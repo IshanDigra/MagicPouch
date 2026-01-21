@@ -368,7 +368,8 @@
             templateFolder: null,
             renameTargetFolder: null,
             currentConfirmAction: null, // Holds the callback for modal
-            openFolders: new Set() // Track open folders for UI stability
+            openFolders: new Set(), // Track open folders for UI stability
+            unsubscribe: null // Store unsubscribe function
         };
 
         const MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -387,9 +388,12 @@
 
                 onAuthStateChanged(auth, user => {
                     STATE.user = user;
-                    app.setupSync();
+                    if(user) {
+                        app.setupSync();
+                    }
                 });
                 
+                localStorage.setItem('magic_pouch_key', STATE.syncKey);
                 document.getElementById('sync-status-text').textContent = STATE.syncKey;
                 document.getElementById('sync-key-input').value = STATE.syncKey;
                 document.getElementById('sync-btn').onclick = () => document.getElementById('modal-sync').classList.remove('hidden');
@@ -408,20 +412,45 @@
 
             setupSync: () => {
                 if(!STATE.user) return;
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sync_nodes', STATE.syncKey);
                 
-                onSnapshot(docRef, (snap) => {
-                    document.getElementById('sync-indicator').className = "w-2 h-2 rounded-full bg-green-500 animate-pulse";
+                // Unsubscribe from previous listener if exists
+                if(STATE.unsubscribe) STATE.unsubscribe();
+                
+                const docRef = doc(db, 'users', STATE.user.uid, 'sync', STATE.syncKey);
+                
+                STATE.unsubscribe = onSnapshot(docRef, (snap) => {
+                    console.log('Sync event received');
+                    
+                    // Update UI to show connected
+                    const indicator = document.getElementById('sync-indicator');
+                    const statusText = document.getElementById('sync-status-text');
+                    
+                    indicator.className = "w-2 h-2 rounded-full bg-green-500 animate-pulse";
+                    statusText.textContent = STATE.syncKey + " ✓";
+                    
                     if(snap.exists()) {
-                        STATE.data = snap.data();
-                        app.cleanupOldJobs(); // Auto-delete > 7 days
+                        const remoteData = snap.data();
+                        // Merge remote data (prioritize remote for conflict resolution)
+                        STATE.data = remoteData.data || { notes: [], profile: [] };
+                        app.cleanupOldJobs();
                     } else {
+                        // First sync - initialize empty
                         STATE.data = { notes: [], profile: [] };
                     }
                     app.refreshUI();
                 }, (error) => {
-                    document.getElementById('sync-indicator').className = "w-2 h-2 rounded-full bg-red-500";
-                    app.toast("Sync Error", true);
+                    console.error('Sync error:', error);
+                    const indicator = document.getElementById('sync-indicator');
+                    const statusText = document.getElementById('sync-status-text');
+                    
+                    indicator.className = "w-2 h-2 rounded-full bg-red-500";
+                    statusText.textContent = "ERROR";
+                    
+                    // Still allow offline functionality
+                    if(!STATE.data.notes) {
+                        STATE.data = { notes: [], profile: [] };
+                    }
+                    app.refreshUI();
                 });
             },
 
@@ -435,20 +464,29 @@
             saveToCloud: async () => {
                 if(!STATE.user) return;
                 try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sync_nodes', STATE.syncKey);
-                    await setDoc(docRef, STATE.data);
-                } catch (e) { app.toast("Save failed", true); }
+                    const docRef = doc(db, 'users', STATE.user.uid, 'sync', STATE.syncKey);
+                    await setDoc(docRef, {
+                        data: STATE.data,
+                        lastUpdated: new Date().toISOString()
+                    }, { merge: true });
+                    console.log('Data saved to cloud');
+                } catch (e) { 
+                    console.error('Save error:', e);
+                    app.toast("Save failed: " + e.message, true); 
+                }
             },
 
             saveSyncKey: () => {
                 const newKey = document.getElementById('sync-key-input').value.trim().toUpperCase();
-                if(newKey) {
+                if(newKey && newKey !== STATE.syncKey) {
                     STATE.syncKey = newKey;
                     localStorage.setItem('magic_pouch_key', newKey);
                     document.getElementById('sync-status-text').textContent = newKey;
                     app.setupSync();
                     document.getElementById('modal-sync').classList.add('hidden');
                     app.toast("Switched Sync Channel");
+                } else if(newKey === STATE.syncKey) {
+                    app.toast("Same key - already connected");
                 }
             },
 
