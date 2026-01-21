@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Magic Pouch - Job Assistant</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Fredoka for the Logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            overscroll-behavior-y: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: pan-x pan-y;
+        }
+        .safe-pb { padding-bottom: env(safe-area-inset-bottom); }
+        .safe-pt { padding-top: env(safe-area-inset-top); }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Smooth fade for elements */
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Floating Logo Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+            100% { transform: translateY(0px); }
+        }
+        .magical-float { animation: float 3s ease-in-out infinite; }
+
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #3b82f6;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #3b82f6;
+        }
+        
+        /* Rotation for accordion arrow */
+        .rotate-90 { transform: rotate(90deg); }
+        .transition-transform { transition-property: transform; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+    </style>
+</head>
+<body class="bg-gray-50 h-screen flex flex-col text-gray-800 font-sans overflow-hidden">
+
+    <!-- === HEADER === -->
+    <header class="bg-white border-b border-gray-200 shrink-0 safe-pt z-20">
+        <div class="h-14 flex items-center justify-between px-4">
+            <div class="flex items-center gap-2 overflow-hidden">
+                <!-- LOGO: Doraemon Magic Pouch Theme -->
+                <div class="w-10 h-10 flex items-center justify-center shrink-0">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-sm filter">
+                        <!-- Body Blue -->
+                        <circle cx="50" cy="50" r="50" fill="#0096E8" />
+                        
+                        <!-- White Stomach -->
+                        <circle cx="50" cy="55" r="35" fill="white" />
+                        
+                        <!-- The Magic Pouch (Pocket) - Closed D Shape -->
+                        <path d="M22 55 A 28 28 0 0 0 78 55 Z" stroke="#0096E8" stroke-width="2.5" fill="none" stroke-linejoin="round" />
+                        
+                        <!-- Collar -->
+                        <path d="M5 25 Q 50 45 95 25" stroke="#E73345" stroke-width="8" fill="none" stroke-linecap="round" />
+                        
+                        <!-- Bell -->
+                        <circle cx="50" cy="40" r="8" fill="#F1C40F" stroke="#333" stroke-width="1.5" />
+                        <line x1="43" y1="37" x2="57" y2="37" stroke="#333" stroke-width="1.5" />
+                        <circle cx="50" cy="42" r="1.5" fill="#333" />
+                        <line x1="50" y1="42" x2="50" y2="48" stroke="#333" stroke-width="1.5" />
+                    </svg>
+                </div>
+                <h1 class="text-xl text-gray-800 whitespace-nowrap pt-1" style="font-family: 'Fredoka', sans-serif;">Magic Pouch</h1>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                 <button onclick="app.exportData()" class="w-8 h-8 flex items-center justify-center text-gray-500 bg-gray-100 rounded-full active:scale-95 transition">
+                    <i class="fas fa-download text-xs"></i>
+                </button>
+                <input type="file" id="import-file" class="hidden" onchange="app.importData(this)">
+                <button onclick="document.getElementById('import-file').click()" class="w-8 h-8 flex items-center justify-center text-gray-500 bg-gray-100 rounded-full active:scale-95 transition">
+                    <i class="fas fa-upload text-xs"></i>
+                </button>
+                <button id="sync-btn" class="text-xs bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-mono font-bold flex items-center gap-2 active:bg-blue-100 ml-2 transition">
+                    <span id="sync-status-text">OFFLINE</span>
+                    <div id="sync-indicator" class="w-2 h-2 rounded-full bg-red-400"></div>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- === MAIN CONTENT AREA === -->
+    <main class="flex-1 overflow-hidden relative" id="main-container">
+        
+        <!-- VIEW: JOBS (Application Dashboard) -->
+        <div id="view-jobs" class="h-full flex flex-col absolute inset-0 transition-transform duration-300 transform translate-x-0 bg-gray-50">
+            
+            <!-- Quick Copy Bar (Profile + Easy Templates) -->
+            <div class="bg-white border-b border-gray-200 px-4 py-3 shrink-0">
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-2">Quick Copy</p>
+                <div class="flex gap-2 overflow-x-auto no-scrollbar" id="job-quick-actions">
+                    <!-- Injected via JS -->
+                    <div class="text-xs text-gray-400 italic">Add Profile Links & Easy Access Templates in the Templates tab.</div>
+                </div>
+            </div>
+
+            <!-- Search -->
+            <div class="px-4 py-3 bg-white border-b border-gray-200 shrink-0">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="search-input" placeholder="Search saved jobs..." class="w-full bg-gray-100 rounded-xl py-2 pl-9 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+
+            <!-- Jobs List (Grouped by Age) -->
+            <div id="jobs-list" class="flex-1 overflow-y-auto p-4 space-y-4 safe-pb pb-24">
+                <div class="text-center mt-10 text-gray-400 text-sm">
+                    <i class="fas fa-cloud-download-alt text-3xl mb-2 opacity-50"></i>
+                    <p>Loading your pouch...</p>
+                </div>
+            </div>
+
+            <!-- FAB (Add Job) -->
+            <button onclick="app.openJobModal()" class="absolute bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg shadow-blue-600/30 flex items-center justify-center text-2xl active:scale-90 transition z-10">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+
+        <!-- VIEW: TEMPLATES (Management) -->
+        <div id="view-templates" class="h-full flex flex-col absolute inset-0 bg-gray-50 transition-transform duration-300 transform translate-x-full">
+            
+            <!-- Template Header / Navigation -->
+            <div class="px-4 py-3 bg-white border-b border-gray-100 shrink-0 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <button id="btn-template-back" onclick="app.closeFolder()" class="hidden text-gray-500 hover:text-blue-600 mr-1 p-1">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <div>
+                            <h2 class="font-bold text-lg text-gray-800 leading-none" id="template-view-title">Library</h2>
+                            <p class="text-xs text-gray-400 mt-1" id="template-view-subtitle">Manage Templates & Links</p>
+                        </div>
+                    </div>
+                    <!-- Add Profile Link Button (Specific to Templates view) -->
+                    <button onclick="app.openProfileModal()" class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg font-bold border border-gray-200">
+                        <i class="fas fa-link mr-1"></i> Profile Links
+                    </button>
+                </div>
+
+                <!-- Search -->
+                <div class="relative">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="template-search" placeholder="Search templates, tags..." class="w-full bg-gray-100 rounded-lg py-2 pl-9 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+            </div>
+
+            <div id="templates-list" class="flex-1 overflow-y-auto p-4 space-y-3 safe-pb pb-24">
+                <!-- Templates/Folders injected here -->
+            </div>
+
+             <!-- FAB (Add Template) -->
+             <button onclick="app.openTemplateModal()" class="absolute bottom-6 right-6 w-14 h-14 bg-purple-600 text-white rounded-full shadow-lg shadow-purple-600/30 flex items-center justify-center text-2xl active:scale-90 transition z-10">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- === BOTTOM NAV === -->
+    <nav class="bg-white border-t border-gray-200 flex justify-around items-center h-16 safe-pb shrink-0 z-30">
+        <button onclick="app.switchView('jobs')" class="nav-btn active text-blue-600 flex flex-col items-center gap-1 w-full h-full justify-center">
+            <i class="fas fa-check-double text-xl"></i>
+            <span class="text-[10px] font-bold">Apply</span>
+        </button>
+        <button onclick="app.switchView('templates')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center">
+            <i class="fas fa-layer-group text-xl"></i>
+            <span class="text-[10px] font-bold">Manage</span>
+        </button>
+    </nav>
+
+    <!-- === MODALS === -->
+    
+    <!-- Custom Confirm Modal -->
+    <div id="modal-confirm" class="fixed inset-0 bg-black/50 z-[60] hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-xs rounded-2xl p-6 shadow-2xl text-center">
+            <i class="fas fa-question-circle text-4xl text-blue-500 mb-4"></i>
+            <h3 class="font-bold text-lg mb-2">Are you sure?</h3>
+            <p id="confirm-msg" class="text-sm text-gray-500 mb-6">Action cannot be undone.</p>
+            <div class="flex gap-3">
+                <button onclick="document.getElementById('modal-confirm').classList.add('hidden')" class="flex-1 py-2 text-gray-500 font-bold bg-gray-100 rounded-xl">No</button>
+                <button onclick="app.confirmYes()" class="flex-1 py-2 text-white font-bold bg-blue-600 rounded-xl">Yes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sync Settings -->
+    <div id="modal-sync" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">Cloud Sync</h3>
+                <button onclick="document.getElementById('modal-sync').classList.add('hidden')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <p class="text-sm text-gray-500 mb-4">Share this code to sync devices.</p>
+            
+            <div class="flex gap-2 mb-4">
+                <input type="text" id="sync-key-input" class="flex-1 text-center text-xl font-mono tracking-widest bg-gray-100 rounded-xl py-3 uppercase focus:ring-2 focus:ring-blue-500 outline-none" placeholder="XXXX-XXXX">
+                <button id="copy-sync-key-btn" class="w-14 shrink-0 bg-gray-100 rounded-xl text-gray-500 hover:text-blue-600 hover:bg-blue-50 flex items-center justify-center transition" title="Copy Code">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+
+            <button id="generate-key-btn" class="w-full text-xs text-blue-600 font-bold py-2 mb-4 hover:underline">Generate New Code</button>
+
+            <div class="flex gap-3">
+                <button onclick="document.getElementById('modal-sync').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl">Cancel</button>
+                <button onclick="app.saveSyncKey()" class="flex-1 py-3 text-white font-bold bg-blue-600 rounded-xl shadow-lg shadow-blue-600/30">Connect</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Job Editor -->
+    <div id="modal-job" class="fixed inset-0 bg-white z-50 hidden flex flex-col safe-pb">
+        <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-white safe-pt">
+            <button onclick="document.getElementById('modal-job').classList.add('hidden')" class="text-gray-500 font-bold px-2">Cancel</button>
+            <span class="font-bold">Add Job Link</span>
+            <button onclick="app.saveJob()" class="text-blue-600 font-bold px-2">Save</button>
+        </div>
+        <div class="p-5 flex flex-col gap-4 flex-1">
+            <input type="text" id="job-title" class="text-2xl font-bold placeholder-gray-300 outline-none" placeholder="Role / Company Name">
+            
+            <div class="flex gap-2 items-center border-b border-gray-100 pb-2">
+                <i class="fas fa-globe text-gray-400"></i>
+                <select id="job-type" class="bg-transparent text-sm font-bold outline-none text-gray-600 flex-1">
+                    <option value="job">Direct Job Link</option>
+                    <option value="site">Company Site</option>
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="naukri">Naukri</option>
+                </select>
+            </div>
+
+            <textarea id="job-content" class="h-32 text-base leading-relaxed placeholder-gray-300 outline-none resize-none" placeholder="Paste link here..."></textarea>
+            
+            <div class="text-xs text-gray-400 text-center mt-auto">
+                Jobs are grouped by day added and deleted after 7 days.
+            </div>
+        </div>
+    </div>
+
+    <!-- Template Editor -->
+    <div id="modal-template" class="fixed inset-0 bg-white z-50 hidden flex flex-col safe-pb">
+        <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-white safe-pt">
+            <button onclick="document.getElementById('modal-template').classList.add('hidden')" class="text-gray-500 font-bold px-2">Cancel</button>
+            <span class="font-bold">Template</span>
+            <button onclick="app.saveTemplate()" class="text-purple-600 font-bold px-2">Save</button>
+        </div>
+        <div class="p-5 flex flex-col gap-4 flex-1 overflow-y-auto">
+            <input type="text" id="tpl-title" class="text-xl font-bold placeholder-gray-300 outline-none" placeholder="Title (e.g. Cold Email)">
+            
+            <!-- Folder -->
+            <div class="bg-gray-50 p-3 rounded-xl border border-gray-200">
+                <label class="text-[10px] font-bold text-gray-400 uppercase">Folder</label>
+                <input type="text" id="tpl-folder" list="folder-list-data" class="w-full bg-transparent text-sm font-bold text-gray-700 outline-none mt-1" placeholder="General">
+                <datalist id="folder-list-data"></datalist>
+            </div>
+
+            <!-- Tags -->
+            <div class="bg-gray-50 p-3 rounded-xl border border-gray-200">
+                <label class="text-[10px] font-bold text-gray-400 uppercase">Tags (Comma separated)</label>
+                <input type="text" id="tpl-tags" class="w-full bg-transparent text-sm text-gray-700 outline-none mt-1" placeholder="e.g. email, intro, urgent">
+            </div>
+
+            <!-- Easy Access Toggle -->
+            <div class="flex items-center justify-between bg-blue-50 p-3 rounded-xl border border-blue-100">
+                <div class="flex flex-col">
+                    <span class="text-sm font-bold text-blue-800">Easy Access</span>
+                    <span class="text-[10px] text-blue-500">Show copy button in Job view</span>
+                </div>
+                <label for="tpl-easy" class="relative inline-block w-10 h-6 cursor-pointer">
+                    <input type="checkbox" id="tpl-easy" class="peer sr-only">
+                    <div class="w-10 h-6 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition"></div>
+                    <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-4"></div>
+                </label>
+            </div>
+
+            <textarea id="tpl-content" class="flex-1 text-base leading-relaxed placeholder-gray-300 outline-none resize-none p-2" placeholder="Paste template text..."></textarea>
+        </div>
+    </div>
+
+    <!-- Rename Folder Modal -->
+    <div id="modal-rename" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl">
+            <h3 class="font-bold text-lg mb-4">Rename Folder</h3>
+            <input type="text" id="rename-input" class="w-full bg-gray-100 rounded-xl py-3 px-4 mb-4 outline-none text-sm" placeholder="New Name">
+            <div class="flex gap-3">
+                <button onclick="document.getElementById('modal-rename').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl">Cancel</button>
+                <button onclick="app.confirmRename()" class="flex-1 py-3 text-white font-bold bg-purple-600 rounded-xl">Rename</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Link Editor -->
+    <div id="modal-profile" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl">
+            <h3 class="font-bold text-lg mb-4">Manage Profile Link</h3>
+            <div class="max-h-40 overflow-y-auto mb-4 space-y-2" id="profile-manage-list">
+                <!-- List existing for delete -->
+            </div>
+            <div class="border-t border-gray-100 pt-4">
+                <h4 class="text-xs font-bold text-gray-400 uppercase mb-2">Add New</h4>
+                <input type="text" id="profile-label" class="w-full bg-gray-100 rounded-xl py-2 px-4 mb-2 outline-none text-sm" placeholder="Label (e.g. Portfolio)">
+                <input type="text" id="profile-value" class="w-full bg-gray-100 rounded-xl py-2 px-4 mb-4 outline-none font-mono text-sm" placeholder="URL">
+                <div class="flex gap-3">
+                    <button onclick="document.getElementById('modal-profile').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl">Close</button>
+                    <button onclick="app.saveProfileItem()" class="flex-1 py-3 text-white font-bold bg-blue-600 rounded-xl">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-900/90 text-white px-5 py-2.5 rounded-full shadow-xl z-[60] hidden flex items-center gap-2 text-sm font-medium transition-opacity">
+        <i class="fas fa-check-circle text-green-400"></i> <span id="toast-msg">Copied!</span>
+    </div>
+
+    <!-- CONFIGURATION & LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, setDoc, getDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // ==========================================
+        // 🔧 CONFIGURATION
+        // ==========================================
+        let firebaseConfig, appId;
+        if (typeof __firebase_config !== 'undefined') {
+            firebaseConfig = JSON.parse(__firebase_config);
+            appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        } else {
+            firebaseConfig = {
+                apiKey: "PASTE_FIREBASE_API_KEY_HERE",
+                authDomain: "PASTE_AUTH_DOMAIN_HERE",
+                projectId: "PASTE_PROJECT_ID_HERE",
+                storageBucket: "PASTE_STORAGE_BUCKET_HERE",
+                messagingSenderId: "PASTE_SENDER_ID_HERE",
+                appId: "PASTE_APP_ID_HERE"
+            };
+            appId = "magic-pouch-personal";
+        }
+
+        const firebaseApp = initializeApp(firebaseConfig);
+        const auth = getAuth(firebaseApp);
+        const db = getFirestore(firebaseApp);
+        
+        // State
+        const STATE = {
+            user: null,
+            syncKey: localStorage.getItem('magic_pouch_key') || Math.random().toString(36).substr(2, 6).toUpperCase(),
+            data: { notes: [], profile: [] },
+            editingId: null,
+            templateFolder: null,
+            renameTargetFolder: null,
+            currentConfirmAction: null, // Holds the callback for modal
+            openFolders: new Set() // Track open folders for UI stability
+        };
+
+        const MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
+
+        // App Logic
+        window.app = {
+            
+            init: async () => {
+                const initAuth = async () => {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        try { await signInWithCustomToken(auth, __initial_auth_token); } 
+                        catch (e) { await signInAnonymously(auth); }
+                    } else { await signInAnonymously(auth); }
+                };
+                await initAuth();
+
+                onAuthStateChanged(auth, user => {
+                    STATE.user = user;
+                    app.setupSync();
+                });
+                
+                document.getElementById('sync-status-text').textContent = STATE.syncKey;
+                document.getElementById('sync-key-input').value = STATE.syncKey;
+                document.getElementById('sync-btn').onclick = () => document.getElementById('modal-sync').classList.remove('hidden');
+                
+                // Search Listeners
+                document.getElementById('search-input').addEventListener('input', (e) => app.renderJobs(e.target.value));
+                document.getElementById('template-search').addEventListener('input', (e) => app.renderTemplates(e.target.value));
+
+                // Sync Modal Buttons
+                document.getElementById('copy-sync-key-btn').addEventListener('click', () => app.copyText(document.getElementById('sync-key-input').value));
+                document.getElementById('generate-key-btn').addEventListener('click', () => {
+                    const newCode = Math.random().toString(36).substr(2, 6).toUpperCase();
+                    document.getElementById('sync-key-input').value = newCode;
+                });
+            },
+
+            setupSync: () => {
+                if(!STATE.user) return;
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sync_nodes', STATE.syncKey);
+                
+                onSnapshot(docRef, (snap) => {
+                    document.getElementById('sync-indicator').className = "w-2 h-2 rounded-full bg-green-500 animate-pulse";
+                    if(snap.exists()) {
+                        STATE.data = snap.data();
+                        app.cleanupOldJobs(); // Auto-delete > 7 days
+                    } else {
+                        STATE.data = { notes: [], profile: [] };
+                    }
+                    app.refreshUI();
+                }, (error) => {
+                    document.getElementById('sync-indicator').className = "w-2 h-2 rounded-full bg-red-500";
+                    app.toast("Sync Error", true);
+                });
+            },
+
+            refreshUI: () => {
+                app.renderJobs();
+                app.renderTemplates();
+                app.renderQuickActions();
+                app.renderProfileManageList();
+            },
+
+            saveToCloud: async () => {
+                if(!STATE.user) return;
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sync_nodes', STATE.syncKey);
+                    await setDoc(docRef, STATE.data);
+                } catch (e) { app.toast("Save failed", true); }
+            },
+
+            saveSyncKey: () => {
+                const newKey = document.getElementById('sync-key-input').value.trim().toUpperCase();
+                if(newKey) {
+                    STATE.syncKey = newKey;
+                    localStorage.setItem('magic_pouch_key', newKey);
+                    document.getElementById('sync-status-text').textContent = newKey;
+                    app.setupSync();
+                    document.getElementById('modal-sync').classList.add('hidden');
+                    app.toast("Switched Sync Channel");
+                }
+            },
+
+            // --- CONFIRMATION MODAL SYSTEM ---
+            openConfirm: (msg, actionFn) => {
+                document.getElementById('confirm-msg').textContent = msg;
+                STATE.currentConfirmAction = actionFn;
+                document.getElementById('modal-confirm').classList.remove('hidden');
+            },
+
+            confirmYes: () => {
+                if (STATE.currentConfirmAction) {
+                    STATE.currentConfirmAction();
+                    STATE.currentConfirmAction = null;
+                }
+                document.getElementById('modal-confirm').classList.add('hidden');
+            },
+
+            // --- DATA MANAGEMENT ---
+            cleanupOldJobs: () => {
+                const now = Date.now();
+                const initialLen = STATE.data.notes.length;
+                // Filter out jobs older than 7 days
+                STATE.data.notes = STATE.data.notes.filter(n => {
+                    if(n.category !== 'job') return true; // Keep templates
+                    const daysOld = Math.floor((now - n.created) / MILLIS_PER_DAY);
+                    return daysOld <= 7;
+                });
+                
+                // Only save if we actually deleted something to avoid loop
+                if(STATE.data.notes.length !== initialLen) {
+                    app.saveToCloud();
+                }
+            },
+
+            askLoadTestData: () => {
+                app.openConfirm("⚠️ Load stress test data (clears current)?", app.loadTestData);
+            },
+
+            loadTestData: () => {
+                const now = Date.now();
+                const day = 24 * 60 * 60 * 1000;
+                
+                let testNotes = [];
+                
+                // 1. "Yesterday" - 15 Completed jobs (The requested scenario)
+                for(let i=1; i<=15; i++) {
+                    testNotes.push({ 
+                        id: `test-yest-${i}`, 
+                        title: `Completed App #${i} @ BigTech`, 
+                        content: 'https://careers.google.com', 
+                        linkType: 'site', 
+                        category: 'job', 
+                        created: now - day, 
+                        status: 'completed' 
+                    });
+                }
+
+                // 2. "2 Days Ago" - 5 Pending (High priority visual test)
+                for(let i=1; i<=5; i++) {
+                    testNotes.push({ 
+                        id: `test-2days-${i}`, 
+                        title: `URGENT Apply #${i} @ Startup`, 
+                        content: 'https://linkedin.com/jobs', 
+                        linkType: 'linkedin', 
+                        category: 'job', 
+                        created: now - (2*day), 
+                        status: 'pending' 
+                    });
+                }
+
+                // 3. "Today" - Mix
+                testNotes.push({ id: 'test-today-1', title: 'Fresh Job', content: 'https://job.com', linkType: 'job', category: 'job', created: now, status: 'pending' });
+                testNotes.push({ id: 'test-today-2', title: 'Done Job', content: 'https://job.com', linkType: 'job', category: 'job', created: now, status: 'completed' });
+
+                // Templates for quick access
+                testNotes.push({ id: 'tpl-1', title: 'Cold Email', content: 'Hi, I saw your opening...', folder: 'Email', tags: ['email'], easyAccess: true, category: 'template', created: now });
+
+                STATE.data.notes = testNotes;
+                
+                app.saveToCloud();
+                app.refreshUI();
+                app.toast("Stress Test Data Loaded");
+            },
+
+            exportData: () => {
+                 const dataStr = JSON.stringify(STATE.data, null, 2);
+                 const blob = new Blob([dataStr], { type: 'application/json' });
+                 const url = URL.createObjectURL(blob);
+                 const a = document.createElement('a'); a.href = url; 
+                 a.download = `magic_pouch_backup_${new Date().toISOString().slice(0,10)}.json`;
+                 document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            },
+
+            importData: (input) => {
+                const file = input.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    try {
+                        const imported = JSON.parse(ev.target.result);
+                        app.openConfirm("Replace current data with backup?", () => {
+                            STATE.data = imported; 
+                            app.saveToCloud(); 
+                            app.refreshUI();
+                            app.toast('Restored!');
+                        });
+                    } catch(err) { alert('Invalid file'); }
+                    input.value = '';
+                };
+                reader.readAsText(file);
+            },
+
+            // --- HELPER FOR OPENING LINKS ---
+            openLink: (url) => {
+                if (!url) return;
+                let finalUrl = url.trim();
+                // Basic protocol fix: default to https if no protocol present
+                if (!finalUrl.match(/^https?:\/\//i) && !finalUrl.match(/^mailto:/i)) {
+                    finalUrl = 'https://' + finalUrl;
+                }
+                
+                try {
+                    window.open(finalUrl, '_blank');
+                } catch(e) {
+                    console.error("Window open error", e);
+                    app.toast("Could not open link", true);
+                }
+            },
+
+            // --- JOBS VIEW ---
+            openJobModal: (id = null) => {
+                STATE.editingId = id;
+                const modal = document.getElementById('modal-job');
+                const title = document.getElementById('job-title');
+                const content = document.getElementById('job-content');
+                const type = document.getElementById('job-type');
+
+                if(id) {
+                    const item = STATE.data.notes.find(n => n.id === id);
+                    title.value = item.title;
+                    content.value = item.content;
+                    type.value = item.linkType || 'job';
+                } else {
+                    title.value = '';
+                    content.value = '';
+                    type.value = 'job';
+                }
+                modal.classList.remove('hidden');
+            },
+
+            saveJob: () => {
+                const title = document.getElementById('job-title').value;
+                const content = document.getElementById('job-content').value;
+                const linkType = document.getElementById('job-type').value;
+
+                if(!title) return;
+
+                const itemData = { 
+                    title, content, linkType, 
+                    category: 'job', 
+                    updated: Date.now() 
+                };
+
+                if(STATE.editingId) {
+                    const idx = STATE.data.notes.findIndex(n => n.id === STATE.editingId);
+                    if(idx > -1) {
+                        STATE.data.notes[idx] = { ...STATE.data.notes[idx], ...itemData };
+                    }
+                } else {
+                    STATE.data.notes.unshift({
+                        id: Date.now().toString(),
+                        created: Date.now(),
+                        status: 'pending',
+                        ...itemData
+                    });
+                }
+                
+                app.saveToCloud();
+                document.getElementById('modal-job').classList.add('hidden');
+                app.toast("Job Saved");
+            },
+
+            toggleJobStatus: (id) => {
+                const note = STATE.data.notes.find(n => n.id === id);
+                if(note) {
+                    note.status = note.status === 'completed' ? 'pending' : 'completed';
+                    app.saveToCloud();
+                    // Just re-render, don't need full refresh
+                    app.renderJobs(); 
+                }
+            },
+
+            deleteNote: (id) => {
+                app.openConfirm("Delete this item?", () => {
+                    STATE.data.notes = STATE.data.notes.filter(n => n.id !== id);
+                    app.saveToCloud();
+                    app.refreshUI();
+                });
+            },
+
+            toggleFolder: (id) => {
+                const list = document.getElementById(id);
+                // Fix: Correctly target icon ID by replacing 'job' with 'icon' (e.g. job-group-0 -> icon-group-0)
+                const icon = document.getElementById(id.replace('job', 'icon'));
+                
+                if (list) {
+                    if (list.classList.contains('hidden')) {
+                        list.classList.remove('hidden');
+                        if (icon) icon.classList.add('rotate-90');
+                        STATE.openFolders.add(id); // Remember open state
+                    } else {
+                        list.classList.add('hidden');
+                        if (icon) icon.classList.remove('rotate-90');
+                        STATE.openFolders.delete(id); // Remember closed state
+                    }
+                }
+            },
+
+            renderJobs: (filter = '') => {
+                const list = document.getElementById('jobs-list');
+                list.innerHTML = '';
+                
+                const now = Date.now();
+                let jobs = (STATE.data.notes || []).filter(n => n.category === 'job');
+
+                if(filter) {
+                    // IF SEARCHING: Show flat list, ignore folders for clarity
+                    const q = filter.toLowerCase();
+                    jobs = jobs.filter(n => n.title.toLowerCase().includes(q));
+                    
+                    if(jobs.length === 0) {
+                        list.innerHTML = `<div class="text-center text-gray-400 mt-10">No match.</div>`;
+                        return;
+                    }
+                    
+                    const container = document.createElement('div');
+                    container.className = "space-y-3 fade-in";
+                    jobs.forEach(job => container.appendChild(app.createJobCard(job)));
+                    list.appendChild(container);
+                    return;
+                }
+
+                if(jobs.length === 0) {
+                    list.innerHTML = `<div class="text-center text-gray-400 mt-10">No active jobs.<br>Added jobs expire in 7 days.</div>`;
+                    return;
+                }
+
+                // Group by Days Old
+                const groups = {};
+                jobs.forEach(job => {
+                    const daysOld = Math.floor((now - job.created) / MILLIS_PER_DAY);
+                    if(daysOld > 7) return; 
+                    if(!groups[daysOld]) groups[daysOld] = [];
+                    groups[daysOld].push(job);
+                });
+
+                // Sort Keys descending
+                const sortedKeys = Object.keys(groups).map(Number).sort((a,b) => b - a);
+
+                sortedKeys.forEach(day => {
+                    let label = day === 0 ? "Today" : day === 1 ? "Yesterday" : `${day} Days Ago`;
+                    const dayJobs = groups[day];
+                    const pendingCount = dayJobs.filter(j => j.status !== 'completed').length;
+                    const totalCount = dayJobs.length;
+                    
+                    // Priority styling for older days with pending items
+                    const isUrgent = day > 0 && pendingCount > 0;
+                    const headerColor = isUrgent ? "border-red-200 bg-red-50" : "border-gray-200 bg-white";
+                    const textColor = isUrgent ? "text-red-700" : "text-gray-700";
+                    const badgeColor = isUrgent ? "bg-red-200 text-red-800" : "bg-gray-100 text-gray-600";
+
+                    // IDs for toggle logic
+                    const listId = `job-group-${day}`;
+                    const iconId = `icon-group-${day}`;
+                    
+                    // Check if folder should be open (from State)
+                    const isOpen = STATE.openFolders.has(listId);
+                    const listClass = isOpen ? "pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4" : "hidden pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4";
+                    const iconClass = isOpen ? "fas fa-chevron-right text-xs text-gray-400 transition-transform duration-200 rotate-90" : "fas fa-chevron-right text-xs text-gray-400 transition-transform duration-200";
+
+                    const groupWrapper = document.createElement('div');
+                    groupWrapper.className = "fade-in";
+
+                    // FOLDER HEADER
+                    groupWrapper.innerHTML = `
+                        <div onclick="app.toggleFolder('${listId}')" class="flex items-center justify-between p-3 rounded-xl border ${headerColor} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none">
+                            <div class="flex items-center gap-3">
+                                <i id="${iconId}" class="${iconClass}"></i>
+                                <span class="font-bold text-sm ${textColor}">${label}</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="text-[10px] font-bold px-2 py-1 rounded-md ${badgeColor}">
+                                    ${pendingCount} Pending
+                                </span>
+                                <span class="text-[10px] font-bold px-2 py-1 rounded-md bg-white border border-gray-100 text-gray-400">
+                                    ${totalCount - pendingCount} Done
+                                </span>
+                            </div>
+                        </div>
+                    `;
+
+                    // FOLDER ITEMS CONTAINER
+                    const itemsContainer = document.createElement('div');
+                    itemsContainer.id = listId;
+                    itemsContainer.className = listClass;
+                    
+                    dayJobs.forEach(job => {
+                        itemsContainer.appendChild(app.createJobCard(job));
+                    });
+
+                    groupWrapper.appendChild(itemsContainer);
+                    list.appendChild(groupWrapper);
+                });
+            },
+
+            createJobCard: (job) => {
+                const el = document.createElement('div');
+                const isDone = job.status === 'completed';
+                el.className = `p-3 rounded-xl shadow-sm border bg-white border-gray-100 relative active:scale-[0.99] transition flex justify-between items-center ${isDone ? 'opacity-50 grayscale' : ''}`;
+                
+                let iconClass = "fa-briefcase";
+                if(job.linkType === 'linkedin') iconClass = "fa-brands fa-linkedin";
+                if(job.linkType === 'site') iconClass = "fa-globe";
+
+                // Robust URL formatting
+                let url = job.content.trim();
+                if (!url.match(/^https?:\/\//i) && !url.match(/^mailto:/i)) {
+                    url = 'https://' + url;
+                }
+                // Escape quotes for HTML attribute
+                const safeUrl = url.replace(/"/g, '&quot;');
+
+                el.innerHTML = `
+                    <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 flex-1 overflow-hidden cursor-pointer no-underline text-inherit block">
+                        <div class="w-8 h-8 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 text-blue-600 text-xs">
+                            <i class="${job.linkType === 'linkedin' ? 'fab' : 'fas'} ${iconClass}"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="font-bold text-gray-800 text-sm truncate ${isDone ? 'line-through' : ''}">${job.title}</h4>
+                            <p class="text-[10px] text-gray-400 truncate">${job.content}</p>
+                        </div>
+                    </a>
+                    <div class="flex items-center gap-2 ml-2">
+                        <button onclick="app.copyText('${job.content.replace(/'/g, "\\'")}')" class="text-gray-300 hover:text-blue-500 p-2" title="Copy Link"><i class="fas fa-link text-xs"></i></button>
+                        <button onclick="app.toggleJobStatus('${job.id}')" class="w-8 h-8 rounded-full ${isDone ? 'bg-green-100 text-green-600' : 'bg-gray-50 text-gray-300'} flex items-center justify-center shadow-sm hover:bg-gray-100">
+                            <i class="fas fa-check text-xs"></i>
+                        </button>
+                        <button onclick="app.openJobModal('${job.id}')" class="text-gray-300 hover:text-blue-500 p-2"><i class="fas fa-pen text-xs"></i></button>
+                        <button onclick="app.deleteNote('${job.id}')" class="text-gray-300 hover:text-red-500 p-2"><i class="fas fa-trash text-xs"></i></button>
+                    </div>
+                `;
+
+                return el;
+            },
+
+            renderQuickActions: () => {
+                const bar = document.getElementById('job-quick-actions');
+                bar.innerHTML = '';
+                
+                // 1. Profile Links
+                (STATE.data.profile || []).forEach(p => {
+                    const btn = document.createElement('button');
+                    // ADDED whitespace-nowrap here
+                    btn.className = "shrink-0 bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm active:bg-gray-50 flex items-center gap-2 whitespace-nowrap";
+                    btn.innerHTML = `<i class="fas fa-user-circle text-gray-400"></i> ${p.label}`;
+                    btn.onclick = () => app.copyText(p.value);
+                    bar.appendChild(btn);
+                });
+
+                // 2. Separator if needed
+                if(STATE.data.profile?.length > 0) {
+                    const sep = document.createElement('div');
+                    sep.className = "w-px h-6 bg-gray-200 shrink-0 mx-1";
+                    bar.appendChild(sep);
+                }
+
+                // 3. Easy Access Templates
+                const easyTemplates = (STATE.data.notes || []).filter(n => n.category === 'template' && n.easyAccess);
+                easyTemplates.forEach(t => {
+                    const btn = document.createElement('button');
+                    // ADDED whitespace-nowrap here
+                    btn.className = "shrink-0 bg-blue-50 border border-blue-100 text-blue-700 px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm active:bg-blue-100 flex items-center gap-2 whitespace-nowrap";
+                    btn.innerHTML = `<i class="fas fa-bolt text-blue-400"></i> ${t.title}`;
+                    btn.onclick = () => app.copyText(t.content);
+                    bar.appendChild(btn);
+                });
+            },
+
+            // --- TEMPLATES VIEW ---
+            openTemplateModal: (id = null) => {
+                STATE.editingId = id;
+                const modal = document.getElementById('modal-template');
+                const title = document.getElementById('tpl-title');
+                const content = document.getElementById('tpl-content');
+                const folder = document.getElementById('tpl-folder');
+                const tags = document.getElementById('tpl-tags');
+                const easy = document.getElementById('tpl-easy');
+                const dataList = document.getElementById('folder-list-data');
+
+                // Populate Datalist
+                const folders = new Set();
+                STATE.data.notes.forEach(n => { if(n.category === 'template' && n.folder) folders.add(n.folder); });
+                dataList.innerHTML = Array.from(folders).map(f => `<option value="${f}">`).join('');
+
+                if(id) {
+                    const item = STATE.data.notes.find(n => n.id === id);
+                    title.value = item.title;
+                    content.value = item.content;
+                    folder.value = item.folder || 'General';
+                    tags.value = (item.tags || []).join(', ');
+                    easy.checked = !!item.easyAccess;
+                } else {
+                    title.value = '';
+                    content.value = '';
+                    folder.value = STATE.templateFolder || 'General';
+                    tags.value = '';
+                    easy.checked = false;
+                }
+                modal.classList.remove('hidden');
+            },
+
+            saveTemplate: () => {
+                const title = document.getElementById('tpl-title').value;
+                const content = document.getElementById('tpl-content').value;
+                const folder = document.getElementById('tpl-folder').value.trim() || 'General';
+                const tags = document.getElementById('tpl-tags').value.split(',').map(t => t.trim()).filter(t => t);
+                const easyAccess = document.getElementById('tpl-easy').checked;
+
+                if(!title) return;
+
+                const itemData = { 
+                    title, content, folder, tags, easyAccess,
+                    category: 'template', 
+                    updated: Date.now() 
+                };
+
+                if(STATE.editingId) {
+                    const idx = STATE.data.notes.findIndex(n => n.id === STATE.editingId);
+                    if(idx > -1) {
+                        STATE.data.notes[idx] = { ...STATE.data.notes[idx], ...itemData };
+                    }
+                } else {
+                    STATE.data.notes.push({
+                        id: Date.now().toString(),
+                        created: Date.now(),
+                        ...itemData
+                    });
+                }
+                
+                app.saveToCloud();
+                document.getElementById('modal-template').classList.add('hidden');
+                app.toast("Template Saved");
+            },
+
+            openFolder: (folderName) => {
+                STATE.templateFolder = folderName;
+                app.renderTemplates();
+            },
+
+            closeFolder: () => {
+                STATE.templateFolder = null;
+                app.renderTemplates();
+            },
+
+            promptRenameFolder: (oldName, e) => {
+                e.stopPropagation();
+                STATE.renameTargetFolder = oldName;
+                document.getElementById('rename-input').value = oldName;
+                document.getElementById('modal-rename').classList.remove('hidden');
+            },
+
+            confirmRename: () => {
+                const newName = document.getElementById('rename-input').value.trim();
+                const oldName = STATE.renameTargetFolder;
+                
+                if(newName && newName !== oldName) {
+                    let changed = false;
+                    STATE.data.notes.forEach(n => {
+                        if(n.category === 'template' && n.folder === oldName) {
+                            n.folder = newName;
+                            changed = true;
+                        }
+                    });
+                    if(changed) app.saveToCloud();
+                }
+                document.getElementById('modal-rename').classList.add('hidden');
+            },
+
+            deleteFolder: (folderName, e) => {
+                e.stopPropagation();
+                app.openConfirm(`Delete folder "${folderName}" and ALL templates inside?`, () => {
+                    STATE.data.notes = STATE.data.notes.filter(n => !(n.category === 'template' && n.folder === folderName));
+                    app.saveToCloud();
+                    app.renderTemplates();
+                });
+            },
+
+            renderTemplates: (filter = '') => {
+                const list = document.getElementById('templates-list');
+                const title = document.getElementById('template-view-title');
+                const subtitle = document.getElementById('template-view-subtitle');
+                const backBtn = document.getElementById('btn-template-back');
+                
+                list.innerHTML = '';
+                let templates = (STATE.data.notes || []).filter(n => n.category === 'template');
+                
+                if(filter) {
+                    const q = filter.toLowerCase();
+                    // If searching, ignore folder structure and show list
+                    templates = templates.filter(n => 
+                        n.title.toLowerCase().includes(q) || 
+                        n.content.toLowerCase().includes(q) ||
+                        (n.tags && n.tags.some(t => t.toLowerCase().includes(q)))
+                    );
+                    title.textContent = "Search Results";
+                    subtitle.textContent = `${templates.length} found`;
+                    backBtn.classList.remove('hidden'); // Allow "back" to clear search visually if needed, though search input controls it
+                } 
+                else if (STATE.templateFolder === null) {
+                    // ROOT VIEW: FOLDERS
+                    title.textContent = "Library";
+                    subtitle.textContent = "Manage Templates";
+                    backBtn.classList.add('hidden');
+
+                    const folders = {};
+                    templates.forEach(t => {
+                        const fname = t.folder || 'General';
+                        if(!folders[fname]) folders[fname] = 0;
+                        folders[fname]++;
+                    });
+
+                    if(Object.keys(folders).length === 0) {
+                        list.innerHTML = `<div class="text-center text-gray-400 mt-10">No templates.</div>`;
+                        return;
+                    }
+
+                    Object.keys(folders).sort().forEach(fname => {
+                        const el = document.createElement('div');
+                        el.className = "bg-white p-4 rounded-xl shadow-sm border border-gray-200 active:bg-gray-50 transition cursor-pointer flex items-center justify-between group";
+                        el.onclick = () => app.openFolder(fname);
+                        el.innerHTML = `
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-folder text-purple-400 text-xl"></i>
+                                <div>
+                                    <h4 class="font-bold text-gray-700">${fname}</h4>
+                                    <p class="text-[10px] text-gray-400">${folders[fname]} items</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="app.promptRenameFolder('${fname}', event)" class="p-2 text-gray-400 hover:text-blue-500"><i class="fas fa-pen"></i></button>
+                                <button onclick="app.deleteFolder('${fname}', event)" class="p-2 text-gray-400 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                            </div>
+                        `;
+                        list.appendChild(el);
+                    });
+                    return;
+                } 
+                else {
+                    // FOLDER VIEW
+                    title.textContent = STATE.templateFolder;
+                    subtitle.textContent = "Tap card to copy";
+                    backBtn.classList.remove('hidden');
+                    templates = templates.filter(t => (t.folder || 'General') === STATE.templateFolder);
+                }
+
+                if(templates.length === 0 && !filter) {
+                     list.innerHTML = `<div class="text-center text-gray-400 mt-10">Empty folder.</div>`;
+                     return;
+                }
+
+                // Render Template Cards
+                templates.forEach(t => {
+                    const el = document.createElement('div');
+                    el.className = "bg-white p-4 rounded-xl shadow-sm border border-gray-200 active:scale-[0.98] transition cursor-pointer group hover:border-purple-200 relative";
+                    el.onclick = () => app.copyText(t.content);
+
+                    let tagsHtml = (t.tags || []).map(tag => `<span class="bg-gray-100 text-gray-500 text-[10px] px-1.5 py-0.5 rounded">${tag}</span>`).join('');
+                    
+                    el.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-gray-800 text-sm group-hover:text-purple-700 transition flex items-center gap-2">
+                                ${t.title}
+                                ${t.easyAccess ? '<i class="fas fa-bolt text-yellow-400 text-xs" title="Easy Access"></i>' : ''}
+                            </h4>
+                            <span class="text-[10px] bg-purple-50 text-purple-600 px-2 py-0.5 rounded-full font-bold">COPY</span>
+                        </div>
+                        <p class="text-xs text-gray-500 font-mono line-clamp-3 mb-2">${t.content}</p>
+                        <div class="flex justify-between items-center mt-2">
+                            <div class="flex gap-1 flex-wrap">${tagsHtml}</div>
+                            <div class="flex gap-3">
+                                <button onclick="event.stopPropagation(); app.openTemplateModal('${t.id}')" class="text-xs font-bold text-gray-300 hover:text-blue-600">EDIT</button>
+                                <button onclick="event.stopPropagation(); app.deleteNote('${t.id}')" class="text-xs font-bold text-gray-300 hover:text-red-500">DEL</button>
+                            </div>
+                        </div>
+                    `;
+                    list.appendChild(el);
+                });
+            },
+
+            // --- PROFILE MANAGEMENT ---
+            openProfileModal: () => {
+                app.renderProfileManageList();
+                document.getElementById('modal-profile').classList.remove('hidden');
+            },
+            
+            saveProfileItem: () => {
+                const label = document.getElementById('profile-label').value;
+                const value = document.getElementById('profile-value').value;
+                if(label && value) {
+                    STATE.data.profile.push({ id: Date.now(), label, value });
+                    app.saveToCloud();
+                    document.getElementById('profile-label').value = '';
+                    document.getElementById('profile-value').value = '';
+                    app.renderProfileManageList();
+                }
+            },
+            
+            deleteProfileItem: (id) => {
+                STATE.data.profile = STATE.data.profile.filter(p => p.id !== id);
+                app.saveToCloud();
+                app.renderProfileManageList();
+            },
+
+            renderProfileManageList: () => {
+                const list = document.getElementById('profile-manage-list');
+                list.innerHTML = '';
+                (STATE.data.profile || []).forEach(p => {
+                    const row = document.createElement('div');
+                    row.className = "flex justify-between items-center bg-gray-50 p-2 rounded-lg";
+                    row.innerHTML = `
+                        <div>
+                            <div class="font-bold text-xs">${p.label}</div>
+                            <div class="text-[10px] text-gray-500 truncate max-w-[150px]">${p.value}</div>
+                        </div>
+                        <button onclick="app.deleteProfileItem(${p.id})" class="text-red-400 hover:text-red-600 px-2"><i class="fas fa-times"></i></button>
+                    `;
+                    list.appendChild(row);
+                });
+            },
+
+            // --- UTILS ---
+            switchView: (viewName) => {
+                const jobsView = document.getElementById('view-jobs');
+                const tplView = document.getElementById('view-templates');
+                const navBtns = document.querySelectorAll('.nav-btn');
+                
+                navBtns.forEach(b => b.classList.remove('text-blue-600', 'active', 'text-gray-400'));
+                
+                if(viewName === 'jobs') {
+                    jobsView.classList.remove('-translate-x-full');
+                    tplView.classList.add('translate-x-full');
+                    navBtns[0].classList.add('text-blue-600');
+                    navBtns[1].classList.add('text-gray-400');
+                    app.renderQuickActions(); // Refresh quick actions on view switch
+                } else {
+                    jobsView.classList.add('-translate-x-full');
+                    tplView.classList.remove('translate-x-full');
+                    navBtns[1].classList.add('text-blue-600');
+                    navBtns[0].classList.add('text-gray-400');
+                }
+            },
+
+            copyText: async (text) => {
+                if(!text) return;
+                try {
+                    await navigator.clipboard.writeText(text);
+                    app.toast("Copied!");
+                } catch(e) {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    app.toast("Copied!");
+                }
+            },
+
+            toast: (msg, isError=false) => {
+                const t = document.getElementById('toast');
+                document.getElementById('toast-msg').textContent = msg;
+                t.querySelector('i').className = isError ? 'fas fa-exclamation-circle text-red-400' : 'fas fa-check-circle text-green-400';
+                t.classList.remove('hidden');
+                t.classList.add('opacity-100');
+                setTimeout(() => {
+                    t.classList.remove('opacity-100');
+                    setTimeout(() => t.classList.add('hidden'), 300);
+                }, 2000);
+            }
+        };
+
+        app.init();
+    </script>
+</body>
+</html>
