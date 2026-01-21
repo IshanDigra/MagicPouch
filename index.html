@@ -340,10 +340,10 @@
         // 🔧 CONFIGURATION
         // ==========================================
         let firebaseConfig, appId;
-        if (typeof __firebase_config !== 'undefined') {
-            firebaseConfig = JSON.parse(__firebase_config);
-            appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        } else {
+        // if (typeof __firebase_config !== 'undefined') {
+        //     firebaseConfig = JSON.parse(__firebase_config);
+        //     appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        // } else {
             firebaseConfig = {
                 apiKey: "AIzaSyD3GZnCEWotlYVHElhh3c5RmCKYjzSdhX8",
                 authDomain: "magic-pouch.firebaseapp.com",
@@ -352,8 +352,8 @@
                 messagingSenderId: "816300585480",
                 appId: "1:816300585480:web:0ead89292305defb2c97bd"
             };
-            appId = "magic-pouch-personal";
-        }
+            appId = "1:816300585480:web:0ead89292305defb2c97bd"; 
+        // }
 
         const firebaseApp = initializeApp(firebaseConfig);
         const auth = getAuth(firebaseApp);
