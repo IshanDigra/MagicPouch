@@ -333,27 +333,20 @@
     <!-- CONFIGURATION & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot, setDoc, getDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
         // 🔧 CONFIGURATION
         // ==========================================
-        let firebaseConfig, appId;
-        // if (typeof __firebase_config !== 'undefined') {
-        //     firebaseConfig = JSON.parse(__firebase_config);
-        //     appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        // } else {
-            firebaseConfig = {
-                apiKey: "AIzaSyD3GZnCEWotlYVHElhh3c5RmCKYjzSdhX8",
-                authDomain: "magic-pouch.firebaseapp.com",
-                projectId: "magic-pouch",
-                storageBucket: "magic-pouch.firebasestorage.app",
-                messagingSenderId: "816300585480",
-                appId: "1:816300585480:web:0ead89292305defb2c97bd"
-            };
-            appId = "1:816300585480:web:0ead89292305defb2c97bd"; 
-        // }
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3GZnCEWotlYVHElhh3c5RmCKYjzSdhX8",
+            authDomain: "magic-pouch.firebaseapp.com",
+            projectId: "magic-pouch",
+            storageBucket: "magic-pouch.firebasestorage.app",
+            messagingSenderId: "816300585480",
+            appId: "1:816300585480:web:0ead89292305defb2c97bd"
+        };
 
         const firebaseApp = initializeApp(firebaseConfig);
         const auth = getAuth(firebaseApp);
@@ -367,9 +360,10 @@
             editingId: null,
             templateFolder: null,
             renameTargetFolder: null,
-            currentConfirmAction: null, // Holds the callback for modal
-            openFolders: new Set(), // Track open folders for UI stability
-            unsubscribe: null // Store unsubscribe function
+            currentConfirmAction: null,
+            openFolders: new Set(),
+            unsubscribe: null,
+            isSyncing: false
         };
 
         const MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
@@ -378,17 +372,19 @@
         window.app = {
             
             init: async () => {
-                const initAuth = async () => {
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        try { await signInWithCustomToken(auth, __initial_auth_token); } 
-                        catch (e) { await signInAnonymously(auth); }
-                    } else { await signInAnonymously(auth); }
-                };
-                await initAuth();
+                // Initialize auth and sync
+                try {
+                    await signInAnonymously(auth);
+                    console.log('Anonymous auth success');
+                } catch(e) {
+                    console.error('Auth error:', e);
+                    app.toast('Auth setup failed', true);
+                }
 
-                onAuthStateChanged(auth, user => {
+                onAuthStateChanged(auth, (user) => {
                     STATE.user = user;
                     if(user) {
+                        console.log('User authenticated:', user.uid);
                         app.setupSync();
                     }
                 });
@@ -411,42 +407,43 @@
             },
 
             setupSync: () => {
-                if(!STATE.user) return;
+                if(!STATE.user) {
+                    console.log('No user, sync not setup');
+                    return;
+                }
                 
-                // Unsubscribe from previous listener if exists
+                console.log('Setting up sync for key:', STATE.syncKey);
                 if(STATE.unsubscribe) STATE.unsubscribe();
                 
-                const docRef = doc(db, 'users', STATE.user.uid, 'sync', STATE.syncKey);
+                STATE.isSyncing = true;
+                const docRef = doc(db, 'sync', STATE.syncKey);
                 
                 STATE.unsubscribe = onSnapshot(docRef, (snap) => {
-                    console.log('Sync event received');
+                    console.log('Snapshot received:', snap.exists());
                     
-                    // Update UI to show connected
                     const indicator = document.getElementById('sync-indicator');
                     const statusText = document.getElementById('sync-status-text');
                     
+                    // Connected!
                     indicator.className = "w-2 h-2 rounded-full bg-green-500 animate-pulse";
                     statusText.textContent = STATE.syncKey + " ✓";
                     
                     if(snap.exists()) {
-                        const remoteData = snap.data();
-                        // Merge remote data (prioritize remote for conflict resolution)
-                        STATE.data = remoteData.data || { notes: [], profile: [] };
+                        const remoteData = snap.data().data || { notes: [], profile: [] };
+                        STATE.data = remoteData;
                         app.cleanupOldJobs();
                     } else {
-                        // First sync - initialize empty
                         STATE.data = { notes: [], profile: [] };
                     }
                     app.refreshUI();
                 }, (error) => {
-                    console.error('Sync error:', error);
+                    console.error('Sync listener error:', error);
                     const indicator = document.getElementById('sync-indicator');
                     const statusText = document.getElementById('sync-status-text');
                     
                     indicator.className = "w-2 h-2 rounded-full bg-red-500";
                     statusText.textContent = "ERROR";
                     
-                    // Still allow offline functionality
                     if(!STATE.data.notes) {
                         STATE.data = { notes: [], profile: [] };
                     }
@@ -462,13 +459,17 @@
             },
 
             saveToCloud: async () => {
-                if(!STATE.user) return;
+                if(!STATE.user) {
+                    console.log('No user, saving locally only');
+                    return;
+                }
                 try {
-                    const docRef = doc(db, 'users', STATE.user.uid, 'sync', STATE.syncKey);
+                    const docRef = doc(db, 'sync', STATE.syncKey);
                     await setDoc(docRef, {
                         data: STATE.data,
+                        userId: STATE.user.uid,
                         lastUpdated: new Date().toISOString()
-                    }, { merge: true });
+                    });
                     console.log('Data saved to cloud');
                 } catch (e) { 
                     console.error('Save error:', e);
@@ -509,21 +510,15 @@
             cleanupOldJobs: () => {
                 const now = Date.now();
                 const initialLen = STATE.data.notes.length;
-                // Filter out jobs older than 7 days
                 STATE.data.notes = STATE.data.notes.filter(n => {
-                    if(n.category !== 'job') return true; // Keep templates
+                    if(n.category !== 'job') return true;
                     const daysOld = Math.floor((now - n.created) / MILLIS_PER_DAY);
                     return daysOld <= 7;
                 });
                 
-                // Only save if we actually deleted something to avoid loop
                 if(STATE.data.notes.length !== initialLen) {
                     app.saveToCloud();
                 }
-            },
-
-            askLoadTestData: () => {
-                app.openConfirm("⚠️ Load stress test data (clears current)?", app.loadTestData);
             },
 
             loadTestData: () => {
@@ -532,7 +527,6 @@
                 
                 let testNotes = [];
                 
-                // 1. "Yesterday" - 15 Completed jobs (The requested scenario)
                 for(let i=1; i<=15; i++) {
                     testNotes.push({ 
                         id: `test-yest-${i}`, 
@@ -545,7 +539,6 @@
                     });
                 }
 
-                // 2. "2 Days Ago" - 5 Pending (High priority visual test)
                 for(let i=1; i<=5; i++) {
                     testNotes.push({ 
                         id: `test-2days-${i}`, 
@@ -558,18 +551,14 @@
                     });
                 }
 
-                // 3. "Today" - Mix
                 testNotes.push({ id: 'test-today-1', title: 'Fresh Job', content: 'https://job.com', linkType: 'job', category: 'job', created: now, status: 'pending' });
                 testNotes.push({ id: 'test-today-2', title: 'Done Job', content: 'https://job.com', linkType: 'job', category: 'job', created: now, status: 'completed' });
-
-                // Templates for quick access
                 testNotes.push({ id: 'tpl-1', title: 'Cold Email', content: 'Hi, I saw your opening...', folder: 'Email', tags: ['email'], easyAccess: true, category: 'template', created: now });
 
                 STATE.data.notes = testNotes;
-                
                 app.saveToCloud();
                 app.refreshUI();
-                app.toast("Stress Test Data Loaded");
+                app.toast("Test Data Loaded");
             },
 
             exportData: () => {
@@ -600,15 +589,12 @@
                 reader.readAsText(file);
             },
 
-            // --- HELPER FOR OPENING LINKS ---
             openLink: (url) => {
                 if (!url) return;
                 let finalUrl = url.trim();
-                // Basic protocol fix: default to https if no protocol present
                 if (!finalUrl.match(/^https?:\/\//i) && !finalUrl.match(/^mailto:/i)) {
                     finalUrl = 'https://' + finalUrl;
                 }
-                
                 try {
                     window.open(finalUrl, '_blank');
                 } catch(e) {
@@ -675,7 +661,6 @@
                 if(note) {
                     note.status = note.status === 'completed' ? 'pending' : 'completed';
                     app.saveToCloud();
-                    // Just re-render, don't need full refresh
                     app.renderJobs(); 
                 }
             },
@@ -690,18 +675,17 @@
 
             toggleFolder: (id) => {
                 const list = document.getElementById(id);
-                // Fix: Correctly target icon ID by replacing 'job' with 'icon' (e.g. job-group-0 -> icon-group-0)
                 const icon = document.getElementById(id.replace('job', 'icon'));
                 
                 if (list) {
                     if (list.classList.contains('hidden')) {
                         list.classList.remove('hidden');
                         if (icon) icon.classList.add('rotate-90');
-                        STATE.openFolders.add(id); // Remember open state
+                        STATE.openFolders.add(id);
                     } else {
                         list.classList.add('hidden');
                         if (icon) icon.classList.remove('rotate-90');
-                        STATE.openFolders.delete(id); // Remember closed state
+                        STATE.openFolders.delete(id);
                     }
                 }
             },
@@ -714,7 +698,6 @@
                 let jobs = (STATE.data.notes || []).filter(n => n.category === 'job');
 
                 if(filter) {
-                    // IF SEARCHING: Show flat list, ignore folders for clarity
                     const q = filter.toLowerCase();
                     jobs = jobs.filter(n => n.title.toLowerCase().includes(q));
                     
@@ -735,7 +718,6 @@
                     return;
                 }
 
-                // Group by Days Old
                 const groups = {};
                 jobs.forEach(job => {
                     const daysOld = Math.floor((now - job.created) / MILLIS_PER_DAY);
@@ -744,7 +726,6 @@
                     groups[daysOld].push(job);
                 });
 
-                // Sort Keys descending
                 const sortedKeys = Object.keys(groups).map(Number).sort((a,b) => b - a);
 
                 sortedKeys.forEach(day => {
@@ -753,17 +734,14 @@
                     const pendingCount = dayJobs.filter(j => j.status !== 'completed').length;
                     const totalCount = dayJobs.length;
                     
-                    // Priority styling for older days with pending items
                     const isUrgent = day > 0 && pendingCount > 0;
                     const headerColor = isUrgent ? "border-red-200 bg-red-50" : "border-gray-200 bg-white";
                     const textColor = isUrgent ? "text-red-700" : "text-gray-700";
                     const badgeColor = isUrgent ? "bg-red-200 text-red-800" : "bg-gray-100 text-gray-600";
 
-                    // IDs for toggle logic
                     const listId = `job-group-${day}`;
                     const iconId = `icon-group-${day}`;
                     
-                    // Check if folder should be open (from State)
                     const isOpen = STATE.openFolders.has(listId);
                     const listClass = isOpen ? "pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4" : "hidden pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4";
                     const iconClass = isOpen ? "fas fa-chevron-right text-xs text-gray-400 transition-transform duration-200 rotate-90" : "fas fa-chevron-right text-xs text-gray-400 transition-transform duration-200";
@@ -771,7 +749,6 @@
                     const groupWrapper = document.createElement('div');
                     groupWrapper.className = "fade-in";
 
-                    // FOLDER HEADER
                     groupWrapper.innerHTML = `
                         <div onclick="app.toggleFolder('${listId}')" class="flex items-center justify-between p-3 rounded-xl border ${headerColor} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none">
                             <div class="flex items-center gap-3">
@@ -789,7 +766,6 @@
                         </div>
                     `;
 
-                    // FOLDER ITEMS CONTAINER
                     const itemsContainer = document.createElement('div');
                     itemsContainer.id = listId;
                     itemsContainer.className = listClass;
@@ -812,12 +788,10 @@
                 if(job.linkType === 'linkedin') iconClass = "fa-brands fa-linkedin";
                 if(job.linkType === 'site') iconClass = "fa-globe";
 
-                // Robust URL formatting
                 let url = job.content.trim();
                 if (!url.match(/^https?:\/\//i) && !url.match(/^mailto:/i)) {
                     url = 'https://' + url;
                 }
-                // Escape quotes for HTML attribute
                 const safeUrl = url.replace(/"/g, '&quot;');
 
                 el.innerHTML = `
@@ -847,28 +821,23 @@
                 const bar = document.getElementById('job-quick-actions');
                 bar.innerHTML = '';
                 
-                // 1. Profile Links
                 (STATE.data.profile || []).forEach(p => {
                     const btn = document.createElement('button');
-                    // ADDED whitespace-nowrap here
                     btn.className = "shrink-0 bg-white border border-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm active:bg-gray-50 flex items-center gap-2 whitespace-nowrap";
                     btn.innerHTML = `<i class="fas fa-user-circle text-gray-400"></i> ${p.label}`;
                     btn.onclick = () => app.copyText(p.value);
                     bar.appendChild(btn);
                 });
 
-                // 2. Separator if needed
                 if(STATE.data.profile?.length > 0) {
                     const sep = document.createElement('div');
                     sep.className = "w-px h-6 bg-gray-200 shrink-0 mx-1";
                     bar.appendChild(sep);
                 }
 
-                // 3. Easy Access Templates
                 const easyTemplates = (STATE.data.notes || []).filter(n => n.category === 'template' && n.easyAccess);
                 easyTemplates.forEach(t => {
                     const btn = document.createElement('button');
-                    // ADDED whitespace-nowrap here
                     btn.className = "shrink-0 bg-blue-50 border border-blue-100 text-blue-700 px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm active:bg-blue-100 flex items-center gap-2 whitespace-nowrap";
                     btn.innerHTML = `<i class="fas fa-bolt text-blue-400"></i> ${t.title}`;
                     btn.onclick = () => app.copyText(t.content);
@@ -887,7 +856,6 @@
                 const easy = document.getElementById('tpl-easy');
                 const dataList = document.getElementById('folder-list-data');
 
-                // Populate Datalist
                 const folders = new Set();
                 STATE.data.notes.forEach(n => { if(n.category === 'template' && n.folder) folders.add(n.folder); });
                 dataList.innerHTML = Array.from(folders).map(f => `<option value="${f}">`).join('');
@@ -996,7 +964,6 @@
                 
                 if(filter) {
                     const q = filter.toLowerCase();
-                    // If searching, ignore folder structure and show list
                     templates = templates.filter(n => 
                         n.title.toLowerCase().includes(q) || 
                         n.content.toLowerCase().includes(q) ||
@@ -1004,10 +971,9 @@
                     );
                     title.textContent = "Search Results";
                     subtitle.textContent = `${templates.length} found`;
-                    backBtn.classList.remove('hidden'); // Allow "back" to clear search visually if needed, though search input controls it
+                    backBtn.classList.remove('hidden');
                 } 
                 else if (STATE.templateFolder === null) {
-                    // ROOT VIEW: FOLDERS
                     title.textContent = "Library";
                     subtitle.textContent = "Manage Templates";
                     backBtn.classList.add('hidden');
@@ -1046,7 +1012,6 @@
                     return;
                 } 
                 else {
-                    // FOLDER VIEW
                     title.textContent = STATE.templateFolder;
                     subtitle.textContent = "Tap card to copy";
                     backBtn.classList.remove('hidden');
@@ -1058,7 +1023,6 @@
                      return;
                 }
 
-                // Render Template Cards
                 templates.forEach(t => {
                     const el = document.createElement('div');
                     el.className = "bg-white p-4 rounded-xl shadow-sm border border-gray-200 active:scale-[0.98] transition cursor-pointer group hover:border-purple-200 relative";
@@ -1141,7 +1105,7 @@
                     tplView.classList.add('translate-x-full');
                     navBtns[0].classList.add('text-blue-600');
                     navBtns[1].classList.add('text-gray-400');
-                    app.renderQuickActions(); // Refresh quick actions on view switch
+                    app.renderQuickActions();
                 } else {
                     jobsView.classList.add('-translate-x-full');
                     tplView.classList.remove('translate-x-full');
