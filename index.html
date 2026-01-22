@@ -60,16 +60,12 @@
                     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-sm filter">
                         <!-- Body Blue -->
                         <circle cx="50" cy="50" r="50" fill="#0096E8" />
-                        
                         <!-- White Stomach -->
                         <circle cx="50" cy="55" r="35" fill="white" />
-                        
                         <!-- The Magic Pouch (Pocket) - Closed D Shape -->
                         <path d="M22 55 A 28 28 0 0 0 78 55 Z" stroke="#0096E8" stroke-width="2.5" fill="none" stroke-linejoin="round" />
-                        
                         <!-- Collar -->
                         <path d="M5 25 Q 50 45 95 25" stroke="#E73345" stroke-width="8" fill="none" stroke-linecap="round" />
-                        
                         <!-- Bell -->
                         <circle cx="50" cy="40" r="8" fill="#F1C40F" stroke="#333" stroke-width="1.5" />
                         <line x1="43" y1="37" x2="57" y2="37" stroke="#333" stroke-width="1.5" />
@@ -104,8 +100,7 @@
             
             <!-- Quick Gadgets Section -->
             <div class="bg-white pt-4 pb-2 px-4 shrink-0 flex flex-col items-center">
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3">Quick Gadgets</p>
-                
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3">Quick Content</p>
                 <div class="flex flex-wrap justify-center gap-2 w-full max-w-lg" id="job-quick-actions">
                     <!-- Injected via JS -->
                 </div>
@@ -148,7 +143,7 @@
                             <p class="text-xs text-gray-400 mt-1" id="template-view-subtitle">Manage Templates & Links</p>
                         </div>
                     </div>
-                    <!-- Add Profile Link Button (Specific to Templates view) -->
+                    <!-- Add Profile Link Button -->
                     <button onclick="app.openProfileModal()" class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg font-bold border border-gray-200">
                         <i class="fas fa-link mr-1"></i> Profile Links
                     </button>
@@ -200,6 +195,59 @@
         </div>
     </div>
     
+    <!-- Status Action Sheet Modal -->
+    <div id="modal-status" class="fixed inset-0 bg-black/50 z-[60] hidden flex items-end sm:items-center justify-center sm:p-6 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm sm:rounded-2xl rounded-t-2xl p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-bold text-lg">Update Status</h3>
+                <button onclick="document.getElementById('modal-status').classList.add('hidden')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="space-y-3">
+                <!-- NEW: Referral Received -->
+                <button onclick="app.updateStatus('referral-received')" class="w-full flex items-center p-4 rounded-xl bg-purple-50 text-purple-700 border border-purple-200 active:scale-[0.98] transition">
+                    <div class="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center mr-3"><i class="fas fa-handshake"></i></div>
+                    <div class="text-left">
+                        <div class="font-bold text-sm">Referral Received</div>
+                        <div class="text-[10px] opacity-75">Ready to apply!</div>
+                    </div>
+                </button>
+
+                <button onclick="app.updateStatus('applied')" class="w-full flex items-center p-4 rounded-xl bg-green-50 text-green-700 border border-green-200 active:scale-[0.98] transition">
+                    <div class="w-8 h-8 rounded-full bg-green-200 flex items-center justify-center mr-3"><i class="fas fa-check"></i></div>
+                    <div class="text-left">
+                        <div class="font-bold text-sm">Applied</div>
+                        <div class="text-[10px] opacity-75">Mark as done</div>
+                    </div>
+                </button>
+
+                <button onclick="app.updateStatus('referral-asked')" class="w-full flex items-center p-4 rounded-xl bg-orange-50 text-orange-700 border border-orange-200 active:scale-[0.98] transition">
+                    <div class="w-8 h-8 rounded-full bg-orange-200 flex items-center justify-center mr-3"><i class="fas fa-paper-plane"></i></div>
+                    <div class="text-left">
+                        <div class="font-bold text-sm">Referral Asked</div>
+                        <div class="text-[10px] opacity-75">Waiting for response</div>
+                    </div>
+                </button>
+                
+                <button onclick="app.updateStatus('reminder')" class="w-full flex items-center p-4 rounded-xl bg-red-50 text-red-700 border border-red-200 active:scale-[0.98] transition">
+                    <div class="w-8 h-8 rounded-full bg-red-200 flex items-center justify-center mr-3"><i class="fas fa-bell"></i></div>
+                    <div class="text-left">
+                        <div class="font-bold text-sm">Follow-up Due</div>
+                        <div class="text-[10px] opacity-75">Need to nudge</div>
+                    </div>
+                </button>
+
+                <button onclick="app.updateStatus('pending')" class="w-full flex items-center p-4 rounded-xl bg-gray-50 text-gray-600 border border-gray-200 active:scale-[0.98] transition">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3"><i class="fas fa-undo"></i></div>
+                    <div class="text-left">
+                        <div class="font-bold text-sm">To Apply</div>
+                        <div class="text-[10px] opacity-75">Reset status</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Sync Settings -->
     <div id="modal-sync" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-6 backdrop-blur-sm">
         <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl">
@@ -333,24 +381,17 @@
     <!-- CONFIGURATION & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
         // 🔧 CONFIGURATION
         // ==========================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyD3GZnCEWotlYVHElhh3c5RmCKYjzSdhX8",
-            authDomain: "magic-pouch.firebaseapp.com",
-            projectId: "magic-pouch",
-            storageBucket: "magic-pouch.firebasestorage.app",
-            messagingSenderId: "816300585480",
-            appId: "1:816300585480:web:0ead89292305defb2c97bd"
-        };
-
+        const firebaseConfig = JSON.parse(__firebase_config);
         const firebaseApp = initializeApp(firebaseConfig);
         const auth = getAuth(firebaseApp);
         const db = getFirestore(firebaseApp);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         
         // State
         const STATE = {
@@ -358,6 +399,7 @@
             syncKey: localStorage.getItem('magic_pouch_key') || Math.random().toString(36).substr(2, 6).toUpperCase(),
             data: { notes: [], profile: [] },
             editingId: null,
+            targetStatusId: null, // For status modal
             templateFolder: null,
             renameTargetFolder: null,
             currentConfirmAction: null,
@@ -368,14 +410,29 @@
 
         const MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
 
+        // Status Priorities for Sorting (Lower number = Higher priority)
+        const STATUS_PRIORITY = {
+            'referral-received': 0, // Top Priority
+            'pending': 1,           // To Apply
+            'reminder': 2,          // Follow-up Due
+            'referral-asked': 3,    // Referral Asked
+            'applied': 4,           // Applied
+            'completed': 4,         // Legacy
+            'referral': 3,          // Legacy fallback
+            'referral-pending': 1   // Legacy fallback -> To Apply
+        };
+
         // App Logic
         window.app = {
             
             init: async () => {
-                // Initialize auth and sync
                 try {
-                    await signInAnonymously(auth);
-                    console.log('Anonymous auth success');
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                    console.log('Auth success');
                 } catch(e) {
                     console.error('Auth error:', e);
                     app.toast('Auth setup failed', true);
@@ -384,7 +441,6 @@
                 onAuthStateChanged(auth, (user) => {
                     STATE.user = user;
                     if(user) {
-                        console.log('User authenticated:', user.uid);
                         app.setupSync();
                     }
                 });
@@ -407,24 +463,16 @@
             },
 
             setupSync: () => {
-                if(!STATE.user) {
-                    console.log('No user, sync not setup');
-                    return;
-                }
-                
-                console.log('Setting up sync for key:', STATE.syncKey);
+                if(!STATE.user) return;
                 if(STATE.unsubscribe) STATE.unsubscribe();
                 
                 STATE.isSyncing = true;
-                const docRef = doc(db, 'sync', STATE.syncKey);
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sync_sessions', STATE.syncKey);
                 
                 STATE.unsubscribe = onSnapshot(docRef, (snap) => {
-                    console.log('Snapshot received:', snap.exists());
-                    
                     const indicator = document.getElementById('sync-indicator');
                     const statusText = document.getElementById('sync-status-text');
                     
-                    // Connected!
                     indicator.className = "w-2 h-2 rounded-full bg-green-500 animate-pulse";
                     statusText.textContent = STATE.syncKey + " ✓";
                     
@@ -432,6 +480,7 @@
                         const remoteData = snap.data().data || { notes: [], profile: [] };
                         STATE.data = remoteData;
                         app.cleanupOldJobs();
+                        app.processAutomationRules(); // New Rule Check
                     } else {
                         STATE.data = { notes: [], profile: [] };
                     }
@@ -440,15 +489,39 @@
                     console.error('Sync listener error:', error);
                     const indicator = document.getElementById('sync-indicator');
                     const statusText = document.getElementById('sync-status-text');
-                    
                     indicator.className = "w-2 h-2 rounded-full bg-red-500";
                     statusText.textContent = "ERROR";
-                    
-                    if(!STATE.data.notes) {
-                        STATE.data = { notes: [], profile: [] };
-                    }
+                    if(!STATE.data.notes) STATE.data = { notes: [], profile: [] };
                     app.refreshUI();
                 });
+            },
+
+            // --- AUTOMATION LOGIC ---
+            processAutomationRules: () => {
+                const now = Date.now();
+                let hasChanges = false;
+                
+                STATE.data.notes.forEach(note => {
+                    // Check specifically for "Referral Asked"
+                    // Map legacy 'referral' status to 'referral-asked' logic if needed, or assume new
+                    const statusToCheck = note.status === 'referral' ? 'referral-asked' : note.status;
+
+                    if (note.category === 'job' && statusToCheck === 'referral-asked') {
+                        const lastUpdated = note.updated || note.created;
+                        // If referral asked > 1 day ago, change to 'reminder'
+                        if ((now - lastUpdated) > MILLIS_PER_DAY) {
+                            note.status = 'reminder';
+                            note.updated = now; // Update timestamp
+                            hasChanges = true;
+                            console.log(`Auto-promoted job ${note.title} to reminder`);
+                        }
+                    }
+                });
+
+                if (hasChanges) {
+                    app.saveToCloud(); // Save the updated statuses
+                    app.toast("Checked follow-ups", false);
+                }
             },
 
             refreshUI: () => {
@@ -459,20 +532,15 @@
             },
 
             saveToCloud: async () => {
-                if(!STATE.user) {
-                    console.log('No user, saving locally only');
-                    return;
-                }
+                if(!STATE.user) return;
                 try {
-                    const docRef = doc(db, 'sync', STATE.syncKey);
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sync_sessions', STATE.syncKey);
                     await setDoc(docRef, {
                         data: STATE.data,
                         userId: STATE.user.uid,
                         lastUpdated: new Date().toISOString()
                     });
-                    console.log('Data saved to cloud');
                 } catch (e) { 
-                    console.error('Save error:', e);
                     app.toast("Save failed: " + e.message, true); 
                 }
             },
@@ -512,6 +580,7 @@
                 const initialLen = STATE.data.notes.length;
                 STATE.data.notes = STATE.data.notes.filter(n => {
                     if(n.category !== 'job') return true;
+                    // Keep completed jobs for history up to 7 days too
                     const daysOld = Math.floor((now - n.created) / MILLIS_PER_DAY);
                     return daysOld <= 7;
                 });
@@ -519,46 +588,6 @@
                 if(STATE.data.notes.length !== initialLen) {
                     app.saveToCloud();
                 }
-            },
-
-            loadTestData: () => {
-                const now = Date.now();
-                const day = 24 * 60 * 60 * 1000;
-                
-                let testNotes = [];
-                
-                for(let i=1; i<=15; i++) {
-                    testNotes.push({ 
-                        id: `test-yest-${i}`, 
-                        title: `Completed App #${i} @ BigTech`, 
-                        content: 'https://careers.google.com', 
-                        linkType: 'site', 
-                        category: 'job', 
-                        created: now - day, 
-                        status: 'completed' 
-                    });
-                }
-
-                for(let i=1; i<=5; i++) {
-                    testNotes.push({ 
-                        id: `test-2days-${i}`, 
-                        title: `URGENT Apply #${i} @ Startup`, 
-                        content: 'https://linkedin.com/jobs', 
-                        linkType: 'linkedin', 
-                        category: 'job', 
-                        created: now - (2*day), 
-                        status: 'pending' 
-                    });
-                }
-
-                testNotes.push({ id: 'test-today-1', title: 'Fresh Job', content: 'https://job.com', linkType: 'job', category: 'job', created: now, status: 'pending' });
-                testNotes.push({ id: 'test-today-2', title: 'Done Job', content: 'https://job.com', linkType: 'job', category: 'job', created: now, status: 'completed' });
-                testNotes.push({ id: 'tpl-1', title: 'Cold Email', content: 'Hi, I saw your opening...', folder: 'Email', tags: ['email'], easyAccess: true, category: 'template', created: now });
-
-                STATE.data.notes = testNotes;
-                app.saveToCloud();
-                app.refreshUI();
-                app.toast("Test Data Loaded");
             },
 
             exportData: () => {
@@ -598,7 +627,6 @@
                 try {
                     window.open(finalUrl, '_blank');
                 } catch(e) {
-                    console.error("Window open error", e);
                     app.toast("Could not open link", true);
                 }
             },
@@ -656,13 +684,23 @@
                 app.toast("Job Saved");
             },
 
-            toggleJobStatus: (id) => {
-                const note = STATE.data.notes.find(n => n.id === id);
-                if(note) {
-                    note.status = note.status === 'completed' ? 'pending' : 'completed';
-                    app.saveToCloud();
-                    app.renderJobs(); 
+            openStatusModal: (id) => {
+                STATE.targetStatusId = id;
+                document.getElementById('modal-status').classList.remove('hidden');
+            },
+
+            updateStatus: (newStatus) => {
+                if (STATE.targetStatusId) {
+                    const note = STATE.data.notes.find(n => n.id === STATE.targetStatusId);
+                    if (note) {
+                        note.status = newStatus;
+                        note.updated = Date.now(); // Update time on status change
+                        app.saveToCloud();
+                        app.renderJobs();
+                    }
                 }
+                document.getElementById('modal-status').classList.add('hidden');
+                STATE.targetStatusId = null;
             },
 
             deleteNote: (id) => {
@@ -676,7 +714,6 @@
             toggleFolder: (id) => {
                 const list = document.getElementById(id);
                 const icon = document.getElementById(id.replace('job', 'icon'));
-                
                 if (list) {
                     if (list.classList.contains('hidden')) {
                         list.classList.remove('hidden');
@@ -697,15 +734,14 @@
                 const now = Date.now();
                 let jobs = (STATE.data.notes || []).filter(n => n.category === 'job');
 
+                // Filter logic
                 if(filter) {
                     const q = filter.toLowerCase();
                     jobs = jobs.filter(n => n.title.toLowerCase().includes(q));
-                    
                     if(jobs.length === 0) {
                         list.innerHTML = `<div class="text-center text-gray-400 mt-10">No match.</div>`;
                         return;
                     }
-                    
                     const container = document.createElement('div');
                     container.className = "space-y-3 fade-in";
                     jobs.forEach(job => container.appendChild(app.createJobCard(job)));
@@ -718,6 +754,7 @@
                     return;
                 }
 
+                // Grouping Logic
                 const groups = {};
                 jobs.forEach(job => {
                     const daysOld = Math.floor((now - job.created) / MILLIS_PER_DAY);
@@ -730,21 +767,70 @@
 
                 sortedKeys.forEach(day => {
                     let label = day === 0 ? "Today" : day === 1 ? "Yesterday" : `${day} Days Ago`;
-                    const dayJobs = groups[day];
-                    const pendingCount = dayJobs.filter(j => j.status !== 'completed').length;
-                    const totalCount = dayJobs.length;
+                    let dayJobs = groups[day];
                     
-                    const isUrgent = day > 0 && pendingCount > 0;
-                    const headerColor = isUrgent ? "border-red-200 bg-red-50" : "border-gray-200 bg-white";
-                    const textColor = isUrgent ? "text-red-700" : "text-gray-700";
-                    const badgeColor = isUrgent ? "bg-red-200 text-red-800" : "bg-gray-100 text-gray-600";
+                    // --- SORTING PRIORITY ---
+                    dayJobs.sort((a, b) => {
+                        const sA = (a.status === 'referral' ? 'referral-asked' : (a.status || 'pending'));
+                        const sB = (b.status === 'referral' ? 'referral-asked' : (b.status || 'pending'));
+                        const pA = STATUS_PRIORITY[sA] !== undefined ? STATUS_PRIORITY[sA] : 1;
+                        const pB = STATUS_PRIORITY[sB] !== undefined ? STATUS_PRIORITY[sB] : 1;
+                        return pA - pB;
+                    });
 
+                    // Stats Counting
+                    const counts = { 'referral-received': 0, 'pending': 0, 'reminder': 0, 'referral-asked': 0, 'applied': 0 };
+                    
+                    dayJobs.forEach(j => {
+                        let s = j.status || 'pending';
+                        if(s === 'referral') s = 'referral-asked';
+                        if(s === 'completed') s = 'applied';
+                        if(s === 'referral-pending') s = 'pending';
+                        if(counts[s] !== undefined) counts[s]++;
+                    });
+
+                    // Build Badges HTML
+                    let badgeHtml = '';
+                    if(counts['referral-received'] > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 border border-purple-200 mr-1">${counts['referral-received']} Rec'd</span>`;
+                    if(counts.pending > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 border border-gray-200 mr-1">${counts.pending} To Apply</span>`;
+                    if(counts.reminder > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-700 border border-red-200 mr-1">${counts.reminder} Due</span>`;
+                    if(counts['referral-asked'] > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-orange-100 text-orange-700 border border-orange-200 mr-1">${counts['referral-asked']} Asked</span>`;
+                    if(counts.applied > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-50 text-green-600 border border-green-100">${counts.applied} Done</span>`;
+
+                    // --- COLOR LOGIC BASED ON AGING (Timeline) ---
+                    let headerColor = "border-gray-200 bg-white";
+                    let textColor = "text-gray-700";
+                    let iconColor = "text-gray-400"; // Chevron color
+
+                    if (day === 0) {
+                        // Today: Fresh Blue
+                        headerColor = "border-blue-100 bg-blue-50/60";
+                        textColor = "text-blue-800";
+                        iconColor = "text-blue-400";
+                    } else if (day >= 4 && day <= 5) {
+                        // 4-5 Days: Warning Orange
+                        headerColor = "border-orange-200 bg-orange-50"; 
+                        textColor = "text-orange-800";
+                        iconColor = "text-orange-400";
+                    } else if (day >= 6) {
+                        // 6-7 Days: Critical Red (Expiring)
+                        headerColor = "border-red-200 bg-red-50";
+                        textColor = "text-red-800";
+                        iconColor = "text-red-400";
+                    }
+                    
+                    // Check if we need to auto-open (Urgent Tasks inside)
+                    const isUrgentTask = counts.reminder > 0 || counts['referral-received'] > 0;
+                    
                     const listId = `job-group-${day}`;
                     const iconId = `icon-group-${day}`;
-                    
                     const isOpen = STATE.openFolders.has(listId);
-                    const listClass = isOpen ? "pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4" : "hidden pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4";
-                    const iconClass = isOpen ? "fas fa-chevron-right text-xs text-gray-400 transition-transform duration-200 rotate-90" : "fas fa-chevron-right text-xs text-gray-400 transition-transform duration-200";
+                    
+                    // Open if manually opened OR has urgent tasks
+                    const shouldOpen = isOpen || isUrgentTask;
+                    const listClass = shouldOpen ? "pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4" : "hidden pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4";
+                    // Use dynamic iconColor for the chevron
+                    const iconClass = shouldOpen ? `fas fa-chevron-right text-xs ${iconColor} transition-transform duration-200 rotate-90` : `fas fa-chevron-right text-xs ${iconColor} transition-transform duration-200`;
 
                     const groupWrapper = document.createElement('div');
                     groupWrapper.className = "fade-in";
@@ -755,13 +841,8 @@
                                 <i id="${iconId}" class="${iconClass}"></i>
                                 <span class="font-bold text-sm ${textColor}">${label}</span>
                             </div>
-                            <div class="flex gap-2">
-                                <span class="text-[10px] font-bold px-2 py-1 rounded-md ${badgeColor}">
-                                    ${pendingCount} Pending
-                                </span>
-                                <span class="text-[10px] font-bold px-2 py-1 rounded-md bg-white border border-gray-100 text-gray-400">
-                                    ${totalCount - pendingCount} Done
-                                </span>
+                            <div class="flex gap-1 flex-wrap justify-end max-w-[60%]">
+                                ${badgeHtml}
                             </div>
                         </div>
                     `;
@@ -781,8 +862,44 @@
 
             createJobCard: (job) => {
                 const el = document.createElement('div');
-                const isDone = job.status === 'completed';
-                el.className = `p-3 rounded-xl shadow-sm border bg-white border-gray-100 relative active:scale-[0.99] transition flex justify-between items-center ${isDone ? 'opacity-50 grayscale' : ''}`;
+                let status = job.status || 'pending';
+                if(status === 'referral') status = 'referral-asked'; // Legacy map
+                if(status === 'referral-pending') status = 'pending'; // Legacy map
+
+                const isDone = status === 'applied' || status === 'completed';
+                
+                // Color logic based on status
+                let borderColor = "border-gray-100";
+                let badgeHtml = "";
+                let statusIcon = "fa-ellipsis-h";
+                let statusBtnClass = "bg-gray-50 text-gray-400";
+
+                if (status === 'referral-received') {
+                    borderColor = "border-purple-200 border-l-4 border-l-purple-400";
+                    badgeHtml = `<span class="text-[9px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded mr-2">REFERRAL RECEIVED</span>`;
+                    statusIcon = "fa-handshake";
+                    statusBtnClass = "bg-purple-100 text-purple-500";
+                } else if (status === 'referral-asked') {
+                    borderColor = "border-orange-200 border-l-4 border-l-orange-400";
+                    badgeHtml = `<span class="text-[9px] font-bold text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded mr-2">REFERRAL ASKED</span>`;
+                    statusIcon = "fa-paper-plane";
+                    statusBtnClass = "bg-orange-100 text-orange-500";
+                } else if (status === 'reminder') {
+                    borderColor = "border-red-200 border-l-4 border-l-red-500";
+                    badgeHtml = `<span class="text-[9px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded mr-2 animate-pulse">FOLLOW-UP DUE</span>`;
+                    statusIcon = "fa-bell";
+                    statusBtnClass = "bg-red-100 text-red-500";
+                } else if (isDone) {
+                    borderColor = "border-green-100 bg-gray-50";
+                    statusIcon = "fa-check";
+                    statusBtnClass = "bg-green-100 text-green-600";
+                } else {
+                    // Pending / To Apply
+                    statusIcon = "fa-circle";
+                    statusBtnClass = "bg-gray-100 text-gray-300";
+                }
+
+                el.className = `p-3 rounded-xl shadow-sm border ${borderColor} bg-white relative active:scale-[0.99] transition flex justify-between items-center ${isDone ? 'opacity-60' : ''}`;
                 
                 let iconClass = "fa-briefcase";
                 if(job.linkType === 'linkedin') iconClass = "fa-brands fa-linkedin";
@@ -800,15 +917,21 @@
                             <i class="${job.linkType === 'linkedin' ? 'fab' : 'fas'} ${iconClass}"></i>
                         </div>
                         <div class="min-w-0">
-                            <h4 class="font-bold text-gray-800 text-sm truncate ${isDone ? 'line-through' : ''}">${job.title}</h4>
+                            <div class="flex items-center">
+                                ${badgeHtml}
+                                <h4 class="font-bold text-gray-800 text-sm truncate ${isDone ? 'line-through decoration-green-500' : ''}">${job.title}</h4>
+                            </div>
                             <p class="text-[10px] text-gray-400 truncate">${job.content}</p>
                         </div>
                     </a>
                     <div class="flex items-center gap-2 ml-2">
                         <button onclick="app.copyText('${job.content.replace(/'/g, "\\'")}')" class="text-gray-300 hover:text-blue-500 p-2" title="Copy Link"><i class="fas fa-link text-xs"></i></button>
-                        <button onclick="app.toggleJobStatus('${job.id}')" class="w-8 h-8 rounded-full ${isDone ? 'bg-green-100 text-green-600' : 'bg-gray-50 text-gray-300'} flex items-center justify-center shadow-sm hover:bg-gray-100">
-                            <i class="fas fa-check text-xs"></i>
+                        
+                        <!-- Status Action Button -->
+                        <button onclick="app.openStatusModal('${job.id}')" class="w-8 h-8 rounded-full ${statusBtnClass} flex items-center justify-center shadow-sm hover:brightness-95 transition">
+                            <i class="fas ${statusIcon} text-xs"></i>
                         </button>
+                        
                         <button onclick="app.openJobModal('${job.id}')" class="text-gray-300 hover:text-blue-500 p-2"><i class="fas fa-pen text-xs"></i></button>
                         <button onclick="app.deleteNote('${job.id}')" class="text-gray-300 hover:text-red-500 p-2"><i class="fas fa-trash text-xs"></i></button>
                     </div>
@@ -821,31 +944,36 @@
                 const bar = document.getElementById('job-quick-actions');
                 bar.innerHTML = '';
                 
+                const profiles = STATE.data.profile || [];
+                const templates = (STATE.data.notes || []).filter(n => n.category === 'template' && n.easyAccess);
+
                 // 1. Render Profile Links (White/Gray Style)
-                (STATE.data.profile || []).forEach(p => {
+                profiles.forEach(p => {
                     const btn = document.createElement('button');
-                    // Style: White bg, Gray border, Gray text, Rounded Pill
                     btn.className = "shrink-0 bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-xl text-sm font-bold shadow-sm active:bg-gray-50 hover:border-gray-300 transition flex items-center gap-2";
-                    // Icon: User circle for profile items
                     btn.innerHTML = `<i class="fas fa-user-circle text-gray-400"></i> ${p.label}`;
                     btn.onclick = () => app.copyText(p.value);
                     bar.appendChild(btn);
                 });
 
+                // Separator if both types exist
+                if(profiles.length > 0 && templates.length > 0) {
+                    const sep = document.createElement('div');
+                    sep.className = "w-px h-6 bg-gray-300 mx-1 self-center";
+                    bar.appendChild(sep);
+                }
+
                 // 2. Render Easy Access Templates (Blue Style)
-                const easyTemplates = (STATE.data.notes || []).filter(n => n.category === 'template' && n.easyAccess);
-                easyTemplates.forEach(t => {
+                templates.forEach(t => {
                     const btn = document.createElement('button');
-                    // Style: Blue bg, Blue text, No border (or light blue border)
                     btn.className = "shrink-0 bg-blue-50 text-blue-700 px-4 py-2 rounded-xl text-sm font-bold shadow-sm active:bg-blue-100 hover:bg-blue-100 transition flex items-center gap-2";
-                    // Icon: Lightning bolt
                     btn.innerHTML = `<i class="fas fa-bolt text-blue-500"></i> ${t.title}`;
                     btn.onclick = () => app.copyText(t.content);
                     bar.appendChild(btn);
                 });
                 
                 // Fallback message if empty
-                if((!STATE.data.profile || STATE.data.profile.length === 0) && easyTemplates.length === 0) {
+                if(profiles.length === 0 && templates.length === 0) {
                      bar.innerHTML = `<div class="text-xs text-gray-300 italic py-2">Add Profile Links & Templates to see gadgets here.</div>`;
                 }
             },
