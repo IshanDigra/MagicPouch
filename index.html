@@ -81,16 +81,16 @@
             </div>
             
             <div class="flex items-center gap-2">
-                 <button onclick="app.exportData()" class="w-10 h-10 flex items-center justify-center text-gray-500 bg-gray-100 rounded-full active:scale-95 transition hover:bg-gray-200">
-                    <i class="fas fa-download text-sm"></i>
+                 <button onclick="app.exportData()" class="w-8 h-8 flex items-center justify-center text-gray-500 bg-gray-100 rounded-full active:scale-95 transition">
+                    <i class="fas fa-download text-xs"></i>
                 </button>
                 <input type="file" id="import-file" class="hidden" onchange="app.importData(this)">
-                <button onclick="document.getElementById('import-file').click()" class="w-10 h-10 flex items-center justify-center text-gray-500 bg-gray-100 rounded-full active:scale-95 transition hover:bg-gray-200">
-                    <i class="fas fa-upload text-sm"></i>
+                <button onclick="document.getElementById('import-file').click()" class="w-8 h-8 flex items-center justify-center text-gray-500 bg-gray-100 rounded-full active:scale-95 transition">
+                    <i class="fas fa-upload text-xs"></i>
                 </button>
-                <button id="sync-btn" class="ml-2 h-10 px-4 bg-blue-50 text-blue-600 rounded-full font-bold flex items-center gap-2 active:bg-blue-100 transition border border-blue-100">
-                    <span id="sync-status-text" class="text-sm font-mono">OFFLINE</span>
-                    <div id="sync-indicator" class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+                <button id="sync-btn" class="text-xs bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-mono font-bold flex items-center gap-2 active:bg-blue-100 ml-2 transition">
+                    <span id="sync-status-text">OFFLINE</span>
+                    <div id="sync-indicator" class="w-2 h-2 rounded-full bg-red-400"></div>
                 </button>
             </div>
         </div>
