@@ -381,17 +381,24 @@
     <!-- CONFIGURATION & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
         // 🔧 CONFIGURATION
         // ==========================================
-        const firebaseConfig = JSON.parse(__firebase_config);
+        const firebaseConfig = {
+            apiKey: "AIzaSyD3GZnCEWotlYVHElhh3c5RmCKYjzSdhX8",
+            authDomain: "magic-pouch.firebaseapp.com",
+            projectId: "magic-pouch",
+            storageBucket: "magic-pouch.firebasestorage.app",
+            messagingSenderId: "816300585480",
+            appId: "1:816300585480:web:0ead89292305defb2c97bd"
+        };
+
         const firebaseApp = initializeApp(firebaseConfig);
         const auth = getAuth(firebaseApp);
         const db = getFirestore(firebaseApp);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         
         // State
         const STATE = {
@@ -399,7 +406,6 @@
             syncKey: localStorage.getItem('magic_pouch_key') || Math.random().toString(36).substr(2, 6).toUpperCase(),
             data: { notes: [], profile: [] },
             editingId: null,
-            targetStatusId: null, // For status modal
             templateFolder: null,
             renameTargetFolder: null,
             currentConfirmAction: null,
@@ -426,13 +432,10 @@
         window.app = {
             
             init: async () => {
+                // Initialize auth and sync
                 try {
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
-                    console.log('Auth success');
+                    await signInAnonymously(auth);
+                    console.log('Anonymous auth success');
                 } catch(e) {
                     console.error('Auth error:', e);
                     app.toast('Auth setup failed', true);
@@ -441,6 +444,7 @@
                 onAuthStateChanged(auth, (user) => {
                     STATE.user = user;
                     if(user) {
+                        console.log('User authenticated:', user.uid);
                         app.setupSync();
                     }
                 });
@@ -463,16 +467,24 @@
             },
 
             setupSync: () => {
-                if(!STATE.user) return;
+                if(!STATE.user) {
+                    console.log('No user, sync not setup');
+                    return;
+                }
+                
+                console.log('Setting up sync for key:', STATE.syncKey);
                 if(STATE.unsubscribe) STATE.unsubscribe();
                 
                 STATE.isSyncing = true;
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sync_sessions', STATE.syncKey);
+                const docRef = doc(db, 'sync', STATE.syncKey);
                 
                 STATE.unsubscribe = onSnapshot(docRef, (snap) => {
+                    console.log('Snapshot received:', snap.exists());
+                    
                     const indicator = document.getElementById('sync-indicator');
                     const statusText = document.getElementById('sync-status-text');
                     
+                    // Connected!
                     indicator.className = "w-2 h-2 rounded-full bg-green-500 animate-pulse";
                     statusText.textContent = STATE.syncKey + " ✓";
                     
@@ -489,9 +501,13 @@
                     console.error('Sync listener error:', error);
                     const indicator = document.getElementById('sync-indicator');
                     const statusText = document.getElementById('sync-status-text');
+                    
                     indicator.className = "w-2 h-2 rounded-full bg-red-500";
                     statusText.textContent = "ERROR";
-                    if(!STATE.data.notes) STATE.data = { notes: [], profile: [] };
+                    
+                    if(!STATE.data.notes) {
+                        STATE.data = { notes: [], profile: [] };
+                    }
                     app.refreshUI();
                 });
             },
@@ -532,15 +548,20 @@
             },
 
             saveToCloud: async () => {
-                if(!STATE.user) return;
+                if(!STATE.user) {
+                    console.log('No user, saving locally only');
+                    return;
+                }
                 try {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'sync_sessions', STATE.syncKey);
+                    const docRef = doc(db, 'sync', STATE.syncKey);
                     await setDoc(docRef, {
                         data: STATE.data,
                         userId: STATE.user.uid,
                         lastUpdated: new Date().toISOString()
                     });
+                    console.log('Data saved to cloud');
                 } catch (e) { 
+                    console.error('Save error:', e);
                     app.toast("Save failed: " + e.message, true); 
                 }
             },
@@ -627,6 +648,7 @@
                 try {
                     window.open(finalUrl, '_blank');
                 } catch(e) {
+                    console.error("Window open error", e);
                     app.toast("Could not open link", true);
                 }
             },
