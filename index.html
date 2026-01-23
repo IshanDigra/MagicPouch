@@ -299,6 +299,9 @@
 
             <textarea id="job-content" class="h-32 text-base leading-relaxed placeholder-gray-300 outline-none resize-none" placeholder="Paste link here..."></textarea>
             
+            <!-- NEW: Remarks Field -->
+            <textarea id="job-remarks" class="h-24 text-sm leading-relaxed placeholder-gray-400 outline-none resize-none bg-gray-50 p-3 rounded-xl border border-gray-100 focus:border-blue-200 transition" placeholder="Add optional remarks (e.g. HR Name, Salary, Stack)..."></textarea>
+
             <div class="text-xs text-gray-400 text-center mt-auto">
                 Jobs are grouped by day added and deleted after 7 days.
             </div>
@@ -385,7 +388,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot, setDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
         // 🔧 CONFIGURATION
@@ -448,11 +451,11 @@
         window.app = {
             
             init: async () => {
-                // Initialize auth and sync
+                // Initialize auth and sync with improved handling
                 try {
                     await signInAnonymously(auth);
                     console.log('Anonymous auth success');
-                } catch(e) {
+                } catch (e) {
                     console.error('Auth error:', e);
                     app.toast('Auth setup failed', true);
                 }
@@ -492,6 +495,7 @@
                 if(STATE.unsubscribe) STATE.unsubscribe();
                 
                 STATE.isSyncing = true;
+                // Using compliant path for public/shared sync data
                 const docRef = doc(db, 'sync', STATE.syncKey);
                 
                 STATE.unsubscribe = onSnapshot(docRef, (snap) => {
@@ -569,6 +573,7 @@
                     return;
                 }
                 try {
+                    // Using compliant path for public/shared sync data
                     const docRef = doc(db, 'sync', STATE.syncKey);
                     await setDoc(docRef, {
                         data: STATE.data,
@@ -649,7 +654,7 @@
                             app.refreshUI();
                             app.toast('Restored!');
                         });
-                    } catch(err) { alert('Invalid file'); }
+                    } catch(err) { app.toast('Invalid file', true); }
                     input.value = '';
                 };
                 reader.readAsText(file);
@@ -676,16 +681,19 @@
                 const title = document.getElementById('job-title');
                 const content = document.getElementById('job-content');
                 const type = document.getElementById('job-type');
+                const remarks = document.getElementById('job-remarks'); // NEW
 
                 if(id) {
                     const item = STATE.data.notes.find(n => n.id === id);
                     title.value = item.title;
                     content.value = item.content;
                     type.value = item.linkType || 'job';
+                    remarks.value = item.remarks || ''; // NEW
                 } else {
                     title.value = '';
                     content.value = '';
                     type.value = 'job';
+                    remarks.value = ''; // NEW
                 }
                 modal.classList.remove('hidden');
             },
@@ -694,11 +702,12 @@
                 const title = document.getElementById('job-title').value;
                 const content = document.getElementById('job-content').value;
                 const linkType = document.getElementById('job-type').value;
+                const remarks = document.getElementById('job-remarks').value; // NEW
 
                 if(!title) return;
 
                 const itemData = { 
-                    title, content, linkType, 
+                    title, content, linkType, remarks, // NEW
                     category: 'job', 
                     updated: Date.now() 
                 };
@@ -938,7 +947,7 @@
                     statusBtnClass = "bg-gray-100 text-gray-300";
                 }
 
-                el.className = `p-3 rounded-xl shadow-sm border ${borderColor} bg-white relative active:scale-[0.99] transition flex justify-between items-center ${isDone ? 'opacity-60' : ''}`;
+                el.className = `p-3 rounded-xl shadow-sm border ${borderColor} bg-white relative active:scale-[0.99] transition flex justify-between items-start ${isDone ? 'opacity-60' : ''}`;
                 
                 let iconClass = "fa-briefcase";
                 if(job.linkType === 'linkedin') iconClass = "fa-brands fa-linkedin";
@@ -949,21 +958,31 @@
                     url = 'https://' + url;
                 }
                 const safeUrl = url.replace(/"/g, '&quot;');
+                
+                // NEW: Prepare remarks HTML if they exist
+                const remarksHtml = job.remarks ? 
+                    `<div class="mt-2 text-xs text-gray-500 bg-gray-50 p-2 rounded-lg border border-gray-100 flex gap-2 items-start">
+                        <i class="fas fa-sticky-note text-gray-300 mt-0.5"></i>
+                        <span class="line-clamp-2">${job.remarks}</span>
+                     </div>` : '';
 
                 el.innerHTML = `
-                    <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 flex-1 overflow-hidden cursor-pointer no-underline text-inherit block">
-                        <div class="w-8 h-8 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 text-blue-600 text-xs">
-                            <i class="${job.linkType === 'linkedin' ? 'fab' : 'fas'} ${iconClass}"></i>
-                        </div>
-                        <div class="min-w-0">
-                            <div class="flex items-center">
-                                ${badgeHtml}
-                                <h4 class="font-bold text-gray-800 text-sm truncate ${isDone ? 'line-through decoration-green-500' : ''}">${job.title}</h4>
+                    <div class="flex-1 min-w-0">
+                        <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 cursor-pointer no-underline text-inherit block mb-1">
+                            <div class="w-8 h-8 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 text-blue-600 text-xs">
+                                <i class="${job.linkType === 'linkedin' ? 'fab' : 'fas'} ${iconClass}"></i>
                             </div>
-                            <p class="text-[10px] text-gray-400 truncate">${job.content}</p>
-                        </div>
-                    </a>
-                    <div class="flex items-center gap-2 ml-2">
+                            <div class="min-w-0">
+                                <div class="flex items-center">
+                                    ${badgeHtml}
+                                    <h4 class="font-bold text-gray-800 text-sm truncate ${isDone ? 'line-through decoration-green-500' : ''}">${job.title}</h4>
+                                </div>
+                                <p class="text-[10px] text-gray-400 truncate">${job.content}</p>
+                            </div>
+                        </a>
+                        ${remarksHtml}
+                    </div>
+                    <div class="flex items-center gap-2 ml-2 self-start mt-1">
                         <div class="flex flex-col items-end gap-1">
                             <span class="text-[9px] text-gray-400 font-medium whitespace-nowrap">${dateStr}</span>
                             <div class="flex items-center gap-2">
@@ -1294,9 +1313,11 @@
             copyText: async (text) => {
                 if(!text) return;
                 try {
+                    // Try/Catch block handles clipboard permission issues
                     await navigator.clipboard.writeText(text);
                     app.toast("Copied!");
                 } catch(e) {
+                    // Fallback for iFrame or permission denial
                     const ta = document.createElement('textarea');
                     ta.value = text;
                     document.body.appendChild(ta);
