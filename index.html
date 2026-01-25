@@ -487,15 +487,13 @@
     <!-- CONFIGURATION & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, onSnapshot, setDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
-        // 🔧 PRODUCTION CONFIGURATION
+        // 🔧 CONFIGURATION
         // ==========================================
-        
-        // 1. Fallback Config (For local dev or direct use)
-        const fallbackConfig = {
+        const firebaseConfig = {
             apiKey: "AIzaSyD3GZnCEWotlYVHElhh3c5RmCKYjzSdhX8",
             authDomain: "magic-pouch.firebaseapp.com",
             projectId: "magic-pouch",
@@ -503,10 +501,6 @@
             messagingSenderId: "816300585480",
             appId: "1:816300585480:web:0ead89292305defb2c97bd"
         };
-
-        // 2. Environment Setup
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : fallbackConfig;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'magic-pouch-default';
 
         const firebaseApp = initializeApp(firebaseConfig);
         const auth = getAuth(firebaseApp);
@@ -519,6 +513,7 @@
             data: { 
                 notes: [], 
                 profile: [],
+                // PLAN DATA SCHEMA
                 plan: {
                     daily: [
                         { id: 'def1', text: 'Apply to 5 Jobs', done: false },
@@ -543,10 +538,16 @@
 
         const MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
 
-        // Status Priorities
+        // Status Priorities for Sorting (Lower number = Higher priority)
         const STATUS_PRIORITY = {
-            'referral-received': 0, 'pending': 1, 'reminder': 2, 'referral-asked': 3,
-            'applied': 4, 'completed': 4, 'referral': 3, 'referral-pending': 1
+            'referral-received': 0, // Top Priority
+            'pending': 1,           // To Apply
+            'reminder': 2,          // Follow-up Due
+            'referral-asked': 3,    // Referral Asked
+            'applied': 4,           // Applied
+            'completed': 4,         // Legacy
+            'referral': 3,          // Legacy fallback
+            'referral-pending': 1   // Legacy fallback -> To Apply
         };
 
         // Helper: Calculate difference in calendar days
@@ -563,21 +564,14 @@
         window.app = {
             
             init: async () => {
-                // Initialize Auth with Production Checks
-                const initAuth = async () => {
-                    try {
-                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                            await signInWithCustomToken(auth, __initial_auth_token);
-                        } else {
-                            await signInAnonymously(auth);
-                        }
-                    } catch (e) {
-                        console.error('Auth setup error:', e);
-                        app.toast('Auth failed', true);
-                    }
-                };
-                
-                await initAuth();
+                // Initialize auth and sync with improved handling
+                try {
+                    await signInAnonymously(auth);
+                    console.log('Anonymous auth success');
+                } catch (e) {
+                    console.error('Auth error:', e);
+                    app.toast('Auth setup failed', true);
+                }
 
                 onAuthStateChanged(auth, (user) => {
                     STATE.user = user;
@@ -587,30 +581,46 @@
                     }
                 });
                 
-                // Init Local Settings
                 localStorage.setItem('magic_pouch_key', STATE.syncKey);
-                if(document.getElementById('sync-status-text')) {
-                    document.getElementById('sync-status-text').textContent = STATE.syncKey;
+                
+                const statusText = document.getElementById('sync-status-text');
+                if(statusText) {
+                    statusText.textContent = STATE.syncKey;
                 }
-                document.getElementById('sync-key-input').value = STATE.syncKey;
+                
+                const keyInput = document.getElementById('sync-key-input');
+                if(keyInput) {
+                    keyInput.value = STATE.syncKey;
+                }
                 
                 // Listeners
-                document.getElementById('copy-sync-key-btn').addEventListener('click', () => app.copyText(document.getElementById('sync-key-input').value));
-                document.getElementById('generate-key-btn').addEventListener('click', () => {
-                    const newCode = Math.random().toString(36).substr(2, 6).toUpperCase();
-                    document.getElementById('sync-key-input').value = newCode;
-                });
+                const copyBtn = document.getElementById('copy-sync-key-btn');
+                if(copyBtn) {
+                    copyBtn.addEventListener('click', () => {
+                        const kInput = document.getElementById('sync-key-input');
+                        if(kInput) app.copyText(kInput.value);
+                    });
+                }
+                
+                const genBtn = document.getElementById('generate-key-btn');
+                if(genBtn) {
+                    genBtn.addEventListener('click', () => {
+                        const newCode = Math.random().toString(36).substr(2, 6).toUpperCase();
+                        const kInput = document.getElementById('sync-key-input');
+                        if(kInput) kInput.value = newCode;
+                    });
+                }
             },
 
             setupSync: () => {
-                if(!STATE.user) return;
+                if(!STATE.user) {
+                    return;
+                }
                 
                 if(STATE.unsubscribe) STATE.unsubscribe();
                 
                 STATE.isSyncing = true;
-                
-                // PRODUCTION COMPLIANT PATH: artifacts/{appId}/public/data/{collection}/{docId}
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'magic_pouches', STATE.syncKey);
+                const docRef = doc(db, 'sync', STATE.syncKey);
                 
                 STATE.unsubscribe = onSnapshot(docRef, (snap) => {
                     const indicator = document.getElementById('sync-indicator');
@@ -858,8 +868,7 @@
             saveToCloud: async () => {
                 if(!STATE.user) return;
                 try {
-                    // COMPLIANT PATH
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'magic_pouches', STATE.syncKey);
+                    const docRef = doc(db, 'sync', STATE.syncKey);
                     await setDoc(docRef, {
                         data: STATE.data,
                         userId: STATE.user.uid,
