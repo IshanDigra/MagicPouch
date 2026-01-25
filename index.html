@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,6 +11,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SortableJS for Drag and Drop -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <!-- Google Fonts: Fredoka for the Logo -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
     
@@ -55,43 +57,46 @@
 <body class="bg-gray-50 h-screen flex flex-col text-gray-800 font-sans overflow-hidden">
 
     <!-- === HEADER === -->
-    <header class="bg-white shrink-0 safe-pt z-20">
-        <div class="h-16 flex items-center justify-between px-4">
-            <div class="flex items-center gap-2 overflow-hidden">
-                <!-- LOGO: Doraemon Magic Pouch Theme -->
-                <div class="w-10 h-10 flex items-center justify-center shrink-0">
+    <header class="bg-white shrink-0 safe-pt z-20 shadow-sm border-b border-gray-100">
+        <div class="h-16 flex items-center px-4 gap-3">
+            <!-- LOGO: Clickable Area for Menu -->
+            <div class="relative cursor-pointer active:scale-95 transition select-none shrink-0" onclick="app.openSettings()">
+                <!-- Icon with Text Inside -->
+                <div class="w-12 h-12 flex items-center justify-center">
                     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-sm filter">
-                        <!-- Body Blue -->
+                        <defs>
+                            <!-- Path for text to follow (Arching over the top) -->
+                            <path id="textCircle" d="M 12,50 A 38,38 0 1 1 88,50" />
+                        </defs>
+                        
                         <circle cx="50" cy="50" r="50" fill="#0096E8" />
-                        <!-- White Stomach -->
                         <circle cx="50" cy="55" r="35" fill="white" />
-                        <!-- The Magic Pouch (Pocket) - Closed D Shape -->
                         <path d="M22 55 A 28 28 0 0 0 78 55 Z" stroke="#0096E8" stroke-width="2.5" fill="none" stroke-linejoin="round" />
-                        <!-- Collar -->
                         <path d="M5 25 Q 50 45 95 25" stroke="#E73345" stroke-width="8" fill="none" stroke-linecap="round" />
-                        <!-- Bell -->
                         <circle cx="50" cy="40" r="8" fill="#F1C40F" stroke="#333" stroke-width="1.5" />
                         <line x1="43" y1="37" x2="57" y2="37" stroke="#333" stroke-width="1.5" />
                         <circle cx="50" cy="42" r="1.5" fill="#333" />
                         <line x1="50" y1="42" x2="50" y2="48" stroke="#333" stroke-width="1.5" />
+
+                        <!-- Curved Text -->
+                        <text font-size="11.5" font-weight="800" fill="#FFD700" letter-spacing="0.5" text-anchor="middle" style="font-family: 'Fredoka', sans-serif; text-shadow: 1px 1px 0px #005c8f;">
+                            <textPath href="#textCircle" startOffset="50%">MAGIC POUCH</textPath>
+                        </text>
                     </svg>
                 </div>
-                <h1 class="text-xl text-gray-800 whitespace-nowrap pt-1 font-bold" style="font-family: 'Fredoka', sans-serif;">Magic Pouch</h1>
+                
+                <!-- HEADER STATUS ICON / SYNC INDICATOR (Overlay on Logo) -->
+                <div id="header-sync-indicator" class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-red-400 border-2 border-white shadow-sm z-10" title="Sync Status"></div>
             </div>
             
-            <div class="flex items-center gap-2">
-                 <button onclick="app.exportData()" class="w-8 h-8 flex items-center justify-center text-gray-500 bg-gray-100 rounded-full active:scale-95 transition">
-                    <i class="fas fa-download text-xs"></i>
-                </button>
-                <input type="file" id="import-file" class="hidden" onchange="app.importData(this)">
-                <button onclick="document.getElementById('import-file').click()" class="w-8 h-8 flex items-center justify-center text-gray-500 bg-gray-100 rounded-full active:scale-95 transition">
-                    <i class="fas fa-upload text-xs"></i>
-                </button>
-                <button id="sync-btn" class="text-xs bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full font-mono font-bold flex items-center gap-2 active:bg-blue-100 ml-2 transition">
-                    <span id="sync-status-text">OFFLINE</span>
-                    <div id="sync-indicator" class="w-2 h-2 rounded-full bg-red-400"></div>
-                </button>
+            <!-- SEARCH BAR: Replaces Title, Optimizes Space -->
+            <div class="flex-1 max-w-lg relative">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="global-search" placeholder="Search jobs..." class="w-full bg-gray-100 rounded-full py-2 pl-9 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-inner" oninput="app.handleGlobalSearch(this.value)">
             </div>
+            
+            <!-- Hidden Import Input (Required for JS) -->
+            <input type="file" id="import-file" class="hidden" onchange="app.importData(this)">
         </div>
     </header>
 
@@ -102,18 +107,10 @@
         <div id="view-jobs" class="h-full flex flex-col absolute inset-0 transition-transform duration-300 transform translate-x-0 bg-white">
             
             <!-- Quick Gadgets Section -->
-            <div class="bg-white pt-4 pb-2 px-4 shrink-0 flex flex-col items-center">
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3">Quick Content</p>
+            <div class="bg-white py-3 px-4 shrink-0 flex flex-col items-center border-b border-gray-100">
+                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-2">Quick Content</p>
                 <div class="flex flex-wrap justify-center gap-2 w-full max-w-lg" id="job-quick-actions">
                     <!-- Injected via JS -->
-                </div>
-            </div>
-
-            <!-- Search -->
-            <div class="px-4 py-3 bg-white border-b border-gray-100 shrink-0 flex justify-center">
-                <div class="relative w-full max-w-2xl">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                    <input type="text" id="search-input" placeholder="Search saved jobs..." class="w-full bg-gray-100 rounded-2xl py-3 pl-12 pr-4 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow">
                 </div>
             </div>
 
@@ -151,12 +148,6 @@
                         <i class="fas fa-link mr-1"></i> Profile Links
                     </button>
                 </div>
-
-                <!-- Search -->
-                <div class="relative">
-                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" id="template-search" placeholder="Search templates, tags..." class="w-full bg-gray-100 rounded-lg py-2 pl-9 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
-                </div>
             </div>
 
             <div id="templates-list" class="flex-1 overflow-y-auto p-4 space-y-3 safe-pb pb-24">
@@ -169,21 +160,130 @@
             </button>
         </div>
 
+        <!-- VIEW: PLAN (Strategy & Goals) -->
+        <div id="view-plan" class="h-full flex flex-col absolute inset-0 bg-gray-50 transition-transform duration-300 transform translate-x-full">
+            <div class="px-4 py-3 bg-white border-b border-gray-100 shrink-0">
+                <h2 class="font-bold text-xl text-gray-800">Master Plan</h2>
+                <p class="text-xs text-gray-400 mt-1">Focus, Execute, Repeat.</p>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 space-y-6 safe-pb pb-24">
+                
+                <!-- Daily Plan Section -->
+                <div class="fade-in">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-gray-700 text-sm flex items-center gap-2">
+                            <i class="fas fa-sun text-yellow-500"></i> Daily Wins
+                        </h3>
+                        <!-- UPDATED ADD BUTTON -->
+                        <button onclick="app.openAddDailyTaskModal()" class="text-xs text-blue-600 font-bold bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition flex items-center gap-1">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                    <!-- Progress Bar for Motivation -->
+                    <div class="h-1 w-full bg-gray-100 rounded-full mb-3 overflow-hidden">
+                        <div id="daily-progress" class="h-full bg-yellow-400 rounded-full transition-all duration-500 w-0"></div>
+                    </div>
+                    <div id="plan-daily-list" class="space-y-2">
+                        <!-- Daily items injected here -->
+                    </div>
+                    <div class="text-[10px] text-gray-300 mt-2 text-center italic">Drag items to prioritize • Resets automatically at midnight</div>
+                </div>
+
+                <!-- Weekly Plan Section -->
+                <div class="fade-in" style="animation-delay: 0.1s">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-gray-700 text-sm flex items-center gap-2">
+                            <i class="fas fa-calendar-week text-indigo-500"></i> Weekly Focus
+                        </h3>
+                    </div>
+                    <div class="relative">
+                        <textarea id="plan-weekly-text" oninput="app.savePlanText('weekly')" class="w-full h-28 bg-gray-50 rounded-xl border border-gray-100 p-4 text-sm focus:bg-white focus:border-indigo-200 focus:ring-4 focus:ring-indigo-50/50 focus:outline-none resize-none transition-all placeholder-gray-400 leading-relaxed" placeholder="1. Networking Goal&#10;2. Application Target&#10;3. Skill to Learn"></textarea>
+                    </div>
+                </div>
+
+                <!-- Monthly Plan Section -->
+                <div class="fade-in" style="animation-delay: 0.2s">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-gray-700 text-sm flex items-center gap-2">
+                            <i class="fas fa-bullseye text-red-500"></i> Monthly Vision
+                        </h3>
+                    </div>
+                    <div class="relative">
+                        <textarea id="plan-monthly-text" oninput="app.savePlanText('monthly')" class="w-full h-28 bg-gray-50 rounded-xl border border-gray-100 p-4 text-sm focus:bg-white focus:border-red-200 focus:ring-4 focus:ring-red-50/50 focus:outline-none resize-none transition-all placeholder-gray-400 leading-relaxed" placeholder="Where do you want to be in 30 days? What is the 'One Big Thing' you need to achieve?"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </main>
 
     <!-- === BOTTOM NAV === -->
     <nav class="bg-white border-t border-gray-200 flex justify-around items-center h-16 safe-pb shrink-0 z-30">
-        <button onclick="app.switchView('jobs')" class="nav-btn active text-blue-600 flex flex-col items-center gap-1 w-full h-full justify-center">
-            <i class="fas fa-check-double text-xl"></i>
+        <button onclick="app.switchView('jobs')" class="nav-btn active text-blue-600 flex flex-col items-center gap-1 w-full h-full justify-center group">
+            <i class="fas fa-check-double text-xl group-active:scale-90 transition"></i>
             <span class="text-[10px] font-bold">Apply</span>
         </button>
-        <button onclick="app.switchView('templates')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center">
-            <i class="fas fa-layer-group text-xl"></i>
-            <span class="text-[10px] font-bold">Manage</span>
+        <button onclick="app.switchView('plan')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group">
+            <!-- UPDATED ICON -->
+            <i class="fas fa-bullseye text-xl group-active:scale-90 transition"></i>
+            <span class="text-[10px] font-bold">Plan</span>
+        </button>
+        <button onclick="app.switchView('templates')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group">
+            <i class="fas fa-folder text-xl group-active:scale-90 transition"></i>
+            <span class="text-[10px] font-bold">Library</span>
         </button>
     </nav>
 
     <!-- === MODALS === -->
+
+    <!-- NEW: Add Daily Task Modal -->
+    <div id="modal-add-task" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl">
+            <h3 class="font-bold text-lg mb-4">Add Daily Win</h3>
+            <input type="text" id="new-task-input" class="w-full bg-gray-100 rounded-xl py-3 px-4 mb-4 outline-none text-sm focus:ring-2 focus:ring-blue-500" placeholder="e.g. Apply to 5 jobs">
+            <div class="flex gap-3">
+                <button onclick="document.getElementById('modal-add-task').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl">Cancel</button>
+                <button onclick="app.saveDailyTask()" class="flex-1 py-3 text-white font-bold bg-blue-600 rounded-xl">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings/Menu Modal (Triggered by Logo) -->
+    <div id="modal-settings" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-6 backdrop-blur-sm" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl">
+            <h3 class="font-bold text-lg mb-4 text-[#B8860B]">Magic Pouch Menu</h3>
+            
+            <!-- Sync Section -->
+            <div class="mb-4 bg-blue-50 p-4 rounded-xl border border-blue-100">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs font-bold text-blue-800 uppercase">Sync Status</span>
+                    <div id="sync-indicator" class="w-2 h-2 rounded-full bg-red-400"></div>
+                </div>
+                <div class="flex justify-between items-center mb-3">
+                     <span id="sync-status-text" class="font-mono text-sm text-gray-600">OFFLINE</span>
+                </div>
+                <button onclick="document.getElementById('modal-settings').classList.add('hidden'); document.getElementById('modal-sync').classList.remove('hidden')" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg shadow-sm text-sm hover:bg-blue-700 transition">
+                    <i class="fas fa-sync-alt mr-2"></i> Connect Cloud
+                </button>
+            </div>
+
+            <!-- Data Actions -->
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <button onclick="app.exportData()" class="flex flex-col items-center justify-center gap-2 p-4 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition active:scale-95">
+                    <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600"><i class="fas fa-download"></i></div>
+                    <span class="text-xs font-bold text-gray-600">Backup</span>
+                </button>
+                <button onclick="document.getElementById('import-file').click()" class="flex flex-col items-center justify-center gap-2 p-4 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition active:scale-95">
+                    <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600"><i class="fas fa-upload"></i></div>
+                    <span class="text-xs font-bold text-gray-600">Restore</span>
+                </button>
+            </div>
+            
+            <button onclick="document.getElementById('modal-settings').classList.add('hidden')" class="w-full py-3 text-gray-500 font-bold bg-gray-100 rounded-xl">Close</button>
+        </div>
+    </div>
     
     <!-- Custom Confirm Modal -->
     <div id="modal-confirm" class="fixed inset-0 bg-black/50 z-[60] hidden flex items-center justify-center p-6 backdrop-blur-sm">
@@ -387,13 +487,15 @@
     <!-- CONFIGURATION & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, onSnapshot, setDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ==========================================
-        // 🔧 CONFIGURATION
+        // 🔧 PRODUCTION CONFIGURATION
         // ==========================================
-        const firebaseConfig = {
+        
+        // 1. Fallback Config (For local dev or direct use)
+        const fallbackConfig = {
             apiKey: "AIzaSyD3GZnCEWotlYVHElhh3c5RmCKYjzSdhX8",
             authDomain: "magic-pouch.firebaseapp.com",
             projectId: "magic-pouch",
@@ -401,6 +503,10 @@
             messagingSenderId: "816300585480",
             appId: "1:816300585480:web:0ead89292305defb2c97bd"
         };
+
+        // 2. Environment Setup
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : fallbackConfig;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'magic-pouch-default';
 
         const firebaseApp = initializeApp(firebaseConfig);
         const auth = getAuth(firebaseApp);
@@ -410,39 +516,45 @@
         const STATE = {
             user: null,
             syncKey: localStorage.getItem('magic_pouch_key') || Math.random().toString(36).substr(2, 6).toUpperCase(),
-            data: { notes: [], profile: [] },
+            data: { 
+                notes: [], 
+                profile: [],
+                plan: {
+                    daily: [
+                        { id: 'def1', text: 'Apply to 5 Jobs', done: false },
+                        { id: 'def2', text: 'Reach out to 2 Recruiters', done: false }
+                    ],
+                    weekly: '',
+                    monthly: '',
+                    lastLogin: '',
+                    streak: 0
+                }
+            },
             editingId: null,
             templateFolder: null,
             renameTargetFolder: null,
             currentConfirmAction: null,
             openFolders: new Set(),
+            hasInitializedFolders: false,
             unsubscribe: null,
-            isSyncing: false
+            isSyncing: false,
+            currentView: 'jobs' 
         };
 
         const MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
 
-        // Status Priorities for Sorting (Lower number = Higher priority)
+        // Status Priorities
         const STATUS_PRIORITY = {
-            'referral-received': 0, // Top Priority
-            'pending': 1,           // To Apply
-            'reminder': 2,          // Follow-up Due
-            'referral-asked': 3,    // Referral Asked
-            'applied': 4,           // Applied
-            'completed': 4,         // Legacy
-            'referral': 3,          // Legacy fallback
-            'referral-pending': 1   // Legacy fallback -> To Apply
+            'referral-received': 0, 'pending': 1, 'reminder': 2, 'referral-asked': 3,
+            'applied': 4, 'completed': 4, 'referral': 3, 'referral-pending': 1
         };
 
         // Helper: Calculate difference in calendar days
         const getDaysDifference = (timestamp) => {
             const now = new Date();
             const date = new Date(timestamp);
-            
-            // Reset time to midnight for accurate day calculation
             const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const startOfDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-            
             const diffTime = startOfToday - startOfDate;
             return Math.floor(diffTime / MILLIS_PER_DAY);
         };
@@ -451,14 +563,21 @@
         window.app = {
             
             init: async () => {
-                // Initialize auth and sync with improved handling
-                try {
-                    await signInAnonymously(auth);
-                    console.log('Anonymous auth success');
-                } catch (e) {
-                    console.error('Auth error:', e);
-                    app.toast('Auth setup failed', true);
-                }
+                // Initialize Auth with Production Checks
+                const initAuth = async () => {
+                    try {
+                        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                            await signInWithCustomToken(auth, __initial_auth_token);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch (e) {
+                        console.error('Auth setup error:', e);
+                        app.toast('Auth failed', true);
+                    }
+                };
+                
+                await initAuth();
 
                 onAuthStateChanged(auth, (user) => {
                     STATE.user = user;
@@ -468,16 +587,14 @@
                     }
                 });
                 
+                // Init Local Settings
                 localStorage.setItem('magic_pouch_key', STATE.syncKey);
-                document.getElementById('sync-status-text').textContent = STATE.syncKey;
+                if(document.getElementById('sync-status-text')) {
+                    document.getElementById('sync-status-text').textContent = STATE.syncKey;
+                }
                 document.getElementById('sync-key-input').value = STATE.syncKey;
-                document.getElementById('sync-btn').onclick = () => document.getElementById('modal-sync').classList.remove('hidden');
                 
-                // Search Listeners
-                document.getElementById('search-input').addEventListener('input', (e) => app.renderJobs(e.target.value));
-                document.getElementById('template-search').addEventListener('input', (e) => app.renderTemplates(e.target.value));
-
-                // Sync Modal Buttons
+                // Listeners
                 document.getElementById('copy-sync-key-btn').addEventListener('click', () => app.copyText(document.getElementById('sync-key-input').value));
                 document.getElementById('generate-key-btn').addEventListener('click', () => {
                     const newCode = Math.random().toString(36).substr(2, 6).toUpperCase();
@@ -486,50 +603,224 @@
             },
 
             setupSync: () => {
-                if(!STATE.user) {
-                    console.log('No user, sync not setup');
-                    return;
-                }
+                if(!STATE.user) return;
                 
-                console.log('Setting up sync for key:', STATE.syncKey);
                 if(STATE.unsubscribe) STATE.unsubscribe();
                 
                 STATE.isSyncing = true;
-                // Using compliant path for public/shared sync data
-                const docRef = doc(db, 'sync', STATE.syncKey);
+                
+                // PRODUCTION COMPLIANT PATH: artifacts/{appId}/public/data/{collection}/{docId}
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'magic_pouches', STATE.syncKey);
                 
                 STATE.unsubscribe = onSnapshot(docRef, (snap) => {
-                    console.log('Snapshot received:', snap.exists());
-                    
                     const indicator = document.getElementById('sync-indicator');
                     const statusText = document.getElementById('sync-status-text');
+                    const headerIndicator = document.getElementById('header-sync-indicator');
                     
-                    // Connected!
-                    indicator.className = "w-2 h-2 rounded-full bg-green-500 animate-pulse";
-                    statusText.textContent = STATE.syncKey + " ✓";
+                    const isConnected = snap.exists();
+                    if(indicator) indicator.className = "w-2 h-2 rounded-full bg-green-500 animate-pulse";
+                    if(statusText) statusText.textContent = STATE.syncKey + " ✓";
+                    if(headerIndicator) headerIndicator.className = "absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-white shadow-sm z-10 animate-pulse";
                     
-                    if(snap.exists()) {
-                        const remoteData = snap.data().data || { notes: [], profile: [] };
-                        STATE.data = remoteData;
+                    if(isConnected) {
+                        const remoteData = snap.data().data || {};
+                        // Backward compatibility and data sanitization
+                        STATE.data = app.sanitizeData(remoteData);
+                        
+                        app.checkDailyReset(); 
                         app.cleanupOldJobs();
-                        app.processAutomationRules(); // New Rule Check
+                        app.processAutomationRules();
                     } else {
-                        STATE.data = { notes: [], profile: [] };
+                        // Init new default data
+                        STATE.data = app.sanitizeData({});
                     }
                     app.refreshUI();
                 }, (error) => {
                     console.error('Sync listener error:', error);
                     const indicator = document.getElementById('sync-indicator');
                     const statusText = document.getElementById('sync-status-text');
+                    const headerIndicator = document.getElementById('header-sync-indicator');
                     
-                    indicator.className = "w-2 h-2 rounded-full bg-red-500";
-                    statusText.textContent = "ERROR";
-                    
-                    if(!STATE.data.notes) {
-                        STATE.data = { notes: [], profile: [] };
-                    }
-                    app.refreshUI();
+                    if(indicator) indicator.className = "w-2 h-2 rounded-full bg-red-400";
+                    if(statusText) statusText.textContent = "ERROR";
+                    if(headerIndicator) headerIndicator.className = "absolute bottom-0 right-0 w-3 h-3 rounded-full bg-red-400 border-2 border-white shadow-sm z-10";
                 });
+            },
+
+            // --- DATA SANITIZATION (Backward Compatibility) ---
+            sanitizeData: (data) => {
+                // Ensure base structure
+                const safeData = data || {};
+                
+                // 1. Notes (Jobs/Templates)
+                if (!Array.isArray(safeData.notes)) safeData.notes = [];
+                
+                // 2. Profile Links
+                if (!Array.isArray(safeData.profile)) safeData.profile = [];
+                
+                // 3. Plan Section (New Feature Compatibility)
+                if (!safeData.plan || typeof safeData.plan !== 'object') {
+                    safeData.plan = {};
+                }
+                
+                // Ensure Plan sub-fields exist
+                if (!Array.isArray(safeData.plan.daily)) {
+                    safeData.plan.daily = [
+                        { id: 'def1', text: 'Apply to 5 Jobs', done: false },
+                        { id: 'def2', text: 'Reach out to 2 Recruiters', done: false }
+                    ];
+                }
+                if (typeof safeData.plan.weekly !== 'string') safeData.plan.weekly = '';
+                if (typeof safeData.plan.monthly !== 'string') safeData.plan.monthly = '';
+                if (typeof safeData.plan.lastLogin !== 'string') safeData.plan.lastLogin = '';
+                if (typeof safeData.plan.streak !== 'number') safeData.plan.streak = 0;
+
+                return safeData;
+            },
+
+            // --- MENU HANDLER ---
+            openSettings: () => {
+                document.getElementById('modal-settings').classList.remove('hidden');
+            },
+
+            // --- PLAN / PSYCHOLOGY LOGIC ---
+            checkDailyReset: () => {
+                const today = new Date().toLocaleDateString();
+                const lastLogin = STATE.data.plan.lastLogin;
+
+                // If it's a new day
+                if (lastLogin !== today) {
+                    console.log("New day detected! Performing daily reset.");
+                    
+                    if (lastLogin) {
+                        const d1 = new Date(lastLogin);
+                        const d2 = new Date();
+                        const diffTime = Math.abs(d2 - d1);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                        
+                        if (diffDays <= 2) { 
+                            STATE.data.plan.streak += 1;
+                        } else {
+                            STATE.data.plan.streak = 1; 
+                        }
+                    } else {
+                        STATE.data.plan.streak = 1; 
+                    }
+
+                    // 2. Fresh Start Effect: Reset Daily Checklist
+                    STATE.data.plan.daily.forEach(task => task.done = false);
+                    
+                    // 3. Update Date
+                    STATE.data.plan.lastLogin = today;
+                    app.saveToCloud();
+                }
+            },
+
+            renderPlan: () => {
+                const plan = STATE.data.plan;
+                
+                // 1. Daily List
+                const listEl = document.getElementById('plan-daily-list');
+                listEl.innerHTML = '';
+                
+                // Calculate completion for progress bar
+                const total = plan.daily.length;
+                const completed = plan.daily.filter(t => t.done).length;
+                const percent = total === 0 ? 0 : (completed / total) * 100;
+                
+                const progressBar = document.getElementById('daily-progress');
+                if (progressBar) {
+                    progressBar.style.width = `${percent}%`;
+                    // Color shift based on completion
+                    if(percent === 100) progressBar.className = "h-full bg-green-500 rounded-full transition-all duration-500";
+                    else progressBar.className = "h-full bg-yellow-400 rounded-full transition-all duration-500";
+                }
+
+                // Initialize Sortable if not already
+                if (!app.sortable) {
+                    app.sortable = new Sortable(listEl, {
+                        animation: 150,
+                        handle: '.drag-handle', // specific handle
+                        onEnd: function (evt) {
+                            // Reorder data array
+                            const item = STATE.data.plan.daily.splice(evt.oldIndex, 1)[0];
+                            STATE.data.plan.daily.splice(evt.newIndex, 0, item);
+                            app.saveToCloud();
+                        },
+                    });
+                }
+
+                plan.daily.forEach((task, idx) => {
+                    const div = document.createElement('div');
+                    // Add subtle animation delay for cascading effect
+                    div.className = "flex items-center gap-3 bg-white p-3.5 rounded-xl border transition-all duration-300 " + (task.done ? "border-green-100 bg-green-50/50" : "border-gray-100 hover:border-blue-200");
+                    div.innerHTML = `
+                        <!-- Grip Handle for Dragging -->
+                        <div class="drag-handle text-gray-300 cursor-move px-1 hover:text-gray-500 transition-colors">
+                            <i class="fas fa-grip-vertical text-xs"></i>
+                        </div>
+                        
+                        <div onclick="app.togglePlanTask(${idx})" class="w-6 h-6 rounded-full border-2 flex items-center justify-center cursor-pointer transition-colors duration-300 ${task.done ? 'bg-green-500 border-green-500 text-white scale-110' : 'border-gray-300 text-transparent hover:border-blue-400'}">
+                            <i class="fas fa-check text-[10px]"></i>
+                        </div>
+                        <span class="text-sm font-medium ${task.done ? 'text-gray-400 line-through transition-colors duration-300' : 'text-gray-700'} flex-1 select-none cursor-pointer" onclick="app.togglePlanTask(${idx})">${task.text}</span>
+                        <button onclick="app.deletePlanTask(${idx})" class="w-8 h-8 flex items-center justify-center text-gray-300 hover:text-red-400 hover:bg-red-50 rounded-full transition-colors"><i class="fas fa-times"></i></button>
+                    `;
+                    listEl.appendChild(div);
+                });
+
+                // 2. Weekly/Monthly Text
+                document.getElementById('plan-weekly-text').value = plan.weekly || '';
+                document.getElementById('plan-monthly-text').value = plan.monthly || '';
+            },
+
+            togglePlanTask: (idx) => {
+                STATE.data.plan.daily[idx].done = !STATE.data.plan.daily[idx].done;
+                app.saveToCloud();
+                app.renderPlan();
+                
+                // Psychology: Dopamine hit sound or effect could go here
+                if(STATE.data.plan.daily[idx].done) {
+                    app.toast("Nice work! 🎉");
+                }
+            },
+
+            // --- REPLACED PROMPT WITH MODAL ---
+            openAddDailyTaskModal: () => {
+                const input = document.getElementById('new-task-input');
+                input.value = '';
+                document.getElementById('modal-add-task').classList.remove('hidden');
+                setTimeout(() => input.focus(), 100);
+            },
+
+            saveDailyTask: () => {
+                const text = document.getElementById('new-task-input').value.trim();
+                if(text) {
+                    STATE.data.plan.daily.push({ id: Date.now().toString(), text, done: false });
+                    app.saveToCloud();
+                    app.renderPlan();
+                    document.getElementById('modal-add-task').classList.add('hidden');
+                }
+            },
+
+            // --- REPLACED CONFIRM WITH MODAL ---
+            deletePlanTask: (idx) => {
+                app.openConfirm("Remove this daily task?", () => {
+                    STATE.data.plan.daily.splice(idx, 1);
+                    app.saveToCloud();
+                    app.renderPlan();
+                });
+            },
+
+            savePlanText: (type) => {
+                const val = document.getElementById(`plan-${type}-text`).value;
+                STATE.data.plan[type] = val;
+                // Debounce save in a real app, but direct save here for simplicity
+                // Using a small timeout to prevent Firestore spam
+                if(app.planSaveTimeout) clearTimeout(app.planSaveTimeout);
+                app.planSaveTimeout = setTimeout(() => {
+                    app.saveToCloud();
+                }, 1000);
             },
 
             // --- AUTOMATION LOGIC ---
@@ -538,24 +829,20 @@
                 let hasChanges = false;
                 
                 STATE.data.notes.forEach(note => {
-                    // Check specifically for "Referral Asked"
-                    // Map legacy 'referral' status to 'referral-asked' logic if needed, or assume new
                     const statusToCheck = note.status === 'referral' ? 'referral-asked' : note.status;
 
                     if (note.category === 'job' && statusToCheck === 'referral-asked') {
                         const lastUpdated = note.updated || note.created;
-                        // If referral asked > 1 day ago, change to 'reminder'
                         if ((now - lastUpdated) > MILLIS_PER_DAY) {
                             note.status = 'reminder';
-                            note.updated = now; // Update timestamp
+                            note.updated = now; 
                             hasChanges = true;
-                            console.log(`Auto-promoted job ${note.title} to reminder`);
                         }
                     }
                 });
 
                 if (hasChanges) {
-                    app.saveToCloud(); // Save the updated statuses
+                    app.saveToCloud();
                     app.toast("Checked follow-ups", false);
                 }
             },
@@ -563,27 +850,23 @@
             refreshUI: () => {
                 app.renderJobs();
                 app.renderTemplates();
+                app.renderPlan(); // Refresh Plan view too
                 app.renderQuickActions();
                 app.renderProfileManageList();
             },
 
             saveToCloud: async () => {
-                if(!STATE.user) {
-                    console.log('No user, saving locally only');
-                    return;
-                }
+                if(!STATE.user) return;
                 try {
-                    // Using compliant path for public/shared sync data
-                    const docRef = doc(db, 'sync', STATE.syncKey);
+                    // COMPLIANT PATH
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'magic_pouches', STATE.syncKey);
                     await setDoc(docRef, {
                         data: STATE.data,
                         userId: STATE.user.uid,
                         lastUpdated: new Date().toISOString()
                     });
-                    console.log('Data saved to cloud');
                 } catch (e) { 
                     console.error('Save error:', e);
-                    app.toast("Save failed: " + e.message, true); 
                 }
             },
 
@@ -592,7 +875,9 @@
                 if(newKey && newKey !== STATE.syncKey) {
                     STATE.syncKey = newKey;
                     localStorage.setItem('magic_pouch_key', newKey);
-                    document.getElementById('sync-status-text').textContent = newKey;
+                    if(document.getElementById('sync-status-text')) {
+                        document.getElementById('sync-status-text').textContent = newKey;
+                    }
                     app.setupSync();
                     document.getElementById('modal-sync').classList.add('hidden');
                     app.toast("Switched Sync Channel");
@@ -601,7 +886,6 @@
                 }
             },
 
-            // --- CONFIRMATION MODAL SYSTEM ---
             openConfirm: (msg, actionFn) => {
                 document.getElementById('confirm-msg').textContent = msg;
                 STATE.currentConfirmAction = actionFn;
@@ -616,13 +900,11 @@
                 document.getElementById('modal-confirm').classList.add('hidden');
             },
 
-            // --- DATA MANAGEMENT ---
             cleanupOldJobs: () => {
                 const now = Date.now();
                 const initialLen = STATE.data.notes.length;
                 STATE.data.notes = STATE.data.notes.filter(n => {
                     if(n.category !== 'job') return true;
-                    // Keep completed jobs for history up to 7 days too
                     const daysOld = Math.floor((now - n.created) / MILLIS_PER_DAY);
                     return daysOld <= 7;
                 });
@@ -649,7 +931,7 @@
                     try {
                         const imported = JSON.parse(ev.target.result);
                         app.openConfirm("Replace current data with backup?", () => {
-                            STATE.data = imported; 
+                            STATE.data = app.sanitizeData(imported); // Use sanitizer
                             app.saveToCloud(); 
                             app.refreshUI();
                             app.toast('Restored!');
@@ -674,26 +956,33 @@
                 }
             },
 
-            // --- JOBS VIEW ---
+            handleGlobalSearch: (query) => {
+                if (STATE.currentView === 'jobs') {
+                    app.renderJobs(query);
+                } else if (STATE.currentView === 'templates') {
+                    app.renderTemplates(query);
+                }
+            },
+
             openJobModal: (id = null) => {
                 STATE.editingId = id;
                 const modal = document.getElementById('modal-job');
                 const title = document.getElementById('job-title');
                 const content = document.getElementById('job-content');
                 const type = document.getElementById('job-type');
-                const remarks = document.getElementById('job-remarks'); // NEW
+                const remarks = document.getElementById('job-remarks');
 
                 if(id) {
                     const item = STATE.data.notes.find(n => n.id === id);
                     title.value = item.title;
                     content.value = item.content;
                     type.value = item.linkType || 'job';
-                    remarks.value = item.remarks || ''; // NEW
+                    remarks.value = item.remarks || '';
                 } else {
                     title.value = '';
                     content.value = '';
                     type.value = 'job';
-                    remarks.value = ''; // NEW
+                    remarks.value = '';
                 }
                 modal.classList.remove('hidden');
             },
@@ -702,12 +991,12 @@
                 const title = document.getElementById('job-title').value;
                 const content = document.getElementById('job-content').value;
                 const linkType = document.getElementById('job-type').value;
-                const remarks = document.getElementById('job-remarks').value; // NEW
+                const remarks = document.getElementById('job-remarks').value;
 
                 if(!title) return;
 
                 const itemData = { 
-                    title, content, linkType, remarks, // NEW
+                    title, content, linkType, remarks,
                     category: 'job', 
                     updated: Date.now() 
                 };
@@ -741,7 +1030,7 @@
                     const note = STATE.data.notes.find(n => n.id === STATE.targetStatusId);
                     if (note) {
                         note.status = newStatus;
-                        note.updated = Date.now(); // Update time on status change
+                        note.updated = Date.now();
                         app.saveToCloud();
                         app.renderJobs();
                     }
@@ -781,7 +1070,6 @@
                 const now = Date.now();
                 let jobs = (STATE.data.notes || []).filter(n => n.category === 'job');
 
-                // Filter logic
                 if(filter) {
                     const q = filter.toLowerCase();
                     jobs = jobs.filter(n => n.title.toLowerCase().includes(q));
@@ -801,7 +1089,6 @@
                     return;
                 }
 
-                // Grouping Logic
                 const groups = {};
                 jobs.forEach(job => {
                     const daysOld = getDaysDifference(job.created);
@@ -816,7 +1103,6 @@
                     let label = day === 0 ? "Today" : day === 1 ? "Yesterday" : `${day} Days Ago`;
                     let dayJobs = groups[day];
                     
-                    // --- SORTING PRIORITY ---
                     dayJobs.sort((a, b) => {
                         const sA = (a.status === 'referral' ? 'referral-asked' : (a.status || 'pending'));
                         const sB = (b.status === 'referral' ? 'referral-asked' : (b.status || 'pending'));
@@ -825,7 +1111,6 @@
                         return pA - pB;
                     });
 
-                    // Stats Counting
                     const counts = { 'referral-received': 0, 'pending': 0, 'reminder': 0, 'referral-asked': 0, 'applied': 0 };
                     
                     dayJobs.forEach(j => {
@@ -836,7 +1121,6 @@
                         if(counts[s] !== undefined) counts[s]++;
                     });
 
-                    // Build Badges HTML
                     let badgeHtml = '';
                     if(counts['referral-received'] > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 border border-purple-200 mr-1">${counts['referral-received']} Rec'd</span>`;
                     if(counts.pending > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 border border-gray-200 mr-1">${counts.pending} To Apply</span>`;
@@ -844,46 +1128,51 @@
                     if(counts['referral-asked'] > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-orange-100 text-orange-700 border border-orange-200 mr-1">${counts['referral-asked']} Asked</span>`;
                     if(counts.applied > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-50 text-green-600 border border-green-100">${counts.applied} Done</span>`;
 
-                    // --- COLOR LOGIC BASED ON AGING (Timeline) ---
-                    let headerColor = "border-gray-200 bg-white";
-                    let textColor = "text-gray-700";
-                    let iconColor = "text-gray-400"; // Chevron color
+                    let bgStyle = "";
+                    let borderColor = "";
+                    let textColor = "";
+                    let iconColor = "";
 
-                    if (day === 0) {
-                        // Today: Fresh Blue
-                        headerColor = "border-blue-100 bg-blue-50/60";
-                        textColor = "text-blue-800";
+                    if (day <= 2) {
+                        bgStyle = "background: linear-gradient(to right, #eff6ff, #ccfbf1);"; 
+                        borderColor = "border-blue-100";
+                        textColor = "text-blue-900";
                         iconColor = "text-blue-400";
-                    } else if (day >= 4 && day <= 5) {
-                        // 4-5 Days: Warning Orange
-                        headerColor = "border-orange-200 bg-orange-50"; 
-                        textColor = "text-orange-800";
+                    } else if (day <= 4) {
+                        bgStyle = "background: linear-gradient(to right, #eef2ff, #f3e8ff);";
+                        borderColor = "border-indigo-100";
+                        textColor = "text-indigo-900";
+                        iconColor = "text-indigo-400";
+                    } else if (day <= 6) {
+                        bgStyle = "background: linear-gradient(to right, #fff7ed, #fef3c7);";
+                        borderColor = "border-orange-100";
+                        textColor = "text-orange-900";
                         iconColor = "text-orange-400";
-                    } else if (day >= 6) {
-                        // 6-7 Days: Critical Red (Expiring)
-                        headerColor = "border-red-200 bg-red-50";
-                        textColor = "text-red-800";
+                    } else {
+                        bgStyle = "background: linear-gradient(to right, #fef2f2, #ffe4e6);";
+                        borderColor = "border-red-100";
+                        textColor = "text-red-900";
                         iconColor = "text-red-400";
                     }
                     
-                    // Check if we need to auto-open (Urgent Tasks inside)
-                    const isUrgentTask = counts.reminder > 0 || counts['referral-received'] > 0;
-                    
                     const listId = `job-group-${day}`;
                     const iconId = `icon-group-${day}`;
-                    const isOpen = STATE.openFolders.has(listId);
                     
-                    // Open if manually opened OR has urgent tasks
-                    const shouldOpen = isOpen || isUrgentTask;
-                    const listClass = shouldOpen ? "pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4" : "hidden pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4";
-                    // Use dynamic iconColor for the chevron
-                    const iconClass = shouldOpen ? `fas fa-chevron-right text-xs ${iconColor} transition-transform duration-200 rotate-90` : `fas fa-chevron-right text-xs ${iconColor} transition-transform duration-200`;
+                    const isUrgentTask = counts.reminder > 0 || counts['referral-received'] > 0;
+                    
+                    if (!STATE.hasInitializedFolders && isUrgentTask) {
+                        STATE.openFolders.add(listId);
+                    }
+                    
+                    const isOpen = STATE.openFolders.has(listId);
+                    const listClass = isOpen ? "pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4" : "hidden pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4";
+                    const iconClass = isOpen ? `fas fa-chevron-right text-xs ${iconColor} transition-transform duration-200 rotate-90` : `fas fa-chevron-right text-xs ${iconColor} transition-transform duration-200`;
 
                     const groupWrapper = document.createElement('div');
                     groupWrapper.className = "fade-in";
 
                     groupWrapper.innerHTML = `
-                        <div onclick="app.toggleFolder('${listId}')" class="flex items-center justify-between p-3 rounded-xl border ${headerColor} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none">
+                        <div onclick="app.toggleFolder('${listId}')" style="${bgStyle}" class="flex items-center justify-between p-3 rounded-xl border ${borderColor} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none">
                             <div class="flex items-center gap-3">
                                 <i id="${iconId}" class="${iconClass}"></i>
                                 <span class="font-bold text-sm ${textColor}">${label}</span>
@@ -905,18 +1194,21 @@
                     groupWrapper.appendChild(itemsContainer);
                     list.appendChild(groupWrapper);
                 });
+                
+                if (!STATE.hasInitializedFolders && sortedKeys.length > 0) {
+                    STATE.hasInitializedFolders = true;
+                }
             },
 
             createJobCard: (job) => {
                 const el = document.createElement('div');
                 let status = job.status || 'pending';
-                if(status === 'referral') status = 'referral-asked'; // Legacy map
-                if(status === 'referral-pending') status = 'pending'; // Legacy map
+                if(status === 'referral') status = 'referral-asked';
+                if(status === 'referral-pending') status = 'pending';
 
                 const isDone = status === 'applied' || status === 'completed';
                 const dateStr = new Date(job.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
                 
-                // Color logic based on status
                 let borderColor = "border-gray-100";
                 let badgeHtml = "";
                 let statusIcon = "fa-ellipsis-h";
@@ -942,7 +1234,6 @@
                     statusIcon = "fa-check";
                     statusBtnClass = "bg-green-100 text-green-600";
                 } else {
-                    // Pending / To Apply
                     statusIcon = "fa-circle";
                     statusBtnClass = "bg-gray-100 text-gray-300";
                 }
@@ -959,7 +1250,6 @@
                 }
                 const safeUrl = url.replace(/"/g, '&quot;');
                 
-                // NEW: Prepare remarks HTML if they exist
                 const remarksHtml = job.remarks ? 
                     `<div class="mt-2 text-xs text-gray-500 bg-gray-50 p-2 rounded-lg border border-gray-100 flex gap-2 items-start">
                         <i class="fas fa-sticky-note text-gray-300 mt-0.5"></i>
@@ -1010,34 +1300,49 @@
                 const profiles = STATE.data.profile || [];
                 const templates = (STATE.data.notes || []).filter(n => n.category === 'template' && n.easyAccess);
 
-                // 1. Render Profile Links (White/Gray Style)
+                const getIconInfo = (label) => {
+                    const l = label.toLowerCase();
+                    if(l.includes('linkedin')) return { cls: 'fab fa-linkedin', color: 'text-blue-700' };
+                    if(l.includes('github')) return { cls: 'fab fa-github', color: 'text-gray-800' };
+                    if(l.includes('resume') || l.includes('cv')) return { cls: 'fas fa-file-alt', color: 'text-red-500' };
+                    if(l.includes('email') || l.includes('mail')) return { cls: 'fas fa-envelope', color: 'text-orange-500' };
+                    if(l.includes('contact') || l.includes('phone') || l.includes('call')) return { cls: 'fas fa-phone', color: 'text-green-500' };
+                    return null;
+                };
+
                 profiles.forEach(p => {
+                    const iconInfo = getIconInfo(p.label);
                     const btn = document.createElement('button');
-                    btn.className = "shrink-0 bg-white border border-gray-200 text-gray-600 px-4 py-2 rounded-xl text-sm font-bold shadow-sm active:bg-gray-50 hover:border-gray-300 transition flex items-center gap-2";
-                    btn.innerHTML = `<i class="fas fa-user-circle text-gray-400"></i> ${p.label}`;
+                    
+                    if (iconInfo) {
+                        btn.className = "shrink-0 w-10 h-10 bg-white border border-gray-200 rounded-full shadow-sm active:scale-90 transition flex items-center justify-center";
+                        btn.innerHTML = `<i class="${iconInfo.cls} ${iconInfo.color} text-lg"></i>`;
+                        btn.title = p.label;
+                    } else {
+                        btn.className = "shrink-0 bg-white border border-gray-200 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm active:bg-gray-50 hover:border-gray-300 transition flex items-center gap-2";
+                        btn.innerHTML = `<i class="fas fa-user-circle text-gray-400"></i> ${p.label}`;
+                    }
+                    
                     btn.onclick = () => app.copyText(p.value);
                     bar.appendChild(btn);
                 });
 
-                // Separator if both types exist
                 if(profiles.length > 0 && templates.length > 0) {
                     const sep = document.createElement('div');
-                    sep.className = "w-px h-6 bg-gray-300 mx-1 self-center";
+                    sep.className = "w-px h-6 bg-gray-200 mx-1 self-center";
                     bar.appendChild(sep);
                 }
 
-                // 2. Render Easy Access Templates (Blue Style)
                 templates.forEach(t => {
                     const btn = document.createElement('button');
-                    btn.className = "shrink-0 bg-blue-50 text-blue-700 px-4 py-2 rounded-xl text-sm font-bold shadow-sm active:bg-blue-100 hover:bg-blue-100 transition flex items-center gap-2";
-                    btn.innerHTML = `<i class="fas fa-bolt text-blue-500"></i> ${t.title}`;
+                    btn.className = "shrink-0 bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm active:bg-blue-100 hover:bg-blue-100 transition flex items-center gap-1.5";
+                    btn.innerHTML = `<i class="fas fa-bolt text-blue-500 text-[10px]"></i> <span class="truncate max-w-[100px]">${t.title}</span>`;
                     btn.onclick = () => app.copyText(t.content);
                     bar.appendChild(btn);
                 });
                 
-                // Fallback message if empty
                 if(profiles.length === 0 && templates.length === 0) {
-                     bar.innerHTML = `<div class="text-xs text-gray-300 italic py-2">Add Profile Links & Templates to see gadgets here.</div>`;
+                     bar.innerHTML = `<div class="text-[10px] text-gray-300 italic py-2">Add Profile Links & Templates to see gadgets here.</div>`;
                 }
             },
 
@@ -1290,23 +1595,65 @@
 
             // --- UTILS ---
             switchView: (viewName) => {
+                STATE.currentView = viewName;
+                
+                // Clear search on switch
+                const searchInput = document.getElementById('global-search');
+                if(searchInput) {
+                    searchInput.value = '';
+                    searchInput.placeholder = viewName === 'jobs' ? 'Search jobs...' : (viewName === 'templates' ? 'Search templates...' : 'Search plans...');
+                }
+
+                // Refresh Data
+                app.renderJobs();
+                app.renderTemplates();
+                app.renderPlan();
+
                 const jobsView = document.getElementById('view-jobs');
                 const tplView = document.getElementById('view-templates');
+                const planView = document.getElementById('view-plan');
                 const navBtns = document.querySelectorAll('.nav-btn');
                 
-                navBtns.forEach(b => b.classList.remove('text-blue-600', 'active', 'text-gray-400'));
+                // RESET Styles & Active States
+                jobsView.style.transform = '';
+                tplView.style.transform = '';
+                planView.style.transform = '';
                 
+                navBtns.forEach(b => {
+                    b.classList.remove('text-blue-600', 'active');
+                    b.classList.add('text-gray-400');
+                });
+                
+                // Reset classes to hidden state
+                const baseClass = "h-full flex flex-col absolute inset-0 transition-transform duration-300 transform bg-white";
+                jobsView.className = baseClass;
+                tplView.className = baseClass + " bg-gray-50"; // Templates has gray bg
+                planView.className = baseClass + " bg-gray-50";
+
+                // Logic
                 if(viewName === 'jobs') {
-                    jobsView.classList.remove('-translate-x-full');
+                    jobsView.classList.add('translate-x-0');
                     tplView.classList.add('translate-x-full');
-                    navBtns[0].classList.add('text-blue-600');
-                    navBtns[1].classList.add('text-gray-400');
+                    planView.classList.add('translate-x-full');
+                    
+                    navBtns[0].classList.add('text-blue-600', 'active');
+                    navBtns[0].classList.remove('text-gray-400');
+                    
                     app.renderQuickActions();
-                } else {
+                } else if (viewName === 'plan') {
                     jobsView.classList.add('-translate-x-full');
-                    tplView.classList.remove('translate-x-full');
-                    navBtns[1].classList.add('text-blue-600');
-                    navBtns[0].classList.add('text-gray-400');
+                    planView.classList.add('translate-x-0'); // Show
+                    tplView.classList.add('translate-x-full');
+                    
+                    navBtns[1].classList.add('text-blue-600', 'active');
+                    navBtns[1].classList.remove('text-gray-400');
+                } else { // templates
+                    jobsView.classList.add('-translate-x-full');
+                    planView.classList.add('-translate-x-full');
+                    tplView.classList.add('translate-x-0');
+                    
+                    navBtns[2].classList.add('text-blue-600', 'active');
+                    navBtns[2].classList.remove('text-gray-400');
                 }
             },
 
