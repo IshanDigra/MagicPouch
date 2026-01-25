@@ -1726,11 +1726,27 @@
                 list.innerHTML = '';
                 
                 let templates = (STATE.data.notes || []).filter(n => n.category === 'template');
+                
+                // SEARCH MODE: Flatten folders and show matches directly
                 if(filter) {
                     const q = filter.toLowerCase();
-                    templates = templates.filter(t => t.title.toLowerCase().includes(q) || (t.folder||'').toLowerCase().includes(q) || (t.tags||'').toLowerCase().includes(q));
+                    templates = templates.filter(t => 
+                        (t.title || '').toLowerCase().includes(q) || 
+                        (t.folder || '').toLowerCase().includes(q) || 
+                        String(t.tags || '').toLowerCase().includes(q)
+                    );
+
+                    if (templates.length === 0) {
+                        list.innerHTML = `<div class="text-center text-gray-400 mt-10 dark:text-gray-500">No matching templates found.</div>`;
+                        return;
+                    }
+
+                    // Render matching templates directly
+                    templates.forEach(t => list.appendChild(app.createTemplateCard(t)));
+                    return; // Exit early to skip folder grouping logic
                 }
 
+                // NORMAL MODE: Group by Folders
                 if (templates.length === 0) {
                     list.innerHTML = `<div class="text-center text-gray-400 mt-10 dark:text-gray-500">No templates. <br>Create one to save time!</div>`;
                     return;
@@ -1812,7 +1828,10 @@
             createTemplateCard: (t) => {
                 const div = document.createElement('div');
                 div.className = "bg-white p-4 rounded-xl border border-gray-100 shadow-sm relative group dark:bg-dark-card dark:border-dark-border";
-                const tagsHtml = t.tags ? t.tags.split(',').map(tag => `<span class="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider dark:bg-gray-800 dark:text-gray-400">${tag.trim()}</span>`).join('') : '';
+                
+                // Safe tag handling
+                const tagsStr = (typeof t.tags === 'string') ? t.tags : '';
+                const tagsHtml = tagsStr ? tagsStr.split(',').map(tag => `<span class="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider dark:bg-gray-800 dark:text-gray-400">${tag.trim()}</span>`).join('') : '';
                 
                 const isEasy = t.easyAccess ? '<i class="fas fa-bolt text-yellow-400 text-xs" title="Easy Access"></i>' : '';
 
@@ -1830,7 +1849,8 @@
                             <button onclick="app.deleteNote('${t.id}')" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>
                         </div>
                     </div>
-                    <div class="bg-gray-50 p-3 rounded-lg text-xs text-gray-600 font-mono leading-relaxed relative group-hover:bg-gray-100 transition cursor-pointer dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700" onclick="app.copyText(this.innerText)">
+                    <!-- Updated: Added line-clamp-2 for 2-line limit, changed innerText to textContent to copy full text -->
+                    <div class="bg-gray-50 p-3 rounded-lg text-xs text-gray-600 font-mono leading-relaxed relative group-hover:bg-gray-100 transition cursor-pointer dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700 line-clamp-2" onclick="app.copyText(this.textContent)">
                         ${t.content}
                         <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-copy text-gray-400 dark:text-gray-500"></i></div>
                     </div>
@@ -2086,11 +2106,20 @@
                 if(viewName === 'templates') vTpls.style.transform = 'translateX(0)';
                 
                 // Update nav
-                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('text-blue-600', 'active', 'dark:text-blue-400'));
-                // Simple index based mapping or query selector would work too, but this is fine for 3 items
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    // Remove active highlight
+                    btn.classList.remove('text-blue-600', 'active', 'dark:text-blue-400');
+                    // Restore inactive gray color
+                    btn.classList.add('text-gray-400', 'dark:text-slate-500');
+                });
+
                 const navIndex = viewName === 'jobs' ? 0 : viewName === 'plan' ? 1 : 2;
-                document.querySelectorAll('.nav-btn')[navIndex].classList.add('text-blue-600', 'active', 'dark:text-blue-400');
-                document.querySelectorAll('.nav-btn')[navIndex].classList.remove('text-gray-400', 'dark:text-gray-500');
+                const activeBtn = document.querySelectorAll('.nav-btn')[navIndex];
+                
+                // Apply active highlight
+                activeBtn.classList.add('text-blue-600', 'active', 'dark:text-blue-400');
+                // Remove inactive gray color
+                activeBtn.classList.remove('text-gray-400', 'dark:text-slate-500');
                 
                 // Refresh data if needed
                 if (viewName === 'plan') app.renderPlan();
