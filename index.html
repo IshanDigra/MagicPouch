@@ -958,7 +958,10 @@
 
                 // Empty slots
                 for(let i=0; i<startDay; i++) {
-                    grid.appendChild(document.createElement('div'));
+                    // Update empty slots for dark mode
+                    const empty = document.createElement('div');
+                    // Optional: Style empty slots if needed, or leave blank/transparent
+                    grid.appendChild(empty);
                 }
 
                 const history = STATE.data.stats.history || {};
@@ -971,16 +974,18 @@
                     const cell = document.createElement('div');
                     const isToday = d === currentDate.getDate();
                     
+                    // Default Light/Dark classes
                     let bgClass = "bg-gray-50 border-gray-100 text-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-600";
                     let content = `<span class="text-[9px] font-bold">${d}</span>`; // Default: show date number
                     let borderClass = "border";
 
                     // Logic: Fire if target met
                     if (count >= target) {
+                        // Success State: Light vs Dark
                         bgClass = "bg-orange-100 border-orange-200 text-orange-500 shadow-sm dark:bg-orange-900/40 dark:border-orange-800 dark:text-orange-400";
                         content = `<i class="fas fa-fire text-sm animate-pulse"></i>`; // Show Fire
                     } else if (count > 0) {
-                        // Activity but missed target
+                        // Activity but missed target: Light vs Dark
                         bgClass = "bg-gray-100 border-gray-200 text-gray-400 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400";
                     }
 
@@ -1967,8 +1972,45 @@
                 const profiles = STATE.data.profile || [];
                 profiles.forEach(p => {
                     const btn = document.createElement('button');
-                    btn.className = "bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200 transition active:scale-95 flex items-center gap-1 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700";
-                    btn.innerHTML = `<i class="fas fa-link text-[10px] opacity-50"></i> ${p.label}`;
+                    const labelLower = p.label.toLowerCase();
+                    let iconClass = "fas fa-link";
+                    let isIconOnly = false;
+                    let specificClasses = "";
+
+                    // Detect types for Icon-Only display
+                    if (labelLower.includes('linkedin')) {
+                        iconClass = "fab fa-linkedin-in";
+                        isIconOnly = true;
+                        specificClasses = "text-blue-700 dark:text-blue-400";
+                    } else if (labelLower.includes('github')) {
+                        iconClass = "fab fa-github";
+                        isIconOnly = true;
+                        specificClasses = "text-gray-800 dark:text-white";
+                    } else if (labelLower.includes('email') || labelLower.includes('mail') || labelLower.includes('gmail')) {
+                        iconClass = "fas fa-envelope";
+                        isIconOnly = true;
+                        specificClasses = "text-red-500 dark:text-red-400";
+                    } else if (labelLower.includes('resume') || labelLower.includes('cv')) {
+                        iconClass = "fas fa-file-alt";
+                        isIconOnly = true;
+                        specificClasses = "text-green-600 dark:text-green-400";
+                    } else if (labelLower.includes('contact') || labelLower.includes('phone') || labelLower.includes('call')) {
+                        iconClass = "fas fa-phone";
+                        isIconOnly = true;
+                        specificClasses = "text-indigo-600 dark:text-indigo-400";
+                    }
+
+                    if (isIconOnly) {
+                        // Render Icon Button
+                        btn.className = `w-9 h-9 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 flex items-center justify-center transition active:scale-90 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 ${specificClasses}`;
+                        btn.innerHTML = `<i class="${iconClass} text-sm"></i>`;
+                        btn.title = p.label; // Tooltip for clarity
+                    } else {
+                        // Render Text Pill (Default)
+                        btn.className = "bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200 transition active:scale-95 flex items-center gap-1 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700";
+                        btn.innerHTML = `<i class="${iconClass} text-[10px] opacity-50"></i> ${p.label}`;
+                    }
+                    
                     btn.onclick = () => app.copyText(p.value);
                     container.appendChild(btn);
                 });
