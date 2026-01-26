@@ -505,13 +505,15 @@
                          <div class="font-bold text-sm">Cold Email</div>
                     </button>
 
-                    <button onclick="app.updateStatus('applied', 'referral')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-purple-50 text-purple-700 border border-purple-200 active:scale-[0.98] transition hover:bg-purple-100 dark:bg-purple-500/10 dark:text-purple-300 dark:border-purple-500/20 dark:hover:bg-purple-500/20">
-                         <div class="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center mb-2 dark:bg-purple-500/30"><i class="fas fa-user-friends"></i></div>
+                    <!-- Updated to TEAL to match Referral Received -->
+                    <button onclick="app.updateStatus('applied', 'referral')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-teal-50 text-teal-700 border border-teal-200 active:scale-[0.98] transition hover:bg-teal-100 dark:bg-teal-500/10 dark:text-teal-300 dark:border-teal-500/20 dark:hover:bg-teal-500/20">
+                         <div class="w-8 h-8 rounded-full bg-teal-200 flex items-center justify-center mb-2 dark:bg-teal-500/30"><i class="fas fa-user-friends"></i></div>
                          <div class="font-bold text-sm">Referral</div>
                     </button>
 
-                    <button onclick="app.updateStatus('applied', 'recruiter')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-teal-50 text-teal-700 border border-teal-200 active:scale-[0.98] transition hover:bg-teal-100 dark:bg-teal-500/10 dark:text-teal-300 dark:border-teal-500/20 dark:hover:bg-teal-500/20">
-                         <div class="w-8 h-8 rounded-full bg-teal-200 flex items-center justify-center mb-2 dark:bg-teal-500/30"><i class="fas fa-headset"></i></div>
+                    <!-- Updated to CYAN to differentiate from Referral -->
+                    <button onclick="app.updateStatus('applied', 'recruiter')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-cyan-50 text-cyan-700 border border-cyan-200 active:scale-[0.98] transition hover:bg-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:border-cyan-500/20 dark:hover:bg-cyan-500/20">
+                         <div class="w-8 h-8 rounded-full bg-cyan-200 flex items-center justify-center mb-2 dark:bg-cyan-500/30"><i class="fas fa-headset"></i></div>
                          <div class="font-bold text-sm">Recruiter</div>
                     </button>
                 </div>
@@ -521,6 +523,12 @@
             <div>
                 <h4 class="text-xs font-bold text-gray-400 uppercase mb-3 dark:text-slate-500">Other Actions</h4>
                 <div class="space-y-2">
+                    <!-- NEW BUTTON: DIRECT APPLY (Renamed) -->
+                    <button onclick="app.updateStatus('direct-apply')" class="w-full flex items-center p-3 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-600 border border-purple-100 active:scale-[0.98] transition dark:bg-purple-500/10 dark:text-purple-300 dark:border-purple-500/20 dark:hover:bg-purple-500/20">
+                        <div class="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center mr-3 text-purple-500 dark:bg-purple-500/20"><i class="fas fa-location-arrow text-xs"></i></div>
+                        <div class="font-bold text-sm">Direct Apply</div>
+                    </button>
+
                     <button onclick="app.updateStatus('referral-asked')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700">
                         <div class="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center mr-3 text-orange-500 dark:bg-orange-500/20"><i class="fas fa-paper-plane text-xs"></i></div>
                         <div class="font-bold text-sm">Referral Asked</div>
@@ -529,8 +537,8 @@
                         <div class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mr-3 text-red-500 dark:bg-red-500/20"><i class="fas fa-bell text-xs"></i></div>
                         <div class="font-bold text-sm">Set Follow-up</div>
                     </button>
-                    <button onclick="app.updateStatus('referral-received')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700">
-                        <div class="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center mr-3 text-purple-500 dark:bg-purple-500/20"><i class="fas fa-handshake text-xs"></i></div>
+                    <button onclick="app.updateStatus('referral-received')" class="w-full flex items-center p-3 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-600 border border-teal-100 active:scale-[0.98] transition dark:bg-teal-500/10 dark:text-teal-300 dark:border-teal-500/20 dark:hover:bg-teal-500/20">
+                        <div class="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center mr-3 text-teal-500 dark:bg-teal-500/20"><i class="fas fa-handshake text-xs"></i></div>
                         <div class="font-bold text-sm">Referral Received</div>
                     </button>
                      <button onclick="app.updateStatus('pending')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-400 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/30 dark:text-slate-500 dark:border-slate-800 dark:hover:bg-slate-800">
@@ -1174,9 +1182,11 @@
             
             renderQuickNotesChips: () => {
                 const container = document.getElementById('quick-notes-container');
+                
+                // Updated Colors for Uniformity
                 const defaults = [
-                    { text: 'Ask Referral', color: 'purple' },
-                    { text: 'Direct Apply', color: 'blue' },
+                    { text: 'Ask Referral', color: 'orange' }, // Matches 'Referral Asked' Status
+                    { text: 'Direct Apply', color: 'purple' }, // Matches 'Direct Apply' Status
                     { text: 'DM Recruiter', color: 'indigo' },
                     { text: 'Salary', color: 'green' }
                 ];
@@ -1343,9 +1353,19 @@
                 });
             },
             
+            // --- FIX: Correct toggle logic for new folder IDs ---
             toggleFolder: (id) => {
                 const list = document.getElementById(id);
-                const icon = document.getElementById(id.replace('job', 'icon'));
+                // Correctly derive icon ID for groups ending in "-list"
+                let iconId = id.replace('-list', '-icon');
+                
+                // Fallback for legacy IDs (job-group-*) if any exist
+                if (id.startsWith('job-group-')) {
+                    iconId = id.replace('job', 'icon');
+                }
+                
+                const icon = document.getElementById(iconId);
+                
                 if (list) {
                     if (list.classList.contains('hidden')) {
                         list.classList.remove('hidden');
@@ -1383,18 +1403,91 @@
                     return;
                 }
 
+                // --- PRIORITY GROUPING LOGIC ---
+
+                // Helper to render a group
+                const renderGroup = (title, items, iconClass, colorClass, borderClass, idPrefix, isOpenDefault = false) => {
+                    if (items.length === 0) return;
+
+                    const listId = `${idPrefix}-list`;
+                    const iconId = `${idPrefix}-icon`;
+                    
+                    let isOpen = STATE.openFolders.has(listId);
+                    if (!STATE.hasInitializedFolders && isOpenDefault) {
+                        isOpen = true;
+                        STATE.openFolders.add(listId);
+                    }
+
+                    const listClass = isOpen ? "pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4 dark:border-gray-700" : "hidden pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4 dark:border-gray-700";
+                    const arrowClass = isOpen ? `fas fa-chevron-right text-xs transition-transform duration-200 rotate-90` : `fas fa-chevron-right text-xs transition-transform duration-200`;
+
+                    const groupWrapper = document.createElement('div');
+                    groupWrapper.className = "fade-in mb-4";
+                    groupWrapper.innerHTML = `
+                        <div onclick="app.toggleFolder('${listId}')" class="flex items-center justify-between p-3 rounded-xl border ${borderClass} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none ${colorClass} dark:opacity-100">
+                            <div class="flex items-center gap-3">
+                                <i id="${iconId}" class="${arrowClass} text-gray-400"></i>
+                                <div class="flex items-center gap-2">
+                                    <i class="${iconClass}"></i>
+                                    <span class="font-bold text-sm">${title}</span>
+                                </div>
+                            </div>
+                            <span class="text-[10px] font-bold opacity-60 bg-white/50 px-2 py-0.5 rounded-full">${items.length}</span>
+                        </div>
+                    `;
+                    
+                    const itemsContainer = document.createElement('div');
+                    itemsContainer.id = listId;
+                    itemsContainer.className = listClass;
+                    items.forEach(job => itemsContainer.appendChild(app.createJobCard(job)));
+                    
+                    groupWrapper.appendChild(itemsContainer);
+                    list.appendChild(groupWrapper);
+                };
+
+                // 1. GROUP 1: Referrals Received (Sea Green)
+                const referralReceivedJobs = jobs.filter(j => j.status === 'referral-received' && getDaysDifference(j.created) <= 7);
+                renderGroup(
+                    "Referrals Received", 
+                    referralReceivedJobs, 
+                    "fas fa-handshake text-teal-600", 
+                    "bg-gradient-to-r from-teal-50 to-green-100 text-teal-900 border-teal-200 dark:from-teal-900/40 dark:to-green-900/40 dark:text-teal-100 dark:border-teal-800", 
+                    "border-teal-200",
+                    "group-ref",
+                    true
+                );
+
+                // 2. GROUP 2: Direct Apply (Purple)
+                const directApplyJobs = jobs.filter(j => j.status === 'direct-apply' && getDaysDifference(j.created) <= 7);
+                renderGroup(
+                    "Direct Apply", 
+                    directApplyJobs, 
+                    "fas fa-location-arrow text-purple-600", 
+                    "bg-gradient-to-r from-purple-50 to-indigo-100 text-purple-900 border-purple-200 dark:from-purple-900/40 dark:to-indigo-900/40 dark:text-purple-100 dark:border-purple-800", 
+                    "border-purple-200",
+                    "group-direct",
+                    true
+                );
+
+                // 3. GROUP 3: Chronological Flow (7 Days Ago -> Today)
+                const remainingJobs = jobs.filter(j => j.status !== 'referral-received' && j.status !== 'direct-apply');
+
                 const groups = {};
-                jobs.forEach(job => {
+                remainingJobs.forEach(job => {
                     const daysOld = getDaysDifference(job.created);
                     if(daysOld > 7) return; 
                     if(!groups[daysOld]) groups[daysOld] = [];
                     groups[daysOld].push(job);
                 });
 
-                const sortedKeys = Object.keys(groups).map(Number).sort((a,b) => b - a);
-                sortedKeys.forEach(day => {
+                // Sort Descending: 7, 6, 5... 0 (Today)
+                const sortedKeysDesc = Object.keys(groups).map(Number).sort((a,b) => b - a);
+
+                sortedKeysDesc.forEach(day => {
                     let label = day === 0 ? "Today" : day === 1 ? "Yesterday" : `${day} Days Ago`;
                     let dayJobs = groups[day];
+                    
+                    // Sort by priority inside date group
                     dayJobs.sort((a, b) => {
                         const sA = (a.status === 'referral' ? 'referral-asked' : (a.status || 'pending'));
                         const sB = (b.status === 'referral' ? 'referral-asked' : (b.status || 'pending'));
@@ -1403,7 +1496,7 @@
                         return pA - pB;
                     });
                     
-                    const counts = { 'referral-received': 0, 'pending': 0, 'reminder': 0, 'referral-asked': 0, 'applied': 0 };
+                    const counts = { 'pending': 0, 'reminder': 0, 'referral-asked': 0, 'applied': 0 };
                     dayJobs.forEach(j => {
                         let s = j.status || 'pending';
                         if(s === 'referral') s = 'referral-asked';
@@ -1413,12 +1506,12 @@
                     });
 
                     let badgeHtml = '';
-                    if(counts['referral-received'] > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-purple-100 text-purple-700 border border-purple-200 mr-1 dark:bg-purple-900/40 dark:text-purple-300 dark:border-purple-800">${counts['referral-received']} Rec'd</span>`;
                     if(counts.pending > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 border border-gray-200 mr-1 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700">${counts.pending} To Apply</span>`;
                     if(counts.reminder > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-700 border border-red-200 mr-1 dark:bg-red-900/40 dark:text-red-300 dark:border-red-800">${counts.reminder} Due</span>`;
                     if(counts['referral-asked'] > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-orange-100 text-orange-700 border border-orange-200 mr-1 dark:bg-orange-900/40 dark:text-orange-300 dark:border-orange-800">${counts['referral-asked']} Asked</span>`;
                     if(counts.applied > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-50 text-green-600 border border-green-100 dark:bg-green-900/40 dark:text-green-300 dark:border-green-800">${counts.applied} Done</span>`;
 
+                    // Style Logic
                     let bgClasses = "";
                     let borderColor = "";
                     let textColor = "";
@@ -1468,7 +1561,7 @@
                     groupWrapper.appendChild(itemsContainer);
                     list.appendChild(groupWrapper);
                 });
-                if (!STATE.hasInitializedFolders && sortedKeys.length > 0) STATE.hasInitializedFolders = true;
+                if (!STATE.hasInitializedFolders && sortedKeysDesc.length > 0) STATE.hasInitializedFolders = true;
             },
 
             createJobCard: (job) => {
@@ -1485,9 +1578,16 @@
                 let statusBtnClass = "bg-gray-50 text-gray-400 dark:bg-gray-800 dark:text-gray-500";
 
                 if (status === 'referral-received') {
-                    borderColor = "border-purple-200 border-l-4 border-l-purple-400 dark:border-purple-900 dark:border-l-purple-500";
-                    badgeHtml = `<span class="text-[9px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded mr-2 dark:bg-purple-900/40 dark:text-purple-300">REFERRAL RECEIVED</span>`;
+                    // SEA GREEN THEME
+                    borderColor = "border-teal-200 border-l-4 border-l-teal-400 dark:border-teal-900 dark:border-l-teal-500";
+                    badgeHtml = `<span class="text-[9px] font-bold text-teal-600 bg-teal-50 px-1.5 py-0.5 rounded mr-2 dark:bg-teal-900/40 dark:text-teal-300">REFERRAL RECEIVED</span>`;
                     statusIcon = "fa-handshake";
+                    statusBtnClass = "bg-teal-100 text-teal-500 dark:bg-teal-900/40 dark:text-teal-400";
+                } else if (status === 'direct-apply') {
+                    // PURPLE THEME
+                    borderColor = "border-purple-200 border-l-4 border-l-purple-400 dark:border-purple-900 dark:border-l-purple-500";
+                    badgeHtml = `<span class="text-[9px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded mr-2 dark:bg-purple-900/40 dark:text-purple-300">DIRECT APPLY</span>`;
+                    statusIcon = "fa-location-arrow";
                     statusBtnClass = "bg-purple-100 text-purple-500 dark:bg-purple-900/40 dark:text-purple-400";
                 } else if (status === 'referral-asked') {
                     borderColor = "border-orange-200 border-l-4 border-l-orange-400 dark:border-orange-900 dark:border-l-orange-500";
