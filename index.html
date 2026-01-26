@@ -92,9 +92,14 @@
 
             <!-- HEADER STATS BUTTONS -->
             <div class="flex items-center gap-2 shrink-0">
-                <button onclick="app.openStreakModal()" class="flex items-center gap-1.5 bg-orange-50 border border-orange-100 px-2 py-1.5 rounded-lg active:scale-95 transition shadow-sm h-9 dark:bg-orange-500/10 dark:border-orange-500/20">
-                    <i class="fas fa-fire text-orange-500 text-xs dark:text-orange-400"></i>
-                    <span class="text-xs font-bold text-orange-700 dark:text-orange-300" id="mini-streak">0</span>
+                <button id="streak-btn" onclick="app.openStreakModal()" class="relative p-[2px] rounded-lg active:scale-95 transition shadow-sm h-9 group overflow-hidden bg-gray-200 dark:bg-slate-700">
+                    <!-- Progress Border Layer -->
+                    <div id="streak-progress-bg" class="absolute inset-0 transition-all duration-500 ease-out" style="background: conic-gradient(from 0deg, transparent 0%, transparent 100%);"></div>
+                    <!-- Inner Content -->
+                    <div class="relative flex items-center gap-1.5 bg-orange-50 px-2 py-1.5 rounded-[6px] h-full w-full dark:bg-slate-900 z-10 border border-transparent">
+                        <i class="fas fa-fire text-orange-500 text-xs dark:text-orange-400"></i>
+                        <span class="text-xs font-bold text-orange-700 dark:text-orange-300" id="mini-streak">0</span>
+                    </div>
                 </button>
                 <button onclick="app.openWeeklyModal()" class="flex items-center gap-1.5 bg-blue-50 border border-blue-100 px-2 py-1.5 rounded-lg active:scale-95 transition shadow-sm h-9 dark:bg-blue-500/10 dark:border-blue-500/20">
                     <i class="fas fa-chart-bar text-blue-500 text-xs dark:text-blue-400"></i>
@@ -985,6 +990,23 @@
                     progressBar.style.width = `${pct}%`;
                     if(pct >= 100) progressBar.className = "h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full transition-all duration-700 shadow-[0_0_10px_rgba(34,197,94,0.5)]";
                     else progressBar.className = "h-full bg-orange-500 rounded-full transition-all duration-700";
+                }
+
+                // --- HEADER BUTTON FIRE BORDER ---
+                const streakBtnBg = document.getElementById('streak-progress-bg');
+                if (streakBtnBg) {
+                    const pct = Math.min(100, (count / target) * 100);
+                    // Create a fire-like gradient (Orange -> Red) that fills up based on percentage
+                    // We use slightly more than 'pct' for the color stop to create a solid leading edge
+                    streakBtnBg.style.background = `conic-gradient(from 0deg, #f97316 0%, #ef4444 ${pct}%, transparent ${pct}%)`;
+                    
+                    // Optional: Add a glow if 100%
+                    const btn = document.getElementById('streak-btn');
+                    if (pct >= 100 && btn) {
+                        btn.classList.add('shadow-[0_0_10px_rgba(249,115,22,0.5)]', 'border-orange-300');
+                    } else if (btn) {
+                        btn.classList.remove('shadow-[0_0_10px_rgba(249,115,22,0.5)]', 'border-orange-300');
+                    }
                 }
 
                 // Render Streak Fire Map
