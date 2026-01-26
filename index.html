@@ -327,7 +327,7 @@
                     <span id="trend-text" class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full dark:bg-green-500/10 dark:text-green-400">--</span>
                 </div>
                 
-                <div class="h-40 w-full relative">
+                <div class="h-48 w-full relative">
                     <canvas id="insightsChart"></canvas>
                 </div>
                 
@@ -476,59 +476,81 @@
         </div>
     </div>
     
-    <!-- Status Action Sheet -->
+    <!-- Status Action Sheet (RE-DESIGNED) -->
     <div id="modal-status" class="fixed inset-0 bg-black/50 z-[60] hidden flex items-end sm:items-center justify-center sm:p-6 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-sm sm:rounded-2xl rounded-t-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="font-bold text-lg dark:text-white">Update Status</h3>
-                <button onclick="document.getElementById('modal-status').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 dark:hover:text-slate-200"><i class="fas fa-times"></i></button>
+        <div class="bg-white w-full max-w-sm sm:rounded-2xl rounded-t-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700 overflow-hidden relative transition-all duration-300 max-h-[90vh] overflow-y-auto">
+            
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="status-modal-title" class="font-bold text-lg dark:text-white">Update Status</h3>
+                <button onclick="app.closeStatusModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-slate-200"><i class="fas fa-times"></i></button>
             </div>
-            <div class="space-y-3">
-                <button onclick="app.updateStatus('referral-received')" class="w-full flex items-center p-4 rounded-xl bg-purple-50 text-purple-700 border border-purple-200 active:scale-[0.98] transition dark:bg-purple-500/10 dark:text-purple-300 dark:border-purple-500/20">
-                    <div class="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center mr-3 dark:bg-purple-500/30"><i class="fas fa-handshake"></i></div>
-                    <div class="text-left">
-                        <div class="font-bold text-sm">Referral Received</div>
-                        <div class="text-[10px] opacity-75">Ready to apply!</div>
-                    </div>
-                </button>
-                <button onclick="app.updateStatus('applied')" class="w-full flex items-center p-4 rounded-xl bg-green-50 text-green-700 border border-green-200 active:scale-[0.98] transition dark:bg-green-500/10 dark:text-green-300 dark:border-green-500/20">
-                    <div class="w-8 h-8 rounded-full bg-green-200 flex items-center justify-center mr-3 dark:bg-green-500/30"><i class="fas fa-check"></i></div>
-                    <div class="text-left">
-                        <div class="font-bold text-sm">Applied</div>
-                        <div class="text-[10px] opacity-75">Mark as done</div>
-                    </div>
-                </button>
-                <button onclick="app.updateStatus('referral-asked')" class="w-full flex items-center p-4 rounded-xl bg-orange-50 text-orange-700 border border-orange-200 active:scale-[0.98] transition dark:bg-orange-500/10 dark:text-orange-300 dark:border-orange-500/20">
-                    <div class="w-8 h-8 rounded-full bg-orange-200 flex items-center justify-center mr-3 dark:bg-orange-500/30"><i class="fas fa-paper-plane"></i></div>
-                    <div class="text-left">
+
+            <!-- APPLIED SECTION (Front & Center) -->
+            <div class="mb-5">
+                <h4 class="text-xs font-bold text-gray-400 uppercase mb-3 dark:text-slate-500">Applied via...</h4>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="app.updateStatus('applied', 'direct')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-blue-50 text-blue-700 border border-blue-200 active:scale-[0.98] transition hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-300 dark:border-blue-500/20 dark:hover:bg-blue-500/20">
+                         <div class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center mb-2 dark:bg-blue-500/30"><i class="fas fa-globe"></i></div>
+                         <div class="font-bold text-sm">Direct / Portal</div>
+                    </button>
+
+                    <button onclick="app.updateStatus('applied', 'cold-email')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-orange-50 text-orange-700 border border-orange-200 active:scale-[0.98] transition hover:bg-orange-100 dark:bg-orange-500/10 dark:text-orange-300 dark:border-orange-500/20 dark:hover:bg-orange-500/20">
+                         <div class="w-8 h-8 rounded-full bg-orange-200 flex items-center justify-center mb-2 dark:bg-orange-500/30"><i class="fas fa-envelope"></i></div>
+                         <div class="font-bold text-sm">Cold Email</div>
+                    </button>
+
+                    <button onclick="app.updateStatus('applied', 'referral')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-purple-50 text-purple-700 border border-purple-200 active:scale-[0.98] transition hover:bg-purple-100 dark:bg-purple-500/10 dark:text-purple-300 dark:border-purple-500/20 dark:hover:bg-purple-500/20">
+                         <div class="w-8 h-8 rounded-full bg-purple-200 flex items-center justify-center mb-2 dark:bg-purple-500/30"><i class="fas fa-user-friends"></i></div>
+                         <div class="font-bold text-sm">Referral</div>
+                    </button>
+
+                    <button onclick="app.updateStatus('applied', 'recruiter')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-teal-50 text-teal-700 border border-teal-200 active:scale-[0.98] transition hover:bg-teal-100 dark:bg-teal-500/10 dark:text-teal-300 dark:border-teal-500/20 dark:hover:bg-teal-500/20">
+                         <div class="w-8 h-8 rounded-full bg-teal-200 flex items-center justify-center mb-2 dark:bg-teal-500/30"><i class="fas fa-headset"></i></div>
+                         <div class="font-bold text-sm">Recruiter</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- OTHER STATUSES -->
+            <div>
+                <h4 class="text-xs font-bold text-gray-400 uppercase mb-3 dark:text-slate-500">Other Actions</h4>
+                <div class="space-y-2">
+                    <button onclick="app.updateStatus('referral-asked')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700">
+                        <div class="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center mr-3 text-orange-500 dark:bg-orange-500/20"><i class="fas fa-paper-plane text-xs"></i></div>
                         <div class="font-bold text-sm">Referral Asked</div>
-                        <div class="text-[10px] opacity-75">Waiting for response</div>
-                    </div>
-                </button>
-                <button onclick="app.updateStatus('reminder')" class="w-full flex items-center p-4 rounded-xl bg-red-50 text-red-700 border border-red-200 active:scale-[0.98] transition dark:bg-red-500/10 dark:text-red-300 dark:border-red-500/20">
-                    <div class="w-8 h-8 rounded-full bg-red-200 flex items-center justify-center mr-3 dark:bg-red-500/30"><i class="fas fa-bell"></i></div>
-                    <div class="text-left">
-                        <div class="font-bold text-sm">Follow-up Due</div>
-                        <div class="text-[10px] opacity-75">Need to nudge</div>
-                    </div>
-                </button>
-                <button onclick="app.updateStatus('pending')" class="w-full flex items-center p-4 rounded-xl bg-gray-50 text-gray-600 border border-gray-200 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-700">
-                    <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3 dark:bg-slate-600"><i class="fas fa-undo"></i></div>
-                    <div class="text-left">
-                        <div class="font-bold text-sm">To Apply</div>
-                        <div class="text-[10px] opacity-75">Reset status</div>
-                    </div>
-                </button>
+                    </button>
+                    <button onclick="app.updateStatus('reminder')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700">
+                        <div class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mr-3 text-red-500 dark:bg-red-500/20"><i class="fas fa-bell text-xs"></i></div>
+                        <div class="font-bold text-sm">Set Follow-up</div>
+                    </button>
+                    <button onclick="app.updateStatus('referral-received')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700">
+                        <div class="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center mr-3 text-purple-500 dark:bg-purple-500/20"><i class="fas fa-handshake text-xs"></i></div>
+                        <div class="font-bold text-sm">Referral Received</div>
+                    </button>
+                     <button onclick="app.updateStatus('pending')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-400 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/30 dark:text-slate-500 dark:border-slate-800 dark:hover:bg-slate-800">
+                        <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center mr-3 dark:bg-slate-600"><i class="fas fa-undo text-xs"></i></div>
+                        <div class="font-bold text-sm">Reset to Pending</div>
+                    </button>
+                </div>
             </div>
+
         </div>
     </div>
 
-    <!-- Job Editor -->
+    <!-- Job Editor (UPDATED: Added Save & Apply) -->
     <div id="modal-job" class="fixed inset-0 bg-white z-50 hidden flex flex-col safe-pb dark:bg-slate-900">
         <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-white safe-pt dark:bg-slate-800 dark:border-slate-700">
             <button onclick="document.getElementById('modal-job').classList.add('hidden')" class="text-gray-500 font-bold px-2 dark:text-slate-400">Cancel</button>
             <span class="font-bold dark:text-white">Add Job Link</span>
-            <button onclick="app.saveJob()" class="text-blue-600 font-bold px-2 dark:text-blue-400">Save</button>
+            <div class="flex gap-2">
+                 <!-- New Button: Save & Apply -->
+                 <button onclick="app.saveJob(true)" class="bg-green-50 text-green-600 font-bold px-3 py-1.5 rounded-lg text-xs border border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800 flex items-center gap-1">
+                    <i class="fas fa-check"></i> Apply
+                 </button>
+                 <button onclick="app.saveJob(false)" class="bg-blue-50 text-blue-600 font-bold px-3 py-1.5 rounded-lg text-xs border border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800">
+                    Save
+                 </button>
+            </div>
         </div>
         <div class="p-5 flex flex-col gap-4 flex-1">
             <input type="text" id="job-title" class="text-2xl font-bold placeholder-gray-300 outline-none dark:bg-transparent dark:text-white" placeholder="Role / Company Name">
@@ -654,11 +676,12 @@
                     streak: 0
                 },
                 stats: {
-                    history: {}, // "YYYY-MM-DD": count
+                    history: {}, // "YYYY-MM-DD": { total: number, methods: { 'cold-email': number } } OR plain number (legacy)
                     dailyTarget: 5
                 }
             },
             editingId: null,
+            targetStatusId: null, // Track which job we are updating status for
             templateFolder: null,
             renameTargetFolder: null,
             currentConfirmAction: null,
@@ -831,6 +854,7 @@
             },
 
             // HELPER: Get stats for a specific 7-day range (offset by weeks)
+            // UPDATED to support Breakdown Object
             getWeeklyStats: (weekOffset = 0) => {
                 const history = STATE.data.stats.history || {};
                 const today = new Date();
@@ -846,14 +870,32 @@
                 startOfTargetWeek.setDate(startOfCurrentWeek.getDate() - (weekOffset * 7));
                 
                 let total = 0;
+                let breakdown = { 'direct': 0, 'cold-email': 0, 'referral': 0, 'recruiter': 0 };
+
                 // Sum 7 days from the start of that week (Sun-Sat)
                 for (let i = 0; i < 7; i++) {
                     const d = new Date(startOfTargetWeek);
                     d.setDate(startOfTargetWeek.getDate() + i);
                     const dStr = d.toLocaleDateString('en-CA');
-                    total += (history[dStr] || 0);
+                    const entry = history[dStr];
+
+                    if (typeof entry === 'number') {
+                        total += entry;
+                        breakdown['direct'] += entry; // Default to direct for legacy
+                    } else if (entry && typeof entry === 'object') {
+                        total += (entry.total || 0);
+                        if (entry.methods) {
+                            breakdown['direct'] += (entry.methods['direct'] || 0);
+                            breakdown['cold-email'] += (entry.methods['cold-email'] || 0);
+                            breakdown['referral'] += (entry.methods['referral'] || 0);
+                            breakdown['recruiter'] += (entry.methods['recruiter'] || 0);
+                        } else {
+                            // Fallback if methods missing
+                            breakdown['direct'] += (entry.total || 0);
+                        }
+                    }
                 }
-                return total;
+                return { total, breakdown };
             },
 
             checkDailyReset: () => {
@@ -878,7 +920,16 @@
                 let checkDate = new Date(today);
                 
                 const todayStr = today.toLocaleDateString('en-CA');
-                const todayCount = STATE.data.stats.history[todayStr] || 0;
+                
+                // Helper to get count safely
+                const getCount = (dStr) => {
+                    const entry = STATE.data.stats.history[dStr];
+                    if (typeof entry === 'number') return entry;
+                    if (entry && typeof entry === 'object') return entry.total || 0;
+                    return 0;
+                };
+
+                const todayCount = getCount(todayStr);
                 const target = STATE.data.stats.dailyTarget || 5;
                 
                 if (todayCount >= target) currentStreak++;
@@ -886,7 +937,7 @@
                 for (let i = 1; i < 365; i++) { 
                     checkDate.setDate(checkDate.getDate() - 1);
                     const dStr = checkDate.toLocaleDateString('en-CA');
-                    const count = STATE.data.stats.history[dStr] || 0;
+                    const count = getCount(dStr);
                     
                     if (count >= target) {
                         currentStreak++;
@@ -909,7 +960,16 @@
             updateProgressUI: () => {
                 const today = new Date();
                 const todayStr = today.toLocaleDateString('en-CA');
-                const count = STATE.data.stats.history[todayStr] || 0;
+                
+                // Helper to get count safely
+                const getCount = (dStr) => {
+                    const entry = STATE.data.stats.history[dStr];
+                    if (typeof entry === 'number') return entry;
+                    if (entry && typeof entry === 'object') return entry.total || 0;
+                    return 0;
+                };
+
+                const count = getCount(todayStr);
                 const target = STATE.data.stats.dailyTarget || 5;
                 
                 // --- Streak Modal Updates ---
@@ -935,14 +995,33 @@
                 if(miniStreak) miniStreak.textContent = STATE.data.plan.streak;
 
                 // Update Weekly Summaries
-                const weeklyCount = app.getWeeklyStats(0); // Current week
+                const weeklyData = app.getWeeklyStats(0); // Current week
+                const weeklyCount = weeklyData.total;
                 const miniWeekly = document.getElementById('mini-weekly');
                 const weeklyTotalEl = document.getElementById('weekly-total');
                 const weeklyRefEl = document.getElementById('weekly-referrals');
                 
                 if(miniWeekly) miniWeekly.textContent = weeklyCount;
                 if(weeklyTotalEl) weeklyTotalEl.textContent = weeklyCount;
-                if(weeklyRefEl) weeklyRefEl.textContent = Math.floor(weeklyCount * 0.2); // Fallback estimate if not overwritten
+                
+                // Calculate actual referrals received
+                const now = new Date();
+                const dayOfWeek = now.getDay();
+                const startOfThisWeek = new Date(now);
+                startOfThisWeek.setDate(now.getDate() - dayOfWeek);
+                startOfThisWeek.setHours(0, 0, 0, 0);
+
+                let referralCount = 0;
+                STATE.data.notes.forEach(n => {
+                    if (n.category === 'job' && n.status === 'referral-received') {
+                        const t = n.updated || n.created;
+                        if (new Date(t) >= startOfThisWeek) {
+                            referralCount++;
+                        }
+                    }
+                });
+                
+                if(weeklyRefEl) weeklyRefEl.textContent = referralCount;
             },
 
             renderStreakCalendar: (currentDate, target) => {
@@ -956,15 +1035,11 @@
                 const year = currentDate.getFullYear();
                 const month = currentDate.getMonth();
                 
-                // Days in month & start day
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
                 const startDay = new Date(year, month, 1).getDay(); // 0=Sun
 
-                // Empty slots
                 for(let i=0; i<startDay; i++) {
-                    // Update empty slots for dark mode
                     const empty = document.createElement('div');
-                    // Optional: Style empty slots if needed, or leave blank/transparent
                     grid.appendChild(empty);
                 }
 
@@ -973,23 +1048,22 @@
                 for(let d=1; d<=daysInMonth; d++) {
                     const dateObj = new Date(year, month, d);
                     const dateStr = dateObj.toLocaleDateString('en-CA');
-                    const count = history[dateStr] || 0;
+                    
+                    let count = 0;
+                    if(typeof history[dateStr] === 'number') count = history[dateStr];
+                    else if(history[dateStr] && typeof history[dateStr] === 'object') count = history[dateStr].total;
                     
                     const cell = document.createElement('div');
                     const isToday = d === currentDate.getDate();
                     
-                    // Default Light/Dark classes
                     let bgClass = "bg-gray-50 border-gray-100 text-gray-300 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-600";
-                    let content = `<span class="text-[9px] font-bold">${d}</span>`; // Default: show date number
+                    let content = `<span class="text-[9px] font-bold">${d}</span>`; 
                     let borderClass = "border";
 
-                    // Logic: Fire if target met
                     if (count >= target) {
-                        // Success State: Light vs Dark
                         bgClass = "bg-orange-100 border-orange-200 text-orange-500 shadow-sm dark:bg-orange-500/10 dark:border-orange-500/20 dark:text-orange-400";
-                        content = `<i class="fas fa-fire text-sm animate-pulse"></i>`; // Show Fire
+                        content = `<i class="fas fa-fire text-sm animate-pulse"></i>`; 
                     } else if (count > 0) {
-                        // Activity but missed target: Light vs Dark
                         bgClass = "bg-gray-100 border-gray-200 text-gray-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-400";
                     }
 
@@ -1013,13 +1087,9 @@
 
                 const year = currentDate.getFullYear();
                 const month = currentDate.getMonth();
-                
-                // Get number of days in month
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
-                // Get starting day of week (0=Sun, 1=Mon...)
                 const startDay = new Date(year, month, 1).getDay();
 
-                // Add empty slots for days before start of month
                 for(let i=0; i<startDay; i++) {
                     const empty = document.createElement('div');
                     grid.appendChild(empty);
@@ -1027,34 +1097,32 @@
 
                 const history = STATE.data.stats.history || {};
 
-                // Generate days
                 for(let d=1; d<=daysInMonth; d++) {
                     const dateObj = new Date(year, month, d);
                     const dateStr = dateObj.toLocaleDateString('en-CA');
-                    const count = history[dateStr] || 0;
+                    
+                    let count = 0;
+                    if(typeof history[dateStr] === 'number') count = history[dateStr];
+                    else if(history[dateStr] && typeof history[dateStr] === 'object') count = history[dateStr].total;
                     
                     const cell = document.createElement('div');
-                    // Styling based on activity level
                     let bgClass = "bg-gray-100 dark:bg-slate-700";
                     if (count > 0) {
-                        if (count >= target) bgClass = "bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.4)] scale-105 z-10 dark:bg-green-600"; // Target Hit
-                        else if (count >= target / 2) bgClass = "bg-green-300 dark:bg-green-800"; // Medium
-                        else bgClass = "bg-green-200 dark:bg-green-900"; // Low
+                        if (count >= target) bgClass = "bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.4)] scale-105 z-10 dark:bg-green-600";
+                        else if (count >= target / 2) bgClass = "bg-green-300 dark:bg-green-800";
+                        else bgClass = "bg-green-200 dark:bg-green-900";
                     }
 
-                    // Highlight Today
                     const isToday = d === currentDate.getDate();
                     const borderClass = isToday ? "border-2 border-blue-500" : "border border-transparent";
 
                     cell.className = `w-full aspect-square rounded-md ${bgClass} ${borderClass} flex items-center justify-center text-[9px] font-bold text-transparent hover:text-gray-600 dark:hover:text-slate-300 transition-all cursor-default relative group`;
                     
-                    // Tooltip
                     cell.innerHTML = `
                         <span class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[9px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none z-20 dark:bg-slate-200 dark:text-slate-900">
                             ${dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}: ${count}
                         </span>
                     `;
-                    
                     grid.appendChild(cell);
                 }
             },
@@ -1082,71 +1150,97 @@
                 
                 if (window.myChart) window.myChart.destroy();
                 
-                // Show last 4 weeks in Bar Chart
-                // Week 0 = current, Week 1 = last week, etc.
-                const weeksData = [];
+                // Show last 4 weeks in GROUPED Bar Chart
+                // Week 0 = current
+                const rawData = [];
                 const labels = ["3 Weeks Ago", "2 Weeks Ago", "Last Week", "This Week"];
                 
                 for(let i=3; i>=0; i--) {
-                    weeksData.push(app.getWeeklyStats(i));
+                    rawData.push(app.getWeeklyStats(i));
                 }
                 
-                // Calculate Trend
-                const thisWeek = weeksData[3];
-                const lastWeek = weeksData[2];
+                // Extract Trend (using total)
+                const thisWeekTotal = rawData[3].total;
+                const lastWeekTotal = rawData[2].total;
                 let trendHtml = "";
-                if(lastWeek === 0) {
-                      trendHtml = thisWeek > 0 ? "+100% 🚀" : "--";
+                if(lastWeekTotal === 0) {
+                      trendHtml = thisWeekTotal > 0 ? "+100% 🚀" : "--";
                 } else {
-                    const diff = thisWeek - lastWeek;
-                    const pct = Math.round((diff / lastWeek) * 100);
+                    const diff = thisWeekTotal - lastWeekTotal;
+                    const pct = Math.round((diff / lastWeekTotal) * 100);
                     const colorClass = diff >= 0 ? "text-green-600 bg-green-50" : "text-red-500 bg-red-50";
                     const sign = diff >= 0 ? "+" : "";
                     trendHtml = `<span class="${colorClass} px-2 py-0.5 rounded-full text-[10px] font-bold dark:bg-opacity-20">${sign}${pct}% vs last week</span>`;
                 }
                 document.getElementById('trend-text').innerHTML = trendHtml;
 
-                // REAL REFERRAL COUNT (This Calendar Week: Sunday -> Now)
-                const now = new Date();
-                const dayOfWeek = now.getDay(); // 0 = Sunday
-                const startOfThisWeek = new Date(now);
-                startOfThisWeek.setDate(now.getDate() - dayOfWeek);
-                startOfThisWeek.setHours(0, 0, 0, 0); // Start of Sunday 00:00
+                // Prepare Datasets for Grouped Bar
+                // Total (Light Color) + Breakdown Bars
                 
-                let referralCount = 0;
+                const datasetTotal = { 
+                    label: 'Total', 
+                    data: rawData.map(d => d.total), 
+                    backgroundColor: '#e0e7ff', // Very light blue
+                    borderRadius: 4,
+                    barPercentage: 0.6,
+                    categoryPercentage: 0.8
+                };
                 
-                STATE.data.notes.forEach(n => {
-                    if (n.category === 'job' && n.status === 'referral-received') {
-                        // Check updated time (or created if not updated)
-                        const t = n.updated || n.created;
-                        if (new Date(t) >= startOfThisWeek) {
-                            referralCount++;
-                        }
-                    }
-                });
+                const datasetDirect = { 
+                    label: 'Direct', 
+                    data: rawData.map(d => d.breakdown['direct']), 
+                    backgroundColor: '#3b82f6', 
+                    borderRadius: 4,
+                    barPercentage: 0.8,
+                    categoryPercentage: 0.8
+                };
                 
-                const weeklyRefEl = document.getElementById('weekly-referrals');
-                if(weeklyRefEl) weeklyRefEl.textContent = referralCount;
+                const datasetCold = { 
+                    label: 'Cold Email', 
+                    data: rawData.map(d => d.breakdown['cold-email']), 
+                    backgroundColor: '#f97316', 
+                    borderRadius: 4,
+                    barPercentage: 0.8,
+                    categoryPercentage: 0.8
+                };
+                
+                const datasetReferral = { 
+                    label: 'Referral', 
+                    data: rawData.map(d => d.breakdown['referral']), 
+                    backgroundColor: '#a855f7', 
+                    borderRadius: 4,
+                    barPercentage: 0.8,
+                    categoryPercentage: 0.8
+                };
+
+                const datasetRecruiter = { 
+                    label: 'Recruiter', 
+                    data: rawData.map(d => d.breakdown['recruiter']), 
+                    backgroundColor: '#14b8a6', 
+                    borderRadius: 4,
+                    barPercentage: 0.8,
+                    categoryPercentage: 0.8
+                };
 
                 window.myChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: labels,
-                        datasets: [{
-                            label: 'Applications',
-                            data: weeksData,
-                            backgroundColor: ['#e0e7ff', '#c7d2fe', '#818cf8', '#4f46e5'],
-                            borderRadius: 4,
-                            barThickness: 20
-                        }]
+                        datasets: [datasetTotal, datasetDirect, datasetCold, datasetReferral, datasetRecruiter]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: { legend: { display: false } },
                         scales: {
-                            y: { display: false, beginAtZero: true, grid: { color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb' } },
-                            x: { grid: { display: false }, ticks: { font: { size: 10 }, color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280' } }
+                            x: { 
+                                grid: { display: false }, 
+                                ticks: { font: { size: 10 }, color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280' } 
+                            },
+                            y: { 
+                                display: false, 
+                                beginAtZero: true 
+                            }
                         }
                     }
                 });
@@ -1379,33 +1473,51 @@
                 modal.classList.remove('hidden');
             },
 
-            saveJob: () => {
+            saveJob: (markApplied = false) => {
                 const title = document.getElementById('job-title').value;
                 const content = document.getElementById('job-content').value;
                 const linkType = document.getElementById('job-type').value;
                 const remarks = document.getElementById('job-remarks').value;
                 if(!title) return;
+                
+                const newId = STATE.editingId || Date.now().toString();
                 const itemData = { title, content, linkType, remarks, category: 'job', updated: Date.now() };
 
                 if(STATE.editingId) {
                     const idx = STATE.data.notes.findIndex(n => n.id === STATE.editingId);
                     if(idx > -1) STATE.data.notes[idx] = { ...STATE.data.notes[idx], ...itemData };
                 } else {
-                    STATE.data.notes.unshift({ id: Date.now().toString(), created: Date.now(), status: 'pending', ...itemData });
-                    // TRACKING: Removed auto-increment here. Now tracked on 'Applied' status change.
+                    STATE.data.notes.unshift({ id: newId, created: Date.now(), status: 'pending', ...itemData });
                     app.recalculateStreak();
                 }
+                
                 app.saveToCloud();
                 document.getElementById('modal-job').classList.add('hidden');
-                app.toast("Job Added");
+                
+                if (markApplied) {
+                    // Open status modal for the newly created/edited job immediately
+                    // Slight delay to allow modal close animation
+                    setTimeout(() => {
+                        app.openStatusModal(newId);
+                        app.toast("Job Saved! Select applied method...");
+                    }, 300);
+                } else {
+                    app.toast("Job Saved");
+                }
             },
 
             openStatusModal: (id) => {
                 STATE.targetStatusId = id;
                 document.getElementById('modal-status').classList.remove('hidden');
             },
+            
+            closeStatusModal: () => {
+                document.getElementById('modal-status').classList.add('hidden');
+                STATE.targetStatusId = null;
+            },
 
-            updateStatus: (newStatus) => {
+            // UPDATED: Handle Medium
+            updateStatus: (newStatus, medium = null) => {
                 if (STATE.targetStatusId) {
                     const note = STATE.data.notes.find(n => n.id === STATE.targetStatusId);
                     if (note) {
@@ -1417,16 +1529,43 @@
                         // Only count for jobs
                         if (note.category === 'job') {
                             const todayStr = new Date().toLocaleDateString('en-CA');
+                            
+                            // Ensure data structure exists
                             if (!STATE.data.stats) STATE.data.stats = { history: {}, dailyTarget: 5 };
                             if (!STATE.data.stats.history) STATE.data.stats.history = {};
-                            if (!STATE.data.stats.history[todayStr]) STATE.data.stats.history[todayStr] = 0;
+                            
+                            // Migrate primitive number to object if needed
+                            let entry = STATE.data.stats.history[todayStr];
+                            if (entry === undefined) {
+                                entry = { total: 0, methods: {} };
+                                STATE.data.stats.history[todayStr] = entry;
+                            } else if (typeof entry === 'number') {
+                                entry = { total: entry, methods: { 'direct': entry } }; // Assume old data was direct
+                                STATE.data.stats.history[todayStr] = entry;
+                            }
 
                             if (isNewDone && !isOldDone) {
-                                STATE.data.stats.history[todayStr]++;
-                                app.toast("Job Applied! (+1) 🔥");
+                                entry.total++;
+                                
+                                // Record Medium
+                                const finalMedium = medium || 'direct'; // Default fallback
+                                if (!entry.methods) entry.methods = {};
+                                if (!entry.methods[finalMedium]) entry.methods[finalMedium] = 0;
+                                entry.methods[finalMedium]++;
+                                
+                                // Save to Note
+                                note.applicationMedium = finalMedium;
+
+                                app.toast("Job Applied! 🔥");
                             } else if (!isNewDone && isOldDone) {
-                                // If un-marking, decrement today (simplest approach for undo)
-                                if (STATE.data.stats.history[todayStr] > 0) STATE.data.stats.history[todayStr]--;
+                                // Decrement Total
+                                if (entry.total > 0) entry.total--;
+                                
+                                // Decrement specific medium if known
+                                const oldMedium = note.applicationMedium || 'direct';
+                                if (entry.methods && entry.methods[oldMedium] > 0) {
+                                    entry.methods[oldMedium]--;
+                                }
                             }
                         }
                         // --- STATS LOGIC END ---
@@ -1438,8 +1577,7 @@
                         app.recalculateStreak();
                     }
                 }
-                document.getElementById('modal-status').classList.add('hidden');
-                STATE.targetStatusId = null;
+                app.closeStatusModal();
             },
 
             deleteNote: (id) => {
@@ -1453,8 +1591,20 @@
                         
                         if (note.category === 'job' && isDone && note.updated) {
                              const dateStr = new Date(note.updated).toLocaleDateString('en-CA');
-                             if (STATE.data.stats.history[dateStr] && STATE.data.stats.history[dateStr] > 0) {
-                                 STATE.data.stats.history[dateStr]--;
+                             const entry = STATE.data.stats.history[dateStr];
+                             
+                             if (entry) {
+                                 // Handle both number and object formats
+                                 if (typeof entry === 'number' && entry > 0) {
+                                     STATE.data.stats.history[dateStr]--;
+                                 } else if (typeof entry === 'object' && entry.total > 0) {
+                                     entry.total--;
+                                     // Decrement medium
+                                     const med = note.applicationMedium || 'direct';
+                                     if (entry.methods && entry.methods[med] > 0) {
+                                         entry.methods[med]--;
+                                     }
+                                 }
                              }
                         }
                         
@@ -1561,7 +1711,6 @@
                         iconColor = "text-blue-500 dark:text-blue-400";
                     } else if (day === 1) {
                         // YESTERDAY: Orange (Immediate Urgency)
-                        // Skipped Yellow. Goes straight to 'Action Required'.
                         bgClasses = "bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/40 dark:to-orange-800/40";
                         borderColor = "border-orange-200 dark:border-orange-800";
                         textColor = "text-orange-900 dark:text-orange-100";
@@ -1583,12 +1732,6 @@
                     const listId = `job-group-${day}`;
                     const iconId = `icon-group-${day}`;
                     
-                    // REMOVED AUTO-OPEN LOGIC
-                    // const isUrgentTask = counts.reminder > 0 || counts['referral-received'] > 0;
-                    // if (!STATE.hasInitializedFolders && isUrgentTask) {
-                    //     STATE.openFolders.add(listId);
-                    // }
-                    
                     const isOpen = STATE.openFolders.has(listId);
                     const listClass = isOpen ? "pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4 dark:border-gray-700" : "hidden pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4 dark:border-gray-700";
                     const iconClass = isOpen ? `fas fa-chevron-right text-xs ${iconColor} transition-transform duration-200 rotate-90` : `fas fa-chevron-right text-xs ${iconColor} transition-transform duration-200`;
@@ -1596,7 +1739,7 @@
                     const groupWrapper = document.createElement('div');
                     groupWrapper.className = "fade-in";
 
-                    const darkClass = "dark:opacity-100"; // Reset opacity for better visibility
+                    const darkClass = "dark:opacity-100"; 
 
                     groupWrapper.innerHTML = `
                         <div onclick="app.toggleFolder('${listId}')" class="flex items-center justify-between p-3 rounded-xl border ${borderColor} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none ${bgClasses} ${darkClass}">
@@ -1660,6 +1803,15 @@
                     borderColor = "border-green-100 bg-gray-50 dark:border-green-900 dark:bg-gray-800";
                     statusIcon = "fa-check";
                     statusBtnClass = "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400";
+                    
+                    // Add badge for application method if exists
+                    if (job.applicationMedium) {
+                        let medLabel = job.applicationMedium;
+                        if (medLabel === 'cold-email') medLabel = 'Cold Email';
+                        if (medLabel === 'direct') medLabel = 'Direct';
+                        badgeHtml = `<span class="text-[9px] font-bold text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded mr-2 dark:bg-gray-700 dark:text-gray-400 uppercase tracking-wider">${medLabel}</span>`;
+                    }
+
                 } else {
                     statusIcon = "fa-circle";
                     statusBtnClass = "bg-gray-100 text-gray-300 dark:bg-gray-800 dark:text-gray-600";
@@ -1727,7 +1879,7 @@
                 
                 let templates = (STATE.data.notes || []).filter(n => n.category === 'template');
                 
-                // SEARCH MODE: Flatten folders and show matches directly
+                // SEARCH MODE
                 if(filter) {
                     const q = filter.toLowerCase();
                     templates = templates.filter(t => 
@@ -1740,10 +1892,8 @@
                         list.innerHTML = `<div class="text-center text-gray-400 mt-10 dark:text-gray-500">No matching templates found.</div>`;
                         return;
                     }
-
-                    // Render matching templates directly
                     templates.forEach(t => list.appendChild(app.createTemplateCard(t)));
-                    return; // Exit early to skip folder grouping logic
+                    return; 
                 }
 
                 // NORMAL MODE: Group by Folders
@@ -1752,7 +1902,6 @@
                     return;
                 }
 
-                // Collect folders
                 const folders = {};
                 const general = [];
                 
@@ -1763,7 +1912,6 @@
                 });
 
                 if (STATE.templateFolder) { // Inside a folder
-                     // Back navigation handled in HTML
                      document.getElementById('btn-template-back').classList.remove('hidden');
                      document.getElementById('template-view-title').textContent = STATE.templateFolder;
                      document.getElementById('template-view-subtitle').textContent = "Tap to edit • Swipe to delete";
@@ -1783,7 +1931,6 @@
                          const div = document.createElement('div');
                          div.className = "bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-[0.99] transition dark:bg-dark-card dark:border-dark-border";
                          div.onclick = (e) => {
-                             // prevent if rename button clicked (which is not here yet but logic safety)
                              app.openFolder(folderName);
                          };
                          div.innerHTML = `
@@ -1829,7 +1976,6 @@
                 const div = document.createElement('div');
                 div.className = "bg-white p-4 rounded-xl border border-gray-100 shadow-sm relative group dark:bg-dark-card dark:border-dark-border";
                 
-                // Safe tag handling
                 const tagsStr = (typeof t.tags === 'string') ? t.tags : '';
                 const tagsHtml = tagsStr ? tagsStr.split(',').map(tag => `<span class="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider dark:bg-gray-800 dark:text-gray-400">${tag.trim()}</span>`).join('') : '';
                 
@@ -1903,9 +2049,6 @@
                 }
                 app.saveToCloud();
                 document.getElementById('modal-template').classList.add('hidden');
-                
-                // If we changed folder while inside another folder, switch view or stay?
-                // Better to just refresh
                 app.refreshUI();
             },
 
@@ -1975,7 +2118,7 @@
                 app.renderQuickActions();
             },
 
-            // DASHBOARD QUICK ACTIONS (Templates + Profile)
+            // DASHBOARD QUICK ACTIONS
             renderQuickActions: () => {
                 const container = document.getElementById('job-quick-actions');
                 container.innerHTML = '';
@@ -2013,12 +2156,10 @@
                     }
 
                     if (isIconOnly) {
-                        // Render Icon Button (Round)
                         btn.className = `w-9 h-9 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 flex items-center justify-center transition active:scale-90 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 ${specificClasses}`;
                         btn.innerHTML = `<i class="${iconClass} text-sm"></i>`;
-                        btn.title = p.label; // Tooltip for clarity
+                        btn.title = p.label;
                     } else {
-                        // Render Text Pill (Default)
                         btn.className = "bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200 transition active:scale-95 flex items-center gap-1 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700";
                         btn.innerHTML = `<i class="${iconClass} text-[10px] opacity-50"></i> ${p.label}`;
                     }
@@ -2107,21 +2248,16 @@
                 
                 // Update nav
                 document.querySelectorAll('.nav-btn').forEach(btn => {
-                    // Remove active highlight
                     btn.classList.remove('text-blue-600', 'active', 'dark:text-blue-400');
-                    // Restore inactive gray color
                     btn.classList.add('text-gray-400', 'dark:text-slate-500');
                 });
 
                 const navIndex = viewName === 'jobs' ? 0 : viewName === 'plan' ? 1 : 2;
                 const activeBtn = document.querySelectorAll('.nav-btn')[navIndex];
                 
-                // Apply active highlight
                 activeBtn.classList.add('text-blue-600', 'active', 'dark:text-blue-400');
-                // Remove inactive gray color
                 activeBtn.classList.remove('text-gray-400', 'dark:text-slate-500');
                 
-                // Refresh data if needed
                 if (viewName === 'plan') app.renderPlan();
                 if (viewName === 'templates') app.renderTemplates();
                 if (viewName === 'jobs') app.renderJobs();
