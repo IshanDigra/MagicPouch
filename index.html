@@ -46,6 +46,13 @@
         .safe-pt { padding-top: env(safe-area-inset-top); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Custom Scrollbar for Modals */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+
         .fade-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         /* Toggle Switch */
@@ -55,7 +62,6 @@
         .transition-transform { transition-property: transform; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
     </style>
 </head>
-<!-- UPDATED: Used h-[100dvh] for iOS dynamic viewport support -->
 <body class="bg-gray-50 h-[100dvh] flex flex-col text-gray-800 font-sans overflow-hidden dark:bg-slate-900 dark:text-slate-100 transition-colors duration-200">
 
     <!-- === HEADER === -->
@@ -113,7 +119,6 @@
     </header>
 
     <!-- === MAIN CONTENT AREA === -->
-    <!-- UPDATED: Added min-h-0 to prevent flex item overflow on mobile -->
     <main class="flex-1 min-h-0 overflow-hidden relative" id="main-container">
         
         <!-- VIEW: JOBS (Application Dashboard) -->
@@ -218,7 +223,6 @@
                         <i class="fas fa-pen-nib opacity-50 text-xs"></i>
                     </div>
                     <div class="bg-white rounded-b-2xl border-x border-b border-gray-200 p-1 shadow-sm dark:bg-slate-800 dark:border-slate-700">
-                        <!-- Removed lined paper class, added standard styling -->
                         <textarea id="plan-weekly-text" oninput="app.savePlanText('weekly')" class="w-full h-40 bg-gray-50 p-4 rounded-b-xl text-sm text-gray-700 leading-relaxed focus:bg-white focus:ring-0 outline-none resize-none transition-all border-none dark:bg-slate-700/50 dark:text-slate-300 dark:focus:bg-slate-700 dark:placeholder-slate-500" placeholder="• Key Objective 1&#10;• Key Objective 2"></textarea>
                     </div>
                 </div>
@@ -232,7 +236,6 @@
                         <i class="fas fa-mountain opacity-50 text-xs"></i>
                     </div>
                     <div class="bg-white rounded-b-2xl border-x border-b border-gray-200 p-1 shadow-sm dark:bg-slate-800 dark:border-slate-700">
-                        <!-- Removed lined paper class, added standard styling -->
                         <textarea id="plan-monthly-text" oninput="app.savePlanText('monthly')" class="w-full h-40 bg-gray-50 p-4 rounded-b-xl text-sm text-gray-700 leading-relaxed focus:bg-white focus:ring-0 outline-none resize-none transition-all border-none dark:bg-slate-700/50 dark:text-slate-300 dark:focus:bg-slate-700 dark:placeholder-slate-500" placeholder="The Big Picture..."></textarea>
                     </div>
                 </div>
@@ -260,7 +263,6 @@
     <!-- === MODALS === -->
 
     <!-- MODAL 1: MOMENTUM (STREAK) -->
-    <!-- UPDATED: Reduced max-height for better fit on mobile -->
     <div id="modal-streak" class="fixed inset-0 bg-black/50 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="if(event.target === this) this.classList.add('hidden')">
         <div class="bg-white w-full max-w-sm rounded-2xl p-5 shadow-2xl flex flex-col max-h-[85dvh] overflow-y-auto dark:bg-slate-800 dark:border dark:border-slate-700">
             <div class="flex justify-between items-center mb-4 shrink-0">
@@ -315,7 +317,6 @@
     </div>
 
     <!-- MODAL 2: WEEKLY INSIGHTS & HEATMAP -->
-    <!-- UPDATED: Reduced max-height for better fit on mobile -->
     <div id="modal-weekly" class="fixed inset-0 bg-black/50 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="if(event.target === this) this.classList.add('hidden')">
         <div class="bg-white w-full max-w-md rounded-2xl p-5 shadow-2xl flex flex-col max-h-[85dvh] overflow-y-auto dark:bg-slate-800 dark:border dark:border-slate-700">
             <div class="flex justify-between items-center mb-4 shrink-0">
@@ -399,7 +400,7 @@
         </div>
     </div>
 
-    <!-- NEW: Add Daily Task Modal -->
+    <!-- Daily Task Modal -->
     <div id="modal-add-task" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-center justify-center p-6 backdrop-blur-sm">
         <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
             <h3 class="font-bold text-lg mb-4 dark:text-white">Add Daily Win</h3>
@@ -542,35 +543,89 @@
         </div>
     </div>
 
-    <!-- Job Editor (UPDATED: Added Save & Apply) -->
-    <div id="modal-job" class="fixed inset-0 bg-white z-50 hidden flex flex-col safe-pb dark:bg-slate-900">
-        <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-white safe-pt dark:bg-slate-800 dark:border-slate-700">
-            <button onclick="document.getElementById('modal-job').classList.add('hidden')" class="text-gray-500 font-bold px-2 dark:text-slate-400">Cancel</button>
-            <span class="font-bold dark:text-white">Add Job Link</span>
-            <div class="flex gap-2">
-                 <!-- New Button: Save & Apply -->
-                 <button onclick="app.saveJob(true)" class="bg-green-50 text-green-600 font-bold px-3 py-1.5 rounded-lg text-xs border border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800 flex items-center gap-1">
-                    <i class="fas fa-check"></i> Apply
-                 </button>
-                 <button onclick="app.saveJob(false)" class="bg-blue-50 text-blue-600 font-bold px-3 py-1.5 rounded-lg text-xs border border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800">
-                    Save
-                 </button>
+    <!-- RE-DESIGNED Job Editor Modal -->
+    <div id="modal-job" class="fixed inset-0 bg-gray-900/40 z-[90] hidden flex items-end sm:items-center justify-center backdrop-blur-sm sm:p-4">
+        <!-- Card Container -->
+        <div class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] transition-all dark:bg-slate-900 dark:border dark:border-slate-800">
+            
+            <!-- Header -->
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 dark:bg-slate-900 dark:border-slate-800">
+                <span class="font-bold text-lg dark:text-white">Add Job</span>
+                <button onclick="document.getElementById('modal-job').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
             </div>
-        </div>
-        <div class="p-5 flex flex-col gap-4 flex-1">
-            <input type="text" id="job-title" class="text-2xl font-bold placeholder-gray-300 outline-none dark:bg-transparent dark:text-white" placeholder="Role / Company Name">
-            <div class="flex gap-2 items-center border-b border-gray-100 pb-2 dark:border-slate-700">
-                <i class="fas fa-globe text-gray-400"></i>
-                <select id="job-type" class="bg-transparent text-sm font-bold outline-none text-gray-600 flex-1 dark:text-slate-300 dark:bg-slate-900">
-                    <option value="job">Direct Job Link</option>
-                    <option value="site">Company Site</option>
-                    <option value="linkedin">LinkedIn</option>
-                    <option value="naukri">Naukri</option>
-                </select>
+
+            <!-- Scrollable Content -->
+            <div class="p-6 overflow-y-auto custom-scrollbar flex-1">
+                
+                <!-- URL Input Group -->
+                <div class="mb-5">
+                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Job Link</label>
+                    <div class="relative group">
+                        <div class="absolute left-4 top-3.5 text-gray-400 dark:text-slate-500">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <input type="text" id="job-content" oninput="app.handleUrlInput(this.value)" class="w-full pl-10 pr-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-500 focus:bg-white transition-all outline-none font-medium text-sm text-gray-700 placeholder-gray-400 dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800" placeholder="Paste URL here (LinkedIn, etc.)">
+                    </div>
+                </div>
+
+                <!-- Title & Type Group -->
+                <div class="grid grid-cols-[1fr,auto] gap-3 mb-5">
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Role / Company</label>
+                        <input type="text" id="job-title" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-sm text-gray-800 placeholder-gray-300 dark:bg-slate-800 dark:text-white dark:placeholder-slate-600 dark:focus:bg-slate-800" placeholder="e.g. Frontend @ Google">
+                    </div>
+                    <div>
+                         <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Platform</label>
+                         <div class="relative">
+                             <select id="job-type" class="appearance-none w-full pl-4 pr-10 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-500 outline-none font-bold text-sm text-gray-600 dark:bg-slate-800 dark:text-slate-300">
+                                <option value="job">Direct</option>
+                                <option value="linkedin">LinkedIn</option>
+                                <option value="naukri">Naukri</option>
+                                <option value="site">Website</option>
+                            </select>
+                            <div class="absolute right-3 top-3.5 text-gray-400 pointer-events-none text-xs">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Chips (NEW) -->
+                <div class="mb-3">
+                    <div class="flex justify-between items-center mb-2">
+                         <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-500">Quick Notes</label>
+                         <button onclick="app.addQuickNoteOption()" class="text-[10px] font-bold text-blue-500 hover:text-blue-600 dark:text-blue-400">+ CUSTOM</button>
+                    </div>
+                    <div class="flex flex-wrap gap-2" id="quick-notes-container">
+                        <!-- Chips injected by JS -->
+                        <button onclick="app.addQuickNote('Ask for Referral')" class="px-3 py-1.5 rounded-lg bg-purple-50 text-purple-600 text-xs font-bold border border-purple-100 hover:bg-purple-100 transition active:scale-95 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-800">Ask Referral</button>
+                        <button onclick="app.addQuickNote('Direct Apply')" class="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-bold border border-blue-100 hover:bg-blue-100 transition active:scale-95 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800">Direct Apply</button>
+                        <button onclick="app.addQuickNote('DM Recruiter')" class="px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-600 text-xs font-bold border border-indigo-100 hover:bg-indigo-100 transition active:scale-95 dark:bg-indigo-900/20 dark:text-indigo-300 dark:border-indigo-800">DM Recruiter</button>
+                        <button onclick="app.addQuickNote('Check Salary')" class="px-3 py-1.5 rounded-lg bg-green-50 text-green-600 text-xs font-bold border border-green-100 hover:bg-green-100 transition active:scale-95 dark:bg-green-900/20 dark:text-green-300 dark:border-green-800">Salary</button>
+                    </div>
+                </div>
+
+                <!-- Notes Area -->
+                <div class="mb-2">
+                    <textarea id="job-remarks" class="w-full h-24 p-4 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-200 focus:bg-white transition-all outline-none text-sm text-gray-700 leading-relaxed placeholder-gray-400 resize-none dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800 dark:focus:border-slate-600" placeholder="Add custom notes here..."></textarea>
+                </div>
+
             </div>
-            <textarea id="job-content" class="h-32 text-base leading-relaxed placeholder-gray-300 outline-none resize-none dark:bg-transparent dark:text-slate-300" placeholder="Paste link here..."></textarea>
-            <textarea id="job-remarks" class="h-24 text-sm leading-relaxed placeholder-gray-400 outline-none resize-none bg-gray-50 p-3 rounded-xl border border-gray-100 focus:border-blue-200 transition dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300" placeholder="Add optional remarks (e.g. HR Name, Salary, Stack)..."></textarea>
-            <div class="text-xs text-gray-400 text-center mt-auto dark:text-slate-600">Jobs are grouped by day added and deleted after 7 days.</div>
+
+            <!-- Footer Actions -->
+            <div class="p-6 pt-2 bg-white border-t border-gray-50 z-10 dark:bg-slate-900 dark:border-slate-800">
+                <div class="flex gap-3">
+                     <!-- Secondary Button -->
+                     <button onclick="app.saveJob(false)" class="flex-1 py-3.5 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200 active:scale-[0.98] transition dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">
+                        Save for Later
+                     </button>
+                     <!-- Primary Button -->
+                     <button onclick="app.saveJob(true)" class="flex-[2] py-3.5 bg-green-500 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 hover:bg-green-600 active:scale-[0.98] transition flex items-center justify-center gap-2">
+                        <i class="fas fa-check"></i> Applied
+                     </button>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -647,9 +702,6 @@
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, onSnapshot, setDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // ==========================================
-        // 🔧 CONFIGURATION (RESTORED FOR DEPLOYMENT)
-        // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyD3GZnCEWotlYVHElhh3c5RmCKYjzSdhX8",
             authDomain: "magic-pouch.firebaseapp.com",
@@ -663,13 +715,13 @@
         const auth = getAuth(firebaseApp);
         const db = getFirestore(firebaseApp);
         
-        // State
         const STATE = {
             user: null,
             syncKey: localStorage.getItem('magic_pouch_key') || Math.random().toString(36).substr(2, 6).toUpperCase(),
             data: { 
                 notes: [], 
                 profile: [],
+                quickNotes: [], 
                 plan: {
                     daily: [
                         { id: 'def1', text: 'Apply to 5 Jobs', done: false },
@@ -681,12 +733,12 @@
                     streak: 0
                 },
                 stats: {
-                    history: {}, // "YYYY-MM-DD": { total: number, methods: { 'cold-email': number } } OR plain number (legacy)
+                    history: {}, 
                     dailyTarget: 5
                 }
             },
             editingId: null,
-            targetStatusId: null, // Track which job we are updating status for
+            targetStatusId: null,
             templateFolder: null,
             renameTargetFolder: null,
             currentConfirmAction: null,
@@ -711,11 +763,10 @@
             return Math.floor((startOfToday - startOfDate) / MILLIS_PER_DAY);
         };
 
-        // App Logic
         window.app = {
             
             init: async () => {
-                app.initTheme(); // Initialize theme on load
+                app.initTheme();
                 try {
                     await signInAnonymously(auth);
                     console.log('Anonymous auth success');
@@ -735,21 +786,8 @@
                 localStorage.setItem('magic_pouch_key', STATE.syncKey);
                 if(document.getElementById('sync-status-text')) document.getElementById('sync-status-text').textContent = STATE.syncKey;
                 if(document.getElementById('sync-key-input')) document.getElementById('sync-key-input').value = STATE.syncKey;
-                
-                const copyBtn = document.getElementById('copy-sync-key-btn');
-                if(copyBtn) copyBtn.addEventListener('click', () => {
-                    const kInput = document.getElementById('sync-key-input');
-                    if(kInput) app.copyText(kInput.value);
-                });
-                
-                const genBtn = document.getElementById('generate-key-btn');
-                if(genBtn) genBtn.addEventListener('click', () => {
-                    const newCode = Math.random().toString(36).substr(2, 6).toUpperCase();
-                    document.getElementById('sync-key-input').value = newCode;
-                });
             },
 
-            // Theme Logic
             initTheme: () => {
                 const isDark = localStorage.getItem('theme') === 'dark' || 
                               (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -779,8 +817,6 @@
                 if(STATE.unsubscribe) STATE.unsubscribe();
                 
                 STATE.isSyncing = true;
-                
-                // RESTORED: Standard Path
                 const docRef = doc(db, 'sync', STATE.syncKey);
                 
                 STATE.unsubscribe = onSnapshot(docRef, (snap) => {
@@ -800,7 +836,6 @@
                         app.cleanupOldJobs();
                         app.processAutomationRules();
                     } else {
-                        // Initialize new sync doc if it doesn't exist
                         STATE.data = app.sanitizeData({});
                     }
                     app.refreshUI();
@@ -815,6 +850,7 @@
                 const safeData = data || {};
                 if (!Array.isArray(safeData.notes)) safeData.notes = [];
                 if (!Array.isArray(safeData.profile)) safeData.profile = [];
+                if (!Array.isArray(safeData.quickNotes)) safeData.quickNotes = []; 
                 if (!safeData.plan || typeof safeData.plan !== 'object') safeData.plan = {};
                 
                 if (!Array.isArray(safeData.plan.daily)) {
@@ -837,47 +873,31 @@
                 return safeData;
             },
 
-            openSettings: () => {
-                document.getElementById('modal-settings').classList.remove('hidden');
-            },
-
-            openStreakModal: () => {
-                document.getElementById('modal-streak').classList.remove('hidden');
-                // Ensure UI is up to date
-                app.updateProgressUI(); 
-            },
-
-            openWeeklyModal: () => {
-                document.getElementById('modal-weekly').classList.remove('hidden');
-                setTimeout(() => {
+            openSettings: () => { document.getElementById('modal-settings').classList.remove('hidden'); },
+            openStreakModal: () => { document.getElementById('modal-streak').classList.remove('hidden'); app.updateProgressUI(); },
+            openWeeklyModal: () => { 
+                document.getElementById('modal-weekly').classList.remove('hidden'); 
+                setTimeout(() => { 
                     app.renderWeeklyStats(); 
-                    // Render heatmap when weekly modal opens
-                    const today = new Date();
-                    const target = STATE.data.stats.dailyTarget || 5;
-                    app.renderHeatmap(today, target);
-                }, 100);
+                    app.renderHeatmap(new Date(), STATE.data.stats.dailyTarget || 5);
+                }, 100); 
             },
 
-            // HELPER: Get stats for a specific 7-day range (offset by weeks)
-            // UPDATED to support Breakdown Object
             getWeeklyStats: (weekOffset = 0) => {
                 const history = STATE.data.stats.history || {};
                 const today = new Date();
-                const dayOfWeek = today.getDay(); // 0 = Sunday
+                const dayOfWeek = today.getDay(); 
                 
-                // Calculate start of the current week (Sunday)
                 const startOfCurrentWeek = new Date(today);
                 startOfCurrentWeek.setDate(today.getDate() - dayOfWeek);
                 startOfCurrentWeek.setHours(0, 0, 0, 0);
 
-                // Calculate start of the target week
                 const startOfTargetWeek = new Date(startOfCurrentWeek);
                 startOfTargetWeek.setDate(startOfCurrentWeek.getDate() - (weekOffset * 7));
                 
                 let total = 0;
                 let breakdown = { 'direct': 0, 'cold-email': 0, 'referral': 0, 'recruiter': 0 };
 
-                // Sum 7 days from the start of that week (Sun-Sat)
                 for (let i = 0; i < 7; i++) {
                     const d = new Date(startOfTargetWeek);
                     d.setDate(startOfTargetWeek.getDate() + i);
@@ -886,7 +906,7 @@
 
                     if (typeof entry === 'number') {
                         total += entry;
-                        breakdown['direct'] += entry; // Default to direct for legacy
+                        breakdown['direct'] += entry;
                     } else if (entry && typeof entry === 'object') {
                         total += (entry.total || 0);
                         if (entry.methods) {
@@ -895,7 +915,6 @@
                             breakdown['referral'] += (entry.methods['referral'] || 0);
                             breakdown['recruiter'] += (entry.methods['recruiter'] || 0);
                         } else {
-                            // Fallback if methods missing
                             breakdown['direct'] += (entry.total || 0);
                         }
                     }
@@ -906,256 +925,177 @@
             checkDailyReset: () => {
                 const today = new Date().toLocaleDateString('en-CA'); 
                 const lastLogin = STATE.data.plan.lastLogin;
-
                 if (lastLogin !== today) {
                     app.recalculateStreak(); 
-                    if (lastLogin) {
-                          STATE.data.plan.daily.forEach(task => task.done = false);
-                    }
+                    if (lastLogin) STATE.data.plan.daily.forEach(task => task.done = false);
                     STATE.data.plan.lastLogin = today;
                     app.saveToCloud();
                 } else {
                     app.recalculateStreak();
                 }
             },
-
+            
             recalculateStreak: () => {
                 const today = new Date();
                 let currentStreak = 0;
                 let checkDate = new Date(today);
-                
                 const todayStr = today.toLocaleDateString('en-CA');
-                
-                // Helper to get count safely
                 const getCount = (dStr) => {
                     const entry = STATE.data.stats.history[dStr];
                     if (typeof entry === 'number') return entry;
                     if (entry && typeof entry === 'object') return entry.total || 0;
                     return 0;
                 };
-
                 const todayCount = getCount(todayStr);
                 const target = STATE.data.stats.dailyTarget || 5;
-                
                 if (todayCount >= target) currentStreak++;
-                
                 for (let i = 1; i < 365; i++) { 
                     checkDate.setDate(checkDate.getDate() - 1);
                     const dStr = checkDate.toLocaleDateString('en-CA');
                     const count = getCount(dStr);
-                    
-                    if (count >= target) {
-                        currentStreak++;
-                    } else {
-                        // Allow today to be incomplete without breaking yesterday's streak
+                    if (count >= target) currentStreak++;
+                    else {
                         if (i === 1 && todayCount < target) continue; 
                         else break;
                     }
                 }
-                
                 STATE.data.plan.streak = currentStreak;
-                const streakCountEl = document.getElementById('streak-count');
-                if(streakCountEl) streakCountEl.textContent = currentStreak;
-                const miniStreak = document.getElementById('mini-streak');
-                if(miniStreak) miniStreak.textContent = currentStreak;
-
                 app.updateProgressUI();
             },
 
             updateProgressUI: () => {
                 const today = new Date();
                 const todayStr = today.toLocaleDateString('en-CA');
-                
-                // Helper to get count safely
                 const getCount = (dStr) => {
                     const entry = STATE.data.stats.history[dStr];
                     if (typeof entry === 'number') return entry;
                     if (entry && typeof entry === 'object') return entry.total || 0;
                     return 0;
                 };
-
                 const count = getCount(todayStr);
                 const target = STATE.data.stats.dailyTarget || 5;
                 
-                // --- Streak Modal Updates ---
                 const progressText = document.getElementById('today-progress-text');
                 const progressBar = document.getElementById('streak-progress-bar');
                 const streakCountEl = document.getElementById('streak-count');
                 
                 if(progressText) progressText.textContent = `${count} / ${target}`;
                 if(streakCountEl) streakCountEl.textContent = STATE.data.plan.streak;
-                
                 if(progressBar) {
                     const pct = Math.min(100, (count / target) * 100);
                     progressBar.style.width = `${pct}%`;
-                    if(pct >= 100) progressBar.className = "h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full transition-all duration-700 shadow-[0_0_10px_rgba(34,197,94,0.5)]";
-                    else progressBar.className = "h-full bg-orange-500 rounded-full transition-all duration-700";
                 }
 
-                // --- HEADER BUTTON FIRE BORDER ---
                 const streakBtnBg = document.getElementById('streak-progress-bg');
                 if (streakBtnBg) {
                     const pct = Math.min(100, (count / target) * 100);
-                    // Create a fire-like gradient (Orange -> Red) that fills up based on percentage
-                    // We use slightly more than 'pct' for the color stop to create a solid leading edge
                     streakBtnBg.style.background = `conic-gradient(from 0deg, #f97316 0%, #ef4444 ${pct}%, transparent ${pct}%)`;
-                    
-                    // Optional: Add a glow if 100%
-                    const btn = document.getElementById('streak-btn');
-                    if (pct >= 100 && btn) {
-                        btn.classList.add('shadow-[0_0_10px_rgba(249,115,22,0.5)]', 'border-orange-300');
-                    } else if (btn) {
-                        btn.classList.remove('shadow-[0_0_10px_rgba(249,115,22,0.5)]', 'border-orange-300');
-                    }
                 }
 
-                // Render Streak Fire Map
                 app.renderStreakCalendar(today, target);
-
-                // Update Header Badges
                 const miniStreak = document.getElementById('mini-streak');
                 if(miniStreak) miniStreak.textContent = STATE.data.plan.streak;
 
-                // Update Weekly Summaries
-                const weeklyData = app.getWeeklyStats(0); // Current week
-                const weeklyCount = weeklyData.total;
+                const weeklyData = app.getWeeklyStats(0);
                 const miniWeekly = document.getElementById('mini-weekly');
                 const weeklyTotalEl = document.getElementById('weekly-total');
                 const weeklyRefEl = document.getElementById('weekly-referrals');
+                if(miniWeekly) miniWeekly.textContent = weeklyData.total;
+                if(weeklyTotalEl) weeklyTotalEl.textContent = weeklyData.total;
                 
-                if(miniWeekly) miniWeekly.textContent = weeklyCount;
-                if(weeklyTotalEl) weeklyTotalEl.textContent = weeklyCount;
-                
-                // Calculate actual referrals received
-                const now = new Date();
-                const dayOfWeek = now.getDay();
-                const startOfThisWeek = new Date(now);
-                startOfThisWeek.setDate(now.getDate() - dayOfWeek);
-                startOfThisWeek.setHours(0, 0, 0, 0);
-
                 let referralCount = 0;
                 STATE.data.notes.forEach(n => {
-                    if (n.category === 'job' && n.status === 'referral-received') {
-                        const t = n.updated || n.created;
-                        if (new Date(t) >= startOfThisWeek) {
-                            referralCount++;
-                        }
-                    }
+                    if (n.category === 'job' && n.status === 'referral-received') referralCount++;
                 });
-                
                 if(weeklyRefEl) weeklyRefEl.textContent = referralCount;
             },
 
-            renderStreakCalendar: (currentDate, target) => {
+             renderStreakCalendar: (currentDate, target) => {
                 const grid = document.getElementById('streak-calendar-grid');
                 if(!grid) return;
                 grid.innerHTML = '';
-
                 const monthLabel = document.getElementById('streak-month-label');
                 if(monthLabel) monthLabel.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-
                 const year = currentDate.getFullYear();
                 const month = currentDate.getMonth();
-                
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
-                const startDay = new Date(year, month, 1).getDay(); // 0=Sun
-
-                for(let i=0; i<startDay; i++) {
-                    const empty = document.createElement('div');
-                    grid.appendChild(empty);
-                }
-
+                const startDay = new Date(year, month, 1).getDay(); 
+                for(let i=0; i<startDay; i++) { grid.appendChild(document.createElement('div')); }
                 const history = STATE.data.stats.history || {};
-
                 for(let d=1; d<=daysInMonth; d++) {
                     const dateObj = new Date(year, month, d);
                     const dateStr = dateObj.toLocaleDateString('en-CA');
-                    
                     let count = 0;
                     if(typeof history[dateStr] === 'number') count = history[dateStr];
                     else if(history[dateStr] && typeof history[dateStr] === 'object') count = history[dateStr].total;
-                    
                     const cell = document.createElement('div');
                     const isToday = d === currentDate.getDate();
-                    
                     let bgClass = "bg-gray-50 border-gray-100 text-gray-300 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-600";
                     let content = `<span class="text-[9px] font-bold">${d}</span>`; 
-                    let borderClass = "border";
-
                     if (count >= target) {
-                        bgClass = "bg-orange-100 border-orange-200 text-orange-500 shadow-sm dark:bg-orange-500/10 dark:border-orange-500/20 dark:text-orange-400";
+                        bgClass = "bg-orange-100 border-orange-200 text-orange-50 shadow-sm dark:bg-orange-500/10 dark:border-orange-500/20 dark:text-orange-400";
                         content = `<i class="fas fa-fire text-sm animate-pulse"></i>`; 
-                    } else if (count > 0) {
-                        bgClass = "bg-gray-100 border-gray-200 text-gray-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-400";
-                    }
-
-                    if (isToday) {
-                        borderClass = "border-2 border-blue-400 dark:border-blue-500";
-                    }
-
-                    cell.className = `w-full aspect-square rounded-xl ${bgClass} ${borderClass} flex items-center justify-center transition-all cursor-default`;
+                    } else if (count > 0) bgClass = "bg-gray-100 border-gray-200 text-gray-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-400";
+                    if (isToday) bgClass += " border-2 border-blue-400 dark:border-blue-500";
+                    cell.className = `w-full aspect-square rounded-xl ${bgClass} border flex items-center justify-center transition-all cursor-default`;
                     cell.innerHTML = content;
                     grid.appendChild(cell);
                 }
             },
-
+            
             renderHeatmap: (currentDate, target) => {
                 const grid = document.getElementById('heatmap-grid');
                 if(!grid) return;
                 grid.innerHTML = '';
-
+                
                 const monthLabel = document.getElementById('current-month-label');
                 if(monthLabel) monthLabel.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-
+                
                 const year = currentDate.getFullYear();
                 const month = currentDate.getMonth();
                 const daysInMonth = new Date(year, month + 1, 0).getDate();
-                const startDay = new Date(year, month, 1).getDay();
-
+                const startDay = new Date(year, month, 1).getDay(); // 0 = Sun
+                
+                // Empty slots for start of month
                 for(let i=0; i<startDay; i++) {
-                    const empty = document.createElement('div');
-                    grid.appendChild(empty);
+                    grid.appendChild(document.createElement('div'));
                 }
-
+                
                 const history = STATE.data.stats.history || {};
-
+                
                 for(let d=1; d<=daysInMonth; d++) {
                     const dateObj = new Date(year, month, d);
                     const dateStr = dateObj.toLocaleDateString('en-CA');
                     
                     let count = 0;
                     if(typeof history[dateStr] === 'number') count = history[dateStr];
-                    else if(history[dateStr] && typeof history[dateStr] === 'object') count = history[dateStr].total;
+                    else if(history[dateStr] && typeof history[dateStr] === 'object') count = history[dateStr].total || 0;
                     
                     const cell = document.createElement('div');
-                    let bgClass = "bg-gray-100 dark:bg-slate-700";
-                    if (count > 0) {
-                        if (count >= target) bgClass = "bg-green-500 shadow-[0_0_5px_rgba(34,197,94,0.4)] scale-105 z-10 dark:bg-green-600";
-                        else if (count >= target / 2) bgClass = "bg-green-300 dark:bg-green-800";
-                        else bgClass = "bg-green-200 dark:bg-green-900";
+                    
+                    // Style based on count
+                    let bgClass = "bg-gray-100 dark:bg-slate-700"; // Empty
+                    if(count > 0) {
+                        if(count >= target) bgClass = "bg-green-500 dark:bg-green-500"; // Target met
+                        else bgClass = "bg-green-200 dark:bg-green-500/30"; // Some activity
                     }
-
-                    const isToday = d === currentDate.getDate();
+                    
+                    // Highlight today
+                    const now = new Date();
+                    const isToday = d === now.getDate() && month === now.getMonth() && year === now.getFullYear();
                     const borderClass = isToday ? "border-2 border-blue-500" : "border border-transparent";
 
-                    cell.className = `w-full aspect-square rounded-md ${bgClass} ${borderClass} flex items-center justify-center text-[9px] font-bold text-transparent hover:text-gray-600 dark:hover:text-slate-300 transition-all cursor-default relative group`;
+                    cell.className = `w-full aspect-square rounded-sm ${bgClass} ${borderClass} transition-all hover:opacity-80`;
+                    cell.title = `${dateStr}: ${count} activities`;
                     
-                    cell.innerHTML = `
-                        <span class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[9px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap pointer-events-none z-20 dark:bg-slate-200 dark:text-slate-900">
-                            ${dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}: ${count}
-                        </span>
-                    `;
                     grid.appendChild(cell);
                 }
             },
 
             editDailyTarget: () => {
-                const modal = document.getElementById('modal-target');
-                const input = document.getElementById('target-input');
-                input.value = STATE.data.stats.dailyTarget || 5;
-                modal.classList.remove('hidden');
+                document.getElementById('target-input').value = STATE.data.stats.dailyTarget || 5;
+                document.getElementById('modal-target').classList.remove('hidden');
             },
-
             saveTarget: () => {
                 const val = parseInt(document.getElementById('target-input').value);
                 if(val > 0) {
@@ -1165,312 +1105,93 @@
                     document.getElementById('modal-target').classList.add('hidden');
                 }
             },
-
             renderWeeklyStats: () => {
                 const ctx = document.getElementById('insightsChart');
                 if (!ctx) return;
-                
                 if (window.myChart) window.myChart.destroy();
-                
-                // Show last 4 weeks in GROUPED Bar Chart
-                // Week 0 = current
                 const rawData = [];
                 const labels = ["3 Weeks Ago", "2 Weeks Ago", "Last Week", "This Week"];
+                for(let i=3; i>=0; i--) { rawData.push(app.getWeeklyStats(i)); }
                 
-                for(let i=3; i>=0; i--) {
-                    rawData.push(app.getWeeklyStats(i));
-                }
-                
-                // Extract Trend (using total)
-                const thisWeekTotal = rawData[3].total;
-                const lastWeekTotal = rawData[2].total;
-                let trendHtml = "";
-                if(lastWeekTotal === 0) {
-                      trendHtml = thisWeekTotal > 0 ? "+100% 🚀" : "--";
-                } else {
-                    const diff = thisWeekTotal - lastWeekTotal;
-                    const pct = Math.round((diff / lastWeekTotal) * 100);
-                    const colorClass = diff >= 0 ? "text-green-600 bg-green-50" : "text-red-500 bg-red-50";
-                    const sign = diff >= 0 ? "+" : "";
-                    trendHtml = `<span class="${colorClass} px-2 py-0.5 rounded-full text-[10px] font-bold dark:bg-opacity-20">${sign}${pct}% vs last week</span>`;
-                }
-                document.getElementById('trend-text').innerHTML = trendHtml;
-
-                // Prepare Datasets for Grouped Bar
-                // Total (Light Color) + Breakdown Bars
-                
-                const datasetTotal = { 
-                    label: 'Total', 
-                    data: rawData.map(d => d.total), 
-                    backgroundColor: '#e0e7ff', // Very light blue
-                    borderRadius: 4,
-                    barPercentage: 0.6,
-                    categoryPercentage: 0.8
-                };
-                
-                const datasetDirect = { 
-                    label: 'Direct', 
-                    data: rawData.map(d => d.breakdown['direct']), 
-                    backgroundColor: '#3b82f6', 
-                    borderRadius: 4,
-                    barPercentage: 0.8,
-                    categoryPercentage: 0.8
-                };
-                
-                const datasetCold = { 
-                    label: 'Cold Email', 
-                    data: rawData.map(d => d.breakdown['cold-email']), 
-                    backgroundColor: '#f97316', 
-                    borderRadius: 4,
-                    barPercentage: 0.8,
-                    categoryPercentage: 0.8
-                };
-                
-                const datasetReferral = { 
-                    label: 'Referral', 
-                    data: rawData.map(d => d.breakdown['referral']), 
-                    backgroundColor: '#a855f7', 
-                    borderRadius: 4,
-                    barPercentage: 0.8,
-                    categoryPercentage: 0.8
-                };
-
-                const datasetRecruiter = { 
-                    label: 'Recruiter', 
-                    data: rawData.map(d => d.breakdown['recruiter']), 
-                    backgroundColor: '#14b8a6', 
-                    borderRadius: 4,
-                    barPercentage: 0.8,
-                    categoryPercentage: 0.8
-                };
+                const datasetTotal = { label: 'Total', data: rawData.map(d => d.total), backgroundColor: '#e0e7ff', borderRadius: 4, barPercentage: 0.6 };
+                const datasetDirect = { label: 'Direct', data: rawData.map(d => d.breakdown['direct']), backgroundColor: '#3b82f6', borderRadius: 4, barPercentage: 0.8 };
+                const datasetCold = { label: 'Cold Email', data: rawData.map(d => d.breakdown['cold-email']), backgroundColor: '#f97316', borderRadius: 4, barPercentage: 0.8 };
+                const datasetReferral = { label: 'Referral', data: rawData.map(d => d.breakdown['referral']), backgroundColor: '#a855f7', borderRadius: 4, barPercentage: 0.8 };
+                const datasetRecruiter = { label: 'Recruiter', data: rawData.map(d => d.breakdown['recruiter']), backgroundColor: '#14b8a6', borderRadius: 4, barPercentage: 0.8 };
 
                 window.myChart = new Chart(ctx, {
                     type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [datasetTotal, datasetDirect, datasetCold, datasetReferral, datasetRecruiter]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            x: { 
-                                grid: { display: false }, 
-                                ticks: { font: { size: 10 }, color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280' } 
-                            },
-                            y: { 
-                                display: false, 
-                                beginAtZero: true 
+                    data: { labels: labels, datasets: [datasetTotal, datasetDirect, datasetCold, datasetReferral, datasetRecruiter] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { display: false, beginAtZero: true } } }
+                });
+            },
+
+            handleUrlInput: (url) => {
+                const typeSelect = document.getElementById('job-type');
+                const titleInput = document.getElementById('job-title');
+                
+                if (url.includes('linkedin.com')) typeSelect.value = 'linkedin';
+                else if (url.includes('naukri.com')) typeSelect.value = 'naukri';
+                else if (url.includes('glassdoor.com')) typeSelect.value = 'site';
+                else if (url.includes('indeed.com')) typeSelect.value = 'site';
+                
+                if (!titleInput.value) {
+                    try {
+                        const urlObj = new URL(url.match(/^http/) ? url : `https://${url}`);
+                        const pathSegments = urlObj.pathname.split('/').filter(p => p.length > 2 && !p.match(/^\d+$/));
+                        
+                        if (pathSegments.length > 0) {
+                            const last = pathSegments[pathSegments.length - 1];
+                            const readable = last.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                            
+                            if (!url.includes('linkedin')) {
+                                titleInput.value = readable;
                             }
                         }
+                    } catch(e) {
+                        // Invalid URL
                     }
-                });
+                }
             },
 
-            renderPlan: () => {
-                const plan = STATE.data.plan;
-                const listEl = document.getElementById('plan-daily-list');
-                listEl.innerHTML = '';
+            addQuickNote: (text) => {
+                const textarea = document.getElementById('job-remarks');
+                const current = textarea.value.trim();
+                textarea.value = current ? `${current}\n• ${text}` : `• ${text}`;
+                textarea.classList.add('bg-blue-50', 'dark:bg-blue-900/20');
+                setTimeout(() => textarea.classList.remove('bg-blue-50', 'dark:bg-blue-900/20'), 300);
+            },
+            
+            addQuickNoteOption: () => {
+                const newTag = prompt("Enter new quick note tag (e.g., 'Check Benefits')");
+                if (newTag && newTag.trim()) {
+                    if(!STATE.data.quickNotes) STATE.data.quickNotes = [];
+                    STATE.data.quickNotes.push(newTag.trim());
+                    app.saveToCloud();
+                    app.renderQuickNotesChips();
+                }
+            },
+            
+            renderQuickNotesChips: () => {
+                const container = document.getElementById('quick-notes-container');
+                const defaults = [
+                    { text: 'Ask Referral', color: 'purple' },
+                    { text: 'Direct Apply', color: 'blue' },
+                    { text: 'DM Recruiter', color: 'indigo' },
+                    { text: 'Salary', color: 'green' }
+                ];
                 
-                if (!app.sortable && listEl) {
-                    app.sortable = new Sortable(listEl, {
-                        animation: 150,
-                        handle: '.drag-handle',
-                        onEnd: function (evt) {
-                            const item = STATE.data.plan.daily.splice(evt.oldIndex, 1)[0];
-                            STATE.data.plan.daily.splice(evt.newIndex, 0, item);
-                            app.saveToCloud();
-                        },
-                    });
-                }
-
-                let completedCount = 0;
-                plan.daily.forEach((task, idx) => {
-                    if(task.done) completedCount++;
-                    const div = document.createElement('div');
-                    div.className = "flex items-center gap-3 bg-gray-50/50 p-3 rounded-xl border transition-all duration-300 dark:bg-slate-800/50 dark:border-slate-700 " + (task.done ? "border-green-100 bg-green-50/20 dark:bg-green-900/20 dark:border-green-800" : "border-gray-100 hover:border-blue-200 hover:bg-white hover:shadow-sm dark:hover:bg-slate-800 dark:hover:border-blue-700");
-                    div.innerHTML = `
-                        <div class="drag-handle text-gray-300 cursor-move px-1 hover:text-gray-500 transition-colors"><i class="fas fa-grip-vertical text-xs"></i></div>
-                        <div onclick="app.togglePlanTask(${idx})" class="w-6 h-6 rounded-full border-2 flex items-center justify-center cursor-pointer transition-colors duration-300 ${task.done ? 'bg-green-500 border-green-500 text-white scale-110' : 'border-gray-300 text-transparent hover:border-blue-400 bg-white dark:bg-slate-700 dark:border-slate-500'}"><i class="fas fa-check text-[10px]"></i></div>
-                        <span class="text-sm font-medium ${task.done ? 'text-gray-400 line-through transition-colors duration-300 dark:text-slate-500' : 'text-gray-700 dark:text-slate-200'} flex-1 select-none cursor-pointer" onclick="app.togglePlanTask(${idx})">${task.text}</span>
-                        <button onclick="app.deletePlanTask(${idx})" class="w-8 h-8 flex items-center justify-center text-gray-300 hover:text-red-400 hover:bg-red-50 rounded-full transition-colors dark:text-slate-500 dark:hover:bg-red-900/30"><i class="fas fa-times"></i></button>
-                    `;
-                    listEl.appendChild(div);
-                });
-
-                // Update Progress Bar
-                const total = plan.daily.length;
-                const pct = total === 0 ? 0 : Math.round((completedCount / total) * 100);
-                const progressBar = document.getElementById('daily-plan-progress');
-                const progressText = document.getElementById('daily-plan-progress-text');
+                let html = '';
                 
-                if(progressBar) progressBar.style.width = `${pct}%`;
-                if(progressText) progressText.textContent = `${pct}%`;
-
-                document.getElementById('plan-weekly-text').value = plan.weekly || '';
-                document.getElementById('plan-monthly-text').value = plan.monthly || '';
-            },
-
-            togglePlanTask: (idx) => {
-                STATE.data.plan.daily[idx].done = !STATE.data.plan.daily[idx].done;
-                app.saveToCloud();
-                app.renderPlan();
-                if(STATE.data.plan.daily[idx].done) app.toast("Nice work! 🎉");
-            },
-
-            openAddDailyTaskModal: () => {
-                const input = document.getElementById('new-task-input');
-                input.value = '';
-                document.getElementById('modal-add-task').classList.remove('hidden');
-                setTimeout(() => input.focus(), 100);
-            },
-
-            saveDailyTask: () => {
-                const text = document.getElementById('new-task-input').value.trim();
-                if(text) {
-                    STATE.data.plan.daily.push({ id: Date.now().toString(), text, done: false });
-                    app.saveToCloud();
-                    app.renderPlan();
-                    document.getElementById('modal-add-task').classList.add('hidden');
-                }
-            },
-
-            deletePlanTask: (idx) => {
-                app.openConfirm("Remove this daily task?", () => {
-                    STATE.data.plan.daily.splice(idx, 1);
-                    app.saveToCloud();
-                    app.renderPlan();
+                defaults.forEach(d => {
+                    html += `<button onclick="app.addQuickNote('${d.text}')" class="px-3 py-1.5 rounded-lg bg-${d.color}-50 text-${d.color}-600 text-xs font-bold border border-${d.color}-100 hover:bg-${d.color}-100 transition active:scale-95 dark:bg-${d.color}-900/20 dark:text-${d.color}-300 dark:border-${d.color}-800">${d.text}</button> `;
                 });
-            },
-
-            savePlanText: (type) => {
-                const val = document.getElementById(`plan-${type}-text`).value;
-                STATE.data.plan[type] = val;
-                if(app.planSaveTimeout) clearTimeout(app.planSaveTimeout);
-                app.planSaveTimeout = setTimeout(() => { app.saveToCloud(); }, 1000);
-            },
-
-            processAutomationRules: () => {
-                const now = Date.now();
-                let hasChanges = false;
-                STATE.data.notes.forEach(note => {
-                    const statusToCheck = note.status === 'referral' ? 'referral-asked' : note.status;
-                    if (note.category === 'job' && statusToCheck === 'referral-asked') {
-                        const lastUpdated = note.updated || note.created;
-                        if ((now - lastUpdated) > MILLIS_PER_DAY) {
-                            note.status = 'reminder';
-                            note.updated = now; 
-                            hasChanges = true;
-                        }
-                    }
+                
+                (STATE.data.quickNotes || []).forEach(note => {
+                     html += `<button onclick="app.addQuickNote('${note}')" class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 text-xs font-bold border border-gray-200 hover:bg-gray-200 transition active:scale-95 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600">${note}</button> `;
                 });
-                if (hasChanges) {
-                    app.saveToCloud();
-                    app.toast("Checked follow-ups", false);
-                }
-            },
-
-            refreshUI: () => {
-                app.renderJobs();
-                app.renderTemplates();
-                app.renderPlan(); 
-                app.renderQuickActions();
-                app.renderProfileManageList();
-            },
-
-            saveToCloud: async () => {
-                if(!STATE.user) return;
-                try {
-                    // RESTORED: Standard Path
-                    const docRef = doc(db, 'sync', STATE.syncKey);
-                    await setDoc(docRef, {
-                        data: STATE.data,
-                        userId: STATE.user.uid,
-                        lastUpdated: new Date().toISOString()
-                    });
-                } catch (e) { console.error('Save error:', e); }
-            },
-
-            saveSyncKey: () => {
-                const newKey = document.getElementById('sync-key-input').value.trim().toUpperCase();
-                if(newKey && newKey !== STATE.syncKey) {
-                    STATE.syncKey = newKey;
-                    localStorage.setItem('magic_pouch_key', newKey);
-                    if(document.getElementById('sync-status-text')) document.getElementById('sync-status-text').textContent = newKey;
-                    app.setupSync();
-                    document.getElementById('modal-sync').classList.add('hidden');
-                    app.toast("Switched Sync Channel");
-                } else if(newKey === STATE.syncKey) {
-                    app.toast("Same key - already connected");
-                }
-            },
-
-            openConfirm: (msg, actionFn) => {
-                document.getElementById('confirm-msg').textContent = msg;
-                STATE.currentConfirmAction = actionFn;
-                document.getElementById('modal-confirm').classList.remove('hidden');
-            },
-
-            confirmYes: () => {
-                if (STATE.currentConfirmAction) {
-                    STATE.currentConfirmAction();
-                    STATE.currentConfirmAction = null;
-                }
-                document.getElementById('modal-confirm').classList.add('hidden');
-            },
-
-            cleanupOldJobs: () => {
-                const now = Date.now();
-                const initialLen = STATE.data.notes.length;
-                STATE.data.notes = STATE.data.notes.filter(n => {
-                    if(n.category !== 'job') return true;
-                    const daysOld = Math.floor((now - n.created) / MILLIS_PER_DAY);
-                    return daysOld <= 7;
-                });
-                if(STATE.data.notes.length !== initialLen) app.saveToCloud();
-            },
-
-            exportData: () => {
-                 const dataStr = JSON.stringify(STATE.data, null, 2);
-                 const blob = new Blob([dataStr], { type: 'application/json' });
-                 const url = URL.createObjectURL(blob);
-                 const a = document.createElement('a'); a.href = url; 
-                 a.download = `magic_pouch_backup_${new Date().toISOString().slice(0,10)}.json`;
-                 document.body.appendChild(a); a.click(); document.body.removeChild(a);
-            },
-
-            importData: (input) => {
-                const file = input.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    try {
-                        const imported = JSON.parse(ev.target.result);
-                        app.openConfirm("Replace current data with backup?", () => {
-                            STATE.data = app.sanitizeData(imported); 
-                            app.saveToCloud(); 
-                            app.refreshUI();
-                            app.toast('Restored!');
-                            // Close the settings menu after successful restore
-                            document.getElementById('modal-settings').classList.add('hidden');
-                        });
-                    } catch(err) { app.toast('Invalid file', true); }
-                    input.value = '';
-                };
-                reader.readAsText(file);
-            },
-
-            openLink: (url) => {
-                if (!url) return;
-                let finalUrl = url.trim();
-                if (!finalUrl.match(/^https?:\/\//i) && !finalUrl.match(/^mailto:/i)) finalUrl = 'https://' + finalUrl;
-                try { window.open(finalUrl, '_blank'); } catch(e) { app.toast("Could not open link", true); }
-            },
-
-            handleGlobalSearch: (query) => {
-                if (STATE.currentView === 'jobs') app.renderJobs(query);
-                else if (STATE.currentView === 'templates') app.renderTemplates(query);
+                
+                container.innerHTML = html;
             },
 
             openJobModal: (id = null) => {
@@ -1480,6 +1201,9 @@
                 const content = document.getElementById('job-content');
                 const type = document.getElementById('job-type');
                 const remarks = document.getElementById('job-remarks');
+                
+                app.renderQuickNotesChips(); 
+
                 if(id) {
                     const item = STATE.data.notes.find(n => n.id === id);
                     title.value = item.title;
@@ -1493,6 +1217,9 @@
                     remarks.value = '';
                 }
                 modal.classList.remove('hidden');
+                setTimeout(() => {
+                    if(!id) content.focus();
+                }, 100);
             },
 
             saveJob: (markApplied = false) => {
@@ -1500,10 +1227,15 @@
                 const content = document.getElementById('job-content').value;
                 const linkType = document.getElementById('job-type').value;
                 const remarks = document.getElementById('job-remarks').value;
-                if(!title) return;
                 
+                if(!title && !content) {
+                     app.toast("Please add a link or title", true);
+                     return;
+                }
+                const finalTitle = title || "Untitled Job";
+
                 const newId = STATE.editingId || Date.now().toString();
-                const itemData = { title, content, linkType, remarks, category: 'job', updated: Date.now() };
+                const itemData = { title: finalTitle, content, linkType, remarks, category: 'job', updated: Date.now() };
 
                 if(STATE.editingId) {
                     const idx = STATE.data.notes.findIndex(n => n.id === STATE.editingId);
@@ -1517,19 +1249,20 @@
                 document.getElementById('modal-job').classList.add('hidden');
                 
                 if (markApplied) {
-                    // Open status modal for the newly created/edited job immediately
-                    // Slight delay to allow modal close animation
                     setTimeout(() => {
                         app.openStatusModal(newId);
-                        app.toast("Job Saved! Select applied method...");
+                        app.toast("Job saved! Select how you applied...");
                     }, 300);
                 } else {
                     app.toast("Job Saved");
+                    app.refreshUI();
                 }
             },
 
             openStatusModal: (id) => {
                 STATE.targetStatusId = id;
+                const note = STATE.data.notes.find(n => n.id === id);
+                if(note) document.getElementById('status-modal-title').textContent = `Update: ${note.title}`;
                 document.getElementById('modal-status').classList.remove('hidden');
             },
             
@@ -1538,60 +1271,41 @@
                 STATE.targetStatusId = null;
             },
 
-            // UPDATED: Handle Medium
-            updateStatus: (newStatus, medium = null) => {
+             updateStatus: (newStatus, medium = null) => {
                 if (STATE.targetStatusId) {
                     const note = STATE.data.notes.find(n => n.id === STATE.targetStatusId);
                     if (note) {
-                        // --- STATS LOGIC START ---
                         const oldStatus = note.status || 'pending';
                         const isOldDone = oldStatus === 'applied' || oldStatus === 'completed';
                         const isNewDone = newStatus === 'applied' || newStatus === 'completed';
-                        
-                        // Only count for jobs
                         if (note.category === 'job') {
                             const todayStr = new Date().toLocaleDateString('en-CA');
-                            
-                            // Ensure data structure exists
                             if (!STATE.data.stats) STATE.data.stats = { history: {}, dailyTarget: 5 };
                             if (!STATE.data.stats.history) STATE.data.stats.history = {};
-                            
-                            // Migrate primitive number to object if needed
                             let entry = STATE.data.stats.history[todayStr];
                             if (entry === undefined) {
                                 entry = { total: 0, methods: {} };
                                 STATE.data.stats.history[todayStr] = entry;
                             } else if (typeof entry === 'number') {
-                                entry = { total: entry, methods: { 'direct': entry } }; // Assume old data was direct
+                                entry = { total: entry, methods: { 'direct': entry } }; 
                                 STATE.data.stats.history[todayStr] = entry;
                             }
-
                             if (isNewDone && !isOldDone) {
                                 entry.total++;
-                                
-                                // Record Medium
-                                const finalMedium = medium || 'direct'; // Default fallback
+                                const finalMedium = medium || 'direct'; 
                                 if (!entry.methods) entry.methods = {};
                                 if (!entry.methods[finalMedium]) entry.methods[finalMedium] = 0;
                                 entry.methods[finalMedium]++;
-                                
-                                // Save to Note
                                 note.applicationMedium = finalMedium;
-
                                 app.toast("Job Applied! 🔥");
                             } else if (!isNewDone && isOldDone) {
-                                // Decrement Total
                                 if (entry.total > 0) entry.total--;
-                                
-                                // Decrement specific medium if known
                                 const oldMedium = note.applicationMedium || 'direct';
                                 if (entry.methods && entry.methods[oldMedium] > 0) {
                                     entry.methods[oldMedium]--;
                                 }
                             }
                         }
-                        // --- STATS LOGIC END ---
-
                         note.status = newStatus;
                         note.updated = Date.now();
                         app.saveToCloud();
@@ -1601,35 +1315,26 @@
                 }
                 app.closeStatusModal();
             },
-
+            
             deleteNote: (id) => {
                 app.openConfirm("Delete this item?", () => {
                     const noteIndex = STATE.data.notes.findIndex(n => n.id === id);
                     if (noteIndex > -1) {
                         const note = STATE.data.notes[noteIndex];
-                        
-                        // NEW LOGIC: Only decrement if it was counted as applied
                         const isDone = note.status === 'applied' || note.status === 'completed';
-                        
                         if (note.category === 'job' && isDone && note.updated) {
                              const dateStr = new Date(note.updated).toLocaleDateString('en-CA');
                              const entry = STATE.data.stats.history[dateStr];
-                             
                              if (entry) {
-                                 // Handle both number and object formats
                                  if (typeof entry === 'number' && entry > 0) {
                                      STATE.data.stats.history[dateStr]--;
                                  } else if (typeof entry === 'object' && entry.total > 0) {
                                      entry.total--;
-                                     // Decrement medium
                                      const med = note.applicationMedium || 'direct';
-                                     if (entry.methods && entry.methods[med] > 0) {
-                                         entry.methods[med]--;
-                                     }
+                                     if (entry.methods && entry.methods[med] > 0) entry.methods[med]--;
                                  }
                              }
                         }
-                        
                         STATE.data.notes.splice(noteIndex, 1);
                         app.recalculateStreak(); 
                         app.saveToCloud();
@@ -1657,8 +1362,6 @@
             renderJobs: (filter = '') => {
                 const list = document.getElementById('jobs-list');
                 list.innerHTML = '';
-                
-                const now = Date.now();
                 let jobs = (STATE.data.notes || []).filter(n => n.category === 'job');
 
                 if(filter) {
@@ -1689,11 +1392,9 @@
                 });
 
                 const sortedKeys = Object.keys(groups).map(Number).sort((a,b) => b - a);
-
                 sortedKeys.forEach(day => {
                     let label = day === 0 ? "Today" : day === 1 ? "Yesterday" : `${day} Days Ago`;
                     let dayJobs = groups[day];
-                    
                     dayJobs.sort((a, b) => {
                         const sA = (a.status === 'referral' ? 'referral-asked' : (a.status || 'pending'));
                         const sB = (b.status === 'referral' ? 'referral-asked' : (b.status || 'pending'));
@@ -1701,9 +1402,8 @@
                         const pB = STATUS_PRIORITY[sB] !== undefined ? STATUS_PRIORITY[sB] : 1;
                         return pA - pB;
                     });
-
-                    const counts = { 'referral-received': 0, 'pending': 0, 'reminder': 0, 'referral-asked': 0, 'applied': 0 };
                     
+                    const counts = { 'referral-received': 0, 'pending': 0, 'reminder': 0, 'referral-asked': 0, 'applied': 0 };
                     dayJobs.forEach(j => {
                         let s = j.status || 'pending';
                         if(s === 'referral') s = 'referral-asked';
@@ -1723,28 +1423,22 @@
                     let borderColor = "";
                     let textColor = "";
                     let iconColor = "";
-
-                    // Rigorous Gradient Logic (UX: Cool -> Warm -> Hot) - Dark Mode Compatible
                     if (day === 0) {
-                        // TODAY: Calm Blue (Fresh Opportunity)
                         bgClasses = "bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40"; 
                         borderColor = "border-blue-100 dark:border-blue-800";
                         textColor = "text-blue-900 dark:text-blue-100";
                         iconColor = "text-blue-500 dark:text-blue-400";
                     } else if (day === 1) {
-                        // YESTERDAY: Orange (Immediate Urgency)
                         bgClasses = "bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/40 dark:to-orange-800/40";
                         borderColor = "border-orange-200 dark:border-orange-800";
                         textColor = "text-orange-900 dark:text-orange-100";
                         iconColor = "text-orange-600 dark:text-orange-400";
                     } else if (day <= 3) {
-                        // 2-3 DAYS: Light Red (High Alert)
                         bgClasses = "bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900/40 dark:to-red-800/40";
                         borderColor = "border-red-200 dark:border-red-800";
                         textColor = "text-red-900 dark:text-red-100";
                         iconColor = "text-red-500 dark:text-red-400";
                     } else {
-                        // 4+ DAYS: Deep Crimson (Critical/Stale)
                         bgClasses = "bg-gradient-to-r from-red-100 to-red-200 dark:from-red-950/50 dark:to-red-900/50";
                         borderColor = "border-red-300 dark:border-red-900";
                         textColor = "text-red-950 dark:text-red-200";
@@ -1753,43 +1447,28 @@
                     
                     const listId = `job-group-${day}`;
                     const iconId = `icon-group-${day}`;
-                    
                     const isOpen = STATE.openFolders.has(listId);
                     const listClass = isOpen ? "pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4 dark:border-gray-700" : "hidden pl-2 border-l-2 border-gray-100 ml-3 space-y-3 mb-4 dark:border-gray-700";
                     const iconClass = isOpen ? `fas fa-chevron-right text-xs ${iconColor} transition-transform duration-200 rotate-90` : `fas fa-chevron-right text-xs ${iconColor} transition-transform duration-200`;
-
                     const groupWrapper = document.createElement('div');
                     groupWrapper.className = "fade-in";
-
-                    const darkClass = "dark:opacity-100"; 
-
                     groupWrapper.innerHTML = `
-                        <div onclick="app.toggleFolder('${listId}')" class="flex items-center justify-between p-3 rounded-xl border ${borderColor} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none ${bgClasses} ${darkClass}">
+                        <div onclick="app.toggleFolder('${listId}')" class="flex items-center justify-between p-3 rounded-xl border ${borderColor} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none ${bgClasses} dark:opacity-100">
                             <div class="flex items-center gap-3">
                                 <i id="${iconId}" class="${iconClass}"></i>
                                 <span class="font-bold text-sm ${textColor}">${label}</span>
                             </div>
-                            <div class="flex gap-1 flex-wrap justify-end max-w-[60%]">
-                                ${badgeHtml}
-                            </div>
+                            <div class="flex gap-1 flex-wrap justify-end max-w-[60%]">${badgeHtml}</div>
                         </div>
                     `;
-
                     const itemsContainer = document.createElement('div');
                     itemsContainer.id = listId;
                     itemsContainer.className = listClass;
-                    
-                    dayJobs.forEach(job => {
-                        itemsContainer.appendChild(app.createJobCard(job));
-                    });
-
+                    dayJobs.forEach(job => itemsContainer.appendChild(app.createJobCard(job)));
                     groupWrapper.appendChild(itemsContainer);
                     list.appendChild(groupWrapper);
                 });
-                
-                if (!STATE.hasInitializedFolders && sortedKeys.length > 0) {
-                    STATE.hasInitializedFolders = true;
-                }
+                if (!STATE.hasInitializedFolders && sortedKeys.length > 0) STATE.hasInitializedFolders = true;
             },
 
             createJobCard: (job) => {
@@ -1797,7 +1476,6 @@
                 let status = job.status || 'pending';
                 if(status === 'referral') status = 'referral-asked';
                 if(status === 'referral-pending') status = 'pending';
-
                 const isDone = status === 'applied' || status === 'completed';
                 const dateStr = new Date(job.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
                 
@@ -1825,36 +1503,29 @@
                     borderColor = "border-green-100 bg-gray-50 dark:border-green-900 dark:bg-gray-800";
                     statusIcon = "fa-check";
                     statusBtnClass = "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400";
-                    
-                    // Add badge for application method if exists
                     if (job.applicationMedium) {
                         let medLabel = job.applicationMedium;
                         if (medLabel === 'cold-email') medLabel = 'Cold Email';
                         if (medLabel === 'direct') medLabel = 'Direct';
                         badgeHtml = `<span class="text-[9px] font-bold text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded mr-2 dark:bg-gray-700 dark:text-gray-400 uppercase tracking-wider">${medLabel}</span>`;
                     }
-
                 } else {
                     statusIcon = "fa-circle";
                     statusBtnClass = "bg-gray-100 text-gray-300 dark:bg-gray-800 dark:text-gray-600";
                 }
 
                 el.className = `p-3 rounded-xl shadow-sm border ${borderColor} bg-white relative active:scale-[0.99] transition flex justify-between items-start ${isDone ? 'opacity-60' : ''} dark:bg-dark-card`;
-                
                 let iconClass = "fa-briefcase";
                 if(job.linkType === 'linkedin') iconClass = "fa-brands fa-linkedin";
                 if(job.linkType === 'site') iconClass = "fa-globe";
 
                 let url = job.content.trim();
-                if (!url.match(/^https?:\/\//i) && !url.match(/^mailto:/i)) {
-                    url = 'https://' + url;
-                }
+                if (!url.match(/^https?:\/\//i) && !url.match(/^mailto:/i)) url = 'https://' + url;
                 const safeUrl = url.replace(/"/g, '&quot;');
-                
                 const remarksHtml = job.remarks ? 
                     `<div class="mt-2 text-xs text-gray-500 bg-gray-50 p-2 rounded-lg border border-gray-100 flex gap-2 items-start dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">
                         <i class="fas fa-sticky-note text-gray-300 mt-0.5 dark:text-gray-600"></i>
-                        <span class="line-clamp-2">${job.remarks}</span>
+                        <span class="line-clamp-2 whitespace-pre-wrap">${job.remarks}</span>
                      </div>` : '';
 
                 el.innerHTML = `
@@ -1878,420 +1549,133 @@
                             <span class="text-[9px] text-gray-400 font-medium whitespace-nowrap dark:text-gray-600">${dateStr}</span>
                             <div class="flex items-center gap-2">
                                 <button onclick="app.copyText('${job.content.replace(/'/g, "\\'")}')" class="text-gray-300 hover:text-blue-500 p-2 dark:text-gray-600 dark:hover:text-blue-400" title="Copy Link"><i class="fas fa-link text-xs"></i></button>
-                                
-                                <!-- Status Action Button -->
                                 <button onclick="app.openStatusModal('${job.id}')" class="w-8 h-8 rounded-full ${statusBtnClass} flex items-center justify-center shadow-sm hover:brightness-95 transition">
                                     <i class="fas ${statusIcon} text-xs"></i>
                                 </button>
-                                
                                 <button onclick="app.openJobModal('${job.id}')" class="text-gray-300 hover:text-blue-500 p-2 dark:text-gray-600 dark:hover:text-blue-400"><i class="fas fa-pen text-xs"></i></button>
                                 <button onclick="app.deleteNote('${job.id}')" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>
                             </div>
                         </div>
                     </div>
                 `;
-
                 return el;
             },
 
-            // TEMPLATE FUNCTIONS
             renderTemplates: (filter = '') => {
-                const list = document.getElementById('templates-list');
-                list.innerHTML = '';
-                
-                let templates = (STATE.data.notes || []).filter(n => n.category === 'template');
-                
-                // SEARCH MODE
-                if(filter) {
+                 const list = document.getElementById('templates-list');
+                 list.innerHTML = '';
+                 let templates = (STATE.data.notes || []).filter(n => n.category === 'template');
+                 if(filter) {
                     const q = filter.toLowerCase();
-                    templates = templates.filter(t => 
-                        (t.title || '').toLowerCase().includes(q) || 
-                        (t.folder || '').toLowerCase().includes(q) || 
-                        String(t.tags || '').toLowerCase().includes(q)
-                    );
-
-                    if (templates.length === 0) {
-                        list.innerHTML = `<div class="text-center text-gray-400 mt-10 dark:text-gray-500">No matching templates found.</div>`;
-                        return;
-                    }
+                    templates = templates.filter(t => (t.title || '').toLowerCase().includes(q) || (t.folder || '').toLowerCase().includes(q) || String(t.tags || '').toLowerCase().includes(q));
+                    if (templates.length === 0) { list.innerHTML = `<div class="text-center text-gray-400 mt-10 dark:text-gray-500">No matching templates.</div>`; return; }
                     templates.forEach(t => list.appendChild(app.createTemplateCard(t)));
                     return; 
-                }
-
-                // NORMAL MODE: Group by Folders
-                if (templates.length === 0) {
-                    list.innerHTML = `<div class="text-center text-gray-400 mt-10 dark:text-gray-500">No templates. <br>Create one to save time!</div>`;
-                    return;
-                }
-
-                const folders = {};
-                const general = [];
-                
-                templates.forEach(t => {
-                    const f = t.folder ? t.folder.trim() : 'General';
-                    if(!folders[f]) folders[f] = [];
-                    folders[f].push(t);
-                });
-
-                if (STATE.templateFolder) { // Inside a folder
+                 }
+                 if (templates.length === 0) { list.innerHTML = `<div class="text-center text-gray-400 mt-10 dark:text-gray-500">No templates. <br>Create one to save time!</div>`; return; }
+                 const folders = {};
+                 templates.forEach(t => { const f = t.folder ? t.folder.trim() : 'General'; if(!folders[f]) folders[f] = []; folders[f].push(t); });
+                 if (STATE.templateFolder) { 
                      document.getElementById('btn-template-back').classList.remove('hidden');
                      document.getElementById('template-view-title').textContent = STATE.templateFolder;
                      document.getElementById('template-view-subtitle').textContent = "Tap to edit • Swipe to delete";
-
                      const folderTpls = folders[STATE.templateFolder] || [];
                      folderTpls.forEach(t => list.appendChild(app.createTemplateCard(t)));
-                     
                      if(folderTpls.length === 0) app.closeFolder();
-
-                } else { // Root view
+                 } else { 
                      document.getElementById('btn-template-back').classList.add('hidden');
                      document.getElementById('template-view-title').textContent = "Library";
                      document.getElementById('template-view-subtitle').textContent = "Manage Templates & Links";
-                     
                      Object.keys(folders).sort().forEach(folderName => {
                          const count = folders[folderName].length;
                          const div = document.createElement('div');
                          div.className = "bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-[0.99] transition dark:bg-dark-card dark:border-dark-border";
-                         div.onclick = (e) => {
-                             app.openFolder(folderName);
-                         };
-                         div.innerHTML = `
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-yellow-50 flex items-center justify-center text-yellow-500 dark:bg-yellow-900/30 dark:text-yellow-400">
-                                    <i class="fas fa-folder"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${folderName}</h4>
-                                    <p class="text-[10px] text-gray-400 dark:text-gray-500">${count} items</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-2">
-                                 <button onclick="event.stopPropagation(); app.openRenameFolder('${folderName}')" class="text-gray-300 hover:text-blue-500 p-2 dark:text-gray-600 dark:hover:text-blue-400"><i class="fas fa-pen text-xs"></i></button>
-                                 <i class="fas fa-chevron-right text-gray-300 text-xs dark:text-gray-600"></i>
-                            </div>
-                         `;
+                         div.onclick = (e) => { app.openFolder(folderName); };
+                         div.innerHTML = `<div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-yellow-50 flex items-center justify-center text-yellow-500 dark:bg-yellow-900/30 dark:text-yellow-400"><i class="fas fa-folder"></i></div><div><h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${folderName}</h4><p class="text-[10px] text-gray-400 dark:text-gray-500">${count} items</p></div></div><div class="flex gap-2"><button onclick="event.stopPropagation(); app.openRenameFolder('${folderName}')" class="text-gray-300 hover:text-blue-500 p-2 dark:text-gray-600 dark:hover:text-blue-400"><i class="fas fa-pen text-xs"></i></button><i class="fas fa-chevron-right text-gray-300 text-xs dark:text-gray-600"></i></div>`;
                          list.appendChild(div);
                      });
-                }
-                
-                // Update datalist for Folder input
-                const datalist = document.getElementById('folder-list-data');
-                datalist.innerHTML = '';
-                Object.keys(folders).forEach(f => {
-                    const op = document.createElement('option');
-                    op.value = f;
-                    datalist.appendChild(op);
-                });
+                 }
+                 const datalist = document.getElementById('folder-list-data'); datalist.innerHTML = '';
+                 Object.keys(folders).forEach(f => { const op = document.createElement('option'); op.value = f; datalist.appendChild(op); });
             },
 
-            openFolder: (name) => {
-                STATE.templateFolder = name;
-                app.renderTemplates();
-            },
-
-            closeFolder: () => {
-                STATE.templateFolder = null;
-                app.renderTemplates();
-            },
-
+            openFolder: (name) => { STATE.templateFolder = name; app.renderTemplates(); },
+            closeFolder: () => { STATE.templateFolder = null; app.renderTemplates(); },
+            
             createTemplateCard: (t) => {
                 const div = document.createElement('div');
                 div.className = "bg-white p-4 rounded-xl border border-gray-100 shadow-sm relative group dark:bg-dark-card dark:border-dark-border";
-                
                 const tagsStr = (typeof t.tags === 'string') ? t.tags : '';
                 const tagsHtml = tagsStr ? tagsStr.split(',').map(tag => `<span class="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider dark:bg-gray-800 dark:text-gray-400">${tag.trim()}</span>`).join('') : '';
-                
                 const isEasy = t.easyAccess ? '<i class="fas fa-bolt text-yellow-400 text-xs" title="Easy Access"></i>' : '';
-
-                div.innerHTML = `
-                    <div class="flex justify-between items-start mb-2">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${t.title}</h4>
-                                ${isEasy}
-                            </div>
-                            <div class="flex flex-wrap gap-1 mt-1">${tagsHtml}</div>
-                        </div>
-                        <div class="flex gap-1">
-                            <button onclick="app.openTemplateModal('${t.id}')" class="text-gray-300 hover:text-blue-500 p-2 dark:text-gray-600 dark:hover:text-blue-400"><i class="fas fa-pen text-xs"></i></button>
-                            <button onclick="app.deleteNote('${t.id}')" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <!-- Updated: Added line-clamp-2 for 2-line limit, changed innerText to textContent to copy full text -->
-                    <div class="bg-gray-50 p-3 rounded-lg text-xs text-gray-600 font-mono leading-relaxed relative group-hover:bg-gray-100 transition cursor-pointer dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700 line-clamp-2" onclick="app.copyText(this.textContent)">
-                        ${t.content}
-                        <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-copy text-gray-400 dark:text-gray-500"></i></div>
-                    </div>
-                `;
+                div.innerHTML = `<div class="flex justify-between items-start mb-2"><div><div class="flex items-center gap-2"><h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${t.title}</h4>${isEasy}</div><div class="flex flex-wrap gap-1 mt-1">${tagsHtml}</div></div><div class="flex gap-1"><button onclick="app.openTemplateModal('${t.id}')" class="text-gray-300 hover:text-blue-500 p-2 dark:text-gray-600 dark:hover:text-blue-400"><i class="fas fa-pen text-xs"></i></button><button onclick="app.deleteNote('${t.id}')" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button></div></div><div class="bg-gray-50 p-3 rounded-lg text-xs text-gray-600 font-mono leading-relaxed relative group-hover:bg-gray-100 transition cursor-pointer dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700 line-clamp-2" onclick="app.copyText(this.textContent)">${t.content}<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-copy text-gray-400 dark:text-gray-500"></i></div></div>`;
                 return div;
             },
 
-            openTemplateModal: (id = null) => {
-                STATE.editingId = id;
-                const modal = document.getElementById('modal-template');
-                const title = document.getElementById('tpl-title');
-                const folder = document.getElementById('tpl-folder');
-                const tags = document.getElementById('tpl-tags');
-                const content = document.getElementById('tpl-content');
-                const easy = document.getElementById('tpl-easy');
+            openTemplateModal: (id = null) => { STATE.editingId = id; const modal = document.getElementById('modal-template'); const title = document.getElementById('tpl-title'); const folder = document.getElementById('tpl-folder'); const tags = document.getElementById('tpl-tags'); const content = document.getElementById('tpl-content'); const easy = document.getElementById('tpl-easy'); if (id) { const t = STATE.data.notes.find(n => n.id === id); title.value = t.title; folder.value = t.folder || ''; tags.value = t.tags || ''; content.value = t.content; easy.checked = !!t.easyAccess; } else { title.value = ''; folder.value = STATE.templateFolder || ''; tags.value = ''; content.value = ''; easy.checked = false; } modal.classList.remove('hidden'); },
+            saveTemplate: () => { const title = document.getElementById('tpl-title').value; const folder = document.getElementById('tpl-folder').value.trim() || 'General'; const tags = document.getElementById('tpl-tags').value; const content = document.getElementById('tpl-content').value; const easyAccess = document.getElementById('tpl-easy').checked; if(!title) return; const itemData = { title, folder, tags, content, easyAccess, category: 'template', updated: Date.now() }; if (STATE.editingId) { const idx = STATE.data.notes.findIndex(n => n.id === STATE.editingId); if(idx > -1) STATE.data.notes[idx] = { ...STATE.data.notes[idx], ...itemData }; } else { STATE.data.notes.unshift({ id: Date.now().toString(), created: Date.now(), ...itemData }); } app.saveToCloud(); document.getElementById('modal-template').classList.add('hidden'); app.refreshUI(); },
+            openRenameFolder: (oldName) => { STATE.renameTargetFolder = oldName; document.getElementById('rename-input').value = oldName; document.getElementById('modal-rename').classList.remove('hidden'); },
+            confirmRename: () => { const newName = document.getElementById('rename-input').value.trim(); if (newName && newName !== STATE.renameTargetFolder) { STATE.data.notes.forEach(n => { if (n.category === 'template' && (n.folder || 'General') === STATE.renameTargetFolder) { n.folder = newName; } }); app.saveToCloud(); app.renderTemplates(); } document.getElementById('modal-rename').classList.add('hidden'); },
 
-                if (id) {
-                    const t = STATE.data.notes.find(n => n.id === id);
-                    title.value = t.title;
-                    folder.value = t.folder || '';
-                    tags.value = t.tags || '';
-                    content.value = t.content;
-                    easy.checked = !!t.easyAccess;
-                } else {
-                    title.value = '';
-                    folder.value = STATE.templateFolder || ''; // Auto-fill if inside folder
-                    tags.value = '';
-                    content.value = '';
-                    easy.checked = false;
-                }
-                modal.classList.remove('hidden');
-            },
+            renderProfileManageList: () => { const list = document.getElementById('profile-manage-list'); if(!list) return; list.innerHTML = ''; const profiles = STATE.data.profile || []; profiles.forEach((p, idx) => { const div = document.createElement('div'); div.className = "flex items-center justify-between bg-gray-50 p-2 rounded-lg border border-gray-100 dark:bg-gray-800 dark:border-gray-700"; div.innerHTML = `<div class="overflow-hidden"><div class="font-bold text-xs text-gray-700 dark:text-gray-300">${p.label}</div><div class="text-[10px] text-gray-400 truncate dark:text-gray-500">${p.value}</div></div><button onclick="app.deleteProfileItem(${idx})" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>`; list.appendChild(div); }); },
+            openProfileModal: () => { app.renderProfileManageList(); document.getElementById('modal-profile').classList.remove('hidden'); },
+            saveProfileItem: () => { const label = document.getElementById('profile-label').value.trim(); const value = document.getElementById('profile-value').value.trim(); if (label && value) { STATE.data.profile.push({ label, value }); app.saveToCloud(); app.renderProfileManageList(); app.renderQuickActions(); document.getElementById('profile-label').value = ''; document.getElementById('profile-value').value = ''; } },
+            deleteProfileItem: (idx) => { STATE.data.profile.splice(idx, 1); app.saveToCloud(); app.renderProfileManageList(); app.renderQuickActions(); },
 
-            saveTemplate: () => {
-                const title = document.getElementById('tpl-title').value;
-                const folder = document.getElementById('tpl-folder').value.trim() || 'General';
-                const tags = document.getElementById('tpl-tags').value;
-                const content = document.getElementById('tpl-content').value;
-                const easyAccess = document.getElementById('tpl-easy').checked;
-                
-                if(!title) return;
-
-                const itemData = { title, folder, tags, content, easyAccess, category: 'template', updated: Date.now() };
-                
-                if (STATE.editingId) {
-                    const idx = STATE.data.notes.findIndex(n => n.id === STATE.editingId);
-                    if(idx > -1) STATE.data.notes[idx] = { ...STATE.data.notes[idx], ...itemData };
-                } else {
-                    STATE.data.notes.unshift({ id: Date.now().toString(), created: Date.now(), ...itemData });
-                }
-                app.saveToCloud();
-                document.getElementById('modal-template').classList.add('hidden');
-                app.refreshUI();
-            },
-
-            openRenameFolder: (oldName) => {
-                STATE.renameTargetFolder = oldName;
-                document.getElementById('rename-input').value = oldName;
-                document.getElementById('modal-rename').classList.remove('hidden');
-            },
-
-            confirmRename: () => {
-                const newName = document.getElementById('rename-input').value.trim();
-                if (newName && newName !== STATE.renameTargetFolder) {
-                    STATE.data.notes.forEach(n => {
-                        if (n.category === 'template' && (n.folder || 'General') === STATE.renameTargetFolder) {
-                            n.folder = newName;
-                        }
-                    });
-                    app.saveToCloud();
-                    app.renderTemplates();
-                }
-                document.getElementById('modal-rename').classList.add('hidden');
-            },
-
-            // PROFILE LINKS
-            renderProfileManageList: () => {
-                const list = document.getElementById('profile-manage-list');
-                if(!list) return;
-                list.innerHTML = '';
-                const profiles = STATE.data.profile || [];
-                profiles.forEach((p, idx) => {
-                    const div = document.createElement('div');
-                    div.className = "flex items-center justify-between bg-gray-50 p-2 rounded-lg border border-gray-100 dark:bg-gray-800 dark:border-gray-700";
-                    div.innerHTML = `
-                        <div class="overflow-hidden">
-                            <div class="font-bold text-xs text-gray-700 dark:text-gray-300">${p.label}</div>
-                            <div class="text-[10px] text-gray-400 truncate dark:text-gray-500">${p.value}</div>
-                        </div>
-                        <button onclick="app.deleteProfileItem(${idx})" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>
-                    `;
-                    list.appendChild(div);
-                });
-            },
-
-            openProfileModal: () => {
-                app.renderProfileManageList();
-                document.getElementById('modal-profile').classList.remove('hidden');
-            },
-
-            saveProfileItem: () => {
-                const label = document.getElementById('profile-label').value.trim();
-                const value = document.getElementById('profile-value').value.trim();
-                if (label && value) {
-                    STATE.data.profile.push({ label, value });
-                    app.saveToCloud();
-                    app.renderProfileManageList();
-                    app.renderQuickActions(); // update dashboard
-                    // clear
-                    document.getElementById('profile-label').value = '';
-                    document.getElementById('profile-value').value = '';
-                }
-            },
-
-            deleteProfileItem: (idx) => {
-                STATE.data.profile.splice(idx, 1);
-                app.saveToCloud();
-                app.renderProfileManageList();
-                app.renderQuickActions();
-            },
-
-            // DASHBOARD QUICK ACTIONS
             renderQuickActions: () => {
-                const container = document.getElementById('job-quick-actions');
-                container.innerHTML = '';
-                
-                // 1. Profile Links
+                const container = document.getElementById('job-quick-actions'); container.innerHTML = '';
                 const profiles = STATE.data.profile || [];
                 profiles.forEach(p => {
                     const btn = document.createElement('button');
                     const labelLower = p.label.toLowerCase();
-                    let iconClass = "fas fa-link";
-                    let isIconOnly = false;
-                    let specificClasses = "";
-
-                    // Detect types for Icon-Only display
-                    if (labelLower.includes('linkedin')) {
-                        iconClass = "fab fa-linkedin-in";
-                        isIconOnly = true;
-                        specificClasses = "text-blue-700 dark:text-blue-400";
-                    } else if (labelLower.includes('github')) {
-                        iconClass = "fab fa-github";
-                        isIconOnly = true;
-                        specificClasses = "text-gray-800 dark:text-white";
-                    } else if (labelLower.includes('email') || labelLower.includes('mail') || labelLower.includes('gmail')) {
-                        iconClass = "fas fa-envelope";
-                        isIconOnly = true;
-                        specificClasses = "text-red-500 dark:text-red-400";
-                    } else if (labelLower.includes('resume') || labelLower.includes('cv')) {
-                        iconClass = "fas fa-file-alt";
-                        isIconOnly = true;
-                        specificClasses = "text-green-600 dark:text-green-400";
-                    } else if (labelLower.includes('contact') || labelLower.includes('phone') || labelLower.includes('call')) {
-                        iconClass = "fas fa-phone";
-                        isIconOnly = true;
-                        specificClasses = "text-indigo-600 dark:text-indigo-400";
-                    }
-
-                    if (isIconOnly) {
-                        btn.className = `w-9 h-9 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 flex items-center justify-center transition active:scale-90 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 ${specificClasses}`;
-                        btn.innerHTML = `<i class="${iconClass} text-sm"></i>`;
-                        btn.title = p.label;
-                    } else {
-                        btn.className = "bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200 transition active:scale-95 flex items-center gap-1 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700";
-                        btn.innerHTML = `<i class="${iconClass} text-[10px] opacity-50"></i> ${p.label}`;
-                    }
-                    
+                    let iconClass = "fas fa-link"; let isIconOnly = false; let specificClasses = "";
+                    if (labelLower.includes('linkedin')) { iconClass = "fab fa-linkedin-in"; isIconOnly = true; specificClasses = "text-blue-700 dark:text-blue-400"; } 
+                    else if (labelLower.includes('github')) { iconClass = "fab fa-github"; isIconOnly = true; specificClasses = "text-gray-800 dark:text-white"; } 
+                    else if (labelLower.includes('email') || labelLower.includes('mail') || labelLower.includes('gmail')) { iconClass = "fas fa-envelope"; isIconOnly = true; specificClasses = "text-red-500 dark:text-red-400"; } 
+                    else if (labelLower.includes('resume') || labelLower.includes('cv')) { iconClass = "fas fa-file-alt"; isIconOnly = true; specificClasses = "text-green-600 dark:text-green-400"; } 
+                    else if (labelLower.includes('contact') || labelLower.includes('phone') || labelLower.includes('call')) { iconClass = "fas fa-phone"; isIconOnly = true; specificClasses = "text-indigo-600 dark:text-indigo-400"; }
+                    if (isIconOnly) { btn.className = `w-9 h-9 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 flex items-center justify-center transition active:scale-90 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 ${specificClasses}`; btn.innerHTML = `<i class="${iconClass} text-sm"></i>`; btn.title = p.label; } 
+                    else { btn.className = "bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200 transition active:scale-95 flex items-center gap-1 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700"; btn.innerHTML = `<i class="${iconClass} text-[10px] opacity-50"></i> ${p.label}`; }
                     btn.onclick = () => app.copyText(p.value);
                     container.appendChild(btn);
                 });
-
-                // 2. Easy Access Templates
                 const easyTpls = (STATE.data.notes || []).filter(n => n.category === 'template' && n.easyAccess);
-                easyTpls.forEach(t => {
-                    const btn = document.createElement('button');
-                    btn.className = "bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-blue-100 transition active:scale-95 flex items-center gap-1 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300 dark:hover:bg-blue-900/50";
-                    btn.innerHTML = `<i class="fas fa-bolt text-[10px] opacity-50"></i> ${t.title}`;
-                    btn.onclick = () => app.copyText(t.content);
-                    container.appendChild(btn);
-                });
-                
-                if (profiles.length === 0 && easyTpls.length === 0) {
-                     container.innerHTML = `<span class="text-[10px] text-gray-300 dark:text-gray-600">Add profile links or 'Easy Access' templates to see them here.</span>`;
-                }
+                easyTpls.forEach(t => { const btn = document.createElement('button'); btn.className = "bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-blue-100 transition active:scale-95 flex items-center gap-1 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300 dark:hover:bg-blue-900/50"; btn.innerHTML = `<i class="fas fa-bolt text-[10px] opacity-50"></i> ${t.title}`; btn.onclick = () => app.copyText(t.content); container.appendChild(btn); });
+                if (profiles.length === 0 && easyTpls.length === 0) { container.innerHTML = `<span class="text-[10px] text-gray-300 dark:text-gray-600">Add profile links or 'Easy Access' templates to see them here.</span>`; }
             },
 
-            // UTILS
-            toast: (msg, isError = false) => {
-                const el = document.getElementById('toast');
-                const msgEl = document.getElementById('toast-msg');
-                const icon = el.querySelector('i');
-                
-                msgEl.textContent = msg;
-                if(isError) {
-                    icon.className = "fas fa-exclamation-circle text-red-400";
-                } else {
-                    icon.className = "fas fa-check-circle text-green-400";
-                }
-                
-                el.classList.remove('hidden');
-                el.classList.remove('opacity-0');
-                
-                if(app.toastTimeout) clearTimeout(app.toastTimeout);
-                app.toastTimeout = setTimeout(() => {
-                    el.classList.add('opacity-0');
-                    setTimeout(() => el.classList.add('hidden'), 300);
-                }, 2000);
+            toast: (msg, isError = false) => { const el = document.getElementById('toast'); const msgEl = document.getElementById('toast-msg'); const icon = el.querySelector('i'); msgEl.textContent = msg; if(isError) { icon.className = "fas fa-exclamation-circle text-red-400"; } else { icon.className = "fas fa-check-circle text-green-400"; } el.classList.remove('hidden'); el.classList.remove('opacity-0'); if(app.toastTimeout) clearTimeout(app.toastTimeout); app.toastTimeout = setTimeout(() => { el.classList.add('opacity-0'); setTimeout(() => el.classList.add('hidden'), 300); }, 2000); },
+            copyText: (text) => { if(!text) return; if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(() => app.toast("Copied!")); } else { const textArea = document.createElement("textarea"); textArea.value = text; textArea.style.position = "fixed"; textArea.style.left = "-9999px"; document.body.appendChild(textArea); textArea.focus(); textArea.select(); try { document.execCommand('copy'); app.toast("Copied!"); } catch (err) { app.toast("Copy failed", true); } document.body.removeChild(textArea); } },
+            openConfirm: (msg, actionFn) => { document.getElementById('confirm-msg').textContent = msg; STATE.currentConfirmAction = actionFn; document.getElementById('modal-confirm').classList.remove('hidden'); },
+            confirmYes: () => { if (STATE.currentConfirmAction) { STATE.currentConfirmAction(); STATE.currentConfirmAction = null; } document.getElementById('modal-confirm').classList.add('hidden'); },
+            cleanupOldJobs: () => { const now = Date.now(); const initialLen = STATE.data.notes.length; STATE.data.notes = STATE.data.notes.filter(n => { if(n.category !== 'job') return true; const daysOld = Math.floor((now - n.created) / MILLIS_PER_DAY); return daysOld <= 7; }); if(STATE.data.notes.length !== initialLen) app.saveToCloud(); },
+            exportData: () => { const dataStr = JSON.stringify(STATE.data, null, 2); const blob = new Blob([dataStr], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `magic_pouch_backup_${new Date().toISOString().slice(0,10)}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); },
+            importData: (input) => { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (ev) => { try { const imported = JSON.parse(ev.target.result); app.openConfirm("Replace current data with backup?", () => { STATE.data = app.sanitizeData(imported); app.saveToCloud(); app.refreshUI(); app.toast('Restored!'); document.getElementById('modal-settings').classList.add('hidden'); }); } catch(err) { app.toast('Invalid file', true); } input.value = ''; }; reader.readAsText(file); },
+            handleGlobalSearch: (query) => { if (STATE.currentView === 'jobs') app.renderJobs(query); else if (STATE.currentView === 'templates') app.renderTemplates(query); },
+
+            renderPlan: () => {
+                const plan = STATE.data.plan; const listEl = document.getElementById('plan-daily-list'); listEl.innerHTML = '';
+                if (!app.sortable && listEl) { app.sortable = new Sortable(listEl, { animation: 150, handle: '.drag-handle', onEnd: function (evt) { const item = STATE.data.plan.daily.splice(evt.oldIndex, 1)[0]; STATE.data.plan.daily.splice(evt.newIndex, 0, item); app.saveToCloud(); }, }); }
+                let completedCount = 0; plan.daily.forEach((task, idx) => { if(task.done) completedCount++; const div = document.createElement('div'); div.className = "flex items-center gap-3 bg-gray-50/50 p-3 rounded-xl border transition-all duration-300 dark:bg-slate-800/50 dark:border-slate-700 " + (task.done ? "border-green-100 bg-green-50/20 dark:bg-green-900/20 dark:border-green-800" : "border-gray-100 hover:border-blue-200 hover:bg-white hover:shadow-sm dark:hover:bg-slate-800 dark:hover:border-blue-700"); div.innerHTML = `<div class="drag-handle text-gray-300 cursor-move px-1 hover:text-gray-500 transition-colors"><i class="fas fa-grip-vertical text-xs"></i></div><div onclick="app.togglePlanTask(${idx})" class="w-6 h-6 rounded-full border-2 flex items-center justify-center cursor-pointer transition-colors duration-300 ${task.done ? 'bg-green-500 border-green-500 text-white scale-110' : 'border-gray-300 text-transparent hover:border-blue-400 bg-white dark:bg-slate-700 dark:border-slate-500'}"><i class="fas fa-check text-[10px]"></i></div><span class="text-sm font-medium ${task.done ? 'text-gray-400 line-through transition-colors duration-300 dark:text-slate-500' : 'text-gray-700 dark:text-slate-200'} flex-1 select-none cursor-pointer" onclick="app.togglePlanTask(${idx})">${task.text}</span><button onclick="app.deletePlanTask(${idx})" class="w-8 h-8 flex items-center justify-center text-gray-300 hover:text-red-400 hover:bg-red-50 rounded-full transition-colors dark:text-slate-500 dark:hover:bg-red-900/30"><i class="fas fa-times"></i></button>`; listEl.appendChild(div); });
+                const total = plan.daily.length; const pct = total === 0 ? 0 : Math.round((completedCount / total) * 100); const progressBar = document.getElementById('daily-plan-progress'); const progressText = document.getElementById('daily-plan-progress-text');
+                if(progressBar) progressBar.style.width = `${pct}%`; if(progressText) progressText.textContent = `${pct}%`;
+                document.getElementById('plan-weekly-text').value = plan.weekly || ''; document.getElementById('plan-monthly-text').value = plan.monthly || '';
             },
-
-            copyText: (text) => {
-                if(!text) return;
-                // Use updated clipboard API
-                if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(text).then(() => app.toast("Copied!"));
-                } else {
-                    // Fallback
-                    const textArea = document.createElement("textarea");
-                    textArea.value = text;
-                    textArea.style.position = "fixed";
-                    textArea.style.left = "-9999px";
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-                    try {
-                        document.execCommand('copy');
-                        app.toast("Copied!");
-                    } catch (err) {
-                        app.toast("Copy failed", true);
-                    }
-                    document.body.removeChild(textArea);
-                }
-            },
-
-            switchView: (viewName) => {
-                STATE.currentView = viewName;
-                const vJobs = document.getElementById('view-jobs');
-                const vPlan = document.getElementById('view-plan');
-                const vTpls = document.getElementById('view-templates');
-                
-                // Reset pos
-                vJobs.style.transform = 'translateX(100%)';
-                vPlan.style.transform = 'translateX(100%)';
-                vTpls.style.transform = 'translateX(100%)';
-
-                // Activate requested
-                if(viewName === 'jobs') vJobs.style.transform = 'translateX(0)';
-                if(viewName === 'plan') vPlan.style.transform = 'translateX(0)';
-                if(viewName === 'templates') vTpls.style.transform = 'translateX(0)';
-                
-                // Update nav
-                document.querySelectorAll('.nav-btn').forEach(btn => {
-                    btn.classList.remove('text-blue-600', 'active', 'dark:text-blue-400');
-                    btn.classList.add('text-gray-400', 'dark:text-slate-500');
-                });
-
-                const navIndex = viewName === 'jobs' ? 0 : viewName === 'plan' ? 1 : 2;
-                const activeBtn = document.querySelectorAll('.nav-btn')[navIndex];
-                
-                activeBtn.classList.add('text-blue-600', 'active', 'dark:text-blue-400');
-                activeBtn.classList.remove('text-gray-400', 'dark:text-slate-500');
-                
-                if (viewName === 'plan') app.renderPlan();
-                if (viewName === 'templates') app.renderTemplates();
-                if (viewName === 'jobs') app.renderJobs();
-            }
+            togglePlanTask: (idx) => { STATE.data.plan.daily[idx].done = !STATE.data.plan.daily[idx].done; app.saveToCloud(); app.renderPlan(); if(STATE.data.plan.daily[idx].done) app.toast("Nice work! 🎉"); },
+            openAddDailyTaskModal: () => { const input = document.getElementById('new-task-input'); input.value = ''; document.getElementById('modal-add-task').classList.remove('hidden'); setTimeout(() => input.focus(), 100); },
+            saveDailyTask: () => { const text = document.getElementById('new-task-input').value.trim(); if(text) { STATE.data.plan.daily.push({ id: Date.now().toString(), text, done: false }); app.saveToCloud(); app.renderPlan(); document.getElementById('modal-add-task').classList.add('hidden'); } },
+            deletePlanTask: (idx) => { app.openConfirm("Remove this daily task?", () => { STATE.data.plan.daily.splice(idx, 1); app.saveToCloud(); app.renderPlan(); }); },
+            savePlanText: (type) => { const val = document.getElementById(`plan-${type}-text`).value; STATE.data.plan[type] = val; if(app.planSaveTimeout) clearTimeout(app.planSaveTimeout); app.planSaveTimeout = setTimeout(() => { app.saveToCloud(); }, 1000); },
+            processAutomationRules: () => { const now = Date.now(); let hasChanges = false; STATE.data.notes.forEach(note => { const statusToCheck = note.status === 'referral' ? 'referral-asked' : note.status; if (note.category === 'job' && statusToCheck === 'referral-asked') { const lastUpdated = note.updated || note.created; if ((now - lastUpdated) > MILLIS_PER_DAY) { note.status = 'reminder'; note.updated = now; hasChanges = true; } } }); if (hasChanges) { app.saveToCloud(); app.toast("Checked follow-ups", false); } },
+            refreshUI: () => { app.renderJobs(); app.renderTemplates(); app.renderPlan(); app.renderQuickActions(); app.renderProfileManageList(); },
+            saveToCloud: async () => { if(!STATE.user) return; try { const docRef = doc(db, 'sync', STATE.syncKey); await setDoc(docRef, { data: STATE.data, userId: STATE.user.uid, lastUpdated: new Date().toISOString() }); } catch (e) { console.error('Save error:', e); } },
+            saveSyncKey: () => { const newKey = document.getElementById('sync-key-input').value.trim().toUpperCase(); if(newKey && newKey !== STATE.syncKey) { STATE.syncKey = newKey; localStorage.setItem('magic_pouch_key', newKey); if(document.getElementById('sync-status-text')) document.getElementById('sync-status-text').textContent = newKey; app.setupSync(); document.getElementById('modal-sync').classList.add('hidden'); app.toast("Switched Sync Channel"); } else if(newKey === STATE.syncKey) { app.toast("Same key - already connected"); } },
+            switchView: (viewName) => { STATE.currentView = viewName; const vJobs = document.getElementById('view-jobs'); const vPlan = document.getElementById('view-plan'); const vTpls = document.getElementById('view-templates'); vJobs.style.transform = 'translateX(100%)'; vPlan.style.transform = 'translateX(100%)'; vTpls.style.transform = 'translateX(100%)'; if(viewName === 'jobs') vJobs.style.transform = 'translateX(0)'; if(viewName === 'plan') vPlan.style.transform = 'translateX(0)'; if(viewName === 'templates') vTpls.style.transform = 'translateX(0)'; document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.remove('text-blue-600', 'active', 'dark:text-blue-400'); btn.classList.add('text-gray-400', 'dark:text-slate-500'); }); const navIndex = viewName === 'jobs' ? 0 : viewName === 'plan' ? 1 : 2; const activeBtn = document.querySelectorAll('.nav-btn')[navIndex]; activeBtn.classList.add('text-blue-600', 'active', 'dark:text-blue-400'); activeBtn.classList.remove('text-gray-400', 'dark:text-slate-500'); if (viewName === 'plan') app.renderPlan(); if (viewName === 'templates') app.renderTemplates(); if (viewName === 'jobs') app.renderJobs(); }
         };
 
-        // Boot
         window.addEventListener('DOMContentLoaded', () => {
             app.init();
             app.refreshUI();
-            
-            // Initial View Setup
             app.switchView('jobs');
         });
 
