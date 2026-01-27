@@ -436,6 +436,27 @@
         </div>
     </div>
 
+    <!-- NEW: Quick Notes Manager Modal -->
+    <div id="modal-quick-notes" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
+            <h3 class="font-bold text-lg mb-4 dark:text-white">Manage Quick Notes</h3>
+            
+            <div class="max-h-48 overflow-y-auto mb-4 space-y-2 custom-scrollbar pr-1" id="quick-notes-manage-list">
+                <!-- List items injected here -->
+            </div>
+            
+            <div class="border-t border-gray-100 pt-4 dark:border-slate-700">
+                <h4 class="text-xs font-bold text-gray-400 uppercase mb-2 dark:text-slate-500">Add New Note</h4>
+                <div class="flex gap-2">
+                    <input type="text" id="quick-note-input" class="flex-1 bg-gray-100 rounded-xl py-2 px-4 outline-none text-sm border-2 border-transparent focus:border-blue-500 focus:bg-white transition-all dark:bg-slate-700 dark:text-white dark:focus:bg-slate-800" placeholder="e.g. Remote Only">
+                    <button onclick="app.saveQuickNote()" class="bg-blue-600 text-white rounded-xl px-4 py-2 font-bold hover:bg-blue-500 active:scale-95 transition">Add</button>
+                </div>
+            </div>
+            
+            <button onclick="document.getElementById('modal-quick-notes').classList.add('hidden')" class="w-full mt-4 py-3 text-gray-500 font-bold bg-gray-50 rounded-xl hover:bg-gray-100 dark:bg-slate-700/50 dark:text-slate-400 dark:hover:bg-slate-700 transition">Done</button>
+        </div>
+    </div>
+
     <!-- Settings/Menu Modal -->
     <div id="modal-settings" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-6 backdrop-blur-sm" onclick="if(event.target === this) this.classList.add('hidden')">
         <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
@@ -626,7 +647,8 @@
                 <div class="mb-3">
                     <div class="flex justify-between items-center mb-2">
                          <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-500">Quick Notes</label>
-                         <button onclick="app.addQuickNoteOption()" class="text-[10px] font-bold text-blue-500 hover:text-blue-600 dark:text-blue-400">+ CUSTOM</button>
+                         <!-- Updated button to open management modal -->
+                         <button onclick="app.openQuickNotesModal()" class="text-[10px] font-bold text-blue-500 hover:text-blue-600 dark:text-blue-400 bg-blue-50 px-2 py-0.5 rounded dark:bg-blue-900/30">+ / -</button>
                     </div>
                     <div class="flex flex-wrap gap-2" id="quick-notes-container">
                         <!-- Chips injected by JS -->
@@ -647,17 +669,17 @@
             <!-- Footer Actions -->
             <div class="p-6 pt-2 bg-white border-t border-gray-50 z-10 dark:bg-slate-900 dark:border-slate-800">
                 <div class="flex gap-2">
-                     <!-- Secondary Button: Later -->
-                     <button onclick="app.saveJob('pending')" class="flex-1 py-3.5 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200 active:scale-[0.98] transition dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 text-xs">
-                        Later
-                     </button>
                      <!-- New Button: Direct Apply -->
                      <button onclick="app.saveJob('direct-apply')" class="flex-1 py-3.5 bg-purple-100 text-purple-600 font-bold rounded-xl hover:bg-purple-200 active:scale-[0.98] transition dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50 text-xs">
                         Direct Apply
                      </button>
                      <!-- Primary Button: Applied -->
-                     <button onclick="app.saveJob(true)" class="flex-[1.5] py-3.5 bg-green-500 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 hover:bg-green-600 active:scale-[0.98] transition flex items-center justify-center gap-2 text-xs">
-                        <i class="fas fa-check"></i> Applied
+                     <button onclick="app.saveJob(true)" class="flex-1 py-3.5 bg-green-100 text-green-700 font-bold rounded-xl hover:bg-green-200 active:scale-[0.98] transition dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-900/50 text-xs">
+                        Applied
+                     </button>
+                     <!-- Secondary Button: Save (was Later) -->
+                     <button onclick="app.saveJob('pending')" class="flex-1 py-3.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 hover:bg-blue-700 active:scale-[0.98] transition text-xs">
+                        Save
                      </button>
                 </div>
             </div>
@@ -1215,38 +1237,91 @@
                 setTimeout(() => textarea.classList.remove('bg-blue-50', 'dark:bg-blue-900/20'), 300);
             },
             
-            addQuickNoteOption: () => {
-                const newTag = prompt("Enter new quick note tag (e.g., 'Check Benefits')");
-                if (newTag && newTag.trim()) {
+            // Replaced old addQuickNoteOption with full modal management logic
+            openQuickNotesModal: () => {
+                app.renderQuickNotesList();
+                document.getElementById('modal-quick-notes').classList.remove('hidden');
+                setTimeout(() => document.getElementById('quick-note-input').focus(), 100);
+            },
+
+            renderQuickNotesList: () => {
+                const list = document.getElementById('quick-notes-manage-list');
+                if(!list) return;
+                list.innerHTML = '';
+                const notes = STATE.data.quickNotes || [];
+                
+                if(notes.length === 0) {
+                    list.innerHTML = `<div class="text-center text-gray-400 text-xs py-6 italic">No custom notes yet.<br>Add one below!</div>`;
+                    return;
+                }
+
+                // Match colors with the chips
+                const colors = ['purple', 'blue', 'emerald', 'orange', 'rose', 'cyan', 'indigo', 'fuchsia', 'amber', 'lime'];
+
+                notes.forEach((note, idx) => {
+                    const color = colors[idx % colors.length];
+                    const div = document.createElement('div');
+                    div.className = "flex items-center justify-between bg-gray-50 p-3 rounded-xl border border-gray-100 group dark:bg-slate-700/50 dark:border-slate-600";
+                    div.innerHTML = `
+                        <div class="flex items-center gap-2 overflow-hidden">
+                            <div class="w-2 h-2 rounded-full bg-${color}-400 shrink-0 shadow-sm"></div>
+                            <span class="text-sm font-bold text-gray-700 truncate dark:text-slate-200">${note}</span>
+                        </div>
+                        <button onclick="app.deleteQuickNote(${idx})" class="text-gray-300 hover:text-red-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 transition active:scale-90 dark:hover:bg-red-900/30 dark:text-slate-500 dark:hover:text-red-400">
+                            <i class="fas fa-trash text-xs"></i>
+                        </button>
+                    `;
+                    list.appendChild(div);
+                });
+            },
+
+            saveQuickNote: () => {
+                const input = document.getElementById('quick-note-input');
+                const val = input.value.trim();
+                if(val) {
                     if(!STATE.data.quickNotes) STATE.data.quickNotes = [];
-                    STATE.data.quickNotes.push(newTag.trim());
+                    STATE.data.quickNotes.push(val);
                     app.saveToCloud();
-                    app.renderQuickNotesChips();
+                    input.value = '';
+                    app.renderQuickNotesList();
+                    app.renderQuickNotesChips(); // Update chips in background
                 }
             },
+
+            deleteQuickNote: (idx) => {
+                if(!STATE.data.quickNotes) return;
+                STATE.data.quickNotes.splice(idx, 1);
+                app.saveToCloud();
+                app.renderQuickNotesList();
+                app.renderQuickNotesChips(); // Update chips in background
+            },
+            
+            // Legacy wrapper to maintain compatibility if called elsewhere
+            addQuickNoteOption: () => { app.openQuickNotesModal(); },
             
             renderQuickNotesChips: () => {
                 const container = document.getElementById('quick-notes-container');
+                container.innerHTML = '';
                 
-                // Updated Colors for Uniformity
-                const defaults = [
-                    { text: 'Ask Referral', color: 'orange' }, // Matches 'Referral Asked' Status
-                    { text: 'Direct Apply', color: 'purple' }, // Matches 'Direct Apply' Status
-                    { text: 'DM Recruiter', color: 'indigo' },
-                    { text: 'Salary', color: 'green' }
-                ];
+                const notes = STATE.data.quickNotes || [];
                 
-                let html = '';
-                
-                defaults.forEach(d => {
-                    html += `<button onclick="app.addQuickNote('${d.text}')" class="px-3 py-1.5 rounded-lg bg-${d.color}-50 text-${d.color}-600 text-xs font-bold border border-${d.color}-100 hover:bg-${d.color}-100 transition active:scale-95 dark:bg-${d.color}-900/20 dark:text-${d.color}-300 dark:border-${d.color}-800">${d.text}</button> `;
+                if (notes.length === 0) {
+                    container.innerHTML = `<span class="text-[10px] text-gray-300 dark:text-gray-600 italic pl-1">No notes. Click '+ / -' to add.</span>`;
+                    return;
+                }
+
+                // Vibrant Palette for unique coloring
+                const colors = ['purple', 'blue', 'emerald', 'orange', 'rose', 'cyan', 'indigo', 'fuchsia', 'amber', 'lime'];
+
+                notes.forEach((note, index) => {
+                    const color = colors[index % colors.length];
+                    const btn = document.createElement('button');
+                    // Dynamic class construction for Tailwind CDN to pick up (requires classes to be standard)
+                    btn.className = `px-3 py-1.5 rounded-lg bg-${color}-50 text-${color}-600 text-xs font-bold border border-${color}-100 hover:bg-${color}-100 transition active:scale-95 dark:bg-${color}-900/20 dark:text-${color}-300 dark:border-${color}-800 shadow-sm`;
+                    btn.textContent = note;
+                    btn.onclick = () => app.addQuickNote(note);
+                    container.appendChild(btn);
                 });
-                
-                (STATE.data.quickNotes || []).forEach(note => {
-                     html += `<button onclick="app.addQuickNote('${note}')" class="px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 text-xs font-bold border border-gray-200 hover:bg-gray-200 transition active:scale-95 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600">${note}</button> `;
-                });
-                
-                container.innerHTML = html;
             },
 
             openJobModal: (id = null) => {
