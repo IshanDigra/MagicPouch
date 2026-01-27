@@ -14,6 +14,10 @@
             darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', "Segoe UI", 'Roboto', "Helvetica Neue", 'Arial', 'sans-serif'],
+                        fredoka: ['Fredoka', 'sans-serif'],
+                    },
                     colors: {
                         dark: {
                             bg: '#0f172a',
@@ -34,7 +38,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
     
     <style>
         body {
@@ -126,7 +130,14 @@
             
             <!-- Quick Gadgets Section -->
             <div class="bg-white pt-4 pb-2 px-4 shrink-0 flex flex-col items-center border-b border-gray-100 dark:bg-slate-900 dark:border-slate-800">
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3 dark:text-slate-500">Quick Content</p>
+                <!-- Quote Display (Clickable) -->
+                <div onclick="app.openQuoteModal()" class="cursor-pointer group flex items-center justify-center gap-2 mb-3 px-2 w-full active:scale-95 transition-transform" title="Tap to edit quote">
+                    <p id="quote-display" class="text-[10px] text-gray-400 font-bold uppercase tracking-widest dark:text-slate-500 max-w-[250px] truncate text-center select-none group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
+                        Quick Content
+                    </p>
+                    <i class="fas fa-pen text-[8px] text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity dark:text-slate-600"></i>
+                </div>
+
                 <div class="flex flex-wrap justify-center gap-2 w-full max-w-lg" id="job-quick-actions">
                     <!-- Injected via JS -->
                 </div>
@@ -261,6 +272,19 @@
     </nav>
 
     <!-- === MODALS === -->
+
+    <!-- NEW: QUOTE EDITOR MODAL -->
+    <div id="modal-quote" class="fixed inset-0 bg-black/50 z-[90] hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
+            <h3 class="font-bold text-lg mb-2 dark:text-white">Daily Inspiration</h3>
+            <p class="text-xs text-gray-400 mb-4 dark:text-slate-400">What drives you today?</p>
+            <input type="text" id="quote-input" class="w-full bg-gray-50 rounded-xl py-3 px-4 mb-4 outline-none text-sm border border-gray-100 focus:border-blue-500 focus:bg-white transition-all dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:focus:border-blue-500" placeholder="Enter your quote...">
+            <div class="flex gap-3">
+                <button onclick="document.getElementById('modal-quote').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
+                <button onclick="app.saveQuote()" class="flex-1 py-3 text-white font-bold bg-blue-600 rounded-xl hover:bg-blue-500">Save Quote</button>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL 1: MOMENTUM (STREAK) -->
     <div id="modal-streak" class="fixed inset-0 bg-black/50 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="if(event.target === this) this.classList.add('hidden')">
@@ -622,13 +646,17 @@
 
             <!-- Footer Actions -->
             <div class="p-6 pt-2 bg-white border-t border-gray-50 z-10 dark:bg-slate-900 dark:border-slate-800">
-                <div class="flex gap-3">
-                     <!-- Secondary Button -->
-                     <button onclick="app.saveJob(false)" class="flex-1 py-3.5 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200 active:scale-[0.98] transition dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">
-                        Save for Later
+                <div class="flex gap-2">
+                     <!-- Secondary Button: Later -->
+                     <button onclick="app.saveJob('pending')" class="flex-1 py-3.5 bg-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-200 active:scale-[0.98] transition dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 text-xs">
+                        Later
                      </button>
-                     <!-- Primary Button -->
-                     <button onclick="app.saveJob(true)" class="flex-[2] py-3.5 bg-green-500 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 hover:bg-green-600 active:scale-[0.98] transition flex items-center justify-center gap-2">
+                     <!-- New Button: Direct Apply -->
+                     <button onclick="app.saveJob('direct-apply')" class="flex-1 py-3.5 bg-purple-100 text-purple-600 font-bold rounded-xl hover:bg-purple-200 active:scale-[0.98] transition dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50 text-xs">
+                        Direct Apply
+                     </button>
+                     <!-- Primary Button: Applied -->
+                     <button onclick="app.saveJob(true)" class="flex-[1.5] py-3.5 bg-green-500 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 hover:bg-green-600 active:scale-[0.98] transition flex items-center justify-center gap-2 text-xs">
                         <i class="fas fa-check"></i> Applied
                      </button>
                 </div>
@@ -707,10 +735,12 @@
     <!-- CONFIGURATION & LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, onSnapshot, setDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const firebaseConfig = {
+        // === Environment Configuration ===
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'magic-pouch-dev';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "AIzaSyD3GZnCEWotlYVHElhh3c5RmCKYjzSdhX8",
             authDomain: "magic-pouch.firebaseapp.com",
             projectId: "magic-pouch",
@@ -723,6 +753,9 @@
         const auth = getAuth(firebaseApp);
         const db = getFirestore(firebaseApp);
         
+        // Load saved folder state from local storage
+        const savedFolders = localStorage.getItem('magic_pouch_folders');
+
         const STATE = {
             user: null,
             syncKey: localStorage.getItem('magic_pouch_key') || Math.random().toString(36).substr(2, 6).toUpperCase(),
@@ -743,15 +776,18 @@
                 stats: {
                     history: {}, 
                     dailyTarget: 5
-                }
+                },
+                userQuote: "Believe in yourself 🌟" // Default quote
             },
             editingId: null,
             targetStatusId: null,
             templateFolder: null,
             renameTargetFolder: null,
             currentConfirmAction: null,
-            openFolders: new Set(),
-            hasInitializedFolders: false,
+            // Initialize with saved state if available
+            openFolders: savedFolders ? new Set(JSON.parse(savedFolders)) : new Set(),
+            // If we have saved folders, we consider the UI initialized so defaults don't override
+            hasInitializedFolders: !!savedFolders,
             unsubscribe: null,
             isSyncing: false,
             currentView: 'jobs' 
@@ -771,13 +807,25 @@
             return Math.floor((startOfToday - startOfDate) / MILLIS_PER_DAY);
         };
 
+        // Helper to get Canvas Compliant Path
+        const getDocRef = () => {
+             // Path: artifacts/{appId}/public/data/sync_rooms/{syncKey}
+             return doc(db, 'artifacts', appId, 'public', 'data', 'sync_rooms', STATE.syncKey);
+        };
+
         window.app = {
             
             init: async () => {
                 app.initTheme();
+                
+                // Initialize Auth (Canvas compliant pattern)
                 try {
-                    await signInAnonymously(auth);
-                    console.log('Anonymous auth success');
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                    console.log('Auth success');
                 } catch (e) {
                     console.error('Auth error:', e);
                     app.toast('Auth setup failed', true);
@@ -786,7 +834,6 @@
                 onAuthStateChanged(auth, (user) => {
                     STATE.user = user;
                     if(user) {
-                        console.log('User authenticated:', user.uid);
                         app.setupSync();
                     }
                 });
@@ -825,7 +872,8 @@
                 if(STATE.unsubscribe) STATE.unsubscribe();
                 
                 STATE.isSyncing = true;
-                const docRef = doc(db, 'sync', STATE.syncKey);
+                // Updated to use compliant path
+                const docRef = getDocRef();
                 
                 STATE.unsubscribe = onSnapshot(docRef, (snap) => {
                     const indicator = document.getElementById('sync-indicator');
@@ -871,6 +919,9 @@
                 if (typeof safeData.plan.monthly !== 'string') safeData.plan.monthly = '';
                 if (typeof safeData.plan.lastLogin !== 'string') safeData.plan.lastLogin = '';
                 if (typeof safeData.plan.streak !== 'number') safeData.plan.streak = 0;
+                
+                // Quote initialization
+                if (typeof safeData.userQuote !== 'string') safeData.userQuote = "Believe in yourself 🌟";
 
                 if (!safeData.stats || typeof safeData.stats !== 'object') {
                     safeData.stats = { history: {}, dailyTarget: 5 };
@@ -1232,7 +1283,7 @@
                 }, 100);
             },
 
-            saveJob: (markApplied = false) => {
+            saveJob: (statusOrFlag = 'pending') => {
                 const title = document.getElementById('job-title').value;
                 const content = document.getElementById('job-content').value;
                 const linkType = document.getElementById('job-type').value;
@@ -1245,26 +1296,47 @@
                 const finalTitle = title || "Untitled Job";
 
                 const newId = STATE.editingId || Date.now().toString();
+                
+                // Determine new status and behavior
+                let newStatus = 'pending';
+                let isAppliedAction = false;
+
+                if (statusOrFlag === true) {
+                    isAppliedAction = true;
+                    // If explicitly Applied button clicked, we let status modal handle final status
+                    // but we default to pending effectively until user chooses in next step
+                } else if (typeof statusOrFlag === 'string') {
+                    newStatus = statusOrFlag;
+                }
+
                 const itemData = { title: finalTitle, content, linkType, remarks, category: 'job', updated: Date.now() };
 
                 if(STATE.editingId) {
                     const idx = STATE.data.notes.findIndex(n => n.id === STATE.editingId);
-                    if(idx > -1) STATE.data.notes[idx] = { ...STATE.data.notes[idx], ...itemData };
+                    if(idx > -1) {
+                        const currentNote = STATE.data.notes[idx];
+                        // Only update status if a specific string status was passed (e.g. 'direct-apply')
+                        // If 'true' was passed, we preserve current status and let modal update it
+                        const statusToSave = (typeof statusOrFlag === 'string') ? statusOrFlag : currentNote.status;
+                        STATE.data.notes[idx] = { ...currentNote, ...itemData, status: statusToSave };
+                    }
                 } else {
-                    STATE.data.notes.unshift({ id: newId, created: Date.now(), status: 'pending', ...itemData });
+                    STATE.data.notes.unshift({ id: newId, created: Date.now(), status: newStatus, ...itemData });
                     app.recalculateStreak();
                 }
                 
                 app.saveToCloud();
                 document.getElementById('modal-job').classList.add('hidden');
                 
-                if (markApplied) {
+                if (isAppliedAction) {
                     setTimeout(() => {
                         app.openStatusModal(newId);
                         app.toast("Job saved! Select how you applied...");
                     }, 300);
                 } else {
-                    app.toast("Job Saved");
+                    let msg = "Job Saved";
+                    if (newStatus === 'direct-apply') msg = "Added to Direct Apply queue";
+                    app.toast(msg);
                     app.refreshUI();
                 }
             },
@@ -1376,6 +1448,8 @@
                         if (icon) icon.classList.remove('rotate-90');
                         STATE.openFolders.delete(id);
                     }
+                    // Save new configuration to local storage
+                    localStorage.setItem('magic_pouch_folders', JSON.stringify([...STATE.openFolders]));
                 }
             },
 
@@ -1722,6 +1796,27 @@
             saveProfileItem: () => { const label = document.getElementById('profile-label').value.trim(); const value = document.getElementById('profile-value').value.trim(); if (label && value) { STATE.data.profile.push({ label, value }); app.saveToCloud(); app.renderProfileManageList(); app.renderQuickActions(); document.getElementById('profile-label').value = ''; document.getElementById('profile-value').value = ''; } },
             deleteProfileItem: (idx) => { STATE.data.profile.splice(idx, 1); app.saveToCloud(); app.renderProfileManageList(); app.renderQuickActions(); },
 
+            renderQuote: () => {
+                const quoteEl = document.getElementById('quote-display');
+                if(quoteEl) quoteEl.textContent = STATE.data.userQuote || "Dream Big 🚀";
+            },
+            openQuoteModal: () => {
+                document.getElementById('quote-input').value = STATE.data.userQuote;
+                document.getElementById('modal-quote').classList.remove('hidden');
+                setTimeout(() => document.getElementById('quote-input').focus(), 100);
+            },
+            saveQuote: () => {
+                const val = document.getElementById('quote-input').value.trim();
+                if(val) {
+                    STATE.data.userQuote = val;
+                    app.saveToCloud();
+                    app.renderQuote();
+                    document.getElementById('modal-quote').classList.add('hidden');
+                }
+            },
+            // Legacy editQuote for reference, now replaced by openQuoteModal
+            editQuote: () => { app.openQuoteModal(); },
+
             renderQuickActions: () => {
                 const container = document.getElementById('job-quick-actions'); container.innerHTML = '';
                 const profiles = STATE.data.profile || [];
@@ -1767,8 +1862,24 @@
             deletePlanTask: (idx) => { app.openConfirm("Remove this daily task?", () => { STATE.data.plan.daily.splice(idx, 1); app.saveToCloud(); app.renderPlan(); }); },
             savePlanText: (type) => { const val = document.getElementById(`plan-${type}-text`).value; STATE.data.plan[type] = val; if(app.planSaveTimeout) clearTimeout(app.planSaveTimeout); app.planSaveTimeout = setTimeout(() => { app.saveToCloud(); }, 1000); },
             processAutomationRules: () => { const now = Date.now(); let hasChanges = false; STATE.data.notes.forEach(note => { const statusToCheck = note.status === 'referral' ? 'referral-asked' : note.status; if (note.category === 'job' && statusToCheck === 'referral-asked') { const lastUpdated = note.updated || note.created; if ((now - lastUpdated) > MILLIS_PER_DAY) { note.status = 'reminder'; note.updated = now; hasChanges = true; } } }); if (hasChanges) { app.saveToCloud(); app.toast("Checked follow-ups", false); } },
-            refreshUI: () => { app.renderJobs(); app.renderTemplates(); app.renderPlan(); app.renderQuickActions(); app.renderProfileManageList(); },
-            saveToCloud: async () => { if(!STATE.user) return; try { const docRef = doc(db, 'sync', STATE.syncKey); await setDoc(docRef, { data: STATE.data, userId: STATE.user.uid, lastUpdated: new Date().toISOString() }); } catch (e) { console.error('Save error:', e); } },
+            refreshUI: () => { 
+                app.renderJobs(); 
+                app.renderTemplates(); 
+                app.renderPlan(); 
+                app.renderQuickActions(); 
+                app.renderProfileManageList(); 
+                app.renderQuote();
+            },
+            saveToCloud: async () => { 
+                if(!STATE.user) return; 
+                try { 
+                    // Updated to use compliant path
+                    const docRef = getDocRef();
+                    await setDoc(docRef, { data: STATE.data, userId: STATE.user.uid, lastUpdated: new Date().toISOString() }); 
+                } catch (e) { 
+                    console.error('Save error:', e); 
+                } 
+            },
             saveSyncKey: () => { const newKey = document.getElementById('sync-key-input').value.trim().toUpperCase(); if(newKey && newKey !== STATE.syncKey) { STATE.syncKey = newKey; localStorage.setItem('magic_pouch_key', newKey); if(document.getElementById('sync-status-text')) document.getElementById('sync-status-text').textContent = newKey; app.setupSync(); document.getElementById('modal-sync').classList.add('hidden'); app.toast("Switched Sync Channel"); } else if(newKey === STATE.syncKey) { app.toast("Same key - already connected"); } },
             switchView: (viewName) => { STATE.currentView = viewName; const vJobs = document.getElementById('view-jobs'); const vPlan = document.getElementById('view-plan'); const vTpls = document.getElementById('view-templates'); vJobs.style.transform = 'translateX(100%)'; vPlan.style.transform = 'translateX(100%)'; vTpls.style.transform = 'translateX(100%)'; if(viewName === 'jobs') vJobs.style.transform = 'translateX(0)'; if(viewName === 'plan') vPlan.style.transform = 'translateX(0)'; if(viewName === 'templates') vTpls.style.transform = 'translateX(0)'; document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.remove('text-blue-600', 'active', 'dark:text-blue-400'); btn.classList.add('text-gray-400', 'dark:text-slate-500'); }); const navIndex = viewName === 'jobs' ? 0 : viewName === 'plan' ? 1 : 2; const activeBtn = document.querySelectorAll('.nav-btn')[navIndex]; activeBtn.classList.add('text-blue-600', 'active', 'dark:text-blue-400'); activeBtn.classList.remove('text-gray-400', 'dark:text-slate-500'); if (viewName === 'plan') app.renderPlan(); if (viewName === 'templates') app.renderTemplates(); if (viewName === 'jobs') app.renderJobs(); }
         };
