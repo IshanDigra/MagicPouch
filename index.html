@@ -191,63 +191,149 @@
 
         <!-- VIEW: PLAN (Strategy & Goals) -->
         <div id="view-plan" class="h-full flex flex-col absolute inset-0 bg-gray-50/50 transition-transform duration-300 transform translate-x-full dark:bg-slate-900">
-            <div class="px-5 py-4 bg-white border-b border-gray-100 shrink-0 shadow-sm z-10 dark:bg-slate-900 dark:border-slate-800">
-                <h2 class="font-bold text-2xl text-gray-800 tracking-tight dark:text-slate-100">Master Plan</h2>
-                <p class="text-xs font-medium text-gray-400 mt-0.5 dark:text-slate-500">Design your future, one day at a time.</p>
-            </div>
-
+            
+            <!-- Content Area -->
             <div class="flex-1 overflow-y-auto p-5 space-y-6 safe-pb pb-24 scroll-smooth">
                 
-                <!-- Daily Plan Section -->
-                <div class="fade-in bg-white rounded-2xl p-5 shadow-sm border border-gray-100/50 relative overflow-hidden group dark:bg-slate-800 dark:border-slate-700">
-                    <div class="absolute top-0 left-0 w-1 h-full bg-yellow-400"></div> <!-- Accent bar -->
+                <!-- NEW: TOP DASHBOARD (Velocity & North Star) -->
+                <div class="grid grid-cols-2 gap-4 fade-in">
                     
-                    <div class="flex justify-between items-end mb-4">
+                    <!-- 1. VELOCITY GAUGE (Fixed) -->
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col justify-between relative overflow-hidden dark:bg-slate-800 dark:border-slate-700 h-40">
+                         <div class="absolute top-0 right-0 p-3 opacity-10">
+                            <i class="fas fa-tachometer-alt text-4xl text-blue-500"></i>
+                        </div>
                         <div>
-                            <h3 class="font-bold text-gray-700 text-sm flex items-center gap-2 uppercase tracking-wider dark:text-slate-300">
-                                <i class="fas fa-sun text-yellow-500 text-lg"></i> Daily Wins
-                            </h3>
-                            <div class="mt-2 flex items-center gap-2">
-                                <div class="h-1.5 w-24 bg-gray-100 rounded-full overflow-hidden dark:bg-slate-700">
-                                    <div id="daily-plan-progress" class="h-full bg-yellow-400 rounded-full transition-all duration-500 w-0"></div>
-                                </div>
-                                <span id="daily-plan-progress-text" class="text-[10px] font-bold text-gray-400 dark:text-slate-500">0%</span>
+                            <h3 class="font-bold text-[10px] text-gray-400 uppercase tracking-wider mb-1 dark:text-slate-500">7-Day Velocity</h3>
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-3xl font-black text-gray-800 dark:text-white" id="velocity-count">0</span>
+                                <span class="text-xs font-bold text-gray-400 dark:text-slate-500">Apps</span>
                             </div>
                         </div>
-                        <button onclick="app.openAddDailyTaskModal()" class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 hover:scale-110 transition shadow-sm dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20">
-                            <i class="fas fa-plus"></i>
+                        
+                        <!-- Gauge SVG (Needle Style) -->
+                        <div class="relative w-full h-14 mt-auto flex items-end justify-center">
+                            <svg viewBox="0 0 100 60" class="w-full h-full drop-shadow-sm overflow-visible" preserveAspectRatio="xMidYMax meet">
+                                <!-- Background Track -->
+                                <path d="M 15 50 A 35 35 0 0 1 85 50" fill="none" stroke="#e2e8f0" stroke-width="8" stroke-linecap="round" class="dark:stroke-slate-700"/>
+                                
+                                <!-- Active Track (Colored) -->
+                                <path id="gauge-path" d="M 15 50 A 35 35 0 0 1 85 50" fill="none" stroke="#3b82f6" stroke-width="8" stroke-linecap="round" stroke-dasharray="0 110" class="transition-all duration-1000 ease-out" />
+                                
+                                <!-- Needle -->
+                                <g id="gauge-needle" class="transition-transform duration-1000 ease-out" style="transform-origin: 50px 50px; transform: rotate(-90deg);">
+                                    <circle cx="50" cy="50" r="4" class="fill-slate-700 dark:fill-slate-200" />
+                                    <path d="M 48 50 L 50 10 L 52 50 Z" class="fill-slate-700 dark:fill-slate-200" />
+                                </g>
+                            </svg>
+                        </div>
+
+                        <div class="mt-1 text-center">
+                            <span id="velocity-label" class="text-[9px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full dark:bg-blue-900/30 dark:text-blue-300">Warming Up</span>
+                        </div>
+                    </div>
+
+                    <!-- 2. THE NORTH STAR (Milky Way Space Theme) -->
+                    <div class="relative rounded-2xl p-4 shadow-lg overflow-hidden group cursor-pointer text-white border border-white/10 h-40 flex flex-col justify-between" onclick="app.openNorthStarModal()">
+                        <!-- Milky Way Background -->
+                        <div class="absolute inset-0 bg-slate-950">
+                            <!-- Deep Space Gradient -->
+                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-indigo-900 via-slate-950 to-black opacity-90"></div>
+                            <!-- Nebulas -->
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl mix-blend-screen"></div>
+                            <div class="absolute bottom-0 left-0 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl mix-blend-screen"></div>
+                            
+                            <!-- Animated Stars -->
+                            <div class="absolute top-4 left-4 w-[2px] h-[2px] bg-white rounded-full animate-[pulse_3s_infinite]"></div>
+                            <div class="absolute top-10 right-8 w-[1px] h-[1px] bg-white rounded-full animate-[pulse_4s_infinite]"></div>
+                            <div class="absolute bottom-8 left-12 w-[2px] h-[2px] bg-blue-200 rounded-full animate-[pulse_2s_infinite]"></div>
+                            <div class="absolute top-1/2 left-1/2 w-[1px] h-[1px] bg-white rounded-full animate-[pulse_5s_infinite]"></div>
+                            <div class="absolute bottom-4 right-4 w-[1.5px] h-[1.5px] bg-purple-200 rounded-full animate-[pulse_3s_infinite]"></div>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="relative z-10 flex justify-between items-start">
+                            <h3 class="font-bold text-[10px] text-indigo-200 uppercase tracking-widest flex items-center gap-1.5">
+                                <i class="fas fa-star text-yellow-300 text-xs drop-shadow-[0_0_8px_rgba(253,224,71,0.6)]"></i> North Star
+                            </h3>
+                            <div class="w-6 h-6 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10 group-hover:bg-white/20 transition opacity-60 group-hover:opacity-100">
+                                <i class="fas fa-pencil-alt text-[8px] text-white"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="relative z-10 mt-auto">
+                            <div id="ns-company" class="font-black text-lg leading-tight truncate drop-shadow-md tracking-tight mb-0.5">Dream Co.</div>
+                            <div id="ns-role" class="text-[10px] text-indigo-100 opacity-80 truncate mb-2">Target Role</div>
+                            <span id="ns-status" class="inline-block text-[8px] font-bold bg-white/10 border border-white/20 px-2 py-0.5 rounded-full text-indigo-50 backdrop-blur-sm">Dreaming</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daily Plan Section -->
+                <div class="fade-in bg-white rounded-2xl p-5 shadow-sm border border-gray-100 dark:bg-slate-800 dark:border-slate-700">
+                    <!-- Header with Progress -->
+                    <div class="flex justify-between items-end mb-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-yellow-50 flex items-center justify-center text-yellow-500 dark:bg-yellow-900/20 dark:text-yellow-400">
+                                <i class="fas fa-trophy text-sm"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-sm dark:text-slate-100 leading-none">Daily Wins</h3>
+                                <span class="text-[10px] text-gray-400 dark:text-slate-500" id="daily-progress-text">0% Complete</span>
+                            </div>
+                        </div>
+                        <div class="w-20 h-1.5 bg-gray-100 rounded-full overflow-hidden dark:bg-slate-700">
+                            <div id="daily-plan-progress" class="h-full bg-yellow-400 rounded-full transition-all duration-500 w-0"></div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Add Input (Inline) -->
+                    <div class="relative mb-2">
+                        <input type="text" id="quick-task-input" class="w-full bg-gray-50 border border-gray-100 rounded-xl py-2.5 pl-4 pr-10 text-sm outline-none focus:border-blue-300 focus:bg-white transition-all dark:bg-slate-700/50 dark:border-slate-600 dark:text-white dark:focus:bg-slate-700" placeholder="Add a new win..." onkeydown="if(event.key === 'Enter') app.addQuickTask()">
+                        <button onclick="app.addQuickTask()" class="absolute right-2 top-1.5 w-7 h-7 flex items-center justify-center bg-blue-600 text-white rounded-lg shadow-sm hover:bg-blue-500 transition active:scale-95">
+                            <i class="fas fa-plus text-xs"></i>
                         </button>
                     </div>
+
+                    <!-- Task List -->
+                    <div id="plan-daily-list" class="space-y-0.5 mb-2">
+                        <!-- Tasks injected here -->
+                    </div>
+
+                    <!-- Footer: Toggle Visibility -->
+                    <div class="flex justify-between items-center pt-2 border-t border-gray-50 mt-1 dark:border-slate-700">
+                        <span class="text-[9px] text-gray-300 font-medium dark:text-slate-600 uppercase tracking-wider">Tap to edit</span>
+                        
+                        <!-- Toggle Hide/Show Done -->
+                        <button id="btn-toggle-done" onclick="app.toggleHideDone()" class="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 hover:text-gray-600 bg-gray-50 px-2 py-1 rounded-lg transition-colors dark:bg-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
+                            <i class="fas fa-eye-slash"></i> <span>Hide Done</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Strategic Goals (Weekly/Monthly) -->
+                <div class="fade-in grid grid-cols-1 gap-4" style="animation-delay: 0.2s">
                     
-                    <div id="plan-daily-list" class="space-y-2.5">
-                        <!-- Daily items injected here -->
+                    <!-- Weekly Card -->
+                    <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm dark:bg-slate-800 dark:border-slate-700">
+                        <div class="bg-purple-50 px-4 py-3 flex justify-between items-center border-b border-purple-100 dark:bg-purple-900/20 dark:border-purple-800">
+                            <h3 class="font-bold text-sm text-purple-800 dark:text-purple-300 flex items-center gap-2">
+                                <i class="fas fa-calendar-week"></i> Weekly Focus
+                            </h3>
+                            <button onclick="app.copyPlanText('weekly')" class="text-purple-400 hover:text-purple-600 dark:hover:text-purple-200"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <textarea id="plan-weekly-text" oninput="app.savePlanText('weekly')" class="w-full h-32 p-4 text-sm text-gray-700 leading-relaxed outline-none resize-none bg-transparent dark:text-slate-300 placeholder-gray-300 dark:placeholder-slate-600" placeholder="- Top priority 1&#10;- Top priority 2"></textarea>
                     </div>
-                    <div class="text-[10px] text-gray-300 mt-3 text-center font-medium dark:text-slate-600">Drag to prioritize • Resets at midnight</div>
-                </div>
 
-                <!-- Weekly Plan -->
-                <div class="fade-in" style="animation-delay: 0.1s">
-                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-t-2xl p-4 flex justify-between items-center text-white shadow-md dark:from-indigo-600 dark:to-purple-700">
-                        <h3 class="font-bold text-sm flex items-center gap-2">
-                            <i class="fas fa-calendar-week"></i> Weekly Focus
-                        </h3>
-                        <i class="fas fa-pen-nib opacity-50 text-xs"></i>
-                    </div>
-                    <div class="bg-white rounded-b-2xl border-x border-b border-gray-200 p-1 shadow-sm dark:bg-slate-800 dark:border-slate-700">
-                        <textarea id="plan-weekly-text" oninput="app.savePlanText('weekly')" class="w-full h-40 bg-gray-50 p-4 rounded-b-xl text-sm text-gray-700 leading-relaxed focus:bg-white focus:ring-0 outline-none resize-none transition-all border-none dark:bg-slate-700/50 dark:text-slate-300 dark:focus:bg-slate-700 dark:placeholder-slate-500" placeholder="• Key Objective 1&#10;• Key Objective 2"></textarea>
-                    </div>
-                </div>
-
-                <!-- Monthly Plan -->
-                <div class="fade-in" style="animation-delay: 0.2s">
-                     <div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-t-2xl p-4 flex justify-between items-center text-white shadow-md dark:from-slate-700 dark:to-slate-800">
-                        <h3 class="font-bold text-sm flex items-center gap-2">
-                            <i class="fas fa-bullseye text-red-400"></i> Monthly Vision
-                        </h3>
-                        <i class="fas fa-mountain opacity-50 text-xs"></i>
-                    </div>
-                    <div class="bg-white rounded-b-2xl border-x border-b border-gray-200 p-1 shadow-sm dark:bg-slate-800 dark:border-slate-700">
-                        <textarea id="plan-monthly-text" oninput="app.savePlanText('monthly')" class="w-full h-40 bg-gray-50 p-4 rounded-b-xl text-sm text-gray-700 leading-relaxed focus:bg-white focus:ring-0 outline-none resize-none transition-all border-none dark:bg-slate-700/50 dark:text-slate-300 dark:focus:bg-slate-700 dark:placeholder-slate-500" placeholder="The Big Picture..."></textarea>
+                    <!-- Monthly Card -->
+                    <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm dark:bg-slate-800 dark:border-slate-700">
+                        <div class="bg-pink-50 px-4 py-3 flex justify-between items-center border-b border-pink-100 dark:bg-pink-900/20 dark:border-pink-800">
+                            <h3 class="font-bold text-sm text-pink-800 dark:text-pink-300 flex items-center gap-2">
+                                <i class="fas fa-bullseye"></i> Monthly Vision
+                            </h3>
+                            <button onclick="app.copyPlanText('monthly')" class="text-pink-400 hover:text-pink-600 dark:hover:text-pink-200"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <textarea id="plan-monthly-text" oninput="app.savePlanText('monthly')" class="w-full h-32 p-4 text-sm text-gray-700 leading-relaxed outline-none resize-none bg-transparent dark:text-slate-300 placeholder-gray-300 dark:placeholder-slate-600" placeholder="The Big Picture..."></textarea>
                     </div>
                 </div>
             </div>
@@ -427,11 +513,49 @@
     <!-- Daily Task Modal -->
     <div id="modal-add-task" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-center justify-center p-6 backdrop-blur-sm">
         <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
-            <h3 class="font-bold text-lg mb-4 dark:text-white">Add Daily Win</h3>
+            <h3 class="font-bold text-lg mb-4 dark:text-white" id="daily-task-modal-title">Add Daily Win</h3>
             <input type="text" id="new-task-input" class="w-full bg-gray-100 rounded-xl py-3 px-4 mb-4 outline-none text-sm focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white dark:placeholder-slate-400" placeholder="e.g. Apply to 5 jobs">
             <div class="flex gap-3">
                 <button onclick="document.getElementById('modal-add-task').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
-                <button onclick="app.saveDailyTask()" class="flex-1 py-3 text-white font-bold bg-blue-600 rounded-xl hover:bg-blue-500">Add</button>
+                <button onclick="app.saveDailyTask()" id="daily-task-save-btn" class="flex-1 py-3 text-white font-bold bg-blue-600 rounded-xl hover:bg-blue-500">Add</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- NEW: North Star Editor Modal -->
+    <div id="modal-northstar" class="fixed inset-0 bg-black/50 z-[90] hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg dark:text-white">Define Your North Star</h3>
+                <button onclick="document.getElementById('modal-northstar').classList.add('hidden')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Company</label>
+                    <input type="text" id="ns-input-company" class="w-full bg-gray-50 rounded-xl py-2 px-3 outline-none text-sm border-2 border-transparent focus:border-indigo-500 transition-colors dark:bg-slate-700 dark:text-white" placeholder="e.g. Google">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Target Role</label>
+                    <input type="text" id="ns-input-role" class="w-full bg-gray-50 rounded-xl py-2 px-3 outline-none text-sm border-2 border-transparent focus:border-indigo-500 transition-colors dark:bg-slate-700 dark:text-white" placeholder="e.g. Senior Designer">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Current Status</label>
+                    <select id="ns-input-status" class="w-full bg-gray-50 rounded-xl py-2 px-3 outline-none text-sm border-2 border-transparent focus:border-indigo-500 transition-colors dark:bg-slate-700 dark:text-white">
+                        <option value="Dreaming">Dreaming</option>
+                        <option value="Researching">Researching</option>
+                        <option value="Networking">Networking</option>
+                        <option value="Applied">Applied</option>
+                        <option value="Interviewing">Interviewing</option>
+                        <option value="Offer">Offer</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="mt-6">
+                <button onclick="app.saveNorthStar()" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 hover:scale-[1.02] transition-transform">
+                    Set Coordinates 🚀
+                </button>
             </div>
         </div>
     </div>
@@ -792,22 +916,25 @@
                     weekly: '',
                     monthly: '',
                     lastLogin: '',
-                    streak: 0
+                    streak: 0,
+                    hideDone: false,
+                    // New Data for North Star
+                    northStar: { company: '', role: '', status: 'Dreaming' } 
                 },
                 stats: {
                     history: {}, 
                     dailyTarget: 5
                 },
-                userQuote: "Believe in yourself 🌟" // Default quote
+                userQuote: "Believe in yourself 🌟" 
             },
             editingId: null,
             targetStatusId: null,
             templateFolder: null,
             renameTargetFolder: null,
             currentConfirmAction: null,
-            // Initialize with saved state if available
+            editingTaskIdx: null, 
+
             openFolders: savedFolders ? new Set(JSON.parse(savedFolders)) : new Set(),
-            // If we have saved folders, we consider the UI initialized so defaults don't override
             hasInitializedFolders: !!savedFolders,
             unsubscribe: null,
             isSyncing: false,
@@ -935,9 +1062,12 @@
                 if (typeof safeData.plan.monthly !== 'string') safeData.plan.monthly = '';
                 if (typeof safeData.plan.lastLogin !== 'string') safeData.plan.lastLogin = '';
                 if (typeof safeData.plan.streak !== 'number') safeData.plan.streak = 0;
+                if (typeof safeData.plan.hideDone !== 'boolean') safeData.plan.hideDone = false; 
                 
-                // Quote initialization
-                if (typeof safeData.userQuote !== 'string') safeData.userQuote = "Believe in yourself 🌟";
+                // Initialize North Star if missing
+                if (!safeData.plan.northStar || typeof safeData.plan.northStar !== 'object') {
+                    safeData.plan.northStar = { company: 'Dream Co.', role: 'Target Role', status: 'Planning' };
+                }
 
                 if (!safeData.stats || typeof safeData.stats !== 'object') {
                     safeData.stats = { history: {}, dailyTarget: 5 };
@@ -1462,6 +1592,7 @@
                         app.saveToCloud();
                         app.renderJobs();
                         app.recalculateStreak();
+                        app.renderVelocity(); // Ensure speedometer updates immediately
                     }
                 }
                 app.closeStatusModal();
@@ -1490,6 +1621,7 @@
                         app.recalculateStreak(); 
                         app.saveToCloud();
                         app.refreshUI();
+                        // renderVelocity is called in refreshUI, so it's covered here
                     }
                 });
             },
@@ -1918,17 +2050,382 @@
             handleGlobalSearch: (query) => { if (STATE.currentView === 'jobs') app.renderJobs(query); else if (STATE.currentView === 'templates') app.renderTemplates(query); },
 
             renderPlan: () => {
-                const plan = STATE.data.plan; const listEl = document.getElementById('plan-daily-list'); listEl.innerHTML = '';
-                if (!app.sortable && listEl) { app.sortable = new Sortable(listEl, { animation: 150, handle: '.drag-handle', onEnd: function (evt) { const item = STATE.data.plan.daily.splice(evt.oldIndex, 1)[0]; STATE.data.plan.daily.splice(evt.newIndex, 0, item); app.saveToCloud(); }, }); }
-                let completedCount = 0; plan.daily.forEach((task, idx) => { if(task.done) completedCount++; const div = document.createElement('div'); div.className = "flex items-center gap-3 bg-gray-50/50 p-3 rounded-xl border transition-all duration-300 dark:bg-slate-800/50 dark:border-slate-700 " + (task.done ? "border-green-100 bg-green-50/20 dark:bg-green-900/20 dark:border-green-800" : "border-gray-100 hover:border-blue-200 hover:bg-white hover:shadow-sm dark:hover:bg-slate-800 dark:hover:border-blue-700"); div.innerHTML = `<div class="drag-handle text-gray-300 cursor-move px-1 hover:text-gray-500 transition-colors"><i class="fas fa-grip-vertical text-xs"></i></div><div onclick="app.togglePlanTask(${idx})" class="w-6 h-6 rounded-full border-2 flex items-center justify-center cursor-pointer transition-colors duration-300 ${task.done ? 'bg-green-500 border-green-500 text-white scale-110' : 'border-gray-300 text-transparent hover:border-blue-400 bg-white dark:bg-slate-700 dark:border-slate-500'}"><i class="fas fa-check text-[10px]"></i></div><span class="text-sm font-medium ${task.done ? 'text-gray-400 line-through transition-colors duration-300 dark:text-slate-500' : 'text-gray-700 dark:text-slate-200'} flex-1 select-none cursor-pointer" onclick="app.togglePlanTask(${idx})">${task.text}</span><button onclick="app.deletePlanTask(${idx})" class="w-8 h-8 flex items-center justify-center text-gray-300 hover:text-red-400 hover:bg-red-50 rounded-full transition-colors dark:text-slate-500 dark:hover:bg-red-900/30"><i class="fas fa-times"></i></button>`; listEl.appendChild(div); });
-                const total = plan.daily.length; const pct = total === 0 ? 0 : Math.round((completedCount / total) * 100); const progressBar = document.getElementById('daily-plan-progress'); const progressText = document.getElementById('daily-plan-progress-text');
-                if(progressBar) progressBar.style.width = `${pct}%`; if(progressText) progressText.textContent = `${pct}%`;
-                document.getElementById('plan-weekly-text').value = plan.weekly || ''; document.getElementById('plan-monthly-text').value = plan.monthly || '';
+                const plan = STATE.data.plan;
+                const listEl = document.getElementById('plan-daily-list');
+                listEl.innerHTML = '';
+                
+                // --- DAILY WINS RENDER LOGIC ---
+                const toggleBtn = document.getElementById('btn-toggle-done');
+                if (toggleBtn) {
+                    if (plan.hideDone) {
+                        toggleBtn.innerHTML = `<i class="fas fa-eye"></i> <span>Show Done</span>`;
+                        toggleBtn.className = "flex items-center gap-1.5 text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-lg transition-colors dark:bg-blue-900/30 dark:text-blue-300";
+                    } else {
+                        toggleBtn.innerHTML = `<i class="fas fa-eye-slash"></i> <span>Hide Done</span>`;
+                        toggleBtn.className = "flex items-center gap-1.5 text-[10px] font-bold text-gray-400 hover:text-gray-600 bg-gray-50 px-2 py-1 rounded-lg transition-colors dark:bg-slate-700 dark:text-slate-400 dark:hover:text-slate-200";
+                    }
+                }
+
+                if (!app.sortable && listEl) {
+                    app.sortable = new Sortable(listEl, {
+                        animation: 150,
+                        ghostClass: 'opacity-50',
+                        onEnd: function (evt) {
+                             const item = STATE.data.plan.daily.splice(evt.oldIndex, 1)[0];
+                             STATE.data.plan.daily.splice(evt.newIndex, 0, item);
+                             app.saveToCloud();
+                        },
+                    });
+                }
+                // Enable dragging on the whole row since we removed the handle
+                if (app.sortable) app.sortable.option("disabled", plan.hideDone);
+
+                let completedCount = 0;
+                let visibleCount = 0;
+
+                if (plan.daily.length === 0) {
+                    listEl.innerHTML = `<div class="text-center text-gray-300 text-xs py-3 dark:text-slate-600 italic">No tasks. Time to win the day!</div>`;
+                }
+
+                plan.daily.forEach((task, idx) => {
+                    if(task.done) completedCount++;
+                    if (plan.hideDone && task.done) return;
+                    visibleCount++;
+
+                    const div = document.createElement('div');
+                    // Compact, clean row
+                    div.className = "group flex items-center gap-3 py-2 px-2 hover:bg-gray-50 rounded-lg transition-colors cursor-default dark:hover:bg-slate-700/30";
+                    
+                    const isEditing = STATE.editingTaskIdx === idx;
+
+                    if (isEditing) {
+                        div.innerHTML = `
+                            <div class="w-5 h-5 flex items-center justify-center text-gray-300"><i class="fas fa-edit text-xs"></i></div>
+                            <input type="text" id="inline-edit-${idx}" class="flex-1 bg-white border border-blue-300 rounded px-2 py-1 text-sm outline-none dark:bg-slate-700 dark:border-blue-500 dark:text-white" value="${task.text.replace(/"/g, '&quot;')}" onblur="app.saveInlineEdit(${idx})" onkeydown="if(event.key === 'Enter') app.saveInlineEdit(${idx})">
+                        `;
+                    } else {
+                        div.innerHTML = `
+                            <!-- Checkbox -->
+                            <div onclick="app.togglePlanTask(${idx})" class="shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center cursor-pointer transition-all duration-200 ${task.done ? 'bg-yellow-400 border-yellow-400 text-white' : 'border-gray-200 text-transparent hover:border-yellow-400 bg-white dark:bg-slate-800 dark:border-slate-600'}">
+                                <i class="fas fa-check text-[10px]"></i>
+                            </div>
+                            
+                            <!-- Text -->
+                            <span class="text-sm font-medium text-gray-700 flex-1 truncate select-none ${task.done ? 'text-gray-400 line-through decoration-gray-300 dark:text-slate-600' : 'dark:text-slate-200'}" onclick="app.enableInlineEdit(${idx})" title="Tap to edit">
+                                ${task.text}
+                            </span>
+                            
+                            <!-- Simple Delete 'x' -->
+                            <button onclick="app.deletePlanTask(${idx})" class="w-6 h-6 flex items-center justify-center text-gray-300 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 dark:text-slate-600 dark:hover:text-red-400">
+                                <i class="fas fa-times text-xs"></i>
+                            </button>
+                        `;
+                    }
+                    listEl.appendChild(div);
+                });
+
+                if (plan.hideDone && visibleCount === 0 && plan.daily.length > 0) {
+                     listEl.innerHTML = `<div class="text-center text-gray-300 text-xs py-2 dark:text-slate-600 italic">All clear! (Toggle 'Show Done' to view)</div>`;
+                }
+                
+                if (STATE.editingTaskIdx !== null) { setTimeout(() => { const inp = document.getElementById(`inline-edit-${STATE.editingTaskIdx}`); if(inp) inp.focus(); }, 10); }
+
+                const total = plan.daily.length;
+                const pct = total === 0 ? 0 : Math.round((completedCount / total) * 100);
+                const progressBar = document.getElementById('daily-plan-progress');
+                const progressText = document.getElementById('daily-progress-text');
+
+                if(progressBar) {
+                    progressBar.style.width = `${pct}%`;
+                    if(pct === 100) progressBar.classList.replace('bg-yellow-400', 'bg-green-500');
+                    else progressBar.classList.replace('bg-green-500', 'bg-yellow-400');
+                }
+                if(progressText) progressText.textContent = `${completedCount}/${total}`;
+
+                // --- NEW: NETWORKING RADAR RENDER ---
+                const netList = document.getElementById('plan-networking-list');
+                if (netList) {
+                    netList.innerHTML = '';
+                    if (!plan.networking || plan.networking.length === 0) {
+                        netList.innerHTML = `<div class="w-full text-center text-xs text-gray-300 italic py-2 px-5 dark:text-slate-600">No active contacts. Add someone to start networking!</div>`;
+                    } else {
+                        // Spacer for scroll padding
+                        netList.appendChild(document.createElement('div')); 
+                        
+                        plan.networking.forEach((contact, idx) => {
+                            const statusColors = {
+                                'todo': 'bg-gray-100 text-gray-500 border-gray-200 dark:bg-slate-700 dark:text-slate-400 dark:border-slate-600',
+                                'contacted': 'bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800',
+                                'meeting': 'bg-purple-50 text-purple-600 border-purple-100 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-800',
+                                'done': 'bg-green-50 text-green-600 border-green-100 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800'
+                            };
+                            const statusLabels = { 'todo': 'To Contact', 'contacted': 'Sent', 'meeting': 'Talking', 'done': 'Done' };
+                            const s = contact.status || 'todo';
+                            const initials = contact.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+                            
+                            const card = document.createElement('div');
+                            card.className = "flex-shrink-0 w-32 bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col items-center gap-2 relative group snap-start dark:bg-slate-800 dark:border-slate-700";
+                            card.innerHTML = `
+                                <button onclick="app.deleteNetworkContact(${idx})" class="absolute top-1 right-1 text-gray-300 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-times text-[10px]"></i></button>
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center text-indigo-600 font-bold text-xs border border-white shadow-sm dark:from-indigo-900 dark:to-blue-900 dark:border-slate-600 dark:text-indigo-300">${initials}</div>
+                                <div class="text-center w-full">
+                                    <div class="font-bold text-xs text-gray-800 truncate dark:text-slate-200">${contact.name}</div>
+                                    <div class="text-[9px] text-gray-400 truncate dark:text-slate-500">${contact.role || 'Contact'}</div>
+                                </div>
+                                <button onclick="app.toggleNetworkStatus(${idx})" class="text-[9px] font-bold px-2 py-0.5 rounded-full border ${statusColors[s]} transition w-full truncate">${statusLabels[s]}</button>
+                            `;
+                            netList.appendChild(card);
+                        });
+                        // Spacer for scroll padding
+                        const spacer = document.createElement('div'); spacer.className = "w-1 shrink-0"; netList.appendChild(spacer);
+                    }
+                }
+
+                // --- NEW: PREP DOJO RENDER ---
+                const prepList = document.getElementById('plan-prep-list');
+                if (prepList) {
+                    prepList.innerHTML = '';
+                    if (!plan.prep || plan.prep.length === 0) {
+                        prepList.innerHTML = `<div class="text-center text-xs text-gray-300 italic py-2 dark:text-slate-600">Add a topic to master (e.g. React, Behavioral).</div>`;
+                    } else {
+                        plan.prep.forEach((item, idx) => {
+                            const levels = ['w-1/4 bg-red-400', 'w-2/3 bg-yellow-400', 'w-full bg-green-500'];
+                            const levelLabels = ['Novice', 'Learning', 'Mastered'];
+                            const currentLevel = item.level || 0;
+                            
+                            const row = document.createElement('div');
+                            row.className = "flex items-center gap-3";
+                            row.innerHTML = `
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-xs font-bold text-gray-700 dark:text-slate-200 truncate">${item.topic}</span>
+                                        <span class="text-[9px] font-bold text-gray-400 uppercase dark:text-slate-500">${levelLabels[currentLevel]}</span>
+                                    </div>
+                                    <div class="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden cursor-pointer dark:bg-slate-700" onclick="app.togglePrepStatus(${idx})">
+                                        <div class="h-full rounded-full transition-all duration-300 ${levels[currentLevel]}"></div>
+                                    </div>
+                                </div>
+                                <button onclick="app.deletePrepItem(${idx})" class="text-gray-300 hover:text-red-400 p-1 dark:text-slate-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>
+                            `;
+                            prepList.appendChild(row);
+                        });
+                    }
+                }
+
+                // Restore Weekly & Monthly Text
+                const weeklyEl = document.getElementById('plan-weekly-text');
+                const monthlyEl = document.getElementById('plan-monthly-text');
+                if (weeklyEl) weeklyEl.value = plan.weekly || '';
+                if (monthlyEl) monthlyEl.value = plan.monthly || '';
+                
+                // Render Top Dashboard Features
+                app.renderVelocity();
+                app.renderNorthStar();
             },
-            togglePlanTask: (idx) => { STATE.data.plan.daily[idx].done = !STATE.data.plan.daily[idx].done; app.saveToCloud(); app.renderPlan(); if(STATE.data.plan.daily[idx].done) app.toast("Nice work! 🎉"); },
-            openAddDailyTaskModal: () => { const input = document.getElementById('new-task-input'); input.value = ''; document.getElementById('modal-add-task').classList.remove('hidden'); setTimeout(() => input.focus(), 100); },
-            saveDailyTask: () => { const text = document.getElementById('new-task-input').value.trim(); if(text) { STATE.data.plan.daily.push({ id: Date.now().toString(), text, done: false }); app.saveToCloud(); app.renderPlan(); document.getElementById('modal-add-task').classList.add('hidden'); } },
-            deletePlanTask: (idx) => { app.openConfirm("Remove this daily task?", () => { STATE.data.plan.daily.splice(idx, 1); app.saveToCloud(); app.renderPlan(); }); },
+
+            // --- 🚀 VELOCITY GAUGE LOGIC ---
+            renderVelocity: () => {
+                const countEl = document.getElementById('velocity-count');
+                const needle = document.getElementById('gauge-needle');
+                const path = document.getElementById('gauge-path');
+                const label = document.getElementById('velocity-label');
+                
+                if(!countEl) return;
+
+                // Calculate 7-day sum
+                const history = STATE.data.stats.history || {};
+                let total = 0;
+                const today = new Date();
+                for(let i=0; i<7; i++) {
+                    const d = new Date(today);
+                    d.setDate(today.getDate() - i);
+                    const dStr = d.toLocaleDateString('en-CA');
+                    const entry = history[dStr];
+                    if (typeof entry === 'number') total += entry;
+                    else if (entry && typeof entry === 'object') total += (entry.total || 0);
+                }
+
+                // Update Big Number
+                countEl.textContent = total;
+                
+                // --- Gauge Animation Logic ---
+                // Scale: 0 to 30 apps per week
+                const maxApps = 30; 
+                // Cap percentage at 1.0 (100%)
+                const percentage = Math.min(total, maxApps) / maxApps;
+
+                // 1. Rotate Needle
+                // Range: -90deg (start) to 90deg (end) = 180deg span
+                const deg = -90 + (percentage * 180);
+                if(needle) needle.style.transform = `rotate(${deg}deg)`;
+
+                // 2. Fill Track
+                // The SVG arc length is approx 110 units (Radius 35 * PI = ~110 for half circle)
+                const arcLength = 110;
+                const dashVal = percentage * arcLength;
+                if(path) {
+                    path.style.strokeDasharray = `${dashVal} ${arcLength}`;
+                
+                    // Dynamic Color
+                    let color = "#3b82f6"; // Blue
+                    if (total > 5) color = "#10b981"; // Green
+                    if (total > 15) color = "#f59e0b"; // Orange
+                    if (total >= 30) color = "#9333ea"; // Purple
+                    path.style.stroke = color;
+                }
+
+                // 3. Update Label Text
+                let text = "Warming Up";
+                let labelClass = "text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300";
+
+                if (total <= 0) {
+                     text = "Idle";
+                     labelClass = "text-gray-400 bg-gray-100 dark:bg-slate-700 dark:text-slate-400";
+                } else if (total > 5) { 
+                    text = "Cruising"; 
+                    labelClass = "text-green-600 bg-green-50 dark:bg-green-900/30 dark:text-green-300";
+                }
+                if (total > 15) { 
+                    text = "High Speed"; 
+                    labelClass = "text-orange-600 bg-orange-50 dark:bg-orange-900/30 dark:text-orange-300";
+                }
+                if (total >= 30) { 
+                    text = "WARP SPEED 🚀"; 
+                    labelClass = "text-purple-600 bg-purple-50 dark:bg-purple-900/30 dark:text-purple-300";
+                }
+                
+                if(label) {
+                    label.textContent = text;
+                    label.className = `text-[9px] font-bold px-2 py-0.5 rounded-full ${labelClass}`;
+                }
+            },
+
+            // --- 🌟 NORTH STAR LOGIC ---
+            renderNorthStar: () => {
+                const ns = STATE.data.plan.northStar;
+                const coEl = document.getElementById('ns-company');
+                const roleEl = document.getElementById('ns-role');
+                const stEl = document.getElementById('ns-status');
+
+                if(coEl) coEl.textContent = ns.company || "Set Dream Job";
+                if(roleEl) roleEl.textContent = ns.role || "Tap to define target";
+                if(stEl) stEl.textContent = ns.status || "Planning";
+            },
+
+            // Updated to use Modal instead of prompt
+            openNorthStarModal: () => {
+                const ns = STATE.data.plan.northStar || { company: '', role: '', status: 'Dreaming' };
+                document.getElementById('ns-input-company').value = ns.company || '';
+                document.getElementById('ns-input-role').value = ns.role || '';
+                document.getElementById('ns-input-status').value = ns.status || 'Dreaming';
+                
+                document.getElementById('modal-northstar').classList.remove('hidden');
+            },
+
+            saveNorthStar: () => {
+                const company = document.getElementById('ns-input-company').value.trim();
+                const role = document.getElementById('ns-input-role').value.trim();
+                const status = document.getElementById('ns-input-status').value;
+                
+                if (company) {
+                    STATE.data.plan.northStar = { company, role, status };
+                    app.saveToCloud();
+                    app.renderNorthStar();
+                    document.getElementById('modal-northstar').classList.add('hidden');
+                    app.toast("North Star Updated 🌟");
+                } else {
+                    app.toast("Company name required", true);
+                }
+            },
+            
+            // Legacy wrapper removed as we are using direct modal calls now
+            // editNorthStar: () => { app.openNorthStarModal(); },
+
+            togglePlanTask: (idx) => { 
+                STATE.data.plan.daily[idx].done = !STATE.data.plan.daily[idx].done; 
+                app.saveToCloud(); 
+                app.renderPlan(); 
+                if(STATE.data.plan.daily[idx].done) app.toast("Nice work! 🎉"); 
+            },
+
+            toggleHideDone: () => {
+                STATE.data.plan.hideDone = !STATE.data.plan.hideDone;
+                app.saveToCloud();
+                app.renderPlan();
+            },
+            
+            // --- FOCUS TIMER LOGIC REMOVED ---
+            
+            // New: Inline Edit Logic
+            enableInlineEdit: (idx) => {
+                STATE.editingTaskIdx = idx;
+                app.renderPlan();
+            },
+
+            saveInlineEdit: (idx) => {
+                const inp = document.getElementById(`inline-edit-${idx}`);
+                if (inp) {
+                    const val = inp.value.trim();
+                    if (val) {
+                        STATE.data.plan.daily[idx].text = val;
+                        app.saveToCloud();
+                    }
+                }
+                STATE.editingTaskIdx = null;
+                app.renderPlan();
+            },
+
+            // New: Quick Add Logic
+            addQuickTask: () => {
+                const input = document.getElementById('quick-task-input');
+                const text = input.value.trim();
+                if (text) {
+                    STATE.data.plan.daily.push({ id: Date.now().toString(), text, done: false });
+                    input.value = '';
+                    app.saveToCloud();
+                    app.renderPlan();
+                    app.toast("Added");
+                }
+            },
+
+            addSuggestion: (text) => {
+                STATE.data.plan.daily.push({ id: Date.now().toString(), text, done: false });
+                app.saveToCloud();
+                app.renderPlan();
+                app.toast("Added");
+            },
+            
+            clearCompletedTasks: () => {
+                app.openConfirm("Remove all completed tasks?", () => {
+                     STATE.data.plan.daily = STATE.data.plan.daily.filter(t => !t.done);
+                     app.saveToCloud();
+                     app.renderPlan();
+                     app.toast("List cleaned up ✨");
+                });
+            },
+            
+            copyPlanText: (type) => {
+                const text = STATE.data.plan[type];
+                app.copyText(text);
+            },
+
+            // Combined Modal for Add & Edit (Legacy support / Fallback if needed, though inline handles add now)
+            openDailyTaskModal: (idx = null) => {
+                STATE.editingTaskIdx = idx; // Used for inline logic now mainly
+                if (idx === null) {
+                    // Focus quick input instead of modal
+                    document.getElementById('quick-task-input').focus();
+                } else {
+                    app.enableInlineEdit(idx);
+                }
+            },
+
+            openAddDailyTaskModal: () => { app.openDailyTaskModal(null); },
+
+            // Replaced by addQuickTask, kept for compatibility with any old buttons
+            saveDailyTask: () => { app.addQuickTask(); document.getElementById('modal-add-task').classList.add('hidden'); },
+
+            deletePlanTask: (idx) => { app.openConfirm("Remove this task?", () => { STATE.data.plan.daily.splice(idx, 1); app.saveToCloud(); app.renderPlan(); }); },
             savePlanText: (type) => { const val = document.getElementById(`plan-${type}-text`).value; STATE.data.plan[type] = val; if(app.planSaveTimeout) clearTimeout(app.planSaveTimeout); app.planSaveTimeout = setTimeout(() => { app.saveToCloud(); }, 1000); },
             processAutomationRules: () => { const now = Date.now(); let hasChanges = false; STATE.data.notes.forEach(note => { const statusToCheck = note.status === 'referral' ? 'referral-asked' : note.status; if (note.category === 'job' && statusToCheck === 'referral-asked') { const lastUpdated = note.updated || note.created; if ((now - lastUpdated) > MILLIS_PER_DAY) { note.status = 'reminder'; note.updated = now; hasChanges = true; } } }); if (hasChanges) { app.saveToCloud(); app.toast("Checked follow-ups", false); } },
             refreshUI: () => { 
@@ -1939,16 +2436,7 @@
                 app.renderProfileManageList(); 
                 app.renderQuote();
             },
-            saveToCloud: async () => { 
-                if(!STATE.user) return; 
-                try { 
-                    // Updated to use compliant path
-                    const docRef = getDocRef();
-                    await setDoc(docRef, { data: STATE.data, userId: STATE.user.uid, lastUpdated: new Date().toISOString() }); 
-                } catch (e) { 
-                    console.error('Save error:', e); 
-                } 
-            },
+            saveToCloud: async () => { if(!STATE.user) return; try { const docRef = doc(db, 'sync', STATE.syncKey); await setDoc(docRef, { data: STATE.data, userId: STATE.user.uid, lastUpdated: new Date().toISOString() }); } catch (e) { console.error('Save error:', e); } },
             saveSyncKey: () => { const newKey = document.getElementById('sync-key-input').value.trim().toUpperCase(); if(newKey && newKey !== STATE.syncKey) { STATE.syncKey = newKey; localStorage.setItem('magic_pouch_key', newKey); if(document.getElementById('sync-status-text')) document.getElementById('sync-status-text').textContent = newKey; app.setupSync(); document.getElementById('modal-sync').classList.add('hidden'); app.toast("Switched Sync Channel"); } else if(newKey === STATE.syncKey) { app.toast("Same key - already connected"); } },
             switchView: (viewName) => { STATE.currentView = viewName; const vJobs = document.getElementById('view-jobs'); const vPlan = document.getElementById('view-plan'); const vTpls = document.getElementById('view-templates'); vJobs.style.transform = 'translateX(100%)'; vPlan.style.transform = 'translateX(100%)'; vTpls.style.transform = 'translateX(100%)'; if(viewName === 'jobs') vJobs.style.transform = 'translateX(0)'; if(viewName === 'plan') vPlan.style.transform = 'translateX(0)'; if(viewName === 'templates') vTpls.style.transform = 'translateX(0)'; document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.remove('text-blue-600', 'active', 'dark:text-blue-400'); btn.classList.add('text-gray-400', 'dark:text-slate-500'); }); const navIndex = viewName === 'jobs' ? 0 : viewName === 'plan' ? 1 : 2; const activeBtn = document.querySelectorAll('.nav-btn')[navIndex]; activeBtn.classList.add('text-blue-600', 'active', 'dark:text-blue-400'); activeBtn.classList.remove('text-gray-400', 'dark:text-slate-500'); if (viewName === 'plan') app.renderPlan(); if (viewName === 'templates') app.renderTemplates(); if (viewName === 'jobs') app.renderJobs(); }
         };
