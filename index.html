@@ -809,6 +809,7 @@
 
         // Helper to get Canvas Compliant Path
         const getDocRef = () => {
+             // Map 'sync' concept to a public data room for this specific key
              // Path: artifacts/{appId}/public/data/sync_rooms/{syncKey}
              return doc(db, 'artifacts', appId, 'public', 'data', 'sync_rooms', STATE.syncKey);
         };
@@ -872,7 +873,6 @@
                 if(STATE.unsubscribe) STATE.unsubscribe();
                 
                 STATE.isSyncing = true;
-                // Updated to use compliant path
                 const docRef = getDocRef();
                 
                 STATE.unsubscribe = onSnapshot(docRef, (snap) => {
