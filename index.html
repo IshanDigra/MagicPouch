@@ -26,6 +26,10 @@
                             text: '#f1f5f9',
                             muted: '#94a3b8'
                         }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'glow': '0 0 15px rgba(59, 130, 246, 0.5)'
                     }
                 }
             }
@@ -166,40 +170,40 @@
         <!-- VIEW: INTERVIEWS (Pipeline & Prep) -->
         <div id="view-interviews" class="h-full flex flex-col absolute inset-0 bg-gray-50 transition-transform duration-300 transform translate-x-full dark:bg-slate-900">
             <!-- Pipeline Health Dashboard -->
-            <div class="bg-white px-4 py-4 border-b border-gray-100 shrink-0 dark:bg-slate-900 dark:border-slate-800 shadow-sm z-10">
+            <div class="bg-white px-4 py-3 border-b border-gray-100 shrink-0 dark:bg-slate-900 dark:border-slate-800 shadow-sm z-10">
                 
                 <!-- Visual Timeline (Horizontal Scroll) -->
-                <div id="interview-timeline" class="flex gap-2 overflow-x-auto no-scrollbar snap-x pb-4">
+                <div id="interview-timeline" class="flex gap-2 overflow-x-auto no-scrollbar snap-x pb-3">
                     <!-- Injected via JS -->
                 </div>
 
-                <!-- Stats Row -->
-                <div class="flex gap-3 overflow-x-auto no-scrollbar mb-4">
-                    <div class="flex-shrink-0 w-28 bg-blue-50 p-3 rounded-xl border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800">
-                        <div class="text-[10px] uppercase font-bold text-blue-400 mb-1">Active</div>
-                        <div class="text-2xl font-black text-blue-700 dark:text-blue-300" id="stats-int-active">0</div>
+                <!-- Stats Row - Streamlined -->
+                <div class="grid grid-cols-3 gap-2 mb-3">
+                    <div class="bg-blue-50 p-2 rounded-lg border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800 flex flex-col items-center">
+                        <div class="text-[9px] uppercase font-bold text-blue-400">Active</div>
+                        <div class="text-lg font-black text-blue-700 dark:text-blue-300 leading-none mt-0.5" id="stats-int-active">0</div>
                     </div>
-                    <div class="flex-shrink-0 w-28 bg-green-50 p-3 rounded-xl border border-green-100 dark:bg-green-900/20 dark:border-green-800">
-                        <div class="text-[10px] uppercase font-bold text-green-400 mb-1">Offers</div>
-                        <div class="text-2xl font-black text-green-700 dark:text-green-300" id="stats-int-offers">0</div>
+                    <div class="bg-emerald-50 p-2 rounded-lg border border-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-800 flex flex-col items-center">
+                        <div class="text-[9px] uppercase font-bold text-emerald-400">Offers</div>
+                        <div class="text-lg font-black text-emerald-700 dark:text-emerald-300 leading-none mt-0.5" id="stats-int-offers">0</div>
                     </div>
-                    <div class="flex-shrink-0 w-28 bg-red-50 p-3 rounded-xl border border-red-100 dark:bg-red-900/20 dark:border-red-800">
-                        <div class="text-[10px] uppercase font-bold text-red-400 mb-1">Urgent</div>
-                        <div class="text-2xl font-black text-red-700 dark:text-red-300" id="stats-int-urgent">0</div>
+                    <div class="bg-red-50 p-2 rounded-lg border border-red-100 dark:bg-red-900/20 dark:border-red-800 flex flex-col items-center">
+                        <div class="text-[9px] uppercase font-bold text-red-400">Urgent</div>
+                        <div class="text-lg font-black text-red-700 dark:text-red-300 leading-none mt-0.5" id="stats-int-urgent">0</div>
                     </div>
                 </div>
 
                 <!-- Filter Tabs -->
-                <div class="flex gap-2 overflow-x-auto no-scrollbar">
-                    <button onclick="app.filterInterviews('all')" class="int-filter-btn active px-4 py-1.5 rounded-full bg-gray-900 text-white text-xs font-bold dark:bg-white dark:text-slate-900 transition-all" data-filter="all">All</button>
-                    <button onclick="app.filterInterviews('active')" class="int-filter-btn px-4 py-1.5 rounded-full bg-gray-100 text-gray-500 text-xs font-bold dark:bg-slate-800 dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="active">Active</button>
-                    <button onclick="app.filterInterviews('offers')" class="int-filter-btn px-4 py-1.5 rounded-full bg-gray-100 text-gray-500 text-xs font-bold dark:bg-slate-800 dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="offers">Offers</button>
-                    <button onclick="app.filterInterviews('archived')" class="int-filter-btn px-4 py-1.5 rounded-full bg-gray-100 text-gray-500 text-xs font-bold dark:bg-slate-800 dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="archived">Archived</button>
+                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                    <button onclick="app.filterInterviews('all')" class="int-filter-btn active px-3 py-1.5 rounded-lg bg-gray-800 text-white text-[10px] font-bold dark:bg-white dark:text-slate-900 transition-all shadow-sm" data-filter="all">All</button>
+                    <button onclick="app.filterInterviews('active')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-slate-800 dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="active">Active</button>
+                    <button onclick="app.filterInterviews('offers')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-slate-800 dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="offers">Offers</button>
+                    <button onclick="app.filterInterviews('archived')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-slate-800 dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="archived">Archived</button>
                 </div>
             </div>
 
             <!-- List Container -->
-            <div id="interviews-list" class="flex-1 overflow-y-auto p-4 space-y-4 safe-pb pb-24">
+            <div id="interviews-list" class="flex-1 overflow-y-auto p-4 space-y-3 safe-pb pb-24">
                 <!-- Interview Cards Injected Here -->
             </div>
 
@@ -1045,19 +1049,6 @@
         </div>
     </div>
     
-    <!-- NEW: HISTORY LOG MODAL -->
-    <div id="modal-history" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-sm" onclick="if(event.target === this) this.classList.add('hidden')">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-5 shadow-2xl flex flex-col max-h-[80vh] dark:bg-slate-900 dark:border dark:border-slate-700">
-             <div class="flex justify-between items-center mb-4 shrink-0">
-                <h3 class="font-bold text-lg text-gray-800 dark:text-white">Activity Log</h3>
-                <button onclick="document.getElementById('modal-history').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-400"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="history-list-content" class="overflow-y-auto custom-scrollbar space-y-3">
-                <!-- Injected via JS -->
-            </div>
-        </div>
-    </div>
-
     <!-- Toast -->
     <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-900/90 text-white px-5 py-2.5 rounded-full shadow-xl z-[60] hidden flex items-center gap-2 text-sm font-medium transition-opacity dark:bg-white/90 dark:text-gray-900">
         <i class="fas fa-check-circle text-green-400 dark:text-green-600"></i> <span id="toast-msg">Copied!</span>
@@ -1145,19 +1136,6 @@
         const getDocRef = () => {
              // Standard path for direct deployment
              return doc(db, 'sync', STATE.syncKey);
-        };
-
-        const toICSDate = (dateStr) => {
-            const d = new Date(dateStr);
-            // Simple approach for local time to ICS format (YYYYMMDDTHHMMSS)
-            // Note: This does not handle timezones perfectly but suffices for "add to calendar"
-            const pad = (n) => n < 10 ? '0'+n : n;
-            return d.getFullYear() +
-                   pad(d.getMonth()+1) +
-                   pad(d.getDate()) + 'T' +
-                   pad(d.getHours()) +
-                   pad(d.getMinutes()) +
-                   pad(d.getSeconds());
         };
 
         window.app = {
@@ -1992,13 +1970,13 @@
                     
                     const el = document.createElement('div');
                     // Added active:scale-95 for touch feedback
-                    el.className = `flex-shrink-0 w-16 h-20 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all snap-start cursor-pointer active:scale-95 ${bgClass}`;
+                    el.className = `flex-shrink-0 w-14 h-16 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all snap-start cursor-pointer active:scale-95 ${bgClass}`;
                     el.onclick = () => app.openDaySummary(isoDate);
                     
                     // Dot indicators
                     let dotsHtml = '';
                     if(hasEvent) {
-                        dotsHtml = `<div class="flex gap-0.5 mt-1">`;
+                        dotsHtml = `<div class="flex gap-0.5 mt-0.5">`;
                         // Limit dots to 3 to prevent overflow
                         dailyInts.slice(0, 3).forEach(int => {
                             let dotColor = "bg-indigo-400";
@@ -2008,19 +1986,19 @@
                             const diffH = (new Date(int.deadline) - now) / 36e5;
                             if(diffH < 24 && diffH > 0 && !isToday) dotColor = "bg-red-500"; 
                             
-                            dotsHtml += `<div class="w-1.5 h-1.5 rounded-full ${dotColor}"></div>`;
+                            dotsHtml += `<div class="w-1 h-1 rounded-full ${dotColor}"></div>`;
                         });
                          if(dailyInts.length > 3) {
-                             dotsHtml += `<div class="w-1.5 h-1.5 rounded-full ${isToday ? 'bg-white' : 'bg-gray-300'} opacity-50"></div>`;
+                             dotsHtml += `<div class="w-1 h-1 rounded-full ${isToday ? 'bg-white' : 'bg-gray-300'} opacity-50"></div>`;
                          }
                         dotsHtml += `</div>`;
                     } else {
-                         dotsHtml = `<div class="w-1.5 h-1.5 rounded-full bg-transparent mt-1"></div>`; // spacer
+                         dotsHtml = `<div class="w-1 h-1 rounded-full bg-transparent mt-0.5"></div>`; // spacer
                     }
 
                     el.innerHTML = `
-                        <span class="text-[10px] font-bold uppercase tracking-wide opacity-80">${dayName}</span>
-                        <span class="text-xl font-black ${dateClass}">${dayNum}</span>
+                        <span class="text-[9px] font-bold uppercase tracking-wide opacity-80">${dayName}</span>
+                        <span class="text-base font-black ${dateClass}">${dayNum}</span>
                         ${dotsHtml}
                     `;
                     container.appendChild(el);
@@ -2093,49 +2071,6 @@
                     modal.classList.add('hidden');
                 }, 300); // Match CSS transition duration
             },
-            
-            // New: Open History Modal from Card
-            openHistoryModal: (id) => {
-                 const modal = document.getElementById('modal-history');
-                 const list = document.getElementById('history-list-content');
-                 const item = STATE.data.notes.find(n => n.id === id);
-                 
-                 if (!item || !item.history || item.history.length === 0) {
-                     list.innerHTML = `<div class="text-center text-gray-400 py-6 italic text-sm">No history recorded yet.</div>`;
-                 } else {
-                     list.innerHTML = '';
-                     // Sort by date desc
-                     const sortedHist = [...item.history].sort((a,b) => b.date - a.date);
-                     sortedHist.forEach(h => {
-                        const d = new Date(h.date);
-                        // Format: 14/02/2026 12:58 PM
-                        const dateStr = d.toLocaleDateString('en-GB') + ' ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-                        const div = document.createElement('div');
-                        div.className = "flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 dark:bg-slate-800 dark:border-slate-700";
-                        
-                        let icon = '<i class="fas fa-circle text-[8px] text-gray-400 mt-1.5"></i>';
-                        let titleClass = "text-gray-700 dark:text-slate-300";
-                        
-                        if (h.completed) {
-                            icon = '<i class="fas fa-check-circle text-green-500 mt-0.5"></i>';
-                            titleClass = "text-green-700 dark:text-green-400";
-                        } else if (h.notes && h.notes.includes("Moved to")) {
-                            icon = '<i class="fas fa-arrow-circle-right text-indigo-500 mt-0.5"></i>';
-                            titleClass = "text-indigo-700 dark:text-indigo-400";
-                        }
-
-                        div.innerHTML = `
-                            <div class="shrink-0 pt-0.5">${icon}</div>
-                            <div>
-                                <div class="font-bold text-sm ${titleClass}">${h.notes || h.status}</div>
-                                <div class="text-[10px] text-gray-400 font-mono mt-0.5 dark:text-slate-500">${dateStr}</div>
-                            </div>
-                        `;
-                        list.appendChild(div);
-                     });
-                 }
-                 modal.classList.remove('hidden');
-            },
 
             renderInterviews: (filter = 'all', searchQuery = '') => {
                 const list = document.getElementById('interviews-list');
@@ -2191,153 +2126,118 @@
                     if (aUrgent !== bUrgent) return aUrgent - bUrgent;
                     return (b.updated || b.created) - (a.updated || a.created);
                 });
+                
+                // --- NEW: Dynamic Theme Helper ---
+                const getStageTheme = (status) => {
+                    switch (status) {
+                        case 'Test Received': return { border: 'border-indigo-500', bg: 'bg-indigo-50', text: 'text-indigo-700', badge: 'bg-indigo-100 text-indigo-700', icon: 'fa-laptop-code' };
+                        case 'HR Screen': return { border: 'border-blue-500', bg: 'bg-blue-50', text: 'text-blue-700', badge: 'bg-blue-100 text-blue-700', icon: 'fa-phone-alt' };
+                        case 'Technical': return { border: 'border-purple-500', bg: 'bg-purple-50', text: 'text-purple-700', badge: 'bg-purple-100 text-purple-700', icon: 'fa-code' };
+                        case 'Final Round': return { border: 'border-orange-500', bg: 'bg-orange-50', text: 'text-orange-700', badge: 'bg-orange-100 text-orange-700', icon: 'fa-user-tie' };
+                        case 'Offer': return { border: 'border-emerald-500', bg: 'bg-emerald-50', text: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-700', icon: 'fa-gift' };
+                        case 'Rejected': return { border: 'border-red-400', bg: 'bg-red-50', text: 'text-red-700', badge: 'bg-red-100 text-red-700', icon: 'fa-times-circle' };
+                        case 'Ghosted': return { border: 'border-gray-400', bg: 'bg-gray-50', text: 'text-gray-700', badge: 'bg-gray-200 text-gray-500', icon: 'fa-ghost' };
+                        case 'Follow Up': return { border: 'border-yellow-500', bg: 'bg-yellow-50', text: 'text-yellow-700', badge: 'bg-yellow-100 text-yellow-700', icon: 'fa-clock' };
+                        default: return { border: 'border-gray-200', bg: 'bg-gray-50', text: 'text-gray-700', badge: 'bg-gray-100 text-gray-600', icon: 'fa-circle' };
+                    }
+                };
 
                 interviews.forEach(interview => {
                     const el = document.createElement('div');
+                    const theme = getStageTheme(interview.status);
                     
-                    // Progress Calculation
-                    const stageMap = {
-                        'Test Received': 10, 'HR Screen': 25, 'Technical': 50,
-                        'Final Round': 85, 'Offer': 100, 'Rejected': 0, 'Ghosted': 0
-                    };
-                    const progress = stageMap[interview.status] || 0;
-                    
-                    // Colors & Visuals
-                    let barColor = "bg-blue-500";
-                    if (progress === 100) barColor = "bg-green-500";
-                    if (progress === 0) barColor = "bg-gray-300";
-
-                    // Map Status to Icon (Since Action Type is removed)
-                    let actionIcon = "fa-clock";
-                    if (interview.status === 'Test Received') actionIcon = "fa-laptop-code";
-                    else if (interview.status === 'HR Screen') actionIcon = "fa-phone-alt";
-                    else if (interview.status === 'Technical') actionIcon = "fa-code";
-                    else if (interview.status === 'Final Round') actionIcon = "fa-user-tie";
-                    else if (interview.status === 'Offer') actionIcon = "fa-gift";
-                    else if (interview.status === 'Rejected') actionIcon = "fa-times-circle";
-
-                    // Deadline Logic
-                    let deadlineHtml = '';
-                    let borderClass = 'border-gray-100 dark:border-slate-700';
-                    let urgencyGlow = '';
-                    
+                    // Deadline Logic - Simplified Badge
+                    let deadlineBadge = '';
                     let showCalButton = false;
 
                     if (interview.stageCompleted) {
-                         // COMPLETED STATE
-                         deadlineHtml = `<div class="flex items-center gap-1 text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded dark:bg-green-900/30 dark:text-green-400 w-full justify-center mt-2"><i class="fas fa-check-circle"></i> COMPLETED</div>`;
-                         borderClass = "border-green-200 border-l-4 border-l-green-500 dark:border-green-800";
+                         deadlineBadge = `<span class="flex items-center gap-1 text-[10px] font-bold text-green-600 dark:text-green-400"><i class="fas fa-check-circle"></i> Done</span>`;
                     } else if (interview.deadline && !['Offer', 'Rejected', 'Ghosted'].includes(interview.status)) {
                         showCalButton = true;
                         const deadlineDate = new Date(interview.deadline);
                         const diffMs = deadlineDate.getTime() - now;
                         const diffHours = diffMs / (1000 * 60 * 60);
-                        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+                        
+                        let dateColor = "bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-slate-300";
+                        let animateClass = "";
                         
                         if (diffMs > 0) {
-                            if (diffHours < 24) {
-                                // CRITICAL < 24h
-                                deadlineHtml = `<div class="flex items-center gap-1.5 text-xs font-black text-red-600 animate-pulse bg-red-50 px-2 py-1 rounded dark:bg-red-900/30 dark:text-red-400"><i class="fas fa-hourglass-half"></i> ${Math.max(0, Math.floor(diffHours))}h LEFT</div>`;
-                                borderClass = "border-red-400 border-l-4 border-l-red-500 dark:border-red-600";
-                                urgencyGlow = "shadow-[0_0_15px_rgba(239,68,68,0.15)]";
-                            } else if (diffHours < 72) {
-                                // URGENT < 3 days
-                                deadlineHtml = `<div class="flex items-center gap-1.5 text-xs font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded dark:bg-orange-900/30 dark:text-orange-400"><i class="fas fa-clock"></i> ${diffDays} days</div>`;
-                                borderClass = "border-orange-200 border-l-4 border-l-orange-400 dark:border-orange-800";
-                            } else {
-                                // Normal
-                                deadlineHtml = `<div class="text-[10px] font-medium text-gray-400 dark:text-slate-500">Due: ${deadlineDate.toLocaleDateString()}</div>`;
+                            if (diffHours < 24) { 
+                                dateColor = "bg-red-100 text-red-600 animate-pulse dark:bg-red-900/40 dark:text-red-400"; 
+                            } else if (diffHours < 72) { 
+                                dateColor = "bg-orange-100 text-orange-600 dark:bg-orange-900/40 dark:text-orange-400"; 
                             }
                         } else {
-                             deadlineHtml = `<div class="text-[10px] font-bold text-gray-400">Deadline Passed</div>`;
+                            dateColor = "bg-gray-200 text-gray-400 dark:bg-slate-800 dark:text-slate-500";
                         }
+                        
+                        // Calendar Leaf Visual
+                        const month = deadlineDate.toLocaleDateString('en-US', {month:'short'}).toUpperCase();
+                        const day = deadlineDate.getDate();
+                        const time = deadlineDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+                        deadlineBadge = `
+                            <div class="flex flex-col items-center justify-center w-10 h-10 rounded-lg ${dateColor} border border-white/10 shadow-sm shrink-0">
+                                <span class="text-[8px] font-bold leading-none">${month}</span>
+                                <span class="text-sm font-bold leading-none">${day}</span>
+                            </div>
+                        `;
                     }
 
                     // Priority Star
-                    const starHtml = interview.priority ? `<i class="fas fa-star text-yellow-400 text-sm drop-shadow-sm ml-2" title="High Priority"></i>` : '';
+                    const starHtml = interview.priority ? `<i class="fas fa-star text-yellow-400 text-xs ml-1" title="High Priority"></i>` : '';
 
-                    // Cal Button
-                    const calBtn = showCalButton ? 
-                        `<button onclick="app.downloadICS('${interview.id}')" class="text-blue-400 hover:text-blue-600 p-1 dark:text-blue-500 dark:hover:text-blue-300" title="Add to Calendar"><i class="fas fa-calendar-plus text-xs"></i></button>` : '';
-
-                    // Action Button Logic
-                    let actionButtonHtml = '';
+                    // Action Buttons (Streamlined Row)
+                    let actionArea = '';
+                    
                     if (interview.stageCompleted) {
-                         actionButtonHtml = `
-                            <div class="mt-3 grid grid-cols-2 gap-2">
-                                <button onclick="app.promoteStage('${interview.id}')" class="col-span-2 bg-indigo-600 text-white text-xs font-bold py-2 rounded-lg shadow-sm hover:bg-indigo-700 active:scale-95 transition">
-                                    Next Stage <i class="fas fa-arrow-right ml-1"></i>
-                                </button>
-                                <button onclick="app.setFollowUp('${interview.id}')" class="bg-orange-50 text-orange-600 border border-orange-100 text-[10px] font-bold py-1.5 rounded-lg hover:bg-orange-100 active:scale-95 transition dark:bg-orange-900/20 dark:text-orange-300 dark:border-orange-800">
-                                    Follow Up
-                                </button>
-                                <button onclick="app.setGhosted('${interview.id}')" class="bg-gray-50 text-gray-500 border border-gray-200 text-[10px] font-bold py-1.5 rounded-lg hover:bg-gray-100 active:scale-95 transition dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700">
-                                    Ghosted
-                                </button>
-                            </div>
-                         `;
+                        actionArea = `
+                            <button onclick="app.promoteStage('${interview.id}')" class="flex-1 bg-indigo-600 text-white text-xs font-bold py-2 rounded-lg hover:bg-indigo-700 active:scale-95 transition shadow-sm">
+                                Next Stage <i class="fas fa-arrow-right ml-1"></i>
+                            </button>
+                        `;
                     } else if (!['Offer', 'Rejected', 'Ghosted'].includes(interview.status)) {
-                         actionButtonHtml = `
-                            <button onclick="app.markStageComplete('${interview.id}')" class="mt-3 w-full bg-white border border-green-200 text-green-600 text-xs font-bold py-2 rounded-lg hover:bg-green-50 active:scale-95 transition shadow-sm flex items-center justify-center gap-1.5 dark:bg-slate-800 dark:border-green-900 dark:text-green-400">
+                        actionArea = `
+                            <button onclick="app.markStageComplete('${interview.id}')" class="flex-1 bg-white border border-${theme.border.replace('border-', '')} ${theme.text} text-xs font-bold py-2 rounded-lg hover:bg-gray-50 active:scale-95 transition flex items-center justify-center gap-1.5 dark:bg-slate-800 dark:border-slate-600 dark:${theme.text}">
                                 <i class="fas fa-check"></i> Mark Done
                             </button>
-                         `;
+                        `;
+                    } else {
+                        // Archived states
+                        actionArea = `<div class="text-[10px] text-gray-400 italic flex-1 text-center">Process Ended</div>`;
                     }
 
-
-                    el.className = `p-4 rounded-xl shadow-sm border ${borderClass} bg-white relative active:scale-[0.99] transition dark:bg-dark-card flex flex-col gap-3 ${urgencyGlow}`;
+                    // COMPACT CARD LAYOUT
+                    el.className = `relative bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm border-l-4 ${theme.border} mb-3 active:scale-[0.99] transition`;
                     el.innerHTML = `
-                        <!-- Header -->
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="font-bold text-lg text-gray-800 leading-tight dark:text-white flex items-center">
-                                    ${interview.company} ${starHtml}
-                                </h3>
-                                <p class="text-xs text-gray-500 font-medium dark:text-slate-400">${interview.role}</p>
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="min-w-0 pr-2">
+                                <h3 class="font-bold text-gray-800 dark:text-white text-base truncate leading-tight">${interview.company} ${starHtml}</h3>
+                                <p class="text-xs text-gray-500 dark:text-slate-400 font-medium truncate">${interview.role}</p>
                             </div>
-                            <div class="flex gap-1 items-center">
-                                ${calBtn}
-                                <button onclick="app.openHistoryModal('${interview.id}')" class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 transition dark:bg-slate-800 dark:text-slate-500 dark:hover:text-indigo-400" title="History"><i class="fas fa-history text-xs"></i></button>
-                                <button onclick="app.openInterviewModal('${interview.id}')" class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition dark:bg-slate-800 dark:text-slate-500 dark:hover:text-blue-400"><i class="fas fa-pen text-xs"></i></button>
-                                <button onclick="app.deleteNote('${interview.id}')" class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition dark:bg-slate-800 dark:text-slate-500 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>
+                            <div class="flex items-start gap-2">
+                                ${deadlineBadge}
                             </div>
                         </div>
 
-                        <!-- Action Block (Uses Status now) -->
-                        <div class="flex items-center justify-between bg-gray-50 p-2.5 rounded-lg border border-gray-100 dark:bg-slate-800 dark:border-slate-700">
-                            <div class="flex items-center gap-2.5 overflow-hidden">
-                                <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 dark:bg-indigo-900/30 dark:text-indigo-400">
-                                    <i class="fas ${actionIcon} text-sm"></i>
-                                </div>
-                                <div class="truncate">
-                                    <div class="text-[9px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-500">STAGE</div>
-                                    <div class="text-sm font-bold text-gray-800 dark:text-slate-200 truncate">${interview.status}</div>
-                                </div>
-                            </div>
-                            ${deadlineHtml && !interview.stageCompleted ? deadlineHtml : ''}
+                        <!-- Badge Row -->
+                        <div class="flex items-center gap-2 mb-3">
+                             <div class="flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wide ${theme.badge} dark:bg-opacity-20">
+                                <i class="fas ${theme.icon}"></i> ${interview.status}
+                             </div>
+                             ${interview.deadline ? `<div class="text-[10px] font-mono text-gray-400 dark:text-slate-500">${new Date(interview.deadline).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>` : ''}
                         </div>
                         
-                        ${interview.stageCompleted ? `<div class="text-[10px] text-center text-gray-400 italic mt-[-5px] dark:text-slate-500">Waiting for response...</div>` : ''}
-
-                        <!-- Footer: Progress & Notes Toggle -->
-                        <div>
-                            <div class="flex justify-between items-end mb-1.5">
-                                <span class="text-[10px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded dark:bg-slate-700 dark:text-slate-300">${interview.status}</span>
-                                <span class="text-[9px] font-bold text-gray-300 dark:text-slate-600">${progress}%</span>
+                        <!-- Actions Footer -->
+                        <div class="flex items-center gap-2 pt-2 border-t border-gray-50 dark:border-slate-700/50">
+                            <!-- Utilities -->
+                            <div class="flex gap-1">
+                                <button onclick="app.openInterviewModal('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-blue-500 transition dark:hover:bg-slate-700"><i class="fas fa-pen text-xs"></i></button>
+                                <button onclick="app.openHistoryModal('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-indigo-500 transition dark:hover:bg-slate-700"><i class="fas fa-history text-xs"></i></button>
+                                ${showCalButton ? `<button onclick="app.downloadICS('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-green-500 transition dark:hover:bg-slate-700"><i class="fas fa-calendar-plus text-xs"></i></button>` : ''}
                             </div>
-                            <div class="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden dark:bg-slate-700">
-                                <div class="h-full ${barColor} rounded-full transition-all duration-500" style="width: ${progress}%"></div>
-                            </div>
-                            
-                            ${actionButtonHtml}
-
-                            <!-- Notes Preview Button -->
-                            ${interview.notes ? 
-                                `<div class="mt-3 pt-2 border-t border-gray-50 flex items-start gap-2 cursor-pointer group dark:border-slate-700" onclick="app.openInterviewModal('${interview.id}')">
-                                    <i class="fas fa-sticky-note text-gray-300 mt-0.5 group-hover:text-blue-400 transition dark:text-slate-600"></i>
-                                    <p class="text-xs text-gray-400 line-clamp-1 group-hover:text-gray-600 transition dark:text-slate-500 dark:group-hover:text-slate-300">${interview.notes}</p>
-                                </div>` : ''
-                            }
+                            <!-- Primary Action -->
+                            ${actionArea}
                         </div>
                     `;
                     list.appendChild(el);
@@ -2414,10 +2314,10 @@
                 STATE.interviewFilter = type;
                 document.querySelectorAll('.int-filter-btn').forEach(btn => {
                     if (btn.dataset.filter === type) {
-                        btn.classList.add('bg-gray-900', 'text-white', 'dark:bg-white', 'dark:text-slate-900');
+                        btn.classList.add('bg-gray-800', 'text-white', 'dark:bg-white', 'dark:text-slate-900', 'shadow-sm');
                         btn.classList.remove('bg-gray-100', 'text-gray-500', 'dark:bg-slate-800', 'dark:text-slate-400');
                     } else {
-                        btn.classList.remove('bg-gray-900', 'text-white', 'dark:bg-white', 'dark:text-slate-900');
+                        btn.classList.remove('bg-gray-800', 'text-white', 'dark:bg-white', 'dark:text-slate-900', 'shadow-sm');
                         btn.classList.add('bg-gray-100', 'text-gray-500', 'dark:bg-slate-800', 'dark:text-slate-400');
                     }
                 });
