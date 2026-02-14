@@ -2900,6 +2900,7 @@
                 if (!app.sortable && listEl) {
                     app.sortable = new Sortable(listEl, {
                         animation: 150,
+                        handle: '.drag-handle', // Only allow dragging via the handle
                         ghostClass: 'opacity-50',
                         onEnd: function (evt) {
                              const item = STATE.data.plan.daily.splice(evt.oldIndex, 1)[0];
@@ -2936,6 +2937,11 @@
                         `;
                     } else {
                         div.innerHTML = `
+                            <!-- Drag Handle -->
+                            <div class="drag-handle shrink-0 w-6 h-6 flex items-center justify-center cursor-grab touch-none text-gray-300 hover:text-gray-500 active:text-blue-500 transition-colors dark:text-slate-600 dark:hover:text-slate-400">
+                                <i class="fas fa-grip-vertical text-xs"></i>
+                            </div>
+
                             <!-- Checkbox -->
                             <div onclick="app.togglePlanTask(${idx})" class="shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center cursor-pointer transition-all duration-200 ${task.done ? 'bg-yellow-400 border-yellow-400 text-white' : 'border-gray-200 text-transparent hover:border-yellow-400 bg-white dark:bg-slate-800 dark:border-slate-600'}">
                                 <i class="fas fa-check text-[10px]"></i>
