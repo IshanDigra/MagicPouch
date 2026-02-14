@@ -64,6 +64,12 @@
         .toggle-checkbox:checked + .toggle-label { background-color: #3b82f6; }
         .rotate-90 { transform: rotate(90deg); }
         .transition-transform { transition-property: transform; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+
+        /* Bottom Sheet Animation */
+        .bottom-sheet-enter { transform: translateY(100%); }
+        .bottom-sheet-enter-active { transform: translateY(0); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .bottom-sheet-exit { transform: translateY(0); }
+        .bottom-sheet-exit-active { transform: translateY(100%); transition: transform 0.2s ease-in; }
     </style>
 </head>
 <body class="bg-gray-50 h-[100dvh] flex flex-col text-gray-800 font-sans overflow-hidden dark:bg-slate-900 dark:text-slate-100 transition-colors duration-200">
@@ -97,7 +103,7 @@
             <!-- SEARCH BAR: Flexible width -->
             <div class="flex-1 relative min-w-[100px]">
                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs dark:text-slate-400"></i>
-                <input type="text" id="global-search" placeholder="Search jobs..." class="w-full bg-gray-100 rounded-full py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-inner dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-500" oninput="app.handleGlobalSearch(this.value)">
+                <input type="text" id="global-search" placeholder="Search..." class="w-full bg-gray-100 rounded-full py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-inner dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-500" oninput="app.handleGlobalSearch(this.value)">
             </div>
 
             <!-- HEADER STATS BUTTONS -->
@@ -157,9 +163,54 @@
             </button>
         </div>
 
+        <!-- VIEW: INTERVIEWS (Pipeline & Prep) -->
+        <div id="view-interviews" class="h-full flex flex-col absolute inset-0 bg-gray-50 transition-transform duration-300 transform translate-x-full dark:bg-slate-900">
+            <!-- Pipeline Health Dashboard -->
+            <div class="bg-white px-4 py-4 border-b border-gray-100 shrink-0 dark:bg-slate-900 dark:border-slate-800 shadow-sm z-10">
+                
+                <!-- Visual Timeline (Horizontal Scroll) -->
+                <div id="interview-timeline" class="flex gap-2 overflow-x-auto no-scrollbar snap-x pb-4">
+                    <!-- Injected via JS -->
+                </div>
+
+                <!-- Stats Row -->
+                <div class="flex gap-3 overflow-x-auto no-scrollbar mb-4">
+                    <div class="flex-shrink-0 w-28 bg-blue-50 p-3 rounded-xl border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800">
+                        <div class="text-[10px] uppercase font-bold text-blue-400 mb-1">Active</div>
+                        <div class="text-2xl font-black text-blue-700 dark:text-blue-300" id="stats-int-active">0</div>
+                    </div>
+                    <div class="flex-shrink-0 w-28 bg-green-50 p-3 rounded-xl border border-green-100 dark:bg-green-900/20 dark:border-green-800">
+                        <div class="text-[10px] uppercase font-bold text-green-400 mb-1">Offers</div>
+                        <div class="text-2xl font-black text-green-700 dark:text-green-300" id="stats-int-offers">0</div>
+                    </div>
+                    <div class="flex-shrink-0 w-28 bg-red-50 p-3 rounded-xl border border-red-100 dark:bg-red-900/20 dark:border-red-800">
+                        <div class="text-[10px] uppercase font-bold text-red-400 mb-1">Urgent</div>
+                        <div class="text-2xl font-black text-red-700 dark:text-red-300" id="stats-int-urgent">0</div>
+                    </div>
+                </div>
+
+                <!-- Filter Tabs -->
+                <div class="flex gap-2 overflow-x-auto no-scrollbar">
+                    <button onclick="app.filterInterviews('all')" class="int-filter-btn active px-4 py-1.5 rounded-full bg-gray-900 text-white text-xs font-bold dark:bg-white dark:text-slate-900 transition-all" data-filter="all">All</button>
+                    <button onclick="app.filterInterviews('active')" class="int-filter-btn px-4 py-1.5 rounded-full bg-gray-100 text-gray-500 text-xs font-bold dark:bg-slate-800 dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="active">Active</button>
+                    <button onclick="app.filterInterviews('offers')" class="int-filter-btn px-4 py-1.5 rounded-full bg-gray-100 text-gray-500 text-xs font-bold dark:bg-slate-800 dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="offers">Offers</button>
+                    <button onclick="app.filterInterviews('archived')" class="int-filter-btn px-4 py-1.5 rounded-full bg-gray-100 text-gray-500 text-xs font-bold dark:bg-slate-800 dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="archived">Archived</button>
+                </div>
+            </div>
+
+            <!-- List Container -->
+            <div id="interviews-list" class="flex-1 overflow-y-auto p-4 space-y-4 safe-pb pb-24">
+                <!-- Interview Cards Injected Here -->
+            </div>
+
+            <!-- FAB -->
+            <button onclick="app.openInterviewModal()" class="absolute bottom-6 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg shadow-indigo-600/30 flex items-center justify-center text-2xl active:scale-90 transition z-10 hover:bg-indigo-500 dark:bg-indigo-600 dark:hover:bg-indigo-500">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+
         <!-- VIEW: TEMPLATES (Management) -->
         <div id="view-templates" class="h-full flex flex-col absolute inset-0 bg-gray-50 transition-transform duration-300 transform translate-x-full dark:bg-slate-900">
-            
             <!-- Template Header / Navigation -->
             <div class="px-4 py-3 bg-white border-b border-gray-100 shrink-0 flex flex-col gap-3 dark:bg-slate-900 dark:border-slate-800">
                 <div class="flex items-center justify-between">
@@ -347,6 +398,10 @@
             <i class="fas fa-check-double text-xl group-active:scale-90 transition"></i>
             <span class="text-[10px] font-bold">Apply</span>
         </button>
+        <button onclick="app.switchView('interviews')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500">
+            <i class="fas fa-user-tie text-xl group-active:scale-90 transition"></i>
+            <span class="text-[10px] font-bold">Interview</span>
+        </button>
         <button onclick="app.switchView('plan')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500">
             <i class="fas fa-bullseye text-xl group-active:scale-90 transition"></i>
             <span class="text-[10px] font-bold">Plan</span>
@@ -358,6 +413,112 @@
     </nav>
 
     <!-- === MODALS === -->
+    
+    <!-- NEW: DAY SUMMARY BOTTOM SHEET (Mobile Friendly) -->
+    <div id="modal-day-summary" class="fixed inset-0 z-[100] hidden flex items-end justify-center pointer-events-none">
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity opacity-0" id="modal-day-summary-bg" onclick="app.closeDaySummary()"></div>
+        <div class="bg-white w-full max-w-md rounded-t-3xl shadow-2xl transform translate-y-full transition-transform duration-300 pointer-events-auto flex flex-col max-h-[80vh] dark:bg-slate-900 dark:border-t dark:border-slate-800" id="modal-day-summary-content">
+            <div class="p-2 flex justify-center shrink-0" onclick="app.closeDaySummary()">
+                <div class="w-12 h-1.5 bg-gray-300 rounded-full dark:bg-slate-700"></div>
+            </div>
+            <div class="px-6 pb-6 pt-2 overflow-y-auto flex-1">
+                 <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-2xl text-gray-800 dark:text-white" id="day-summary-date">Today</h3>
+                    <button onclick="app.closeDaySummary()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-400"><i class="fas fa-times"></i></button>
+                </div>
+                <div id="day-summary-list" class="space-y-3">
+                    <!-- Content -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: HISTORY LOG MODAL -->
+    <div id="modal-history" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-sm" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 shadow-2xl flex flex-col max-h-[80vh] dark:bg-slate-900 dark:border dark:border-slate-700">
+             <div class="flex justify-between items-center mb-4 shrink-0">
+                <h3 class="font-bold text-lg text-gray-800 dark:text-white">Activity Log</h3>
+                <button onclick="document.getElementById('modal-history').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-400"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="history-list-content" class="overflow-y-auto custom-scrollbar space-y-3">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- UPDATED: Interview Editor Modal -->
+    <div id="modal-interview" class="fixed inset-0 bg-gray-900/40 z-[90] hidden flex items-end sm:items-center justify-center backdrop-blur-sm sm:p-4">
+        <div class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] transition-all dark:bg-slate-900 dark:border dark:border-slate-800">
+            <!-- Header -->
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 dark:bg-slate-900 dark:border-slate-800">
+                <span class="font-bold text-lg dark:text-white">Add to Pipeline</span>
+                <button onclick="document.getElementById('modal-interview').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-5">
+                
+                <!-- Priority Toggle -->
+                <div class="flex items-center justify-between bg-yellow-50 p-3 rounded-xl border border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-700/50">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 dark:bg-yellow-900/40 dark:text-yellow-400">
+                            <i class="fas fa-star text-xs"></i>
+                        </div>
+                        <div>
+                            <div class="font-bold text-sm text-yellow-800 dark:text-yellow-200">High Priority</div>
+                            <div class="text-[10px] text-yellow-600/80 dark:text-yellow-400/70">Pin to top of list</div>
+                        </div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="int-priority" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-slate-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-yellow-500"></div>
+                    </label>
+                </div>
+
+                <!-- Core Details -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Company</label>
+                        <input type="text" id="int-company" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none font-bold text-sm text-gray-800 dark:bg-slate-800 dark:text-white dark:focus:bg-slate-800" placeholder="e.g. Google">
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Role</label>
+                        <input type="text" id="int-role" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-gray-800 dark:bg-slate-800 dark:text-white dark:focus:bg-slate-800" placeholder="e.g. SDE II">
+                    </div>
+                </div>
+
+                <!-- Stage & Deadline -->
+                <div class="grid grid-cols-1 gap-3">
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Current Stage</label>
+                        <select id="int-status" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 outline-none text-sm font-bold text-gray-700 dark:bg-slate-800 dark:text-white appearance-none">
+                            <option value="Test Received">Online Test / Assignment</option>
+                            <option value="HR Screen">HR Screen</option>
+                            <option value="Technical">Technical Round</option>
+                            <option value="Final Round">Final Round</option>
+                            <option value="Offer">Offer Received</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Ghosted">Ghosted</option>
+                            <option value="Follow Up">Follow Up</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Deadline / Date (Optional)</label>
+                        <input type="datetime-local" id="int-deadline" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-gray-700 dark:bg-slate-800 dark:text-white dark:focus:bg-slate-800 dark:[color-scheme:dark]">
+                    </div>
+                </div>
+
+                <!-- Prep Notes -->
+                <div>
+                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Preparation Notes</label>
+                    <textarea id="int-notes" class="w-full h-24 p-4 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-gray-700 leading-relaxed placeholder-gray-400 resize-none dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800" placeholder="Topics to cover, system design concepts, behavioral stories..."></textarea>
+                </div>
+            </div>
+            <div class="p-6 pt-2 bg-white border-t border-gray-50 z-10 dark:bg-slate-900 dark:border-slate-800">
+                <button onclick="app.saveInterview()" class="w-full py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 hover:bg-indigo-700 active:scale-[0.98] transition text-sm">Save</button>
+            </div>
+        </div>
+    </div>
 
     <!-- NEW: QUOTE EDITOR MODAL -->
     <div id="modal-quote" class="fixed inset-0 bg-black/50 z-[90] hidden flex items-center justify-center p-6 backdrop-blur-sm">
@@ -660,7 +821,18 @@
                 <button onclick="app.closeStatusModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-slate-200"><i class="fas fa-times"></i></button>
             </div>
 
-            <!-- APPLIED SECTION (Front & Center) -->
+            <!-- 🆕 NEW: PROGRESS SECTION (The Bridge) -->
+            <div class="mb-5 bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-xl border border-indigo-100 dark:from-indigo-900/20 dark:to-purple-900/20 dark:border-indigo-800/50">
+                <h4 class="text-xs font-bold text-indigo-900 uppercase mb-2 dark:text-indigo-300 flex items-center gap-1.5">
+                    <i class="fas fa-rocket text-indigo-500"></i> Got a Response?
+                </h4>
+                <button onclick="app.promoteToInterview()" class="w-full flex items-center justify-center gap-2 p-3 rounded-lg bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 hover:scale-[1.02] active:scale-[0.98] transition font-bold text-sm">
+                    <span>Move to Interview / Test</span>
+                    <i class="fas fa-arrow-right text-xs opacity-70"></i>
+                </button>
+            </div>
+
+            <!-- APPLIED SECTION -->
             <div class="mb-5">
                 <h4 class="text-xs font-bold text-gray-400 uppercase mb-3 dark:text-slate-500">Applied via...</h4>
                 <div class="grid grid-cols-2 gap-3">
@@ -776,12 +948,16 @@
                     </div>
                     <div class="flex flex-wrap gap-2" id="quick-notes-container">
                         <!-- Chips injected by JS -->
+                        <button onclick="app.addQuickNote('Ask for Referral')" class="px-3 py-1.5 rounded-lg bg-purple-50 text-purple-600 text-xs font-bold border border-purple-100 hover:bg-purple-100 transition active:scale-95 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-800">Ask Referral</button>
+                        <button onclick="app.addQuickNote('Direct Apply')" class="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-bold border border-blue-100 hover:bg-blue-100 transition active:scale-95 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800">Direct Apply</button>
+                        <button onclick="app.addQuickNote('DM Recruiter')" class="px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-600 text-xs font-bold border border-indigo-100 hover:bg-indigo-100 transition active:scale-95 dark:bg-indigo-900/20 dark:text-indigo-300 dark:border-indigo-800">DM Recruiter</button>
+                        <button onclick="app.addQuickNote('Check Salary')" class="px-3 py-1.5 rounded-lg bg-green-50 text-green-600 text-xs font-bold border border-green-100 hover:bg-green-100 transition active:scale-95 dark:bg-green-900/20 dark:text-green-300 dark:border-green-800">Salary</button>
                     </div>
                 </div>
 
                 <!-- Notes Area -->
                 <div class="mb-2">
-                    <textarea id="job-remarks" oninput="app.renderQuickNotesChips()" class="w-full h-24 p-4 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-200 focus:bg-white transition-all outline-none text-sm text-gray-700 leading-relaxed placeholder-gray-400 resize-none dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800 dark:focus:border-slate-600" placeholder="Add custom notes here..."></textarea>
+                    <textarea id="job-remarks" class="w-full h-24 p-4 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-200 focus:bg-white transition-all outline-none text-sm text-gray-700 leading-relaxed placeholder-gray-400 resize-none dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800 dark:focus:border-slate-600" placeholder="Add custom notes here..."></textarea>
                 </div>
 
             </div>
@@ -798,7 +974,7 @@
                         Applied
                      </button>
                      <!-- Secondary Button: Save (was Later) -->
-                     <button onclick="app.saveJob()" class="flex-1 py-3.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 hover:bg-blue-700 active:scale-[0.98] transition text-xs">
+                     <button onclick="app.saveJob('pending')" class="flex-1 py-3.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 hover:bg-blue-700 active:scale-[0.98] transition text-xs">
                         Save
                      </button>
                 </div>
@@ -868,6 +1044,19 @@
             </div>
         </div>
     </div>
+    
+    <!-- NEW: HISTORY LOG MODAL -->
+    <div id="modal-history" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-sm" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-5 shadow-2xl flex flex-col max-h-[80vh] dark:bg-slate-900 dark:border dark:border-slate-700">
+             <div class="flex justify-between items-center mb-4 shrink-0">
+                <h3 class="font-bold text-lg text-gray-800 dark:text-white">Activity Log</h3>
+                <button onclick="document.getElementById('modal-history').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-400"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="history-list-content" class="overflow-y-auto custom-scrollbar space-y-3">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
 
     <!-- Toast -->
     <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-900/90 text-white px-5 py-2.5 rounded-full shadow-xl z-[60] hidden flex items-center gap-2 text-sm font-medium transition-opacity dark:bg-white/90 dark:text-gray-900">
@@ -928,7 +1117,8 @@
             templateFolder: null,
             renameTargetFolder: null,
             currentConfirmAction: null,
-            editingTaskIdx: null, 
+            editingTaskIdx: null,
+            interviewFilter: 'all', 
 
             openFolders: savedFolders ? new Set(JSON.parse(savedFolders)) : new Set(),
             hasInitializedFolders: !!savedFolders,
@@ -955,6 +1145,19 @@
         const getDocRef = () => {
              // Standard path for direct deployment
              return doc(db, 'sync', STATE.syncKey);
+        };
+
+        const toICSDate = (dateStr) => {
+            const d = new Date(dateStr);
+            // Simple approach for local time to ICS format (YYYYMMDDTHHMMSS)
+            // Note: This does not handle timezones perfectly but suffices for "add to calendar"
+            const pad = (n) => n < 10 ? '0'+n : n;
+            return d.getFullYear() +
+                   pad(d.getMonth()+1) +
+                   pad(d.getDate()) + 'T' +
+                   pad(d.getHours()) +
+                   pad(d.getMinutes()) +
+                   pad(d.getSeconds());
         };
 
         window.app = {
@@ -1629,6 +1832,38 @@
                 app.closeStatusModal();
             },
             
+            promoteToInterview: () => {
+                if(STATE.targetStatusId) {
+                    const note = STATE.data.notes.find(n => n.id === STATE.targetStatusId);
+                    if(note) {
+                        // Switch type
+                        note.category = 'interview';
+                        note.company = note.title; // Map title to company
+                        note.status = 'Test Received';
+                        note.updated = Date.now();
+                        
+                        // Initial history entry
+                        if (!note.history) note.history = [];
+                        note.history.push({
+                            status: "Test Received",
+                            date: Date.now(),
+                            completed: false,
+                            notes: "Started Interview Process"
+                        });
+                        
+                        app.saveToCloud();
+                        app.closeStatusModal();
+                        
+                        // Switch view and open modal for details
+                        app.switchView('interviews');
+                        setTimeout(() => {
+                            app.openInterviewModal(note.id);
+                            app.toast("Moved to Interview Pipeline 🚀");
+                        }, 300);
+                    }
+                }
+            },
+            
             deleteNote: (id) => {
                 app.openConfirm("Delete this item?", () => {
                     const noteIndex = STATE.data.notes.findIndex(n => n.id === id);
@@ -1683,6 +1918,664 @@
                     // Save new configuration to local storage
                     localStorage.setItem('magic_pouch_folders', JSON.stringify([...STATE.openFolders]));
                 }
+            },
+
+            // --- INTERVIEW LOGIC ---
+            
+            downloadICS: (id) => {
+                const item = STATE.data.notes.find(n => n.id === id);
+                if(!item || !item.deadline) return;
+                
+                const start = new Date(item.deadline);
+                // Add 1 hour duration by default
+                const end = new Date(start.getTime() + (60 * 60 * 1000));
+                
+                const formatTime = (date) => {
+                     return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+                };
+
+                const icsContent = [
+                    'BEGIN:VCALENDAR',
+                    'VERSION:2.0',
+                    'BEGIN:VEVENT',
+                    `SUMMARY:Interview: ${item.company} (${item.role})`,
+                    `DTSTART:${formatTime(start)}`,
+                    `DTEND:${formatTime(end)}`,
+                    `DESCRIPTION:Stage: ${item.status}\\nNotes: ${item.notes || ''}`,
+                    'END:VEVENT',
+                    'END:VCALENDAR'
+                ].join('\r\n');
+
+                const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `interview_${item.company.replace(/\s/g,'_')}.ics`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                app.toast("Calendar Event Downloaded");
+            },
+
+            // NEW: Interactive Timeline Rendering
+            renderTimeline: () => {
+                const container = document.getElementById('interview-timeline');
+                if(!container) return;
+                container.innerHTML = '';
+                
+                const today = new Date();
+                const startToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+                const interviews = (STATE.data.notes || []).filter(n => n.category === 'interview' && n.deadline);
+
+                for(let i=0; i<7; i++) {
+                    const d = new Date(startToday);
+                    d.setDate(startToday.getDate() + i);
+                    const isoDate = d.toISOString();
+                    
+                    // Find interviews for this day
+                    const dailyInts = interviews.filter(n => {
+                        const nDate = new Date(n.deadline);
+                        return nDate.getDate() === d.getDate() && 
+                               nDate.getMonth() === d.getMonth() && 
+                               nDate.getFullYear() === d.getFullYear();
+                    });
+                    
+                    const isToday = i === 0;
+                    const hasEvent = dailyInts.length > 0;
+                    
+                    // Styling
+                    let bgClass = isToday ? "bg-indigo-600 text-white shadow-md ring-2 ring-indigo-200 dark:ring-indigo-900" : "bg-white text-gray-500 border border-gray-100 hover:border-indigo-200 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600";
+                    let dateClass = isToday ? "text-white" : "text-gray-800 dark:text-white";
+                    
+                    const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
+                    const dayNum = d.getDate();
+                    
+                    const el = document.createElement('div');
+                    // Added active:scale-95 for touch feedback
+                    el.className = `flex-shrink-0 w-16 h-20 rounded-2xl flex flex-col items-center justify-center gap-1 transition-all snap-start cursor-pointer active:scale-95 ${bgClass}`;
+                    el.onclick = () => app.openDaySummary(isoDate);
+                    
+                    // Dot indicators
+                    let dotsHtml = '';
+                    if(hasEvent) {
+                        dotsHtml = `<div class="flex gap-0.5 mt-1">`;
+                        // Limit dots to 3 to prevent overflow
+                        dailyInts.slice(0, 3).forEach(int => {
+                            let dotColor = "bg-indigo-400";
+                            if(isToday) dotColor = "bg-white";
+                            // Urgent check
+                            const now = new Date();
+                            const diffH = (new Date(int.deadline) - now) / 36e5;
+                            if(diffH < 24 && diffH > 0 && !isToday) dotColor = "bg-red-500"; 
+                            
+                            dotsHtml += `<div class="w-1.5 h-1.5 rounded-full ${dotColor}"></div>`;
+                        });
+                         if(dailyInts.length > 3) {
+                             dotsHtml += `<div class="w-1.5 h-1.5 rounded-full ${isToday ? 'bg-white' : 'bg-gray-300'} opacity-50"></div>`;
+                         }
+                        dotsHtml += `</div>`;
+                    } else {
+                         dotsHtml = `<div class="w-1.5 h-1.5 rounded-full bg-transparent mt-1"></div>`; // spacer
+                    }
+
+                    el.innerHTML = `
+                        <span class="text-[10px] font-bold uppercase tracking-wide opacity-80">${dayName}</span>
+                        <span class="text-xl font-black ${dateClass}">${dayNum}</span>
+                        ${dotsHtml}
+                    `;
+                    container.appendChild(el);
+                }
+            },
+            
+            // NEW: Day Summary Logic
+            openDaySummary: (isoDate) => {
+                const date = new Date(isoDate);
+                const list = document.getElementById('day-summary-list');
+                const title = document.getElementById('day-summary-date');
+                const modal = document.getElementById('modal-day-summary');
+                const bg = document.getElementById('modal-day-summary-bg');
+                const content = document.getElementById('modal-day-summary-content');
+
+                // Set Title
+                const isToday = new Date().toDateString() === date.toDateString();
+                title.textContent = isToday ? "Today's Agenda" : date.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric' });
+
+                // Find Events
+                const events = (STATE.data.notes || []).filter(n => {
+                    if (n.category !== 'interview' || !n.deadline) return false;
+                    const d = new Date(n.deadline);
+                    return d.getDate() === date.getDate() && 
+                           d.getMonth() === date.getMonth() && 
+                           d.getFullYear() === date.getFullYear();
+                });
+
+                list.innerHTML = '';
+                if (events.length === 0) {
+                    list.innerHTML = `<div class="text-center text-gray-400 py-8 italic dark:text-slate-500">Nothing scheduled for this day.<br>Enjoy the focus time! ☕</div>`;
+                } else {
+                    events.sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
+                    events.forEach(evt => {
+                        const timeStr = new Date(evt.deadline).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        const div = document.createElement('div');
+                        div.className = "bg-gray-50 p-4 rounded-xl border border-gray-100 flex items-center justify-between dark:bg-slate-800 dark:border-slate-700";
+                        div.innerHTML = `
+                            <div>
+                                <div class="text-xs font-bold text-indigo-500 mb-1">${timeStr}</div>
+                                <div class="font-bold text-gray-800 dark:text-white">${evt.company}</div>
+                                <div class="text-xs text-gray-500 dark:text-slate-400">${evt.status}</div>
+                            </div>
+                            <button onclick="app.openInterviewModal('${evt.id}'); app.closeDaySummary()" class="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-indigo-600 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-300">
+                                <i class="fas fa-chevron-right text-xs"></i>
+                            </button>
+                        `;
+                        list.appendChild(div);
+                    });
+                }
+
+                // Show Modal with Animation
+                modal.classList.remove('hidden');
+                // Small delay to allow display:block to apply before opacity transition
+                requestAnimationFrame(() => {
+                    bg.classList.remove('opacity-0');
+                    content.classList.remove('translate-y-full');
+                });
+            },
+
+            closeDaySummary: () => {
+                const modal = document.getElementById('modal-day-summary');
+                const bg = document.getElementById('modal-day-summary-bg');
+                const content = document.getElementById('modal-day-summary-content');
+                
+                bg.classList.add('opacity-0');
+                content.classList.add('translate-y-full');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300); // Match CSS transition duration
+            },
+            
+            // New: Open History Modal from Card
+            openHistoryModal: (id) => {
+                 const modal = document.getElementById('modal-history');
+                 const list = document.getElementById('history-list-content');
+                 const item = STATE.data.notes.find(n => n.id === id);
+                 
+                 if (!item || !item.history || item.history.length === 0) {
+                     list.innerHTML = `<div class="text-center text-gray-400 py-6 italic text-sm">No history recorded yet.</div>`;
+                 } else {
+                     list.innerHTML = '';
+                     // Sort by date desc
+                     const sortedHist = [...item.history].sort((a,b) => b.date - a.date);
+                     sortedHist.forEach(h => {
+                        const d = new Date(h.date);
+                        // Format: 14/02/2026 12:58 PM
+                        const dateStr = d.toLocaleDateString('en-GB') + ' ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+                        const div = document.createElement('div');
+                        div.className = "flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 dark:bg-slate-800 dark:border-slate-700";
+                        
+                        let icon = '<i class="fas fa-circle text-[8px] text-gray-400 mt-1.5"></i>';
+                        let titleClass = "text-gray-700 dark:text-slate-300";
+                        
+                        if (h.completed) {
+                            icon = '<i class="fas fa-check-circle text-green-500 mt-0.5"></i>';
+                            titleClass = "text-green-700 dark:text-green-400";
+                        } else if (h.notes && h.notes.includes("Moved to")) {
+                            icon = '<i class="fas fa-arrow-circle-right text-indigo-500 mt-0.5"></i>';
+                            titleClass = "text-indigo-700 dark:text-indigo-400";
+                        }
+
+                        div.innerHTML = `
+                            <div class="shrink-0 pt-0.5">${icon}</div>
+                            <div>
+                                <div class="font-bold text-sm ${titleClass}">${h.notes || h.status}</div>
+                                <div class="text-[10px] text-gray-400 font-mono mt-0.5 dark:text-slate-500">${dateStr}</div>
+                            </div>
+                        `;
+                        list.appendChild(div);
+                     });
+                 }
+                 modal.classList.remove('hidden');
+            },
+
+            renderInterviews: (filter = 'all', searchQuery = '') => {
+                const list = document.getElementById('interviews-list');
+                if (!list) return;
+                list.innerHTML = '';
+                
+                let interviews = (STATE.data.notes || []).filter(n => n.category === 'interview');
+                
+                // 1. Stats Calculation
+                const activeCount = interviews.filter(i => !['Offer', 'Rejected', 'Ghosted'].includes(i.status)).length;
+                const offerCount = interviews.filter(i => i.status === 'Offer').length;
+                
+                const now = Date.now();
+                let urgentCount = 0;
+                interviews.forEach(i => {
+                    if (i.deadline && !['Offer', 'Rejected', 'Ghosted'].includes(i.status) && !i.stageCompleted) {
+                        const diffHours = (new Date(i.deadline).getTime() - now) / (1000 * 60 * 60);
+                        if (diffHours > 0 && diffHours < 48) urgentCount++;
+                    }
+                });
+
+                document.getElementById('stats-int-active').textContent = activeCount;
+                document.getElementById('stats-int-offers').textContent = offerCount;
+                document.getElementById('stats-int-urgent').textContent = urgentCount;
+
+                // 2. Filtering
+                if (filter === 'active') interviews = interviews.filter(i => !['Offer', 'Rejected', 'Ghosted'].includes(i.status));
+                if (filter === 'offers') interviews = interviews.filter(i => i.status === 'Offer');
+                if (filter === 'archived') interviews = interviews.filter(i => ['Rejected', 'Ghosted'].includes(i.status));
+                
+                // 3. Search
+                if (searchQuery) {
+                    const q = searchQuery.toLowerCase();
+                    interviews = interviews.filter(i => 
+                        (i.company || '').toLowerCase().includes(q) || 
+                        (i.role || '').toLowerCase().includes(q)
+                    );
+                }
+
+                // 4. Render
+                if (interviews.length === 0) {
+                    list.innerHTML = `<div class="text-center text-gray-400 mt-10 dark:text-gray-500">No interviews found.</div>`;
+                    return;
+                }
+
+                // Sort: High Priority > Urgent Deadline > Date Updated
+                interviews.sort((a, b) => {
+                    if (a.priority !== b.priority) return (b.priority ? 1 : 0) - (a.priority ? 1 : 0);
+                    
+                    const aUrgent = (a.deadline && !['Offer', 'Rejected'].includes(a.status)) ? new Date(a.deadline).getTime() : Infinity;
+                    const bUrgent = (b.deadline && !['Offer', 'Rejected'].includes(b.status)) ? new Date(b.deadline).getTime() : Infinity;
+                    
+                    if (aUrgent !== bUrgent) return aUrgent - bUrgent;
+                    return (b.updated || b.created) - (a.updated || a.created);
+                });
+
+                interviews.forEach(interview => {
+                    const el = document.createElement('div');
+                    
+                    // Progress Calculation
+                    const stageMap = {
+                        'Test Received': 10, 'HR Screen': 25, 'Technical': 50,
+                        'Final Round': 85, 'Offer': 100, 'Rejected': 0, 'Ghosted': 0
+                    };
+                    const progress = stageMap[interview.status] || 0;
+                    
+                    // Colors & Visuals
+                    let barColor = "bg-blue-500";
+                    if (progress === 100) barColor = "bg-green-500";
+                    if (progress === 0) barColor = "bg-gray-300";
+
+                    // Map Status to Icon (Since Action Type is removed)
+                    let actionIcon = "fa-clock";
+                    if (interview.status === 'Test Received') actionIcon = "fa-laptop-code";
+                    else if (interview.status === 'HR Screen') actionIcon = "fa-phone-alt";
+                    else if (interview.status === 'Technical') actionIcon = "fa-code";
+                    else if (interview.status === 'Final Round') actionIcon = "fa-user-tie";
+                    else if (interview.status === 'Offer') actionIcon = "fa-gift";
+                    else if (interview.status === 'Rejected') actionIcon = "fa-times-circle";
+
+                    // Deadline Logic
+                    let deadlineHtml = '';
+                    let borderClass = 'border-gray-100 dark:border-slate-700';
+                    let urgencyGlow = '';
+                    
+                    let showCalButton = false;
+
+                    if (interview.stageCompleted) {
+                         // COMPLETED STATE
+                         deadlineHtml = `<div class="flex items-center gap-1 text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded dark:bg-green-900/30 dark:text-green-400 w-full justify-center mt-2"><i class="fas fa-check-circle"></i> COMPLETED</div>`;
+                         borderClass = "border-green-200 border-l-4 border-l-green-500 dark:border-green-800";
+                    } else if (interview.deadline && !['Offer', 'Rejected', 'Ghosted'].includes(interview.status)) {
+                        showCalButton = true;
+                        const deadlineDate = new Date(interview.deadline);
+                        const diffMs = deadlineDate.getTime() - now;
+                        const diffHours = diffMs / (1000 * 60 * 60);
+                        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+                        
+                        if (diffMs > 0) {
+                            if (diffHours < 24) {
+                                // CRITICAL < 24h
+                                deadlineHtml = `<div class="flex items-center gap-1.5 text-xs font-black text-red-600 animate-pulse bg-red-50 px-2 py-1 rounded dark:bg-red-900/30 dark:text-red-400"><i class="fas fa-hourglass-half"></i> ${Math.max(0, Math.floor(diffHours))}h LEFT</div>`;
+                                borderClass = "border-red-400 border-l-4 border-l-red-500 dark:border-red-600";
+                                urgencyGlow = "shadow-[0_0_15px_rgba(239,68,68,0.15)]";
+                            } else if (diffHours < 72) {
+                                // URGENT < 3 days
+                                deadlineHtml = `<div class="flex items-center gap-1.5 text-xs font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded dark:bg-orange-900/30 dark:text-orange-400"><i class="fas fa-clock"></i> ${diffDays} days</div>`;
+                                borderClass = "border-orange-200 border-l-4 border-l-orange-400 dark:border-orange-800";
+                            } else {
+                                // Normal
+                                deadlineHtml = `<div class="text-[10px] font-medium text-gray-400 dark:text-slate-500">Due: ${deadlineDate.toLocaleDateString()}</div>`;
+                            }
+                        } else {
+                             deadlineHtml = `<div class="text-[10px] font-bold text-gray-400">Deadline Passed</div>`;
+                        }
+                    }
+
+                    // Priority Star
+                    const starHtml = interview.priority ? `<i class="fas fa-star text-yellow-400 text-sm drop-shadow-sm ml-2" title="High Priority"></i>` : '';
+
+                    // Cal Button
+                    const calBtn = showCalButton ? 
+                        `<button onclick="app.downloadICS('${interview.id}')" class="text-blue-400 hover:text-blue-600 p-1 dark:text-blue-500 dark:hover:text-blue-300" title="Add to Calendar"><i class="fas fa-calendar-plus text-xs"></i></button>` : '';
+
+                    // Action Button Logic
+                    let actionButtonHtml = '';
+                    if (interview.stageCompleted) {
+                         actionButtonHtml = `
+                            <div class="mt-3 grid grid-cols-2 gap-2">
+                                <button onclick="app.promoteStage('${interview.id}')" class="col-span-2 bg-indigo-600 text-white text-xs font-bold py-2 rounded-lg shadow-sm hover:bg-indigo-700 active:scale-95 transition">
+                                    Next Stage <i class="fas fa-arrow-right ml-1"></i>
+                                </button>
+                                <button onclick="app.setFollowUp('${interview.id}')" class="bg-orange-50 text-orange-600 border border-orange-100 text-[10px] font-bold py-1.5 rounded-lg hover:bg-orange-100 active:scale-95 transition dark:bg-orange-900/20 dark:text-orange-300 dark:border-orange-800">
+                                    Follow Up
+                                </button>
+                                <button onclick="app.setGhosted('${interview.id}')" class="bg-gray-50 text-gray-500 border border-gray-200 text-[10px] font-bold py-1.5 rounded-lg hover:bg-gray-100 active:scale-95 transition dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700">
+                                    Ghosted
+                                </button>
+                            </div>
+                         `;
+                    } else if (!['Offer', 'Rejected', 'Ghosted'].includes(interview.status)) {
+                         actionButtonHtml = `
+                            <button onclick="app.markStageComplete('${interview.id}')" class="mt-3 w-full bg-white border border-green-200 text-green-600 text-xs font-bold py-2 rounded-lg hover:bg-green-50 active:scale-95 transition shadow-sm flex items-center justify-center gap-1.5 dark:bg-slate-800 dark:border-green-900 dark:text-green-400">
+                                <i class="fas fa-check"></i> Mark Done
+                            </button>
+                         `;
+                    }
+
+
+                    el.className = `p-4 rounded-xl shadow-sm border ${borderClass} bg-white relative active:scale-[0.99] transition dark:bg-dark-card flex flex-col gap-3 ${urgencyGlow}`;
+                    el.innerHTML = `
+                        <!-- Header -->
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-800 leading-tight dark:text-white flex items-center">
+                                    ${interview.company} ${starHtml}
+                                </h3>
+                                <p class="text-xs text-gray-500 font-medium dark:text-slate-400">${interview.role}</p>
+                            </div>
+                            <div class="flex gap-1 items-center">
+                                ${calBtn}
+                                <button onclick="app.openHistoryModal('${interview.id}')" class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 transition dark:bg-slate-800 dark:text-slate-500 dark:hover:text-indigo-400" title="History"><i class="fas fa-history text-xs"></i></button>
+                                <button onclick="app.openInterviewModal('${interview.id}')" class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition dark:bg-slate-800 dark:text-slate-500 dark:hover:text-blue-400"><i class="fas fa-pen text-xs"></i></button>
+                                <button onclick="app.deleteNote('${interview.id}')" class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition dark:bg-slate-800 dark:text-slate-500 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Action Block (Uses Status now) -->
+                        <div class="flex items-center justify-between bg-gray-50 p-2.5 rounded-lg border border-gray-100 dark:bg-slate-800 dark:border-slate-700">
+                            <div class="flex items-center gap-2.5 overflow-hidden">
+                                <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 dark:bg-indigo-900/30 dark:text-indigo-400">
+                                    <i class="fas ${actionIcon} text-sm"></i>
+                                </div>
+                                <div class="truncate">
+                                    <div class="text-[9px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-500">STAGE</div>
+                                    <div class="text-sm font-bold text-gray-800 dark:text-slate-200 truncate">${interview.status}</div>
+                                </div>
+                            </div>
+                            ${deadlineHtml && !interview.stageCompleted ? deadlineHtml : ''}
+                        </div>
+                        
+                        ${interview.stageCompleted ? `<div class="text-[10px] text-center text-gray-400 italic mt-[-5px] dark:text-slate-500">Waiting for response...</div>` : ''}
+
+                        <!-- Footer: Progress & Notes Toggle -->
+                        <div>
+                            <div class="flex justify-between items-end mb-1.5">
+                                <span class="text-[10px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded dark:bg-slate-700 dark:text-slate-300">${interview.status}</span>
+                                <span class="text-[9px] font-bold text-gray-300 dark:text-slate-600">${progress}%</span>
+                            </div>
+                            <div class="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden dark:bg-slate-700">
+                                <div class="h-full ${barColor} rounded-full transition-all duration-500" style="width: ${progress}%"></div>
+                            </div>
+                            
+                            ${actionButtonHtml}
+
+                            <!-- Notes Preview Button -->
+                            ${interview.notes ? 
+                                `<div class="mt-3 pt-2 border-t border-gray-50 flex items-start gap-2 cursor-pointer group dark:border-slate-700" onclick="app.openInterviewModal('${interview.id}')">
+                                    <i class="fas fa-sticky-note text-gray-300 mt-0.5 group-hover:text-blue-400 transition dark:text-slate-600"></i>
+                                    <p class="text-xs text-gray-400 line-clamp-1 group-hover:text-gray-600 transition dark:text-slate-500 dark:group-hover:text-slate-300">${interview.notes}</p>
+                                </div>` : ''
+                            }
+                        </div>
+                    `;
+                    list.appendChild(el);
+                });
+            },
+            
+            markStageComplete: (id) => {
+                const note = STATE.data.notes.find(n => n.id === id);
+                if(note) {
+                    note.stageCompleted = true;
+                    // Logic to set specific completion message
+                    let logMsg = `${note.status} Completed`;
+                    if(note.status === 'Test Received') logMsg = "Test Completed";
+                    else if(note.status === 'Technical') logMsg = "Technical Round Completed";
+                    else if(note.status === 'HR Screen') logMsg = "HR Call Completed";
+
+                    if (!note.history) note.history = [];
+                    note.history.push({
+                        status: note.status,
+                        date: Date.now(),
+                        completed: true,
+                        notes: logMsg
+                    });
+                    
+                    app.saveToCloud();
+                    app.renderInterviews(STATE.interviewFilter);
+                    app.renderTimeline();
+                    app.toast("Stage Completed! 🎉");
+                }
+            },
+            
+            promoteStage: (id) => {
+                const note = STATE.data.notes.find(n => n.id === id);
+                if(note) {
+                     // Open modal to set new details
+                     app.openInterviewModal(id);
+                     app.toast("Select the next stage & deadline");
+                }
+            },
+            
+            setFollowUp: (id) => {
+                const note = STATE.data.notes.find(n => n.id === id);
+                if(note) {
+                    note.status = "Follow Up";
+                    note.stageCompleted = false; 
+                    note.updated = Date.now();
+                    
+                     if (!note.history) note.history = [];
+                     note.history.push({ status: "Waiting", date: Date.now(), notes: "Moved to Follow Up" });
+
+                    app.saveToCloud();
+                    app.renderInterviews(STATE.interviewFilter);
+                    app.toast("Moved to Follow Up");
+                }
+            },
+            
+             setGhosted: (id) => {
+                const note = STATE.data.notes.find(n => n.id === id);
+                if(note) {
+                    note.status = "Ghosted";
+                    note.stageCompleted = false;
+                    note.updated = Date.now();
+                    
+                     if (!note.history) note.history = [];
+                     note.history.push({ status: "Waiting", date: Date.now(), notes: "Marked Ghosted" });
+
+                    app.saveToCloud();
+                    app.renderInterviews(STATE.interviewFilter);
+                    app.toast("Moved to Archived");
+                }
+            },
+            
+            filterInterviews: (type) => {
+                STATE.interviewFilter = type;
+                document.querySelectorAll('.int-filter-btn').forEach(btn => {
+                    if (btn.dataset.filter === type) {
+                        btn.classList.add('bg-gray-900', 'text-white', 'dark:bg-white', 'dark:text-slate-900');
+                        btn.classList.remove('bg-gray-100', 'text-gray-500', 'dark:bg-slate-800', 'dark:text-slate-400');
+                    } else {
+                        btn.classList.remove('bg-gray-900', 'text-white', 'dark:bg-white', 'dark:text-slate-900');
+                        btn.classList.add('bg-gray-100', 'text-gray-500', 'dark:bg-slate-800', 'dark:text-slate-400');
+                    }
+                });
+                app.renderInterviews(type, document.getElementById('global-search').value);
+            },
+
+            openInterviewModal: (id = null) => {
+                STATE.editingId = id;
+                const modal = document.getElementById('modal-interview');
+                const company = document.getElementById('int-company');
+                const role = document.getElementById('int-role');
+                const status = document.getElementById('int-status');
+                const deadline = document.getElementById('int-deadline');
+                const priority = document.getElementById('int-priority');
+                const notes = document.getElementById('int-notes');
+
+                if (id) {
+                    const item = STATE.data.notes.find(n => n.id === id);
+                    company.value = item.company || '';
+                    role.value = item.role || '';
+                    status.value = item.status || 'Test Received';
+                    deadline.value = item.deadline || '';
+                    priority.checked = !!item.priority;
+                    notes.value = item.notes || '';
+                } else {
+                    company.value = '';
+                    role.value = '';
+                    status.value = 'Test Received';
+                    
+                    // Set default deadline to Today 11:59 PM
+                    const now = new Date();
+                    const pad = (n) => n < 10 ? '0' + n : n;
+                    deadline.value = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T23:59`;
+                    
+                    priority.checked = false;
+                    notes.value = '';
+                }
+                modal.classList.remove('hidden');
+            },
+            
+            // New: Open History Modal from Card
+            openHistoryModal: (id) => {
+                 const modal = document.getElementById('modal-history');
+                 const list = document.getElementById('history-list-content');
+                 const item = STATE.data.notes.find(n => n.id === id);
+                 
+                 if (!item || !item.history || item.history.length === 0) {
+                     list.innerHTML = `<div class="text-center text-gray-400 py-6 italic text-sm">No history recorded yet.</div>`;
+                 } else {
+                     list.innerHTML = '';
+                     // Sort by date desc
+                     const sortedHist = [...item.history].sort((a,b) => b.date - a.date);
+                     sortedHist.forEach(h => {
+                        const d = new Date(h.date);
+                        // Format: 14/02/2026 12:58 PM
+                        const dateStr = d.toLocaleDateString('en-GB') + ' ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+                        const div = document.createElement('div');
+                        div.className = "flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 dark:bg-slate-800 dark:border-slate-700";
+                        
+                        let icon = '<i class="fas fa-circle text-[8px] text-gray-400 mt-1.5"></i>';
+                        let titleClass = "text-gray-700 dark:text-slate-300";
+                        
+                        if (h.completed) {
+                            icon = '<i class="fas fa-check-circle text-green-500 mt-0.5"></i>';
+                            titleClass = "text-green-700 dark:text-green-400";
+                        } else if (h.notes && (h.notes.includes("Moved to") || h.notes.includes("Started"))) {
+                            icon = '<i class="fas fa-arrow-circle-right text-indigo-500 mt-0.5"></i>';
+                            titleClass = "text-indigo-700 dark:text-indigo-400";
+                        }
+
+                        div.innerHTML = `
+                            <div class="shrink-0 pt-0.5">${icon}</div>
+                            <div>
+                                <div class="font-bold text-sm ${titleClass}">${h.notes || h.status}</div>
+                                <div class="text-[10px] text-gray-400 font-mono mt-0.5 dark:text-slate-500">${dateStr}</div>
+                            </div>
+                        `;
+                        list.appendChild(div);
+                     });
+                 }
+                 modal.classList.remove('hidden');
+            },
+
+            saveInterview: () => {
+                const company = document.getElementById('int-company').value.trim();
+                const role = document.getElementById('int-role').value.trim();
+                const status = document.getElementById('int-status').value;
+                const deadline = document.getElementById('int-deadline').value;
+                const priority = document.getElementById('int-priority').checked;
+                const notes = document.getElementById('int-notes').value.trim();
+
+                if (!company) {
+                    app.toast('Company Name Required', true);
+                    return;
+                }
+                
+                // Get previous item to check for status change
+                let oldStatus = null;
+                let isStageReset = false;
+                
+                if (STATE.editingId) {
+                     const oldItem = STATE.data.notes.find(n => n.id === STATE.editingId);
+                     if(oldItem) {
+                         oldStatus = oldItem.status;
+                         // If status changed OR user is editing a completed stage to "move" it
+                         if (oldItem.status !== status || (oldItem.stageCompleted && oldItem.status === status)) {
+                             // Status changed or re-saving completed stage (likely promoting)
+                             isStageReset = true;
+                         }
+                     }
+                }
+
+                const itemData = { 
+                    company, 
+                    role, 
+                    status, 
+                    deadline,
+                    priority,
+                    notes, 
+                    category: 'interview', 
+                    updated: Date.now() 
+                };
+                
+                if (isStageReset) {
+                    itemData.stageCompleted = false; // Reset completed flag for new stage
+                }
+
+                if (STATE.editingId) {
+                    const idx = STATE.data.notes.findIndex(n => n.id === STATE.editingId);
+                    if (idx > -1) {
+                        // If status changed, log the transition
+                        if (STATE.data.notes[idx].status !== status) {
+                             if (!STATE.data.notes[idx].history) STATE.data.notes[idx].history = [];
+                             STATE.data.notes[idx].history.push({
+                                 status: status,
+                                 date: Date.now(),
+                                 completed: false, 
+                                 notes: `Moved to ${status}`
+                             });
+                        }
+                        
+                        STATE.data.notes[idx] = { ...STATE.data.notes[idx], ...itemData };
+                    }
+                } else {
+                    STATE.data.notes.unshift({ 
+                        id: Date.now().toString(), 
+                        created: Date.now(), 
+                        history: [{status: status, date: Date.now(), completed: false, notes: `Started: ${status}`}], 
+                        stageCompleted: false,
+                        ...itemData 
+                    });
+                }
+
+                app.saveToCloud();
+                document.getElementById('modal-interview').classList.add('hidden');
+                app.renderInterviews(STATE.interviewFilter);
+                app.renderTimeline(); // Update timeline
+                app.toast('Pipeline Updated');
             },
 
             renderJobs: (filter = '') => {
@@ -1752,8 +2645,7 @@
                 };
 
                 // 1. GROUP 1: Referrals Received (Sea Green)
-                // EDITED: Removed date filter to keep referrals indefinitely visible
-                const referralReceivedJobs = jobs.filter(j => j.status === 'referral-received');
+                const referralReceivedJobs = jobs.filter(j => j.status === 'referral-received' && getDaysDifference(j.created) <= 7);
                 renderGroup(
                     "Referrals Received", 
                     referralReceivedJobs, 
@@ -2076,20 +2968,16 @@
             copyText: (text) => { if(!text) return; if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(() => app.toast("Copied!")); } else { const textArea = document.createElement("textarea"); textArea.value = text; textArea.style.position = "fixed"; textArea.style.left = "-9999px"; document.body.appendChild(textArea); textArea.focus(); textArea.select(); try { document.execCommand('copy'); app.toast("Copied!"); } catch (err) { app.toast("Copy failed", true); } document.body.removeChild(textArea); } },
             openConfirm: (msg, actionFn) => { document.getElementById('confirm-msg').textContent = msg; STATE.currentConfirmAction = actionFn; document.getElementById('modal-confirm').classList.remove('hidden'); },
             confirmYes: () => { if (STATE.currentConfirmAction) { STATE.currentConfirmAction(); STATE.currentConfirmAction = null; } document.getElementById('modal-confirm').classList.add('hidden'); },
-            cleanupOldJobs: () => { 
-                const now = Date.now(); 
-                const initialLen = STATE.data.notes.length; 
-                STATE.data.notes = STATE.data.notes.filter(n => { 
-                    if(n.category !== 'job') return true; 
-                    if(n.status === 'referral-received') return true; // Keep referrals indefinitely
-                    const daysOld = Math.floor((now - n.created) / MILLIS_PER_DAY); 
-                    return daysOld <= 7; 
-                }); 
-                if(STATE.data.notes.length !== initialLen) app.saveToCloud(); 
-            },
+            cleanupOldJobs: () => { const now = Date.now(); const initialLen = STATE.data.notes.length; STATE.data.notes = STATE.data.notes.filter(n => { if(n.category !== 'job') return true; const daysOld = Math.floor((now - n.created) / MILLIS_PER_DAY); return daysOld <= 7; }); if(STATE.data.notes.length !== initialLen) app.saveToCloud(); },
             exportData: () => { const dataStr = JSON.stringify(STATE.data, null, 2); const blob = new Blob([dataStr], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `magic_pouch_backup_${new Date().toISOString().slice(0,10)}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); },
             importData: (input) => { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (ev) => { try { const imported = JSON.parse(ev.target.result); app.openConfirm("Replace current data with backup?", () => { STATE.data = app.sanitizeData(imported); app.saveToCloud(); app.refreshUI(); app.toast('Restored!'); document.getElementById('modal-settings').classList.add('hidden'); }); } catch(err) { app.toast('Invalid file', true); } input.value = ''; }; reader.readAsText(file); },
-            handleGlobalSearch: (query) => { if (STATE.currentView === 'jobs') app.renderJobs(query); else if (STATE.currentView === 'templates') app.renderTemplates(query); },
+            handleGlobalSearch: (query) => { 
+                if (STATE.currentView === 'jobs') app.renderJobs(query); 
+                else if (STATE.currentView === 'templates') app.renderTemplates(query); 
+                else if (STATE.currentView === 'interviews') {
+                    app.renderInterviews(STATE.interviewFilter, query);
+                }
+            },
 
             renderPlan: () => {
                 const plan = STATE.data.plan;
@@ -2477,10 +3365,51 @@
                 app.renderQuickActions(); 
                 app.renderProfileManageList(); 
                 app.renderQuote();
+                if (STATE.currentView === 'interviews') {
+                    app.renderInterviews(STATE.interviewFilter);
+                    app.renderTimeline();
+                }
             },
             saveToCloud: async () => { if(!STATE.user) return; try { const docRef = doc(db, 'sync', STATE.syncKey); await setDoc(docRef, { data: STATE.data, userId: STATE.user.uid, lastUpdated: new Date().toISOString() }); } catch (e) { console.error('Save error:', e); } },
             saveSyncKey: () => { const newKey = document.getElementById('sync-key-input').value.trim().toUpperCase(); if(newKey && newKey !== STATE.syncKey) { STATE.syncKey = newKey; localStorage.setItem('magic_pouch_key', newKey); if(document.getElementById('sync-status-text')) document.getElementById('sync-status-text').textContent = newKey; app.setupSync(); document.getElementById('modal-sync').classList.add('hidden'); app.toast("Switched Sync Channel"); } else if(newKey === STATE.syncKey) { app.toast("Same key - already connected"); } },
-            switchView: (viewName) => { STATE.currentView = viewName; const vJobs = document.getElementById('view-jobs'); const vPlan = document.getElementById('view-plan'); const vTpls = document.getElementById('view-templates'); vJobs.style.transform = 'translateX(100%)'; vPlan.style.transform = 'translateX(100%)'; vTpls.style.transform = 'translateX(100%)'; if(viewName === 'jobs') vJobs.style.transform = 'translateX(0)'; if(viewName === 'plan') vPlan.style.transform = 'translateX(0)'; if(viewName === 'templates') vTpls.style.transform = 'translateX(0)'; document.querySelectorAll('.nav-btn').forEach(btn => { btn.classList.remove('text-blue-600', 'active', 'dark:text-blue-400'); btn.classList.add('text-gray-400', 'dark:text-slate-500'); }); const navIndex = viewName === 'jobs' ? 0 : viewName === 'plan' ? 1 : 2; const activeBtn = document.querySelectorAll('.nav-btn')[navIndex]; activeBtn.classList.add('text-blue-600', 'active', 'dark:text-blue-400'); activeBtn.classList.remove('text-gray-400', 'dark:text-slate-500'); if (viewName === 'plan') app.renderPlan(); if (viewName === 'templates') app.renderTemplates(); if (viewName === 'jobs') app.renderJobs(); }
+            switchView: (viewName) => { 
+                STATE.currentView = viewName; 
+                const vJobs = document.getElementById('view-jobs'); 
+                const vPlan = document.getElementById('view-plan'); 
+                const vTpls = document.getElementById('view-templates'); 
+                const vInts = document.getElementById('view-interviews');
+                
+                vJobs.style.transform = 'translateX(100%)'; 
+                vPlan.style.transform = 'translateX(100%)'; 
+                vTpls.style.transform = 'translateX(100%)'; 
+                vInts.style.transform = 'translateX(100%)'; 
+                
+                if(viewName === 'jobs') vJobs.style.transform = 'translateX(0)'; 
+                if(viewName === 'plan') vPlan.style.transform = 'translateX(0)'; 
+                if(viewName === 'templates') vTpls.style.transform = 'translateX(0)'; 
+                if(viewName === 'interviews') vInts.style.transform = 'translateX(0)'; 
+                
+                document.querySelectorAll('.nav-btn').forEach(btn => { 
+                    btn.classList.remove('text-blue-600', 'active', 'dark:text-blue-400'); 
+                    btn.classList.add('text-gray-400', 'dark:text-slate-500'); 
+                }); 
+                
+                const navIndex = viewName === 'jobs' ? 0 : viewName === 'interviews' ? 1 : viewName === 'plan' ? 2 : 3; 
+                const activeBtn = document.querySelectorAll('.nav-btn')[navIndex]; 
+                
+                if (activeBtn) {
+                    activeBtn.classList.add('text-blue-600', 'active', 'dark:text-blue-400'); 
+                    activeBtn.classList.remove('text-gray-400', 'dark:text-slate-500'); 
+                }
+                
+                if (viewName === 'plan') app.renderPlan(); 
+                if (viewName === 'templates') app.renderTemplates(); 
+                if (viewName === 'jobs') app.renderJobs(); 
+                if (viewName === 'interviews') {
+                    app.renderInterviews(STATE.interviewFilter);
+                    app.renderTimeline();
+                }
+            }
         };
 
         window.addEventListener('DOMContentLoaded', () => {
