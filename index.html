@@ -2235,6 +2235,7 @@
                                 <button onclick="app.openInterviewModal('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-blue-500 transition dark:hover:bg-slate-700"><i class="fas fa-pen text-xs"></i></button>
                                 <button onclick="app.openHistoryModal('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-indigo-500 transition dark:hover:bg-slate-700"><i class="fas fa-history text-xs"></i></button>
                                 ${showCalButton ? `<button onclick="app.downloadICS('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-green-500 transition dark:hover:bg-slate-700"><i class="fas fa-calendar-plus text-xs"></i></button>` : ''}
+                                <button onclick="app.deleteNote('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-500 transition dark:hover:bg-slate-700"><i class="fas fa-trash text-xs"></i></button>
                             </div>
                             <!-- Primary Action -->
                             ${actionArea}
