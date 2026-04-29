@@ -1049,6 +1049,21 @@
         </div>
     </div>
     
+    <!-- Fill Placeholders Modal -->
+    <div id="modal-placeholders" class="fixed inset-0 bg-black/50 z-[110] hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
+            <h3 class="font-bold text-lg mb-2 dark:text-white">Fill Placeholders</h3>
+            <p class="text-xs text-gray-400 mb-4 dark:text-slate-400">Enter values for the template fields before copying.</p>
+            <div id="placeholders-container" class="space-y-3 max-h-60 overflow-y-auto custom-scrollbar pr-1 mb-4">
+                <!-- Dynamic inputs will be injected here -->
+            </div>
+            <div class="flex gap-3">
+                <button onclick="document.getElementById('modal-placeholders').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
+                <button onclick="app.executeTemplateCopy()" class="flex-1 py-3 text-white font-bold bg-blue-600 rounded-xl hover:bg-blue-500 shadow-lg shadow-blue-600/30">Copy Text</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Toast -->
     <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-900/90 text-white px-5 py-2.5 rounded-full shadow-xl z-[60] hidden flex items-center gap-2 text-sm font-medium transition-opacity dark:bg-white/90 dark:text-gray-900">
         <i class="fas fa-check-circle text-green-400 dark:text-green-600"></i> <span id="toast-msg">Copied!</span>
@@ -1110,6 +1125,8 @@
             currentConfirmAction: null,
             editingTaskIdx: null,
             interviewFilter: 'all', 
+            pendingTemplateContent: '',
+            pendingPlaceholders: [],
 
             openFolders: savedFolders ? new Set(JSON.parse(savedFolders)) : new Set(),
             hasInitializedFolders: !!savedFolders,
@@ -2808,7 +2825,7 @@
                 const tagsStr = (typeof t.tags === 'string') ? t.tags : '';
                 const tagsHtml = tagsStr ? tagsStr.split(',').map(tag => `<span class="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider dark:bg-gray-800 dark:text-gray-400">${tag.trim()}</span>`).join('') : '';
                 const isEasy = t.easyAccess ? '<i class="fas fa-bolt text-yellow-400 text-xs" title="Easy Access"></i>' : '';
-                div.innerHTML = `<div class="flex justify-between items-start mb-2"><div><div class="flex items-center gap-2"><h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${t.title}</h4>${isEasy}</div><div class="flex flex-wrap gap-1 mt-1">${tagsHtml}</div></div><div class="flex gap-1"><button onclick="app.openTemplateModal('${t.id}')" class="text-gray-300 hover:text-blue-500 p-2 dark:text-gray-600 dark:hover:text-blue-400"><i class="fas fa-pen text-xs"></i></button><button onclick="app.deleteNote('${t.id}')" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button></div></div><div class="bg-gray-50 p-3 rounded-lg text-xs text-gray-600 font-mono leading-relaxed relative group-hover:bg-gray-100 transition cursor-pointer dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700 line-clamp-2" onclick="app.copyText(this.textContent)">${t.content}<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-copy text-gray-400 dark:text-gray-500"></i></div></div>`;
+                div.innerHTML = `<div class="flex justify-between items-start mb-2"><div><div class="flex items-center gap-2"><h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${t.title}</h4>${isEasy}</div><div class="flex flex-wrap gap-1 mt-1">${tagsHtml}</div></div><div class="flex gap-1"><button onclick="app.openTemplateModal('${t.id}')" class="text-gray-300 hover:text-blue-500 p-2 dark:text-gray-600 dark:hover:text-blue-400"><i class="fas fa-pen text-xs"></i></button><button onclick="app.deleteNote('${t.id}')" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button></div></div><div class="bg-gray-50 p-3 rounded-lg text-xs text-gray-600 font-mono leading-relaxed relative group-hover:bg-gray-100 transition cursor-pointer dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700 line-clamp-2" onclick="app.handleTemplateCopy(decodeURIComponent('${encodeURIComponent(t.content)}'))">${t.content}<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-copy text-gray-400 dark:text-gray-500"></i></div></div>`;
                 return div;
             },
 
@@ -2843,6 +2860,59 @@
             // Legacy editQuote for reference, now replaced by openQuoteModal
             editQuote: () => { app.openQuoteModal(); },
 
+            handleTemplateCopy: (content) => {
+                const regex = /\[\[(.*?)\]\]/g;
+                const matches = [...content.matchAll(regex)];
+                
+                if (matches.length === 0) {
+                    app.copyText(content);
+                    return;
+                }
+
+                const uniqueKeys = [...new Set(matches.map(m => m[1]))];
+                STATE.pendingTemplateContent = content;
+                STATE.pendingPlaceholders = uniqueKeys;
+
+                const container = document.getElementById('placeholders-container');
+                if (container) {
+                    container.innerHTML = '';
+                    uniqueKeys.forEach((key, idx) => {
+                        const wrapper = document.createElement('div');
+                        wrapper.innerHTML = `
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1 dark:text-slate-500">${key}</label>
+                            <input type="text" id="ph-input-${idx}" class="w-full bg-gray-50 rounded-xl py-2 px-3 outline-none text-sm border border-gray-200 focus:border-blue-500 transition-colors dark:bg-slate-700 dark:text-white dark:border-slate-600" placeholder="Enter ${key}">
+                        `;
+                        container.appendChild(wrapper);
+                    });
+                }
+
+                document.getElementById('modal-placeholders').classList.remove('hidden');
+                
+                setTimeout(() => {
+                    const firstInput = document.getElementById('ph-input-0');
+                    if (firstInput) firstInput.focus();
+                }, 100);
+            },
+
+            executeTemplateCopy: () => {
+                let finalContent = STATE.pendingTemplateContent;
+                
+                STATE.pendingPlaceholders.forEach((key, idx) => {
+                    const inputEl = document.getElementById(`ph-input-${idx}`);
+                    const val = inputEl ? inputEl.value : '';
+                    
+                    const escapedKey = key.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+                    const replaceRegex = new RegExp(`\\[\\[${escapedKey}\\]\\]`, 'g');
+                    
+                    finalContent = finalContent.replace(replaceRegex, val !== '' ? val : `[[${key}]]`);
+                });
+
+                app.copyText(finalContent);
+                document.getElementById('modal-placeholders').classList.add('hidden');
+                STATE.pendingTemplateContent = '';
+                STATE.pendingPlaceholders = [];
+            },
+
             renderQuickActions: () => {
                 const container = document.getElementById('job-quick-actions'); container.innerHTML = '';
                 const profiles = STATE.data.profile || [];
@@ -2861,7 +2931,7 @@
                     container.appendChild(btn);
                 });
                 const easyTpls = (STATE.data.notes || []).filter(n => n.category === 'template' && n.easyAccess);
-                easyTpls.forEach(t => { const btn = document.createElement('button'); btn.className = "bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-blue-100 transition active:scale-95 flex items-center gap-1 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300 dark:hover:bg-blue-900/50"; btn.innerHTML = `<i class="fas fa-bolt text-[10px] opacity-50"></i> ${t.title}`; btn.onclick = () => app.copyText(t.content); container.appendChild(btn); });
+                easyTpls.forEach(t => { const btn = document.createElement('button'); btn.className = "bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-blue-100 transition active:scale-95 flex items-center gap-1 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300 dark:hover:bg-blue-900/50"; btn.innerHTML = `<i class="fas fa-bolt text-[10px] opacity-50"></i> ${t.title}`; btn.onclick = () => app.handleTemplateCopy(t.content); container.appendChild(btn); });
                 if (profiles.length === 0 && easyTpls.length === 0) { container.innerHTML = `<span class="text-[10px] text-gray-300 dark:text-gray-600">Add profile links or 'Easy Access' templates to see them here.</span>`; }
             },
 
