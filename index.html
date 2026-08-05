@@ -16,17 +16,17 @@
                 extend: {
                     fontFamily: {
                         sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', "Segoe UI", 'Roboto', "Helvetica Neue", 'Arial', 'sans-serif'],
-                        fredoka: ['Fredoka', 'sans-serif'],
+
                     },
                     colors: {
                         gray: tailwind.colors.zinc,
                         slate: tailwind.colors.zinc,
-                        blue: tailwind.colors.teal,
+
                         dark: {
-                            bg: '#09090b',
-                            card: '#18181b',
+                            bg: '#000000',
+                            card: '#0a0a0a',
                             border: '#27272a',
-                            text: '#f4f4f5',
+                            text: '#fafafa',
                             muted: '#a1a1aa'
                         }
                     },
@@ -45,8 +45,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
-    
+
     <style>
         body {
             overscroll-behavior-y: none;
@@ -79,10 +78,10 @@
         .bottom-sheet-exit-active { transform: translateY(100%); transition: transform 0.2s ease-in; }
     </style>
 </head>
-<body class="bg-gray-50 h-[100dvh] flex flex-col text-gray-800 font-sans overflow-hidden dark:bg-slate-900 dark:text-slate-100 transition-colors duration-200">
+<body class="bg-gray-50 h-[100dvh] flex flex-col text-gray-800 font-sans tracking-tight overflow-hidden dark:bg-black dark:text-slate-100 transition-colors duration-200">
 
     <!-- === HEADER === -->
-    <header class="bg-white shrink-0 safe-pt z-20 shadow-sm border-b border-gray-100 dark:bg-slate-900 dark:border-slate-800 transition-colors duration-200">
+    <header class="bg-white shrink-0 safe-pt z-20 shadow-sm border-b border-gray-100 dark:bg-black dark:border-gray-800 transition-colors duration-200">
         <div class="h-16 flex items-center px-4 gap-3">
             <!-- LOGO: Clickable Area for Menu -->
             <div class="relative cursor-pointer active:scale-95 transition select-none shrink-0" onclick="app.openSettings()">
@@ -98,7 +97,7 @@
                         <line x1="43" y1="37" x2="57" y2="37" stroke="#333" stroke-width="1.5" />
                         <circle cx="50" cy="42" r="1.5" fill="#333" />
                         <line x1="50" y1="42" x2="50" y2="48" stroke="#333" stroke-width="1.5" />
-                        <text font-size="11.5" font-weight="800" fill="#FFD700" letter-spacing="0.5" text-anchor="middle" style="font-family: 'Fredoka', sans-serif; text-shadow: 1px 1px 0px #005c8f;">
+                        <text font-size="11.5" font-weight="800" fill="#FFD700" letter-spacing="0.5" text-anchor="middle" style="font-family: system-ui, sans-serif; text-shadow: 1px 1px 0px #005c8f;">
                             <textPath href="#textCircle" startOffset="50%">MAGIC POUCH</textPath>
                         </text>
                     </svg>
@@ -110,7 +109,7 @@
             <!-- SEARCH BAR: Flexible width -->
             <div class="flex-1 relative min-w-[100px]">
                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs dark:text-slate-400"></i>
-                <input type="text" id="global-search" placeholder="Search..." class="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-full py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm dark:text-slate-200 dark:placeholder-slate-500" oninput="app.handleGlobalSearch(this.value)">
+                <input type="text" id="global-search" placeholder="Search..." class="w-full bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-gray-800 rounded-full py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm dark:text-slate-200 dark:placeholder-slate-500" oninput="app.handleGlobalSearch(this.value)">
             </div>
 
             <!-- HEADER STATS BUTTONS -->
@@ -119,12 +118,12 @@
                     <!-- Progress Border Layer -->
                     <div id="streak-progress-bg" class="absolute inset-0 transition-all duration-500 ease-out" style="background: conic-gradient(from 0deg, transparent 0%, transparent 100%);"></div>
                     <!-- Inner Content -->
-                    <div class="relative flex items-center gap-1.5 bg-orange-50 px-2 py-1.5 rounded-[6px] h-full w-full dark:bg-slate-900 z-10 border border-transparent">
+                    <div class="relative flex items-center gap-1.5 bg-gray-50 px-2 py-1.5 rounded-[6px] h-full w-full dark:bg-black z-10 border border-transparent">
                         <i class="fas fa-fire text-orange-500 text-xs dark:text-orange-400"></i>
                         <span class="text-xs font-bold text-orange-700 dark:text-orange-300" id="mini-streak">0</span>
                     </div>
                 </button>
-                <button onclick="app.openWeeklyModal()" class="flex items-center gap-1.5 bg-white border border-gray-100 px-2 py-1.5 rounded-lg active:scale-95 hover:scale-[1.02] transition-all shadow-sm h-9 dark:bg-slate-800 dark:border-slate-700">
+                <button onclick="app.openWeeklyModal()" class="flex items-center gap-1.5 bg-white border border-gray-100 px-2 py-1.5 rounded-lg active:scale-95 hover:scale-[1.02] transition-all shadow-sm h-9 dark:bg-[#0a0a0a] dark:border-gray-800">
                     <i class="fas fa-chart-bar text-blue-500 text-xs dark:text-blue-400"></i>
                     <span class="text-xs font-bold text-blue-700 dark:text-blue-300" id="mini-weekly">0</span>
                 </button>
@@ -139,13 +138,13 @@
     <main class="flex-1 min-h-0 overflow-hidden relative" id="main-container">
         
         <!-- VIEW: JOBS (Application Dashboard) -->
-        <div id="view-jobs" class="h-full flex flex-col absolute inset-0 transition-transform duration-300 transform translate-x-0 bg-white dark:bg-slate-900">
+        <div id="view-jobs" class="h-full flex flex-col absolute inset-0 transition-transform duration-300 transform translate-x-0 bg-white dark:bg-black">
             
             <!-- Quick Gadgets Section -->
-            <div class="bg-white pt-4 pb-2 px-4 shrink-0 flex flex-col items-center border-b border-gray-100 dark:bg-slate-900 dark:border-slate-800">
+            <div class="bg-white pt-4 pb-2 px-4 shrink-0 flex flex-col items-center border-b border-gray-100 dark:bg-black dark:border-gray-800">
                 <!-- Quote Display (Clickable) -->
                 <div onclick="app.openQuoteModal()" class="cursor-pointer group flex items-center justify-center gap-2 mb-3 px-2 w-full active:scale-95 transition-transform" title="Tap to edit quote">
-                    <p id="quote-display" class="text-[10px] text-gray-400 font-bold uppercase tracking-widest dark:text-slate-500 text-center select-none group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
+                    <p id="quote-display" class="text-[10px] text-gray-400 font-bold uppercase tracking-widest dark:text-slate-500 text-center select-none group-hover:text-zinc-900 dark:group-hover:text-blue-400 transition-colors">
                         Quick Content
                     </p>
                     <i class="fas fa-pen text-[8px] text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity dark:text-slate-600"></i>
@@ -157,7 +156,7 @@
             </div>
 
             <!-- Jobs List (Grouped by Age) -->
-            <div id="jobs-list" class="flex-1 overflow-y-auto p-4 space-y-4 safe-pb pb-24 bg-gray-50 dark:bg-slate-900">
+            <div id="jobs-list" class="flex-1 overflow-y-auto p-4 space-y-4 safe-pb pb-24 bg-gray-50 dark:bg-black">
                 <div class="text-center mt-10 text-gray-400 text-sm">
                     <i class="fas fa-cloud-download-alt text-3xl mb-2 opacity-50"></i>
                     <p>Loading your pouch...</p>
@@ -165,15 +164,15 @@
             </div>
 
             <!-- FAB (Add Job) -->
-            <button onclick="app.openJobModal()" aria-label="Add New Job" class="absolute bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-[1.25rem] shadow-xl shadow-blue-600/20 flex items-center justify-center text-xl hover:scale-105 active:scale-95 transition-all z-10 hover:bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-500">
+            <button onclick="app.openJobModal()" aria-label="Add New Job" class="absolute bottom-6 right-6 w-14 h-14 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-full shadow-lg shadow-sm flex items-center justify-center text-xl hover:scale-105 active:scale-95 transition-all z-10 hover:bg-zinc-800 dark:hover:bg-zinc-200">
                 <i class="fas fa-plus" aria-hidden="true"></i>
             </button>
         </div>
 
         <!-- VIEW: INTERVIEWS (Pipeline & Prep) -->
-        <div id="view-interviews" class="h-full flex flex-col absolute inset-0 bg-gray-50 transition-transform duration-300 transform translate-x-full dark:bg-slate-900">
+        <div id="view-interviews" class="h-full flex flex-col absolute inset-0 bg-gray-50 transition-transform duration-300 transform translate-x-full dark:bg-black">
             <!-- Pipeline Health Dashboard -->
-            <div class="bg-white px-4 py-3 border-b border-gray-100 shrink-0 dark:bg-slate-900 dark:border-slate-800 shadow-sm z-10">
+            <div class="bg-white px-4 py-3 border-b border-gray-100 shrink-0 dark:bg-black dark:border-gray-800 shadow-sm z-10">
                 
                 <!-- Visual Timeline (Horizontal Scroll) -->
                 <div id="interview-timeline" class="flex gap-2 overflow-x-auto no-scrollbar snap-x pb-3">
@@ -182,15 +181,15 @@
 
                 <!-- Stats Row - Streamlined -->
                 <div class="grid grid-cols-3 gap-2 mb-3">
-                    <div class="bg-blue-50 p-2 rounded-lg border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800 flex flex-col items-center">
+                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-100 dark:bg-gray-800 dark:border-blue-800 flex flex-col items-center">
                         <div class="text-[9px] uppercase font-bold text-blue-400">Active</div>
                         <div class="text-lg font-black text-blue-700 dark:text-blue-300 leading-none mt-0.5" id="stats-int-active">0</div>
                     </div>
-                    <div class="bg-emerald-50 p-2 rounded-lg border border-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-800 flex flex-col items-center">
+                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-100 dark:bg-gray-800 dark:border-emerald-800 flex flex-col items-center">
                         <div class="text-[9px] uppercase font-bold text-emerald-400">Offers</div>
                         <div class="text-lg font-black text-emerald-700 dark:text-emerald-300 leading-none mt-0.5" id="stats-int-offers">0</div>
                     </div>
-                    <div class="bg-red-50 p-2 rounded-lg border border-red-100 dark:bg-red-900/20 dark:border-red-800 flex flex-col items-center">
+                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-100 dark:bg-gray-800 dark:border-red-800 flex flex-col items-center">
                         <div class="text-[9px] uppercase font-bold text-red-400">Urgent</div>
                         <div class="text-lg font-black text-red-700 dark:text-red-300 leading-none mt-0.5" id="stats-int-urgent">0</div>
                     </div>
@@ -199,9 +198,9 @@
                 <!-- Filter Tabs -->
                 <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                     <button onclick="app.filterInterviews('all')" class="int-filter-btn active px-3 py-1.5 rounded-lg bg-gray-800 text-white text-[10px] font-bold dark:bg-white dark:text-slate-900 transition-all shadow-sm" data-filter="all">All</button>
-                    <button onclick="app.filterInterviews('active')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-slate-800 dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="active">Active</button>
-                    <button onclick="app.filterInterviews('offers')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-slate-800 dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="offers">Offers</button>
-                    <button onclick="app.filterInterviews('archived')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-slate-800 dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="archived">Archived</button>
+                    <button onclick="app.filterInterviews('active')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-[#0a0a0a] dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="active">Active</button>
+                    <button onclick="app.filterInterviews('offers')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-[#0a0a0a] dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="offers">Offers</button>
+                    <button onclick="app.filterInterviews('archived')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-[#0a0a0a] dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="archived">Archived</button>
                 </div>
             </div>
 
@@ -211,18 +210,18 @@
             </div>
 
             <!-- FAB -->
-            <button onclick="app.openInterviewModal()" aria-label="Add New Interview" class="absolute bottom-6 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg shadow-indigo-600/30 flex items-center justify-center text-2xl active:scale-90 transition z-10 hover:bg-indigo-500 dark:bg-indigo-600 dark:hover:bg-indigo-500">
+            <button onclick="app.openInterviewModal()" aria-label="Add New Interview" class="absolute bottom-6 right-6 w-14 h-14 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-full shadow-lg shadow-sm flex items-center justify-center text-2xl active:scale-90 transition z-10 hover:bg-zinc-800 dark:hover:bg-zinc-200">
                 <i class="fas fa-plus" aria-hidden="true"></i>
             </button>
         </div>
 
         <!-- VIEW: TEMPLATES (Management) -->
-        <div id="view-templates" class="h-full flex flex-col absolute inset-0 bg-gray-50 transition-transform duration-300 transform translate-x-full dark:bg-slate-900">
+        <div id="view-templates" class="h-full flex flex-col absolute inset-0 bg-gray-50 transition-transform duration-300 transform translate-x-full dark:bg-black">
             <!-- Template Header / Navigation -->
-            <div class="px-4 py-3 bg-white border-b border-gray-100 shrink-0 flex flex-col gap-3 dark:bg-slate-900 dark:border-slate-800">
+            <div class="px-4 py-3 bg-white border-b border-gray-100 shrink-0 flex flex-col gap-3 dark:bg-black dark:border-gray-800">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <button id="btn-template-back" onclick="app.closeFolder()" class="hidden text-gray-500 hover:text-blue-600 mr-1 p-1 dark:text-slate-400 dark:hover:text-blue-400">
+                        <button id="btn-template-back" onclick="app.closeFolder()" class="hidden text-gray-500 hover:text-blue-600 mr-1 p-1 dark:text-slate-400 dark:hover:text-zinc-100">
                             <i class="fas fa-arrow-left"></i>
                         </button>
                         <div>
@@ -231,7 +230,7 @@
                         </div>
                     </div>
                     <!-- Add Profile Link Button -->
-                    <button onclick="app.openProfileModal()" class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg font-bold border border-gray-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700 transition">
+                    <button onclick="app.openProfileModal()" class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg font-bold border border-gray-200 dark:bg-[#0a0a0a] dark:text-slate-300 dark:border-gray-800 dark:hover:bg-slate-700 transition">
                         <i class="fas fa-link mr-1"></i> Profile Links
                     </button>
                 </div>
@@ -242,13 +241,13 @@
             </div>
 
              <!-- FAB (Add Template) -->
-             <button onclick="app.openTemplateModal()" aria-label="Add New Template" class="absolute bottom-6 right-6 w-14 h-14 bg-purple-600 text-white rounded-full shadow-lg shadow-purple-600/30 flex items-center justify-center text-2xl active:scale-90 transition z-10 hover:bg-purple-500 dark:bg-purple-600 dark:hover:bg-purple-500">
+             <button onclick="app.openTemplateModal()" aria-label="Add New Template" class="absolute bottom-6 right-6 w-14 h-14 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-full shadow-lg shadow-sm flex items-center justify-center text-2xl active:scale-90 transition z-10 hover:bg-zinc-800 dark:hover:bg-zinc-200">
                 <i class="fas fa-plus" aria-hidden="true"></i>
             </button>
         </div>
 
         <!-- VIEW: PLAN (Strategy & Goals) -->
-        <div id="view-plan" class="h-full flex flex-col absolute inset-0 bg-gray-50/50 transition-transform duration-300 transform translate-x-full dark:bg-slate-900">
+        <div id="view-plan" class="h-full flex flex-col absolute inset-0 bg-gray-50/50 transition-transform duration-300 transform translate-x-full dark:bg-black">
             
             <!-- Content Area -->
             <div class="flex-1 overflow-y-auto p-5 space-y-6 safe-pb pb-24 scroll-smooth">
@@ -257,7 +256,7 @@
                 <div class="grid grid-cols-2 gap-4 fade-in">
                     
                     <!-- 1. VELOCITY GAUGE (Fixed) -->
-                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col justify-between relative overflow-hidden dark:bg-slate-800 dark:border-slate-700 h-40">
+                    <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex flex-col justify-between relative overflow-hidden dark:bg-[#0a0a0a] dark:border-gray-800 h-40">
                          <div class="absolute top-0 right-0 p-3 opacity-10">
                             <i class="fas fa-tachometer-alt text-4xl text-blue-500"></i>
                         </div>
@@ -287,12 +286,12 @@
                         </div>
 
                         <div class="mt-1 text-center">
-                            <span id="velocity-label" class="text-[9px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full dark:bg-blue-900/30 dark:text-blue-300">Warming Up</span>
+                            <span id="velocity-label" class="text-[9px] font-bold text-blue-600 bg-gray-50 px-2 py-0.5 rounded-full dark:bg-gray-800 dark:text-blue-300">Warming Up</span>
                         </div>
                     </div>
 
                     <!-- 2. THE NORTH STAR (Milky Way Space Theme) -->
-                    <div class="relative rounded-2xl p-4 shadow-lg overflow-hidden group cursor-pointer text-white border border-white/10 h-40 flex flex-col justify-between" onclick="app.openNorthStarModal()">
+                    <div class="relative rounded-xl p-4 shadow-lg overflow-hidden group cursor-pointer text-white border border-white/10 h-40 flex flex-col justify-between" onclick="app.openNorthStarModal()">
                         <!-- Milky Way Background -->
                         <div class="absolute inset-0 bg-slate-950">
                             <!-- Deep Space Gradient -->
@@ -328,11 +327,11 @@
                 </div>
 
                 <!-- Daily Plan Section -->
-                <div class="fade-in bg-white rounded-2xl p-5 shadow-sm border border-gray-100 dark:bg-slate-800 dark:border-slate-700">
+                <div class="fade-in bg-white rounded-xl p-5 shadow-sm border border-gray-100 dark:bg-[#0a0a0a] dark:border-gray-800">
                     <!-- Header with Progress -->
                     <div class="flex justify-between items-end mb-3">
                         <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 rounded-full bg-yellow-50 flex items-center justify-center text-yellow-500 dark:bg-yellow-900/20 dark:text-yellow-400">
+                            <div class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-yellow-500 dark:bg-gray-800 dark:text-yellow-400">
                                 <i class="fas fa-trophy text-sm"></i>
                             </div>
                             <div>
@@ -348,7 +347,7 @@
                     <!-- Quick Add Input (Inline) -->
                     <div class="relative mb-2">
                         <input type="text" id="quick-task-input" class="w-full bg-gray-50 border border-gray-100 rounded-xl py-2.5 pl-4 pr-10 text-sm outline-none focus:border-blue-300 focus:bg-white transition-all dark:bg-slate-700/50 dark:border-slate-600 dark:text-white dark:focus:bg-slate-700" placeholder="Add a new win..." onkeydown="if(event.key === 'Enter') app.addQuickTask()">
-                        <button onclick="app.addQuickTask()" class="absolute right-2 top-1.5 w-7 h-7 flex items-center justify-center bg-blue-600 text-white rounded-lg shadow-sm hover:bg-blue-500 transition active:scale-95">
+                        <button onclick="app.addQuickTask()" class="absolute right-2 top-1.5 w-7 h-7 flex items-center justify-center bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-lg shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition active:scale-95">
                             <i class="fas fa-plus text-xs"></i>
                         </button>
                     </div>
@@ -359,7 +358,7 @@
                     </div>
 
                     <!-- Footer: Toggle Visibility -->
-                    <div class="flex justify-between items-center pt-2 border-t border-gray-50 mt-1 dark:border-slate-700">
+                    <div class="flex justify-between items-center pt-2 border-t border-gray-50 mt-1 dark:border-gray-800">
                         <span class="text-[9px] text-gray-300 font-medium dark:text-slate-600 uppercase tracking-wider">Tap to edit</span>
                         
                         <!-- Toggle Hide/Show Done -->
@@ -373,8 +372,8 @@
                 <div class="fade-in grid grid-cols-1 gap-4" style="animation-delay: 0.2s">
                     
                     <!-- Weekly Card -->
-                    <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm dark:bg-slate-800 dark:border-slate-700">
-                        <div class="bg-purple-50 px-4 py-3 flex justify-between items-center border-b border-purple-100 dark:bg-purple-900/20 dark:border-purple-800">
+                    <div class="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm dark:bg-[#0a0a0a] dark:border-gray-800">
+                        <div class="bg-gray-50 px-4 py-3 flex justify-between items-center border-b border-gray-100 dark:bg-gray-800 dark:border-purple-800">
                             <h3 class="font-bold text-sm text-purple-800 dark:text-purple-300 flex items-center gap-2">
                                 <i class="fas fa-calendar-week"></i> Weekly Focus
                             </h3>
@@ -384,8 +383,8 @@
                     </div>
 
                     <!-- Monthly Card -->
-                    <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm dark:bg-slate-800 dark:border-slate-700">
-                        <div class="bg-pink-50 px-4 py-3 flex justify-between items-center border-b border-pink-100 dark:bg-pink-900/20 dark:border-pink-800">
+                    <div class="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm dark:bg-[#0a0a0a] dark:border-gray-800">
+                        <div class="bg-gray-50 px-4 py-3 flex justify-between items-center border-b border-gray-100 dark:bg-gray-800 dark:border-pink-800">
                             <h3 class="font-bold text-sm text-pink-800 dark:text-pink-300 flex items-center gap-2">
                                 <i class="fas fa-bullseye"></i> Monthly Vision
                             </h3>
@@ -400,20 +399,20 @@
     </main>
 
     <!-- === BOTTOM NAV === -->
-    <nav class="bg-white border-t border-gray-200 flex justify-around items-center h-16 safe-pb shrink-0 z-30 dark:bg-slate-900 dark:border-slate-800">
-        <button onclick="app.switchView('jobs')" class="nav-btn active text-blue-600 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-blue-400 scale-105 transition-all">
+    <nav class="bg-white border-t border-gray-200 flex justify-around items-center h-16 safe-pb shrink-0 z-30 dark:bg-black dark:border-gray-800">
+        <button onclick="app.switchView('jobs')" class="nav-btn active text-zinc-900 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-zinc-100 scale-105 transition-all">
             <i class="fas fa-check-double text-xl group-active:scale-90 transition"></i>
             <span class="text-[10px] font-bold">Apply</span>
         </button>
-        <button onclick="app.switchView('interviews')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 hover:scale-105 transition-all">
+        <button onclick="app.switchView('interviews')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-105 transition-all">
             <i class="fas fa-user-tie text-xl group-active:scale-90 transition"></i>
             <span class="text-[10px] font-bold">Interview</span>
         </button>
-        <button onclick="app.switchView('plan')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 hover:scale-105 transition-all">
+        <button onclick="app.switchView('plan')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-105 transition-all">
             <i class="fas fa-bullseye text-xl group-active:scale-90 transition"></i>
             <span class="text-[10px] font-bold">Plan</span>
         </button>
-        <button onclick="app.switchView('templates')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 hover:scale-105 transition-all">
+        <button onclick="app.switchView('templates')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-105 transition-all">
             <i class="fas fa-folder text-xl group-active:scale-90 transition"></i>
             <span class="text-[10px] font-bold">Library</span>
         </button>
@@ -424,14 +423,14 @@
     <!-- NEW: DAY SUMMARY BOTTOM SHEET (Mobile Friendly) -->
     <div id="modal-day-summary" class="fixed inset-0 z-[100] hidden flex items-end justify-center pointer-events-none">
         <div class="absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity opacity-0" id="modal-day-summary-bg" onclick="app.closeDaySummary()"></div>
-        <div class="bg-white w-full max-w-md rounded-t-3xl shadow-2xl transform translate-y-full transition-transform duration-300 pointer-events-auto flex flex-col max-h-[80vh] dark:bg-slate-900 dark:border-t dark:border-slate-800" id="modal-day-summary-content">
+        <div class="bg-white w-full max-w-md rounded-t-xl shadow-lg border border-gray-100 dark:border-gray-800 transform translate-y-full transition-transform duration-300 pointer-events-auto flex flex-col max-h-[80vh] dark:bg-black dark:border-t dark:border-gray-800" id="modal-day-summary-content">
             <div class="p-2 flex justify-center shrink-0" onclick="app.closeDaySummary()">
                 <div class="w-12 h-1.5 bg-gray-300 rounded-full dark:bg-slate-700"></div>
             </div>
             <div class="px-6 pb-6 pt-2 overflow-y-auto flex-1">
                  <div class="flex justify-between items-center mb-4">
                     <h3 class="font-bold text-2xl text-gray-800 dark:text-white" id="day-summary-date">Today</h3>
-                    <button onclick="app.closeDaySummary()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-400"><i class="fas fa-times"></i></button>
+                    <button onclick="app.closeDaySummary()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400"><i class="fas fa-times"></i></button>
                 </div>
                 <div id="day-summary-list" class="space-y-3">
                     <!-- Content -->
@@ -442,10 +441,10 @@
 
     <!-- NEW: HISTORY LOG MODAL -->
     <div id="modal-history" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-sm" onclick="if(event.target === this) this.classList.add('hidden')">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-5 shadow-2xl flex flex-col max-h-[80vh] dark:bg-slate-900 dark:border dark:border-slate-700">
+        <div class="bg-white w-full max-w-sm rounded-xl p-5 shadow-lg border border-gray-100 dark:border-gray-800 flex flex-col max-h-[80vh] dark:bg-black dark:border dark:border-gray-800">
              <div class="flex justify-between items-center mb-4 shrink-0">
                 <h3 class="font-bold text-lg text-gray-800 dark:text-white">Activity Log</h3>
-                <button onclick="document.getElementById('modal-history').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-400"><i class="fas fa-times"></i></button>
+                <button onclick="document.getElementById('modal-history').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400"><i class="fas fa-times"></i></button>
             </div>
             <div id="history-list-content" class="overflow-y-auto custom-scrollbar space-y-3">
                 <!-- Injected via JS -->
@@ -455,19 +454,19 @@
 
     <!-- UPDATED: Interview Editor Modal -->
     <div id="modal-interview" class="fixed inset-0 bg-gray-900/40 z-[90] hidden flex items-end sm:items-center justify-center backdrop-blur-sm sm:p-4">
-        <div class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] transition-all dark:bg-slate-900 dark:border dark:border-slate-800">
+        <div class="bg-white w-full sm:max-w-md rounded-t-xl sm:rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 overflow-hidden flex flex-col max-h-[90vh] transition-all dark:bg-black dark:border dark:border-gray-800">
             <!-- Header -->
-            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 dark:bg-slate-900 dark:border-slate-800">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 dark:bg-black dark:border-gray-800">
                 <span class="font-bold text-lg dark:text-white">Add to Pipeline</span>
-                <button onclick="document.getElementById('modal-interview').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
+                <button onclick="document.getElementById('modal-interview').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
             </div>
             
             <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-5">
                 
                 <!-- Priority Toggle -->
-                <div class="flex items-center justify-between bg-yellow-50 p-3 rounded-xl border border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-700/50">
+                <div class="flex items-center justify-between bg-gray-50 p-3 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-yellow-700/50">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 dark:bg-yellow-900/40 dark:text-yellow-400">
+                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-yellow-600 dark:bg-gray-800 dark:text-yellow-400">
                             <i class="fas fa-star text-xs"></i>
                         </div>
                         <div>
@@ -485,11 +484,11 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Company</label>
-                        <input type="text" id="int-company" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none font-bold text-sm text-gray-800 dark:bg-slate-800 dark:text-white dark:focus:bg-slate-800" placeholder="e.g. Google">
+                        <input type="text" id="int-company" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none font-bold text-sm text-gray-800 dark:bg-[#0a0a0a] dark:text-white dark:focus:bg-slate-800" placeholder="e.g. Google">
                     </div>
                     <div>
                         <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Role</label>
-                        <input type="text" id="int-role" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-gray-800 dark:bg-slate-800 dark:text-white dark:focus:bg-slate-800" placeholder="e.g. SDE II">
+                        <input type="text" id="int-role" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-gray-800 dark:bg-[#0a0a0a] dark:text-white dark:focus:bg-slate-800" placeholder="e.g. SDE II">
                     </div>
                 </div>
 
@@ -497,7 +496,7 @@
                 <div class="grid grid-cols-1 gap-3">
                     <div>
                         <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Current Stage</label>
-                        <select id="int-status" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 outline-none text-sm font-bold text-gray-700 dark:bg-slate-800 dark:text-white appearance-none">
+                        <select id="int-status" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 outline-none text-sm font-bold text-gray-700 dark:bg-[#0a0a0a] dark:text-white appearance-none">
                             <option value="Test Received">Online Test / Assignment</option>
                             <option value="HR Screen">HR Screen</option>
                             <option value="Technical">Technical Round</option>
@@ -511,45 +510,45 @@
                     
                     <div>
                         <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Deadline / Date (Optional)</label>
-                        <input type="datetime-local" id="int-deadline" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-gray-700 dark:bg-slate-800 dark:text-white dark:focus:bg-slate-800 dark:[color-scheme:dark]">
+                        <input type="datetime-local" id="int-deadline" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-gray-700 dark:bg-[#0a0a0a] dark:text-white dark:focus:bg-slate-800 dark:[color-scheme:dark]">
                     </div>
                 </div>
 
                 <!-- Prep Notes -->
                 <div>
                     <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Preparation Notes</label>
-                    <textarea id="int-notes" class="w-full h-24 p-4 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-gray-700 leading-relaxed placeholder-gray-400 resize-none dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800" placeholder="Topics to cover, system design concepts, behavioral stories..."></textarea>
+                    <textarea id="int-notes" class="w-full h-24 p-4 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-gray-700 leading-relaxed placeholder-gray-400 resize-none dark:bg-[#0a0a0a] dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800" placeholder="Topics to cover, system design concepts, behavioral stories..."></textarea>
                 </div>
             </div>
-            <div class="p-6 pt-2 bg-white border-t border-gray-50 z-10 dark:bg-slate-900 dark:border-slate-800">
-                <button onclick="app.saveInterview()" class="w-full py-3.5 bg-indigo-600 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 hover:bg-indigo-700 active:scale-[0.98] transition text-sm">Save</button>
+            <div class="p-6 pt-2 bg-white border-t border-gray-50 z-10 dark:bg-black dark:border-gray-800">
+                <button onclick="app.saveInterview()" class="w-full py-3.5 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-[0.98] transition text-sm">Save</button>
             </div>
         </div>
     </div>
 
     <!-- NEW: QUOTE EDITOR MODAL -->
     <div id="modal-quote" class="fixed inset-0 bg-black/50 z-[90] hidden flex items-center justify-center p-6 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
+        <div class="bg-white w-full max-w-sm rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <h3 class="font-bold text-lg mb-2 dark:text-white">Daily Inspiration</h3>
             <p class="text-xs text-gray-400 mb-4 dark:text-slate-400">What drives you today?</p>
             <input type="text" id="quote-input" class="w-full bg-gray-50 rounded-xl py-3 px-4 mb-4 outline-none text-sm border border-gray-100 focus:border-blue-500 focus:bg-white transition-all dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:focus:border-blue-500" placeholder="Enter your quote...">
             <div class="flex gap-3">
                 <button onclick="document.getElementById('modal-quote').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
-                <button onclick="app.saveQuote()" class="flex-1 py-3 text-white font-bold bg-blue-600 rounded-xl hover:bg-blue-500">Save Quote</button>
+                <button onclick="app.saveQuote()" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Save Quote</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL 1: MOMENTUM (STREAK) -->
     <div id="modal-streak" class="fixed inset-0 bg-black/50 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="if(event.target === this) this.classList.add('hidden')">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-5 shadow-2xl flex flex-col max-h-[85dvh] overflow-y-auto dark:bg-slate-800 dark:border dark:border-slate-700">
+        <div class="bg-white w-full max-w-sm rounded-xl p-5 shadow-lg border border-gray-100 dark:border-gray-800 flex flex-col max-h-[85dvh] overflow-y-auto dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <div class="flex justify-between items-center mb-4 shrink-0">
                 <h3 class="font-bold text-lg text-gray-800 dark:text-white">Momentum</h3>
                 <button onclick="document.getElementById('modal-streak').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600"><i class="fas fa-times"></i></button>
             </div>
 
             <!-- Simplified Streak Section -->
-            <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-5 border border-orange-200 mb-5 relative overflow-hidden dark:from-orange-900/40 dark:to-orange-900/20 dark:border-orange-500/20">
+            <div class="bg-gradient-to-br bg-gray-50  rounded-xl p-5 border border-gray-200 mb-5 relative overflow-hidden dark:bg-gray-800  dark:border-orange-500/20">
                 <div class="absolute top-0 right-0 -mr-4 -mt-4 text-orange-200/50 text-9xl dark:text-orange-500/10">
                     <i class="fas fa-fire"></i>
                 </div>
@@ -560,7 +559,7 @@
                         <span id="streak-count">0</span>
                         <i class="fas fa-fire text-4xl animate-pulse"></i>
                     </div>
-                    <div class="mt-4 w-full bg-white/50 rounded-full h-3 p-0.5 dark:bg-slate-900/30">
+                    <div class="mt-4 w-full bg-white/50 rounded-full h-3 p-0.5 dark:bg-black/30">
                         <div id="streak-progress-bar" class="h-full rounded-full bg-orange-500 transition-all duration-1000 w-0 shadow-sm"></div>
                     </div>
                     
@@ -570,7 +569,7 @@
                             <span class="text-[9px] font-bold text-orange-400 block tracking-wider dark:text-orange-300/70">TODAY'S PROGRESS</span>
                             <span class="text-sm font-black text-orange-600 dark:text-orange-400" id="today-progress-text">0 / 5</span>
                         </div>
-                        <button onclick="app.editDailyTarget()" class="flex items-center gap-1.5 bg-white/60 hover:bg-white text-orange-600 px-2.5 py-1.5 rounded-lg border border-orange-100 shadow-sm transition active:scale-95 group dark:bg-slate-800 dark:border-slate-600 dark:text-orange-400 dark:hover:bg-slate-700">
+                        <button onclick="app.editDailyTarget()" class="flex items-center gap-1.5 bg-white/60 hover:bg-white text-orange-600 px-2.5 py-1.5 rounded-lg border border-gray-100 shadow-sm transition active:scale-95 group dark:bg-[#0a0a0a] dark:border-slate-600 dark:text-orange-400 dark:hover:bg-slate-700">
                             <span class="text-[9px] font-bold">SET GOAL</span>
                             <i class="fas fa-pencil-alt text-[9px] group-hover:rotate-12 transition-transform"></i>
                         </button>
@@ -579,7 +578,7 @@
             </div>
             
             <!-- Monthly Streak Map (Fire Map) -->
-            <div class="bg-white rounded-xl border border-gray-100 p-4 shadow-sm dark:bg-slate-800/50 dark:border-slate-700">
+            <div class="bg-white rounded-xl border border-gray-100 p-4 shadow-sm dark:bg-[#0a0a0a]/50 dark:border-gray-800">
                 <div class="flex justify-between items-center mb-3">
                     <h4 class="font-bold text-gray-700 text-xs uppercase tracking-wide dark:text-slate-400">Streak Calendar</h4>
                     <span id="streak-month-label" class="text-[10px] font-bold text-gray-400 dark:text-slate-500"></span>
@@ -596,26 +595,26 @@
 
     <!-- MODAL 2: WEEKLY INSIGHTS & HEATMAP -->
     <div id="modal-weekly" class="fixed inset-0 bg-black/50 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="if(event.target === this) this.classList.add('hidden')">
-        <div class="bg-white w-full max-w-md rounded-2xl p-5 shadow-2xl flex flex-col max-h-[85dvh] overflow-y-auto dark:bg-slate-800 dark:border dark:border-slate-700">
+        <div class="bg-white w-full max-w-md rounded-xl p-5 shadow-lg border border-gray-100 dark:border-gray-800 flex flex-col max-h-[85dvh] overflow-y-auto dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <div class="flex justify-between items-center mb-4 shrink-0">
                 <h3 class="font-bold text-lg text-gray-800 dark:text-white">Weekly Insights</h3>
                 <button onclick="document.getElementById('modal-weekly').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600"><i class="fas fa-times"></i></button>
             </div>
 
             <!-- Chart Section (4 Weeks) -->
-            <div class="bg-white rounded-xl border border-gray-100 p-4 shadow-sm mb-4 dark:bg-slate-800/50 dark:border-slate-700">
+            <div class="bg-white rounded-xl border border-gray-100 p-4 shadow-sm mb-4 dark:bg-[#0a0a0a]/50 dark:border-gray-800">
                 <div class="flex justify-between items-end mb-4">
                     <h3 class="font-bold text-gray-700 text-xs flex items-center gap-2 uppercase tracking-wide dark:text-slate-300">
                         <i class="fas fa-chart-line text-blue-500"></i> Performance
                     </h3>
-                    <span id="trend-text" class="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full dark:bg-green-500/10 dark:text-green-400">--</span>
+                    <span id="trend-text" class="text-[10px] font-bold text-green-600 bg-gray-50 px-2 py-0.5 rounded-full dark:bg-gray-800 dark:text-green-400">--</span>
                 </div>
                 
                 <div class="h-48 w-full relative">
                     <canvas id="insightsChart"></canvas>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-gray-50 dark:border-slate-700">
+                <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-gray-50 dark:border-gray-800">
                         <div>
                             <div class="text-[10px] text-gray-400 uppercase font-bold dark:text-slate-500">This Week</div>
                             <div class="text-xl font-bold text-gray-800 dark:text-slate-200" id="weekly-total">0</div>
@@ -629,7 +628,7 @@
             </div>
 
             <!-- Calendar Heatmap Section (Moved Here) -->
-            <div class="bg-white rounded-xl border border-gray-100 p-4 shadow-sm dark:bg-slate-800/50 dark:border-slate-700">
+            <div class="bg-white rounded-xl border border-gray-100 p-4 shadow-sm dark:bg-[#0a0a0a]/50 dark:border-gray-800">
                 <div class="flex justify-between items-center mb-3">
                     <h4 class="font-bold text-gray-700 text-xs uppercase tracking-wide dark:text-slate-300">Monthly Activity</h4>
                     <span id="current-month-label" class="text-[10px] font-bold text-gray-400 dark:text-slate-500"></span>
@@ -647,7 +646,7 @@
                         <span class="text-[9px] text-gray-400 dark:text-slate-500">0</span>
                     </div>
                     <div class="flex items-center gap-1">
-                        <div class="w-2.5 h-2.5 rounded-sm bg-green-200 dark:bg-green-500/30"></div>
+                        <div class="w-2.5 h-2.5 rounded-sm bg-green-200 dark:bg-gray-800"></div>
                         <span class="text-[9px] text-gray-400 dark:text-slate-500">Low</span>
                     </div>
                     <div class="flex items-center gap-1">
@@ -663,7 +662,7 @@
 
     <!-- Target Editor Modal -->
     <div id="modal-target" class="fixed inset-0 bg-black/50 z-[90] hidden flex items-center justify-center p-6 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-xs rounded-2xl p-6 shadow-2xl text-center dark:bg-slate-800 dark:border dark:border-slate-700">
+        <div class="bg-white w-full max-w-xs rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 text-center dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <h3 class="font-bold text-lg mb-2 dark:text-white">Set Daily Target</h3>
             <p class="text-xs text-gray-400 mb-4 dark:text-slate-400">How many jobs will you apply to daily?</p>
             <div class="flex items-center justify-center gap-4 mb-6">
@@ -673,26 +672,26 @@
             </div>
             <div class="flex gap-3">
                 <button onclick="document.getElementById('modal-target').classList.add('hidden')" class="flex-1 py-2 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
-                <button onclick="app.saveTarget()" class="flex-1 py-2 text-white font-bold bg-indigo-600 rounded-xl hover:bg-indigo-500">Save</button>
+                <button onclick="app.saveTarget()" class="flex-1 py-2 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Save</button>
             </div>
         </div>
     </div>
 
     <!-- Daily Task Modal -->
     <div id="modal-add-task" class="fixed inset-0 bg-black/50 z-[70] hidden flex items-center justify-center p-6 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
+        <div class="bg-white w-full max-w-sm rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <h3 class="font-bold text-lg mb-4 dark:text-white" id="daily-task-modal-title">Add Daily Win</h3>
             <input type="text" id="new-task-input" class="w-full bg-gray-100 rounded-xl py-3 px-4 mb-4 outline-none text-sm focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white dark:placeholder-slate-400" placeholder="e.g. Apply to 5 jobs">
             <div class="flex gap-3">
                 <button onclick="document.getElementById('modal-add-task').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
-                <button onclick="app.saveDailyTask()" id="daily-task-save-btn" class="flex-1 py-3 text-white font-bold bg-blue-600 rounded-xl hover:bg-blue-500">Add</button>
+                <button onclick="app.saveDailyTask()" id="daily-task-save-btn" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Add</button>
             </div>
         </div>
     </div>
     
     <!-- NEW: North Star Editor Modal -->
     <div id="modal-northstar" class="fixed inset-0 bg-black/50 z-[90] hidden flex items-center justify-center p-6 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
+        <div class="bg-white w-full max-w-sm rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-bold text-lg dark:text-white">Define Your North Star</h3>
                 <button onclick="document.getElementById('modal-northstar').classList.add('hidden')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
@@ -721,7 +720,7 @@
             </div>
             
             <div class="mt-6">
-                <button onclick="app.saveNorthStar()" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/30 hover:scale-[1.02] transition-transform">
+                <button onclick="app.saveNorthStar()" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg shadow-sm hover:scale-[1.02] transition-transform">
                     Set Coordinates 🚀
                 </button>
             </div>
@@ -730,18 +729,18 @@
 
     <!-- NEW: Quick Notes Manager Modal -->
     <div id="modal-quick-notes" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
+        <div class="bg-white w-full max-w-sm rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <h3 class="font-bold text-lg mb-4 dark:text-white">Manage Quick Notes</h3>
             
             <div class="max-h-48 overflow-y-auto mb-4 space-y-2 custom-scrollbar pr-1" id="quick-notes-manage-list">
                 <!-- List items injected here -->
             </div>
             
-            <div class="border-t border-gray-100 pt-4 dark:border-slate-700">
+            <div class="border-t border-gray-100 pt-4 dark:border-gray-800">
                 <h4 class="text-xs font-bold text-gray-400 uppercase mb-2 dark:text-slate-500">Add New Note</h4>
                 <div class="flex gap-2">
                     <input type="text" id="quick-note-input" class="flex-1 bg-gray-100 rounded-xl py-2 px-4 outline-none text-sm border-2 border-transparent focus:border-blue-500 focus:bg-white transition-all dark:bg-slate-700 dark:text-white dark:focus:bg-slate-800" placeholder="e.g. Remote Only">
-                    <button onclick="app.saveQuickNote()" class="bg-blue-600 text-white rounded-xl px-4 py-2 font-bold hover:bg-blue-500 active:scale-95 transition">Add</button>
+                    <button onclick="app.saveQuickNote()" class="bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-xl px-4 py-2 font-bold hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-95 transition">Add</button>
                 </div>
             </div>
             
@@ -751,13 +750,13 @@
 
     <!-- Settings/Menu Modal -->
     <div id="modal-settings" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-6 backdrop-blur-sm" onclick="if(event.target === this) this.classList.add('hidden')">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
+        <div class="bg-white w-full max-w-sm rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <h3 class="font-bold text-lg mb-4 text-[#B8860B] dark:text-yellow-500">Magic Pouch Menu</h3>
             
             <!-- Dark Mode Toggle -->
-            <div class="flex items-center justify-between mb-4 p-3 bg-gray-50 dark:bg-slate-700/50 rounded-xl border border-gray-100 dark:border-slate-700">
+            <div class="flex items-center justify-between mb-4 p-3 bg-gray-50 dark:bg-slate-700/50 rounded-xl border border-gray-100 dark:border-gray-800">
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
                         <i class="fas fa-moon"></i>
                     </div>
                     <span class="text-sm font-bold text-gray-700 dark:text-slate-200">Dark Mode</span>
@@ -769,7 +768,7 @@
             </div>
 
             <!-- Sync Section -->
-            <div class="mb-4 bg-blue-50 p-4 rounded-xl border border-blue-100 dark:bg-blue-500/10 dark:border-blue-500/20">
+            <div class="mb-4 bg-gray-50 p-4 rounded-xl border border-gray-100 dark:bg-gray-800 dark:border-blue-500/20">
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-xs font-bold text-blue-800 uppercase dark:text-blue-300">Sync Status</span>
                     <div id="sync-indicator" class="w-2 h-2 rounded-full bg-red-400"></div>
@@ -780,12 +779,12 @@
                 <div id="modal-sync" class="hidden mt-2">
                     <input type="text" id="sync-key-input" class="w-full p-2 border rounded mb-2 text-center font-mono uppercase dark:bg-slate-700 dark:text-white dark:border-slate-600" placeholder="ENTER KEY">
                     <div class="flex gap-2">
-                        <button onclick="app.saveSyncKey()" class="flex-1 bg-blue-600 text-white p-2 rounded font-bold text-xs hover:bg-blue-500">JOIN</button>
+                        <button onclick="app.saveSyncKey()" class="flex-1 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 p-2 rounded font-bold text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200">JOIN</button>
                         <button id="generate-key-btn" class="bg-gray-200 text-gray-600 p-2 rounded font-bold text-xs hover:bg-gray-300 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600">GEN NEW</button>
                     </div>
                      <p class="text-[10px] text-gray-400 mt-2 text-center dark:text-slate-500">Use same key on other devices to sync.</p>
                 </div>
-                <button onclick="document.getElementById('modal-sync').classList.remove('hidden'); this.classList.add('hidden')" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg shadow-sm text-sm hover:bg-blue-700 transition">
+                <button onclick="document.getElementById('modal-sync').classList.remove('hidden'); this.classList.add('hidden')" class="w-full bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold py-2 rounded-lg shadow-sm text-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition">
                     <i class="fas fa-sync-alt mr-2"></i> Connect Cloud
                 </button>
             </div>
@@ -808,20 +807,20 @@
     
     <!-- Confirm Modal -->
     <div id="modal-confirm" class="fixed inset-0 bg-black/50 z-[60] hidden flex items-center justify-center p-6 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-xs rounded-2xl p-6 shadow-2xl text-center dark:bg-slate-800 dark:border dark:border-slate-700">
+        <div class="bg-white w-full max-w-xs rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 text-center dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <i class="fas fa-question-circle text-4xl text-blue-500 mb-4"></i>
             <h3 class="font-bold text-lg mb-2 dark:text-white">Are you sure?</h3>
             <p id="confirm-msg" class="text-sm text-gray-500 mb-6 dark:text-slate-400">Action cannot be undone.</p>
             <div class="flex gap-3">
                 <button onclick="document.getElementById('modal-confirm').classList.add('hidden')" class="flex-1 py-2 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">No</button>
-                <button onclick="app.confirmYes()" class="flex-1 py-2 text-white font-bold bg-blue-600 rounded-xl hover:bg-blue-500">Yes</button>
+                <button onclick="app.confirmYes()" class="flex-1 py-2 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Yes</button>
             </div>
         </div>
     </div>
     
     <!-- Status Action Sheet (RE-DESIGNED) -->
     <div id="modal-status" class="fixed inset-0 bg-black/50 z-[60] hidden flex items-end sm:items-center justify-center sm:p-6 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-sm sm:rounded-2xl rounded-t-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700 overflow-hidden relative transition-all duration-300 max-h-[90vh] overflow-y-auto">
+        <div class="bg-white w-full max-w-sm sm:rounded-xl rounded-t-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800 overflow-hidden relative transition-all duration-300 max-h-[90vh] overflow-y-auto">
             
             <div class="flex justify-between items-center mb-4">
                 <h3 id="status-modal-title" class="font-bold text-lg dark:text-white">Update Status</h3>
@@ -829,11 +828,11 @@
             </div>
 
             <!-- 🆕 NEW: PROGRESS SECTION (The Bridge) -->
-            <div class="mb-5 bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-xl border border-indigo-100 dark:from-indigo-900/20 dark:to-purple-900/20 dark:border-indigo-800/50">
+            <div class="mb-5 bg-gradient-to-r bg-gray-50 to-purple-50 p-4 rounded-xl border border-gray-100 dark:bg-gray-800  dark:border-indigo-800/50">
                 <h4 class="text-xs font-bold text-indigo-900 uppercase mb-2 dark:text-indigo-300 flex items-center gap-1.5">
                     <i class="fas fa-rocket text-indigo-500"></i> Got a Response?
                 </h4>
-                <button onclick="app.promoteToInterview()" class="w-full flex items-center justify-center gap-2 p-3 rounded-lg bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 hover:scale-[1.02] active:scale-[0.98] transition font-bold text-sm">
+                <button onclick="app.promoteToInterview()" class="w-full flex items-center justify-center gap-2 p-3 rounded-lg bg-indigo-600 text-white shadow-lg shadow-sm hover:scale-[1.02] active:scale-[0.98] transition font-bold text-sm">
                     <span>Move to Interview / Test</span>
                     <i class="fas fa-arrow-right text-xs opacity-70"></i>
                 </button>
@@ -843,25 +842,25 @@
             <div class="mb-5">
                 <h4 class="text-xs font-bold text-gray-400 uppercase mb-3 dark:text-slate-500">Applied via...</h4>
                 <div class="grid grid-cols-2 gap-3">
-                    <button onclick="app.updateStatus('applied', 'direct')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-blue-50 text-blue-700 border border-blue-200 active:scale-[0.98] transition hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-300 dark:border-blue-500/20 dark:hover:bg-blue-500/20">
-                         <div class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center mb-2 dark:bg-blue-500/30"><i class="fas fa-globe"></i></div>
+                    <button onclick="app.updateStatus('applied', 'direct')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 text-blue-700 border border-gray-200 active:scale-[0.98] transition hover:bg-gray-100 dark:bg-gray-800 dark:text-blue-300 dark:border-blue-500/20 dark:hover:bg-blue-500/20">
+                         <div class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center mb-2 dark:bg-gray-800"><i class="fas fa-globe"></i></div>
                          <div class="font-bold text-sm">Direct / Portal</div>
                     </button>
 
-                    <button onclick="app.updateStatus('applied', 'cold-email')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-orange-50 text-orange-700 border border-orange-200 active:scale-[0.98] transition hover:bg-orange-100 dark:bg-orange-500/10 dark:text-orange-300 dark:border-orange-500/20 dark:hover:bg-orange-500/20">
-                         <div class="w-8 h-8 rounded-full bg-orange-200 flex items-center justify-center mb-2 dark:bg-orange-500/30"><i class="fas fa-envelope"></i></div>
+                    <button onclick="app.updateStatus('applied', 'cold-email')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 text-orange-700 border border-gray-200 active:scale-[0.98] transition hover:bg-gray-100 dark:bg-gray-800 dark:text-orange-300 dark:border-orange-500/20 dark:hover:bg-orange-500/20">
+                         <div class="w-8 h-8 rounded-full bg-orange-200 flex items-center justify-center mb-2 dark:bg-gray-800"><i class="fas fa-envelope"></i></div>
                          <div class="font-bold text-sm">Cold Email</div>
                     </button>
 
                     <!-- Updated to TEAL to match Referral Received -->
-                    <button onclick="app.updateStatus('applied', 'referral')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-teal-50 text-teal-700 border border-teal-200 active:scale-[0.98] transition hover:bg-teal-100 dark:bg-teal-500/10 dark:text-teal-300 dark:border-teal-500/20 dark:hover:bg-teal-500/20">
-                         <div class="w-8 h-8 rounded-full bg-teal-200 flex items-center justify-center mb-2 dark:bg-teal-500/30"><i class="fas fa-user-friends"></i></div>
+                    <button onclick="app.updateStatus('applied', 'referral')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 text-teal-700 border border-gray-200 active:scale-[0.98] transition hover:bg-gray-100 dark:bg-gray-800 dark:text-teal-300 dark:border-teal-500/20 dark:hover:bg-teal-500/20">
+                         <div class="w-8 h-8 rounded-full bg-teal-200 flex items-center justify-center mb-2 dark:bg-gray-800"><i class="fas fa-user-friends"></i></div>
                          <div class="font-bold text-sm">Referral</div>
                     </button>
 
                     <!-- Updated to CYAN to differentiate from Referral -->
-                    <button onclick="app.updateStatus('applied', 'recruiter')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-cyan-50 text-cyan-700 border border-cyan-200 active:scale-[0.98] transition hover:bg-cyan-100 dark:bg-cyan-500/10 dark:text-cyan-300 dark:border-cyan-500/20 dark:hover:bg-cyan-500/20">
-                         <div class="w-8 h-8 rounded-full bg-cyan-200 flex items-center justify-center mb-2 dark:bg-cyan-500/30"><i class="fas fa-headset"></i></div>
+                    <button onclick="app.updateStatus('applied', 'recruiter')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 text-cyan-700 border border-gray-200 active:scale-[0.98] transition hover:bg-gray-100 dark:bg-gray-800 dark:text-cyan-300 dark:border-cyan-500/20 dark:hover:bg-cyan-500/20">
+                         <div class="w-8 h-8 rounded-full bg-cyan-200 flex items-center justify-center mb-2 dark:bg-gray-800"><i class="fas fa-headset"></i></div>
                          <div class="font-bold text-sm">Recruiter</div>
                     </button>
                 </div>
@@ -872,24 +871,24 @@
                 <h4 class="text-xs font-bold text-gray-400 uppercase mb-3 dark:text-slate-500">Other Actions</h4>
                 <div class="space-y-2">
                     <!-- NEW BUTTON: DIRECT APPLY (Renamed) -->
-                    <button onclick="app.updateStatus('direct-apply')" class="w-full flex items-center p-3 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-600 border border-purple-100 active:scale-[0.98] transition dark:bg-purple-500/10 dark:text-purple-300 dark:border-purple-500/20 dark:hover:bg-purple-500/20">
-                        <div class="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center mr-3 text-purple-500 dark:bg-purple-500/20"><i class="fas fa-location-arrow text-xs"></i></div>
+                    <button onclick="app.updateStatus('direct-apply')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-purple-600 border border-gray-100 active:scale-[0.98] transition dark:bg-gray-800 dark:text-purple-300 dark:border-purple-500/20 dark:hover:bg-purple-500/20">
+                        <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center mr-3 text-purple-500 dark:bg-gray-800"><i class="fas fa-location-arrow text-xs"></i></div>
                         <div class="font-bold text-sm">Direct Apply</div>
                     </button>
 
-                    <button onclick="app.updateStatus('referral-asked')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700">
-                        <div class="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center mr-3 text-orange-500 dark:bg-orange-500/20"><i class="fas fa-paper-plane text-xs"></i></div>
+                    <button onclick="app.updateStatus('referral-asked')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-gray-800 dark:hover:bg-slate-700">
+                        <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center mr-3 text-orange-500 dark:bg-gray-800"><i class="fas fa-paper-plane text-xs"></i></div>
                         <div class="font-bold text-sm">Referral Asked</div>
                     </button>
-                    <button onclick="app.updateStatus('reminder')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-slate-700 dark:hover:bg-slate-700">
-                        <div class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mr-3 text-red-500 dark:bg-red-500/20"><i class="fas fa-bell text-xs"></i></div>
+                    <button onclick="app.updateStatus('reminder')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-gray-800 dark:hover:bg-slate-700">
+                        <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center mr-3 text-red-500 dark:bg-gray-800"><i class="fas fa-bell text-xs"></i></div>
                         <div class="font-bold text-sm">Set Follow-up</div>
                     </button>
-                    <button onclick="app.updateStatus('referral-received')" class="w-full flex items-center p-3 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-600 border border-teal-100 active:scale-[0.98] transition dark:bg-teal-500/10 dark:text-teal-300 dark:border-teal-500/20 dark:hover:bg-teal-500/20">
-                        <div class="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center mr-3 text-teal-500 dark:bg-teal-500/20"><i class="fas fa-handshake text-xs"></i></div>
+                    <button onclick="app.updateStatus('referral-received')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-teal-600 border border-gray-100 active:scale-[0.98] transition dark:bg-gray-800 dark:text-teal-300 dark:border-teal-500/20 dark:hover:bg-teal-500/20">
+                        <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center mr-3 text-teal-500 dark:bg-gray-800"><i class="fas fa-handshake text-xs"></i></div>
                         <div class="font-bold text-sm">Referral Received</div>
                     </button>
-                     <button onclick="app.updateStatus('pending')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-400 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/30 dark:text-slate-500 dark:border-slate-800 dark:hover:bg-slate-800">
+                     <button onclick="app.updateStatus('pending')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-400 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/30 dark:text-slate-500 dark:border-gray-800 dark:hover:bg-slate-800">
                         <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center mr-3 dark:bg-slate-600"><i class="fas fa-undo text-xs"></i></div>
                         <div class="font-bold text-sm">Reset to Pending</div>
                     </button>
@@ -902,12 +901,12 @@
     <!-- RE-DESIGNED Job Editor Modal -->
     <div id="modal-job" class="fixed inset-0 bg-gray-900/40 z-[90] hidden flex items-end sm:items-center justify-center backdrop-blur-sm sm:p-4">
         <!-- Card Container -->
-        <div class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] transition-all dark:bg-slate-900 dark:border dark:border-slate-800">
+        <div class="bg-white w-full sm:max-w-md rounded-t-xl sm:rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 overflow-hidden flex flex-col max-h-[90vh] transition-all dark:bg-black dark:border dark:border-gray-800">
             
             <!-- Header -->
-            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 dark:bg-slate-900 dark:border-slate-800">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 dark:bg-black dark:border-gray-800">
                 <span class="font-bold text-lg dark:text-white">Add Job</span>
-                <button onclick="document.getElementById('modal-job').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
+                <button onclick="document.getElementById('modal-job').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
             </div>
 
             <!-- Scrollable Content -->
@@ -920,7 +919,7 @@
                         <div class="absolute left-4 top-3.5 text-gray-400 dark:text-slate-500">
                             <i class="fas fa-link"></i>
                         </div>
-                        <input type="text" id="job-content" oninput="app.handleUrlInput(this.value)" class="w-full pl-10 pr-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-500 focus:bg-white transition-all outline-none font-medium text-sm text-gray-700 placeholder-gray-400 dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800" placeholder="Paste URL here (LinkedIn, etc.)">
+                        <input type="text" id="job-content" oninput="app.handleUrlInput(this.value)" class="w-full pl-10 pr-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-500 focus:bg-white transition-all outline-none font-medium text-sm text-gray-700 placeholder-gray-400 dark:bg-[#0a0a0a] dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800" placeholder="Paste URL here (LinkedIn, etc.)">
                     </div>
                 </div>
 
@@ -928,12 +927,12 @@
                 <div class="grid grid-cols-[1fr,auto] gap-3 mb-5">
                     <div>
                         <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Role / Company</label>
-                        <input type="text" id="job-title" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-sm text-gray-800 placeholder-gray-300 dark:bg-slate-800 dark:text-white dark:placeholder-slate-600 dark:focus:bg-slate-800" placeholder="e.g. Frontend @ Google">
+                        <input type="text" id="job-title" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-500 focus:bg-white transition-all outline-none font-bold text-sm text-gray-800 placeholder-gray-300 dark:bg-[#0a0a0a] dark:text-white dark:placeholder-slate-600 dark:focus:bg-slate-800" placeholder="e.g. Frontend @ Google">
                     </div>
                     <div>
                          <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Platform</label>
                          <div class="relative">
-                             <select id="job-type" class="appearance-none w-full pl-4 pr-10 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-500 outline-none font-bold text-sm text-gray-600 dark:bg-slate-800 dark:text-slate-300">
+                             <select id="job-type" class="appearance-none w-full pl-4 pr-10 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-500 outline-none font-bold text-sm text-gray-600 dark:bg-[#0a0a0a] dark:text-slate-300">
                                 <option value="job">Direct</option>
                                 <option value="linkedin">LinkedIn</option>
                                 <option value="naukri">Naukri</option>
@@ -951,37 +950,37 @@
                     <div class="flex justify-between items-center mb-2">
                          <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-500">Quick Notes</label>
                          <!-- Updated button to open management modal -->
-                         <button onclick="app.openQuickNotesModal()" class="text-[10px] font-bold text-blue-500 hover:text-blue-600 dark:text-blue-400 bg-blue-50 px-2 py-0.5 rounded dark:bg-blue-900/30">+ / -</button>
+                         <button onclick="app.openQuickNotesModal()" class="text-[10px] font-bold text-blue-500 hover:text-blue-600 dark:text-blue-400 bg-gray-50 px-2 py-0.5 rounded dark:bg-gray-800">+ / -</button>
                     </div>
                     <div class="flex flex-wrap gap-2" id="quick-notes-container">
                         <!-- Chips injected by JS -->
-                        <button onclick="app.addQuickNote('Ask for Referral')" class="px-3 py-1.5 rounded-lg bg-purple-50 text-purple-600 text-xs font-bold border border-purple-100 hover:bg-purple-100 transition active:scale-95 dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-800">Ask Referral</button>
-                        <button onclick="app.addQuickNote('Direct Apply')" class="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-bold border border-blue-100 hover:bg-blue-100 transition active:scale-95 dark:bg-blue-900/20 dark:text-blue-300 dark:border-blue-800">Direct Apply</button>
-                        <button onclick="app.addQuickNote('DM Recruiter')" class="px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-600 text-xs font-bold border border-indigo-100 hover:bg-indigo-100 transition active:scale-95 dark:bg-indigo-900/20 dark:text-indigo-300 dark:border-indigo-800">DM Recruiter</button>
-                        <button onclick="app.addQuickNote('Check Salary')" class="px-3 py-1.5 rounded-lg bg-green-50 text-green-600 text-xs font-bold border border-green-100 hover:bg-green-100 transition active:scale-95 dark:bg-green-900/20 dark:text-green-300 dark:border-green-800">Salary</button>
+                        <button onclick="app.addQuickNote('Ask for Referral')" class="px-3 py-1.5 rounded-lg bg-gray-50 text-purple-600 text-xs font-bold border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-gray-800 dark:text-purple-300 dark:border-purple-800">Ask Referral</button>
+                        <button onclick="app.addQuickNote('Direct Apply')" class="px-3 py-1.5 rounded-lg bg-gray-50 text-blue-600 text-xs font-bold border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-gray-800 dark:text-blue-300 dark:border-blue-800">Direct Apply</button>
+                        <button onclick="app.addQuickNote('DM Recruiter')" class="px-3 py-1.5 rounded-lg bg-gray-50 text-indigo-600 text-xs font-bold border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-gray-800 dark:text-indigo-300 dark:border-indigo-800">DM Recruiter</button>
+                        <button onclick="app.addQuickNote('Check Salary')" class="px-3 py-1.5 rounded-lg bg-gray-50 text-green-600 text-xs font-bold border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-gray-800 dark:text-green-300 dark:border-green-800">Salary</button>
                     </div>
                 </div>
 
                 <!-- Notes Area -->
                 <div class="mb-2">
-                    <textarea id="job-remarks" class="w-full h-24 p-4 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-200 focus:bg-white transition-all outline-none text-sm text-gray-700 leading-relaxed placeholder-gray-400 resize-none dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800 dark:focus:border-slate-600" placeholder="Add custom notes here..."></textarea>
+                    <textarea id="job-remarks" class="w-full h-24 p-4 bg-gray-50 rounded-xl border-2 border-transparent focus:border-gray-200 focus:bg-white transition-all outline-none text-sm text-gray-700 leading-relaxed placeholder-gray-400 resize-none dark:bg-[#0a0a0a] dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800 dark:focus:border-slate-600" placeholder="Add custom notes here..."></textarea>
                 </div>
 
             </div>
 
             <!-- Footer Actions -->
-            <div class="p-6 pt-2 bg-white border-t border-gray-50 z-10 dark:bg-slate-900 dark:border-slate-800">
+            <div class="p-6 pt-2 bg-white border-t border-gray-50 z-10 dark:bg-black dark:border-gray-800">
                 <div class="flex gap-2">
                      <!-- New Button: Direct Apply -->
-                     <button onclick="app.saveJob('direct-apply')" class="flex-1 py-3.5 bg-purple-100 text-purple-600 font-bold rounded-xl hover:bg-purple-200 active:scale-[0.98] transition dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50 text-xs">
+                     <button onclick="app.saveJob('direct-apply')" class="flex-1 py-3.5 bg-gray-100 text-purple-600 font-bold rounded-xl hover:bg-purple-200 active:scale-[0.98] transition dark:bg-gray-800 dark:text-purple-300 dark:hover:bg-purple-900/50 text-xs">
                         Direct Apply
                      </button>
                      <!-- Primary Button: Applied -->
-                     <button onclick="app.saveJob(true)" class="flex-1 py-3.5 bg-green-100 text-green-700 font-bold rounded-xl hover:bg-green-200 active:scale-[0.98] transition dark:bg-green-900/30 dark:text-green-300 dark:hover:bg-green-900/50 text-xs">
+                     <button onclick="app.saveJob(true)" class="flex-1 py-3.5 bg-gray-100 text-green-700 font-bold rounded-xl hover:bg-green-200 active:scale-[0.98] transition dark:bg-gray-800 dark:text-green-300 dark:hover:bg-green-900/50 text-xs">
                         Applied
                      </button>
                      <!-- Secondary Button: Save (was Later) -->
-                     <button onclick="app.saveJob('pending')" class="flex-1 py-3.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 hover:bg-blue-700 active:scale-[0.98] transition text-xs">
+                     <button onclick="app.saveJob('pending')" class="flex-1 py-3.5 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-[0.98] transition text-xs">
                         Save
                      </button>
                 </div>
@@ -991,24 +990,24 @@
     </div>
 
     <!-- Template Editor -->
-    <div id="modal-template" class="fixed inset-0 bg-white z-50 hidden flex flex-col safe-pb dark:bg-slate-900">
-        <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-white safe-pt dark:bg-slate-800 dark:border-slate-700">
+    <div id="modal-template" class="fixed inset-0 bg-white z-50 hidden flex flex-col safe-pb dark:bg-black">
+        <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-white safe-pt dark:bg-[#0a0a0a] dark:border-gray-800">
             <button onclick="document.getElementById('modal-template').classList.add('hidden')" class="text-gray-500 font-bold px-2 dark:text-slate-400">Cancel</button>
             <span class="font-bold dark:text-white">Template</span>
             <button onclick="app.saveTemplate()" class="text-purple-600 font-bold px-2 dark:text-purple-400">Save</button>
         </div>
         <div class="p-5 flex flex-col gap-4 flex-1 overflow-y-auto">
             <input type="text" id="tpl-title" class="text-xl font-bold placeholder-gray-300 outline-none dark:bg-transparent dark:text-white" placeholder="Title (e.g. Cold Email)">
-            <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 dark:bg-slate-800 dark:border-slate-700">
+            <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 dark:bg-[#0a0a0a] dark:border-gray-800">
                 <label class="text-[10px] font-bold text-gray-400 uppercase">Folder</label>
                 <input type="text" id="tpl-folder" list="folder-list-data" class="w-full bg-transparent text-sm font-bold text-gray-700 outline-none mt-1 dark:text-slate-300" placeholder="General">
                 <datalist id="folder-list-data"></datalist>
             </div>
-            <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 dark:bg-slate-800 dark:border-slate-700">
+            <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 dark:bg-[#0a0a0a] dark:border-gray-800">
                 <label class="text-[10px] font-bold text-gray-400 uppercase">Tags (Comma separated)</label>
                 <input type="text" id="tpl-tags" class="w-full bg-transparent text-sm text-gray-700 outline-none mt-1 dark:text-slate-300" placeholder="e.g. email, intro, urgent">
             </div>
-            <div class="flex items-center justify-between bg-blue-50 p-3 rounded-xl border border-blue-100 dark:bg-blue-500/10 dark:border-blue-500/20">
+            <div class="flex items-center justify-between bg-gray-50 p-3 rounded-xl border border-gray-100 dark:bg-gray-800 dark:border-blue-500/20">
                 <div class="flex flex-col">
                     <span class="text-sm font-bold text-blue-800 dark:text-blue-300">Easy Access</span>
                     <span class="text-[10px] text-blue-500 dark:text-blue-400/70">Show copy button in Job view</span>
@@ -1025,28 +1024,28 @@
 
     <!-- Rename Folder Modal -->
     <div id="modal-rename" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-6 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
+        <div class="bg-white w-full max-w-sm rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <h3 class="font-bold text-lg mb-4 dark:text-white">Rename Folder</h3>
             <input type="text" id="rename-input" class="w-full bg-gray-100 rounded-xl py-3 px-4 mb-4 outline-none text-sm dark:bg-slate-700 dark:text-white" placeholder="New Name">
             <div class="flex gap-3">
                 <button onclick="document.getElementById('modal-rename').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
-                <button onclick="app.confirmRename()" class="flex-1 py-3 text-white font-bold bg-purple-600 rounded-xl hover:bg-purple-500">Rename</button>
+                <button onclick="app.confirmRename()" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Rename</button>
             </div>
         </div>
     </div>
 
     <!-- Profile Link Editor -->
     <div id="modal-profile" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-6 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
+        <div class="bg-white w-full max-w-sm rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <h3 class="font-bold text-lg mb-4 dark:text-white">Manage Profile Link</h3>
             <div class="max-h-40 overflow-y-auto mb-4 space-y-2" id="profile-manage-list"></div>
-            <div class="border-t border-gray-100 pt-4 dark:border-slate-700">
+            <div class="border-t border-gray-100 pt-4 dark:border-gray-800">
                 <h4 class="text-xs font-bold text-gray-400 uppercase mb-2">Add New</h4>
                 <input type="text" id="profile-label" class="w-full bg-gray-100 rounded-xl py-2 px-4 mb-2 outline-none text-sm dark:bg-slate-700 dark:text-white" placeholder="Label (e.g. Portfolio)">
                 <input type="text" id="profile-value" class="w-full bg-gray-100 rounded-xl py-2 px-4 mb-4 outline-none font-mono text-sm dark:bg-slate-700 dark:text-white" placeholder="URL">
                 <div class="flex gap-3">
                     <button onclick="document.getElementById('modal-profile').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Close</button>
-                    <button onclick="app.saveProfileItem()" class="flex-1 py-3 text-white font-bold bg-blue-600 rounded-xl hover:bg-blue-500">Add</button>
+                    <button onclick="app.saveProfileItem()" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Add</button>
                 </div>
             </div>
         </div>
@@ -1054,7 +1053,7 @@
     
     <!-- Fill Placeholders Modal -->
     <div id="modal-placeholders" class="fixed inset-0 bg-black/50 z-[110] hidden flex items-center justify-center p-6 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl dark:bg-slate-800 dark:border dark:border-slate-700">
+        <div class="bg-white w-full max-w-sm rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <h3 class="font-bold text-lg mb-2 dark:text-white">Fill Placeholders</h3>
             <p class="text-xs text-gray-400 mb-4 dark:text-slate-400">Enter values for the template fields before copying.</p>
             <div id="placeholders-container" class="space-y-3 max-h-60 overflow-y-auto custom-scrollbar pr-1 mb-4">
@@ -1062,7 +1061,7 @@
             </div>
             <div class="flex gap-3">
                 <button onclick="document.getElementById('modal-placeholders').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
-                <button onclick="app.executeTemplateCopy()" class="flex-1 py-3 text-white font-bold bg-blue-600 rounded-xl hover:bg-blue-500 shadow-lg shadow-blue-600/30">Copy Text</button>
+                <button onclick="app.executeTemplateCopy()" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200 shadow-lg shadow-sm">Copy Text</button>
             </div>
         </div>
     </div>
@@ -1432,10 +1431,10 @@
                     else if(history[dateStr] && typeof history[dateStr] === 'object') count = history[dateStr].total;
                     const cell = document.createElement('div');
                     const isToday = d === currentDate.getDate();
-                    let bgClass = "bg-gray-50 border-gray-100 text-gray-300 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-600";
+                    let bgClass = "bg-gray-50 border-gray-100 text-gray-300 dark:bg-[#0a0a0a] dark:border-gray-800 dark:text-slate-600";
                     let content = `<span class="text-[9px] font-bold">${d}</span>`; 
                     if (count >= target) {
-                        bgClass = "bg-orange-100 border-orange-200 text-orange-50 shadow-sm dark:bg-orange-500/10 dark:border-orange-500/20 dark:text-orange-400";
+                        bgClass = "bg-gray-100 border-gray-200 text-orange-50 shadow-sm dark:bg-gray-800 dark:border-orange-500/20 dark:text-orange-400";
                         content = `<i class="fas fa-fire text-sm animate-pulse"></i>`; 
                     } else if (count > 0) bgClass = "bg-gray-100 border-gray-200 text-gray-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-400";
                     if (isToday) bgClass += " border-2 border-blue-400 dark:border-blue-500";
@@ -1479,7 +1478,7 @@
                     let bgClass = "bg-gray-100 dark:bg-slate-700"; // Empty
                     if(count > 0) {
                         if(count >= target) bgClass = "bg-green-500 dark:bg-green-500"; // Target met
-                        else bgClass = "bg-green-200 dark:bg-green-500/30"; // Some activity
+                        else bgClass = "bg-green-200 dark:bg-gray-800"; // Some activity
                     }
                     
                     // Highlight today
@@ -1611,7 +1610,7 @@
                             <div class="w-2 h-2 rounded-full bg-${color}-400 shrink-0 shadow-sm"></div>
                             <span class="text-sm font-bold text-gray-700 truncate dark:text-slate-200">${note}</span>
                         </div>
-                        <button onclick="app.deleteQuickNote(${idx})" class="text-gray-300 hover:text-red-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-50 transition active:scale-90 dark:hover:bg-red-900/30 dark:text-slate-500 dark:hover:text-red-400">
+                        <button onclick="app.deleteQuickNote(${idx})" class="text-gray-300 hover:text-red-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-50 transition active:scale-90 dark:hover:bg-red-900/30 dark:text-slate-500 dark:hover:text-red-400">
                             <i class="fas fa-trash text-xs"></i>
                         </button>
                     `;
@@ -1674,7 +1673,7 @@
                         btn.className = `px-3 py-1.5 rounded-lg bg-${color}-100 text-${color}-700 text-xs font-bold border border-${color}-200 transition active:scale-95 dark:bg-${color}-900/40 dark:text-${color}-300 dark:border-${color}-700 shadow-sm`;
                     } else {
                         // Default Grey Style
-                        btn.className = `px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs font-bold border border-gray-200 hover:bg-gray-200 transition active:scale-95 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700 dark:hover:bg-slate-700`;
+                        btn.className = `px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs font-bold border border-gray-200 hover:bg-gray-200 transition active:scale-95 dark:bg-[#0a0a0a] dark:text-slate-400 dark:border-gray-800 dark:hover:bg-slate-700`;
                     }
                     
                     btn.textContent = note;
@@ -1982,7 +1981,7 @@
                     const hasEvent = dailyInts.length > 0;
                     
                     // Styling
-                    let bgClass = isToday ? "bg-indigo-600 text-white shadow-md ring-2 ring-indigo-200 dark:ring-indigo-900" : "bg-white text-gray-500 border border-gray-100 hover:border-indigo-200 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600";
+                    let bgClass = isToday ? "bg-indigo-600 text-white shadow-md ring-2 ring-indigo-200 dark:ring-indigo-900" : "bg-white text-gray-500 border border-gray-100 hover:border-gray-200 dark:bg-[#0a0a0a] dark:border-gray-800 dark:text-slate-400 dark:hover:border-slate-600";
                     let dateClass = isToday ? "text-white" : "text-gray-800 dark:text-white";
                     
                     const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
@@ -2055,7 +2054,7 @@
                     events.forEach(evt => {
                         const timeStr = new Date(evt.deadline).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                         const div = document.createElement('div');
-                        div.className = "bg-gray-50 p-4 rounded-xl border border-gray-100 flex items-center justify-between dark:bg-slate-800 dark:border-slate-700";
+                        div.className = "bg-gray-50 p-4 rounded-xl border border-gray-100 flex items-center justify-between dark:bg-[#0a0a0a] dark:border-gray-800";
                         div.innerHTML = `
                             <div>
                                 <div class="text-xs font-bold text-indigo-500 mb-1">${timeStr}</div>
@@ -2150,14 +2149,14 @@
                 // --- NEW: Dynamic Theme Helper ---
                 const getStageTheme = (status) => {
                     switch (status) {
-                        case 'Test Received': return { border: 'border-indigo-500', bg: 'bg-indigo-50', text: 'text-indigo-700', badge: 'bg-indigo-100 text-indigo-700', icon: 'fa-laptop-code' };
-                        case 'HR Screen': return { border: 'border-blue-500', bg: 'bg-blue-50', text: 'text-blue-700', badge: 'bg-blue-100 text-blue-700', icon: 'fa-phone-alt' };
-                        case 'Technical': return { border: 'border-purple-500', bg: 'bg-purple-50', text: 'text-purple-700', badge: 'bg-purple-100 text-purple-700', icon: 'fa-code' };
-                        case 'Final Round': return { border: 'border-orange-500', bg: 'bg-orange-50', text: 'text-orange-700', badge: 'bg-orange-100 text-orange-700', icon: 'fa-user-tie' };
-                        case 'Offer': return { border: 'border-emerald-500', bg: 'bg-emerald-50', text: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-700', icon: 'fa-gift' };
-                        case 'Rejected': return { border: 'border-red-400', bg: 'bg-red-50', text: 'text-red-700', badge: 'bg-red-100 text-red-700', icon: 'fa-times-circle' };
+                        case 'Test Received': return { border: 'border-indigo-500', bg: 'bg-gray-50', text: 'text-indigo-700', badge: 'bg-gray-100 text-indigo-700', icon: 'fa-laptop-code' };
+                        case 'HR Screen': return { border: 'border-blue-500', bg: 'bg-gray-50', text: 'text-blue-700', badge: 'bg-gray-100 text-blue-700', icon: 'fa-phone-alt' };
+                        case 'Technical': return { border: 'border-purple-500', bg: 'bg-gray-50', text: 'text-purple-700', badge: 'bg-gray-100 text-purple-700', icon: 'fa-code' };
+                        case 'Final Round': return { border: 'border-orange-500', bg: 'bg-gray-50', text: 'text-orange-700', badge: 'bg-gray-100 text-orange-700', icon: 'fa-user-tie' };
+                        case 'Offer': return { border: 'border-emerald-500', bg: 'bg-gray-50', text: 'text-emerald-700', badge: 'bg-gray-100 text-emerald-700', icon: 'fa-gift' };
+                        case 'Rejected': return { border: 'border-red-400', bg: 'bg-gray-50', text: 'text-red-700', badge: 'bg-gray-100 text-red-700', icon: 'fa-times-circle' };
                         case 'Ghosted': return { border: 'border-gray-400', bg: 'bg-gray-50', text: 'text-gray-700', badge: 'bg-gray-200 text-gray-500', icon: 'fa-ghost' };
-                        case 'Follow Up': return { border: 'border-yellow-500', bg: 'bg-yellow-50', text: 'text-yellow-700', badge: 'bg-yellow-100 text-yellow-700', icon: 'fa-clock' };
+                        case 'Follow Up': return { border: 'border-yellow-500', bg: 'bg-gray-50', text: 'text-yellow-700', badge: 'bg-gray-100 text-yellow-700', icon: 'fa-clock' };
                         default: return { border: 'border-gray-200', bg: 'bg-gray-50', text: 'text-gray-700', badge: 'bg-gray-100 text-gray-600', icon: 'fa-circle' };
                     }
                 };
@@ -2183,12 +2182,12 @@
                         
                         if (diffMs > 0) {
                             if (diffHours < 24) { 
-                                dateColor = "bg-red-100 text-red-600 animate-pulse dark:bg-red-900/40 dark:text-red-400"; 
+                                dateColor = "bg-gray-100 text-red-600 animate-pulse dark:bg-gray-800 dark:text-red-400";
                             } else if (diffHours < 72) { 
-                                dateColor = "bg-orange-100 text-orange-600 dark:bg-orange-900/40 dark:text-orange-400"; 
+                                dateColor = "bg-gray-100 text-orange-600 dark:bg-gray-800 dark:text-orange-400";
                             }
                         } else {
-                            dateColor = "bg-gray-200 text-gray-400 dark:bg-slate-800 dark:text-slate-500";
+                            dateColor = "bg-gray-200 text-gray-400 dark:bg-[#0a0a0a] dark:text-slate-500";
                         }
                         
                         // Calendar Leaf Visual
@@ -2218,7 +2217,7 @@
                         `;
                     } else if (!['Offer', 'Rejected', 'Ghosted'].includes(interview.status)) {
                         actionArea = `
-                            <button onclick="app.markStageComplete('${interview.id}')" class="flex-1 bg-white border border-${theme.border.replace('border-', '')} ${theme.text} text-xs font-bold py-2 rounded-lg hover:bg-gray-50 active:scale-95 transition flex items-center justify-center gap-1.5 dark:bg-slate-800 dark:border-slate-600 dark:${theme.text}">
+                            <button onclick="app.markStageComplete('${interview.id}')" class="flex-1 bg-white border border-${theme.border.replace('border-', '')} ${theme.text} text-xs font-bold py-2 rounded-lg hover:bg-gray-50 active:scale-95 transition flex items-center justify-center gap-1.5 dark:bg-[#0a0a0a] dark:border-slate-600 dark:${theme.text}">
                                 <i class="fas fa-check"></i> Mark Done
                             </button>
                         `;
@@ -2228,7 +2227,7 @@
                     }
 
                     // COMPACT CARD LAYOUT
-                    el.className = `relative bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm border-l-4 ${theme.border} mb-3 active:scale-[0.99] transition`;
+                    el.className = `relative bg-white dark:bg-[#0a0a0a] rounded-xl p-3 shadow-sm border-l-4 ${theme.border} mb-3 active:scale-[0.99] transition`;
                     el.innerHTML = `
                         <div class="flex justify-between items-start mb-2">
                             <div class="min-w-0 pr-2">
@@ -2249,13 +2248,13 @@
                         </div>
                         
                         <!-- Actions Footer -->
-                        <div class="flex items-center gap-2 pt-2 border-t border-gray-50 dark:border-slate-700/50">
+                        <div class="flex items-center gap-2 pt-2 border-t border-gray-50 dark:border-gray-800/50">
                             <!-- Utilities -->
                             <div class="flex gap-1">
-                                <button onclick="app.openInterviewModal('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-blue-500 transition dark:hover:bg-slate-700"><i class="fas fa-pen text-xs"></i></button>
+                                <button onclick="app.openInterviewModal('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-zinc-900 transition dark:hover:bg-slate-700"><i class="fas fa-pen text-xs"></i></button>
                                 <button onclick="app.openHistoryModal('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-indigo-500 transition dark:hover:bg-slate-700"><i class="fas fa-history text-xs"></i></button>
                                 ${showCalButton ? `<button onclick="app.downloadICS('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-green-500 transition dark:hover:bg-slate-700"><i class="fas fa-calendar-plus text-xs"></i></button>` : ''}
-                                <button onclick="app.deleteNote('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-500 transition dark:hover:bg-slate-700"><i class="fas fa-trash text-xs"></i></button>
+                                <button onclick="app.deleteNote('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-red-500 transition dark:hover:bg-slate-700"><i class="fas fa-trash text-xs"></i></button>
                             </div>
                             <!-- Primary Action -->
                             ${actionArea}
@@ -2336,10 +2335,10 @@
                 document.querySelectorAll('.int-filter-btn').forEach(btn => {
                     if (btn.dataset.filter === type) {
                         btn.classList.add('bg-gray-800', 'text-white', 'dark:bg-white', 'dark:text-slate-900', 'shadow-sm');
-                        btn.classList.remove('bg-gray-100', 'text-gray-500', 'dark:bg-slate-800', 'dark:text-slate-400');
+                        btn.classList.remove('bg-gray-100', 'text-gray-500', 'dark:bg-[#0a0a0a]', 'dark:text-slate-400');
                     } else {
                         btn.classList.remove('bg-gray-800', 'text-white', 'dark:bg-white', 'dark:text-slate-900', 'shadow-sm');
-                        btn.classList.add('bg-gray-100', 'text-gray-500', 'dark:bg-slate-800', 'dark:text-slate-400');
+                        btn.classList.add('bg-gray-100', 'text-gray-500', 'dark:bg-[#0a0a0a]', 'dark:text-slate-400');
                     }
                 });
                 app.renderInterviews(type, document.getElementById('global-search').value);
@@ -2396,7 +2395,7 @@
                         // Format: 14/02/2026 12:58 PM
                         const dateStr = d.toLocaleDateString('en-GB') + ' ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
                         const div = document.createElement('div');
-                        div.className = "flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 dark:bg-slate-800 dark:border-slate-700";
+                        div.className = "flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 dark:bg-[#0a0a0a] dark:border-gray-800";
                         
                         let icon = '<i class="fas fa-circle text-[8px] text-gray-400 mt-1.5"></i>';
                         let titleClass = "text-gray-700 dark:text-slate-300";
@@ -2571,8 +2570,8 @@
                     "Referrals Received", 
                     referralReceivedJobs, 
                     "fas fa-handshake text-teal-600", 
-                    "bg-gradient-to-r from-teal-50 to-green-100 text-teal-900 border-teal-200 dark:from-teal-900/40 dark:to-green-900/40 dark:text-teal-100 dark:border-teal-800", 
-                    "border-teal-200",
+                    "bg-gradient-to-r bg-gray-50  text-teal-900 border-gray-200 dark:bg-gray-800  dark:text-teal-100 dark:border-teal-800",
+                    "border-gray-200",
                     "group-ref",
                     true
                 );
@@ -2583,8 +2582,8 @@
                     "Direct Apply", 
                     directApplyJobs, 
                     "fas fa-location-arrow text-purple-600", 
-                    "bg-gradient-to-r from-purple-50 to-indigo-100 text-purple-900 border-purple-200 dark:from-purple-900/40 dark:to-indigo-900/40 dark:text-purple-100 dark:border-purple-800", 
-                    "border-purple-200",
+                    "bg-gradient-to-r bg-gray-50  text-purple-900 border-gray-200 dark:bg-gray-800  dark:text-purple-100 dark:border-purple-800",
+                    "border-gray-200",
                     "group-direct",
                     true
                 );
@@ -2627,9 +2626,9 @@
 
                     let badgeHtml = '';
                     if(counts.pending > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 border border-gray-200 mr-1 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-700">${counts.pending} To Apply</span>`;
-                    if(counts.reminder > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-700 border border-red-200 mr-1 dark:bg-red-900/40 dark:text-red-300 dark:border-red-800">${counts.reminder} Due</span>`;
-                    if(counts['referral-asked'] > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-orange-100 text-orange-700 border border-orange-200 mr-1 dark:bg-orange-900/40 dark:text-orange-300 dark:border-orange-800">${counts['referral-asked']} Asked</span>`;
-                    if(counts.applied > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-50 text-green-600 border border-green-100 dark:bg-green-900/40 dark:text-green-300 dark:border-green-800">${counts.applied} Done</span>`;
+                    if(counts.reminder > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-red-700 border border-gray-200 mr-1 dark:bg-gray-800 dark:text-red-300 dark:border-red-800">${counts.reminder} Due</span>`;
+                    if(counts['referral-asked'] > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-gray-100 text-orange-700 border border-gray-200 mr-1 dark:bg-gray-800 dark:text-orange-300 dark:border-orange-800">${counts['referral-asked']} Asked</span>`;
+                    if(counts.applied > 0) badgeHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-gray-50 text-green-600 border border-gray-100 dark:bg-gray-800 dark:text-green-300 dark:border-green-800">${counts.applied} Done</span>`;
 
                     // Style Logic
                     let bgClasses = "";
@@ -2637,22 +2636,22 @@
                     let textColor = "";
                     let iconColor = "";
                     if (day === 0) {
-                        bgClasses = "bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/40 dark:to-blue-800/40"; 
-                        borderColor = "border-blue-100 dark:border-blue-800";
+                        bgClasses = "bg-gradient-to-r bg-gray-50  dark:bg-gray-800 ";
+                        borderColor = "border-gray-100 dark:border-blue-800";
                         textColor = "text-blue-900 dark:text-blue-100";
                         iconColor = "text-blue-500 dark:text-blue-400";
                     } else if (day === 1) {
-                        bgClasses = "bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/40 dark:to-orange-800/40";
-                        borderColor = "border-orange-200 dark:border-orange-800";
+                        bgClasses = "bg-gradient-to-r bg-gray-50  dark:bg-gray-800 ";
+                        borderColor = "border-gray-200 dark:border-orange-800";
                         textColor = "text-orange-900 dark:text-orange-100";
                         iconColor = "text-orange-600 dark:text-orange-400";
                     } else if (day <= 3) {
-                        bgClasses = "bg-gradient-to-r from-red-50 to-red-100 dark:from-red-900/40 dark:to-red-800/40";
-                        borderColor = "border-red-200 dark:border-red-800";
+                        bgClasses = "bg-gradient-to-r bg-gray-50  dark:bg-gray-800 ";
+                        borderColor = "border-gray-200 dark:border-red-800";
                         textColor = "text-red-900 dark:text-red-100";
                         iconColor = "text-red-500 dark:text-red-400";
                     } else {
-                        bgClasses = "bg-gradient-to-r from-red-100 to-red-200 dark:from-red-950/50 dark:to-red-900/50";
+                        bgClasses = "bg-gradient-to-r from-red-100 to-red-200 dark:from-red-950/50 ";
                         borderColor = "border-red-300 dark:border-red-900";
                         textColor = "text-red-950 dark:text-red-200";
                         iconColor = "text-red-700 dark:text-red-500";
@@ -2699,30 +2698,30 @@
 
                 if (status === 'referral-received') {
                     // SEA GREEN THEME
-                    borderColor = "border-teal-200 border-l-4 border-l-teal-400 dark:border-teal-900 dark:border-l-teal-500";
-                    badgeHtml = `<span class="text-[9px] font-bold text-teal-600 bg-teal-50 px-1.5 py-0.5 rounded mr-2 dark:bg-teal-900/40 dark:text-teal-300">REFERRAL RECEIVED</span>`;
+                    borderColor = "border-gray-200 border-l-4 border-l-teal-400 dark:border-teal-900 dark:border-l-teal-500";
+                    badgeHtml = `<span class="text-[9px] font-bold text-teal-600 bg-gray-50 px-1.5 py-0.5 rounded mr-2 dark:bg-gray-800 dark:text-teal-300">REFERRAL RECEIVED</span>`;
                     statusIcon = "fa-handshake";
-                    statusBtnClass = "bg-teal-100 text-teal-500 dark:bg-teal-900/40 dark:text-teal-400";
+                    statusBtnClass = "bg-gray-100 text-teal-500 dark:bg-gray-800 dark:text-teal-400";
                 } else if (status === 'direct-apply') {
                     // PURPLE THEME
-                    borderColor = "border-purple-200 border-l-4 border-l-purple-400 dark:border-purple-900 dark:border-l-purple-500";
-                    badgeHtml = `<span class="text-[9px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded mr-2 dark:bg-purple-900/40 dark:text-purple-300">DIRECT APPLY</span>`;
+                    borderColor = "border-gray-200 border-l-4 border-l-purple-400 dark:border-purple-900 dark:border-l-purple-500";
+                    badgeHtml = `<span class="text-[9px] font-bold text-purple-600 bg-gray-50 px-1.5 py-0.5 rounded mr-2 dark:bg-gray-800 dark:text-purple-300">DIRECT APPLY</span>`;
                     statusIcon = "fa-location-arrow";
-                    statusBtnClass = "bg-purple-100 text-purple-500 dark:bg-purple-900/40 dark:text-purple-400";
+                    statusBtnClass = "bg-gray-100 text-purple-500 dark:bg-gray-800 dark:text-purple-400";
                 } else if (status === 'referral-asked') {
-                    borderColor = "border-orange-200 border-l-4 border-l-orange-400 dark:border-orange-900 dark:border-l-orange-500";
-                    badgeHtml = `<span class="text-[9px] font-bold text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded mr-2 dark:bg-orange-900/40 dark:text-orange-300">REFERRAL ASKED</span>`;
+                    borderColor = "border-gray-200 border-l-4 border-l-orange-400 dark:border-orange-900 dark:border-l-orange-500";
+                    badgeHtml = `<span class="text-[9px] font-bold text-orange-600 bg-gray-50 px-1.5 py-0.5 rounded mr-2 dark:bg-gray-800 dark:text-orange-300">REFERRAL ASKED</span>`;
                     statusIcon = "fa-paper-plane";
-                    statusBtnClass = "bg-orange-100 text-orange-500 dark:bg-orange-900/40 dark:text-orange-400";
+                    statusBtnClass = "bg-gray-100 text-orange-500 dark:bg-gray-800 dark:text-orange-400";
                 } else if (status === 'reminder') {
-                    borderColor = "border-red-200 border-l-4 border-l-red-500 dark:border-red-900 dark:border-l-red-500";
-                    badgeHtml = `<span class="text-[9px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded mr-2 animate-pulse dark:bg-red-900/40 dark:text-red-300">FOLLOW-UP DUE</span>`;
+                    borderColor = "border-gray-200 border-l-4 border-l-red-500 dark:border-red-900 dark:border-l-red-500";
+                    badgeHtml = `<span class="text-[9px] font-bold text-red-600 bg-gray-50 px-1.5 py-0.5 rounded mr-2 animate-pulse dark:bg-gray-800 dark:text-red-300">FOLLOW-UP DUE</span>`;
                     statusIcon = "fa-bell";
-                    statusBtnClass = "bg-red-100 text-red-500 dark:bg-red-900/40 dark:text-red-400";
+                    statusBtnClass = "bg-gray-100 text-red-500 dark:bg-gray-800 dark:text-red-400";
                 } else if (isDone) {
-                    borderColor = "border-green-100 bg-gray-50 dark:border-green-900 dark:bg-gray-800";
+                    borderColor = "border-gray-100 bg-gray-50 dark:border-green-900 dark:bg-gray-800";
                     statusIcon = "fa-check";
-                    statusBtnClass = "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400";
+                    statusBtnClass = "bg-gray-100 text-green-600 dark:bg-gray-800 dark:text-green-400";
                     if (job.applicationMedium) {
                         let medLabel = job.applicationMedium;
                         if (medLabel === 'cold-email') medLabel = 'Cold Email';
@@ -2751,7 +2750,7 @@
                 el.innerHTML = `
                     <div class="flex-1 min-w-0">
                         <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 cursor-pointer no-underline text-inherit block mb-1">
-                            <div class="w-8 h-8 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 text-blue-600 text-xs dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400">
+                            <div class="w-8 h-8 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0 text-blue-600 text-xs dark:bg-gray-800 dark:border-blue-800 dark:text-blue-400">
                                 <i class="${job.linkType === 'linkedin' ? 'fab' : 'fas'} ${iconClass}"></i>
                             </div>
                             <div class="min-w-0">
@@ -2768,11 +2767,11 @@
                         <div class="flex flex-col items-end gap-1">
                             <span class="text-[9px] text-gray-400 font-medium whitespace-nowrap dark:text-gray-600">${dateStr}</span>
                             <div class="flex items-center gap-2">
-                                <button onclick="app.copyText('${job.content.replace(/'/g, "\\'")}')" class="text-gray-300 hover:text-blue-500 p-2 dark:text-gray-600 dark:hover:text-blue-400" title="Copy Link"><i class="fas fa-link text-xs"></i></button>
+                                <button onclick="app.copyText('${job.content.replace(/'/g, "\\'")}')" class="text-gray-300 hover:text-zinc-900 p-2 dark:text-gray-600 dark:hover:text-zinc-100" title="Copy Link"><i class="fas fa-link text-xs"></i></button>
                                 <button onclick="app.openStatusModal('${job.id}')" class="w-8 h-8 rounded-full ${statusBtnClass} flex items-center justify-center shadow-sm hover:brightness-95 transition">
                                     <i class="fas ${statusIcon} text-xs"></i>
                                 </button>
-                                <button onclick="app.openJobModal('${job.id}')" class="text-gray-300 hover:text-blue-500 p-2 dark:text-gray-600 dark:hover:text-blue-400"><i class="fas fa-pen text-xs"></i></button>
+                                <button onclick="app.openJobModal('${job.id}')" class="text-gray-300 hover:text-zinc-900 p-2 dark:text-gray-600 dark:hover:text-zinc-100"><i class="fas fa-pen text-xs"></i></button>
                                 <button onclick="app.deleteNote('${job.id}')" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>
                             </div>
                         </div>
@@ -2811,7 +2810,7 @@
                          const div = document.createElement('div');
                          div.className = "bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-[0.99] transition dark:bg-dark-card dark:border-dark-border";
                          div.onclick = (e) => { app.openFolder(folderName); };
-                         div.innerHTML = `<div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-yellow-50 flex items-center justify-center text-yellow-500 dark:bg-yellow-900/30 dark:text-yellow-400"><i class="fas fa-folder"></i></div><div><h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${folderName}</h4><p class="text-[10px] text-gray-400 dark:text-gray-500">${count} items</p></div></div><div class="flex gap-2"><button onclick="event.stopPropagation(); app.openRenameFolder('${folderName}')" class="text-gray-300 hover:text-blue-500 p-2 dark:text-gray-600 dark:hover:text-blue-400"><i class="fas fa-pen text-xs"></i></button><i class="fas fa-chevron-right text-gray-300 text-xs dark:text-gray-600"></i></div>`;
+                         div.innerHTML = `<div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-yellow-500 dark:bg-gray-800 dark:text-yellow-400"><i class="fas fa-folder"></i></div><div><h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${folderName}</h4><p class="text-[10px] text-gray-400 dark:text-gray-500">${count} items</p></div></div><div class="flex gap-2"><button onclick="event.stopPropagation(); app.openRenameFolder('${folderName}')" class="text-gray-300 hover:text-zinc-900 p-2 dark:text-gray-600 dark:hover:text-zinc-100"><i class="fas fa-pen text-xs"></i></button><i class="fas fa-chevron-right text-gray-300 text-xs dark:text-gray-600"></i></div>`;
                          list.appendChild(div);
                      });
                  }
@@ -2828,7 +2827,7 @@
                 const tagsStr = (typeof t.tags === 'string') ? t.tags : '';
                 const tagsHtml = tagsStr ? tagsStr.split(',').map(tag => `<span class="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider dark:bg-gray-800 dark:text-gray-400">${tag.trim()}</span>`).join('') : '';
                 const isEasy = t.easyAccess ? '<i class="fas fa-bolt text-yellow-400 text-xs" title="Easy Access"></i>' : '';
-                div.innerHTML = `<div class="flex justify-between items-start mb-2"><div><div class="flex items-center gap-2"><h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${t.title}</h4>${isEasy}</div><div class="flex flex-wrap gap-1 mt-1">${tagsHtml}</div></div><div class="flex gap-1"><button onclick="app.openTemplateModal('${t.id}')" class="text-gray-300 hover:text-blue-500 p-2 dark:text-gray-600 dark:hover:text-blue-400"><i class="fas fa-pen text-xs"></i></button><button onclick="app.deleteNote('${t.id}')" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button></div></div><div class="bg-gray-50 p-3 rounded-lg text-xs text-gray-600 font-mono leading-relaxed relative group-hover:bg-gray-100 transition cursor-pointer dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700 line-clamp-2" onclick="app.handleTemplateCopy(decodeURIComponent('${encodeURIComponent(t.content)}'))">${t.content}<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-copy text-gray-400 dark:text-gray-500"></i></div></div>`;
+                div.innerHTML = `<div class="flex justify-between items-start mb-2"><div><div class="flex items-center gap-2"><h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${t.title}</h4>${isEasy}</div><div class="flex flex-wrap gap-1 mt-1">${tagsHtml}</div></div><div class="flex gap-1"><button onclick="app.openTemplateModal('${t.id}')" class="text-gray-300 hover:text-zinc-900 p-2 dark:text-gray-600 dark:hover:text-zinc-100"><i class="fas fa-pen text-xs"></i></button><button onclick="app.deleteNote('${t.id}')" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button></div></div><div class="bg-gray-50 p-3 rounded-lg text-xs text-gray-600 font-mono leading-relaxed relative group-hover:bg-gray-100 transition cursor-pointer dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700 line-clamp-2" onclick="app.handleTemplateCopy(decodeURIComponent('${encodeURIComponent(t.content)}'))">${t.content}<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-copy text-gray-400 dark:text-gray-500"></i></div></div>`;
                 return div;
             },
 
@@ -2928,13 +2927,13 @@
                     else if (labelLower.includes('email') || labelLower.includes('mail') || labelLower.includes('gmail')) { iconClass = "fas fa-envelope"; isIconOnly = true; specificClasses = "text-red-500 dark:text-red-400"; } 
                     else if (labelLower.includes('resume') || labelLower.includes('cv')) { iconClass = "fas fa-file-alt"; isIconOnly = true; specificClasses = "text-green-600 dark:text-green-400"; } 
                     else if (labelLower.includes('contact') || labelLower.includes('phone') || labelLower.includes('call')) { iconClass = "fas fa-phone"; isIconOnly = true; specificClasses = "text-indigo-600 dark:text-indigo-400"; }
-                    if (isIconOnly) { btn.className = `w-9 h-9 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 flex items-center justify-center transition active:scale-90 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700 ${specificClasses}`; btn.innerHTML = `<i class="${iconClass} text-sm"></i>`; btn.title = p.label; } 
-                    else { btn.className = "bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200 transition active:scale-95 flex items-center gap-1 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700"; btn.innerHTML = `<i class="${iconClass} text-[10px] opacity-50"></i> ${p.label}`; }
+                    if (isIconOnly) { btn.className = `w-9 h-9 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 flex items-center justify-center transition active:scale-90 dark:bg-[#0a0a0a] dark:border-gray-800 dark:hover:bg-slate-700 ${specificClasses}`; btn.innerHTML = `<i class="${iconClass} text-sm"></i>`; btn.title = p.label; }
+                    else { btn.className = "bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200 transition active:scale-95 flex items-center gap-1 dark:bg-[#0a0a0a] dark:border-gray-800 dark:text-slate-300 dark:hover:bg-slate-700"; btn.innerHTML = `<i class="${iconClass} text-[10px] opacity-50"></i> ${p.label}`; }
                     btn.onclick = () => app.copyText(p.value);
                     container.appendChild(btn);
                 });
                 const easyTpls = (STATE.data.notes || []).filter(n => n.category === 'template' && n.easyAccess);
-                easyTpls.forEach(t => { const btn = document.createElement('button'); btn.className = "bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-blue-100 transition active:scale-95 flex items-center gap-1 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300 dark:hover:bg-blue-900/50"; btn.innerHTML = `<i class="fas fa-bolt text-[10px] opacity-50"></i> ${t.title}`; btn.onclick = () => app.handleTemplateCopy(t.content); container.appendChild(btn); });
+                easyTpls.forEach(t => { const btn = document.createElement('button'); btn.className = "bg-gray-50 hover:bg-gray-100 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-100 transition active:scale-95 flex items-center gap-1 dark:bg-gray-800 dark:border-blue-800 dark:text-blue-300 dark:hover:bg-blue-900/50"; btn.innerHTML = `<i class="fas fa-bolt text-[10px] opacity-50"></i> ${t.title}`; btn.onclick = () => app.handleTemplateCopy(t.content); container.appendChild(btn); });
                 if (profiles.length === 0 && easyTpls.length === 0) { container.innerHTML = `<span class="text-[10px] text-gray-300 dark:text-gray-600">Add profile links or 'Easy Access' templates to see them here.</span>`; }
             },
 
@@ -2963,7 +2962,7 @@
                 if (toggleBtn) {
                     if (plan.hideDone) {
                         toggleBtn.innerHTML = `<i class="fas fa-eye"></i> <span>Show Done</span>`;
-                        toggleBtn.className = "flex items-center gap-1.5 text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-lg transition-colors dark:bg-blue-900/30 dark:text-blue-300";
+                        toggleBtn.className = "flex items-center gap-1.5 text-[10px] font-bold text-blue-500 bg-gray-50 px-2 py-1 rounded-lg transition-colors dark:bg-gray-800 dark:text-blue-300";
                     } else {
                         toggleBtn.innerHTML = `<i class="fas fa-eye-slash"></i> <span>Hide Done</span>`;
                         toggleBtn.className = "flex items-center gap-1.5 text-[10px] font-bold text-gray-400 hover:text-gray-600 bg-gray-50 px-2 py-1 rounded-lg transition-colors dark:bg-slate-700 dark:text-slate-400 dark:hover:text-slate-200";
@@ -3016,7 +3015,7 @@
                             </div>
 
                             <!-- Checkbox -->
-                            <div onclick="app.togglePlanTask(${idx})" class="shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center cursor-pointer transition-all duration-200 ${task.done ? 'bg-yellow-400 border-yellow-400 text-white' : 'border-gray-200 text-transparent hover:border-yellow-400 bg-white dark:bg-slate-800 dark:border-slate-600'}">
+                            <div onclick="app.togglePlanTask(${idx})" class="shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center cursor-pointer transition-all duration-200 ${task.done ? 'bg-yellow-400 border-yellow-400 text-white' : 'border-gray-200 text-transparent hover:border-yellow-400 bg-white dark:bg-[#0a0a0a] dark:border-slate-600'}">
                                 <i class="fas fa-check text-[10px]"></i>
                             </div>
                             
@@ -3065,19 +3064,19 @@
                         plan.networking.forEach((contact, idx) => {
                             const statusColors = {
                                 'todo': 'bg-gray-100 text-gray-500 border-gray-200 dark:bg-slate-700 dark:text-slate-400 dark:border-slate-600',
-                                'contacted': 'bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800',
-                                'meeting': 'bg-purple-50 text-purple-600 border-purple-100 dark:bg-purple-900/30 dark:text-purple-300 dark:border-purple-800',
-                                'done': 'bg-green-50 text-green-600 border-green-100 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800'
+                                'contacted': 'bg-gray-50 text-blue-600 border-gray-100 dark:bg-gray-800 dark:text-blue-300 dark:border-blue-800',
+                                'meeting': 'bg-gray-50 text-purple-600 border-gray-100 dark:bg-gray-800 dark:text-purple-300 dark:border-purple-800',
+                                'done': 'bg-gray-50 text-green-600 border-gray-100 dark:bg-gray-800 dark:text-green-300 dark:border-green-800'
                             };
                             const statusLabels = { 'todo': 'To Contact', 'contacted': 'Sent', 'meeting': 'Talking', 'done': 'Done' };
                             const s = contact.status || 'todo';
                             const initials = contact.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
                             
                             const card = document.createElement('div');
-                            card.className = "flex-shrink-0 w-32 bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col items-center gap-2 relative group snap-start dark:bg-slate-800 dark:border-slate-700";
+                            card.className = "flex-shrink-0 w-32 bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col items-center gap-2 relative group snap-start dark:bg-[#0a0a0a] dark:border-gray-800";
                             card.innerHTML = `
                                 <button onclick="app.deleteNetworkContact(${idx})" class="absolute top-1 right-1 text-gray-300 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-times text-[10px]"></i></button>
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 flex items-center justify-center text-indigo-600 font-bold text-xs border border-white shadow-sm dark:from-indigo-900 dark:to-blue-900 dark:border-slate-600 dark:text-indigo-300">${initials}</div>
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-100  flex items-center justify-center text-indigo-600 font-bold text-xs border border-white shadow-sm dark:from-indigo-900 dark:to-blue-900 dark:border-slate-600 dark:text-indigo-300">${initials}</div>
                                 <div class="text-center w-full">
                                     <div class="font-bold text-xs text-gray-800 truncate dark:text-slate-200">${contact.name}</div>
                                     <div class="text-[9px] text-gray-400 truncate dark:text-slate-500">${contact.role || 'Contact'}</div>
@@ -3186,22 +3185,22 @@
 
                 // 3. Update Label Text
                 let text = "Warming Up";
-                let labelClass = "text-blue-600 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300";
+                let labelClass = "text-blue-600 bg-gray-50 dark:bg-gray-800 dark:text-blue-300";
 
                 if (total <= 0) {
                      text = "Idle";
                      labelClass = "text-gray-400 bg-gray-100 dark:bg-slate-700 dark:text-slate-400";
                 } else if (total > 5) { 
                     text = "Cruising"; 
-                    labelClass = "text-green-600 bg-green-50 dark:bg-green-900/30 dark:text-green-300";
+                    labelClass = "text-green-600 bg-gray-50 dark:bg-gray-800 dark:text-green-300";
                 }
                 if (total > 15) { 
                     text = "High Speed"; 
-                    labelClass = "text-orange-600 bg-orange-50 dark:bg-orange-900/30 dark:text-orange-300";
+                    labelClass = "text-orange-600 bg-gray-50 dark:bg-gray-800 dark:text-orange-300";
                 }
                 if (total >= 30) { 
                     text = "WARP SPEED 🚀"; 
-                    labelClass = "text-purple-600 bg-purple-50 dark:bg-purple-900/30 dark:text-purple-300";
+                    labelClass = "text-purple-600 bg-gray-50 dark:bg-gray-800 dark:text-purple-300";
                 }
                 
                 if(label) {
@@ -3370,7 +3369,7 @@
                 if(viewName === 'interviews') vInts.style.transform = 'translateX(0)'; 
                 
                 document.querySelectorAll('.nav-btn').forEach(btn => { 
-                    btn.classList.remove('text-blue-600', 'active', 'dark:text-blue-400'); 
+                    btn.classList.remove('text-zinc-900', 'active', 'dark:text-zinc-100');
                     btn.classList.add('text-gray-400', 'dark:text-slate-500'); 
                 }); 
                 
@@ -3378,7 +3377,7 @@
                 const activeBtn = document.querySelectorAll('.nav-btn')[navIndex]; 
                 
                 if (activeBtn) {
-                    activeBtn.classList.add('text-blue-600', 'active', 'dark:text-blue-400'); 
+                    activeBtn.classList.add('text-zinc-900', 'active', 'dark:text-zinc-100');
                     activeBtn.classList.remove('text-gray-400', 'dark:text-slate-500'); 
                 }
                 
