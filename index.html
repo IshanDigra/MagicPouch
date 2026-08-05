@@ -19,12 +19,15 @@
                         fredoka: ['Fredoka', 'sans-serif'],
                     },
                     colors: {
+                        gray: tailwind.colors.zinc,
+                        slate: tailwind.colors.zinc,
+                        blue: tailwind.colors.teal,
                         dark: {
-                            bg: '#0f172a',
-                            card: '#1e293b',
-                            border: '#334155',
-                            text: '#f1f5f9',
-                            muted: '#94a3b8'
+                            bg: '#09090b',
+                            card: '#18181b',
+                            border: '#27272a',
+                            text: '#f4f4f5',
+                            muted: '#a1a1aa'
                         }
                     },
                     boxShadow: {
@@ -107,12 +110,12 @@
             <!-- SEARCH BAR: Flexible width -->
             <div class="flex-1 relative min-w-[100px]">
                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs dark:text-slate-400"></i>
-                <input type="text" id="global-search" placeholder="Search..." class="w-full bg-gray-100 rounded-full py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-inner dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-500" oninput="app.handleGlobalSearch(this.value)">
+                <input type="text" id="global-search" placeholder="Search..." class="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-full py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm dark:text-slate-200 dark:placeholder-slate-500" oninput="app.handleGlobalSearch(this.value)">
             </div>
 
             <!-- HEADER STATS BUTTONS -->
             <div class="flex items-center gap-2 shrink-0">
-                <button id="streak-btn" onclick="app.openStreakModal()" class="relative p-[2px] rounded-lg active:scale-95 transition shadow-sm h-9 group overflow-hidden bg-gray-200 dark:bg-slate-700">
+                <button id="streak-btn" onclick="app.openStreakModal()" class="relative p-[2px] rounded-lg active:scale-95 hover:scale-[1.02] transition-all shadow-sm h-9 group overflow-hidden bg-gray-200 dark:bg-slate-700">
                     <!-- Progress Border Layer -->
                     <div id="streak-progress-bg" class="absolute inset-0 transition-all duration-500 ease-out" style="background: conic-gradient(from 0deg, transparent 0%, transparent 100%);"></div>
                     <!-- Inner Content -->
@@ -121,7 +124,7 @@
                         <span class="text-xs font-bold text-orange-700 dark:text-orange-300" id="mini-streak">0</span>
                     </div>
                 </button>
-                <button onclick="app.openWeeklyModal()" class="flex items-center gap-1.5 bg-blue-50 border border-blue-100 px-2 py-1.5 rounded-lg active:scale-95 transition shadow-sm h-9 dark:bg-blue-500/10 dark:border-blue-500/20">
+                <button onclick="app.openWeeklyModal()" class="flex items-center gap-1.5 bg-white border border-gray-100 px-2 py-1.5 rounded-lg active:scale-95 hover:scale-[1.02] transition-all shadow-sm h-9 dark:bg-slate-800 dark:border-slate-700">
                     <i class="fas fa-chart-bar text-blue-500 text-xs dark:text-blue-400"></i>
                     <span class="text-xs font-bold text-blue-700 dark:text-blue-300" id="mini-weekly">0</span>
                 </button>
@@ -162,7 +165,7 @@
             </div>
 
             <!-- FAB (Add Job) -->
-            <button onclick="app.openJobModal()" aria-label="Add New Job" class="absolute bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg shadow-blue-600/30 flex items-center justify-center text-2xl active:scale-90 transition z-10 hover:bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-500">
+            <button onclick="app.openJobModal()" aria-label="Add New Job" class="absolute bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-[1.25rem] shadow-xl shadow-blue-600/20 flex items-center justify-center text-xl hover:scale-105 active:scale-95 transition-all z-10 hover:bg-blue-500 dark:bg-blue-600 dark:hover:bg-blue-500">
                 <i class="fas fa-plus" aria-hidden="true"></i>
             </button>
         </div>
@@ -398,19 +401,19 @@
 
     <!-- === BOTTOM NAV === -->
     <nav class="bg-white border-t border-gray-200 flex justify-around items-center h-16 safe-pb shrink-0 z-30 dark:bg-slate-900 dark:border-slate-800">
-        <button onclick="app.switchView('jobs')" class="nav-btn active text-blue-600 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-blue-400">
+        <button onclick="app.switchView('jobs')" class="nav-btn active text-blue-600 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-blue-400 scale-105 transition-all">
             <i class="fas fa-check-double text-xl group-active:scale-90 transition"></i>
             <span class="text-[10px] font-bold">Apply</span>
         </button>
-        <button onclick="app.switchView('interviews')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500">
+        <button onclick="app.switchView('interviews')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 hover:scale-105 transition-all">
             <i class="fas fa-user-tie text-xl group-active:scale-90 transition"></i>
             <span class="text-[10px] font-bold">Interview</span>
         </button>
-        <button onclick="app.switchView('plan')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500">
+        <button onclick="app.switchView('plan')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 hover:scale-105 transition-all">
             <i class="fas fa-bullseye text-xl group-active:scale-90 transition"></i>
             <span class="text-[10px] font-bold">Plan</span>
         </button>
-        <button onclick="app.switchView('templates')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500">
+        <button onclick="app.switchView('templates')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 hover:scale-105 transition-all">
             <i class="fas fa-folder text-xl group-active:scale-90 transition"></i>
             <span class="text-[10px] font-bold">Library</span>
         </button>
