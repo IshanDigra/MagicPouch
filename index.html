@@ -397,23 +397,46 @@
 
                 <!-- NEW: Networking Radar UI -->
                 <div class="fade-in bg-white rounded-xl p-5 shadow-sm border border-gray-100 dark:bg-[#0a0a0a] dark:border-gray-800">
-                    <h3 class="font-bold text-gray-800 text-sm dark:text-slate-100 mb-3 flex items-center gap-2">
-                        <i class="fas fa-users text-indigo-500"></i> Networking Radar
-                    </h3>
-                    <div class="flex gap-2 mb-3">
-                        <input type="text" id="network-name-input" class="flex-1 bg-gray-50 border border-gray-100 rounded-xl py-2 pl-3 text-sm outline-none focus:border-indigo-300 focus:bg-white transition-all dark:bg-slate-700/50 dark:border-slate-600 dark:text-white" placeholder="Name (e.g. John)">
-                        <select id="network-role-input" class="w-1/3 bg-gray-50 border border-gray-100 rounded-xl py-2 pl-2 text-xs font-medium outline-none focus:border-indigo-300 dark:bg-slate-700/50 dark:border-slate-600 dark:text-slate-200">
-                            <option value="Recruiter">Recruiter</option>
-                            <option value="Engineer">Engineer</option>
-                            <option value="Manager">Manager</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        <button onclick="app.addNetworkContact()" class="w-10 h-[38px] flex items-center justify-center bg-indigo-600 text-white rounded-xl shadow-sm hover:bg-indigo-700 active:scale-95 transition">
-                            <i class="fas fa-plus"></i>
-                        </button>
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-bold text-gray-800 text-sm dark:text-slate-100 flex items-center gap-2">
+                            <i class="fas fa-users text-indigo-500"></i> Networking Radar
+                        </h3>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-500">View</span>
+                            <select id="network-group-by" onchange="app.renderPlan()" class="bg-gray-50 border border-gray-100 rounded-md py-1 pl-2 pr-6 text-[10px] font-medium outline-none focus:border-indigo-300 dark:bg-slate-700/50 dark:border-slate-600 dark:text-slate-200 appearance-none">
+                                <option value="none">Flat List</option>
+                                <option value="company">By Company</option>
+                                <option value="role">By Role</option>
+                            </select>
+                        </div>
                     </div>
-                    <div id="plan-networking-list" class="flex gap-4 overflow-x-auto no-scrollbar py-2 -mx-2 px-2">
-                        <!-- Contacts injected here -->
+
+                    <!-- Expanded Input Form -->
+                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 mb-3 dark:bg-[#0a0a0a]/50 dark:border-gray-800">
+                        <div class="grid grid-cols-2 gap-2 mb-2">
+                            <input type="text" id="network-name-input" class="w-full bg-white border border-gray-100 rounded-lg py-1.5 px-3 text-xs outline-none focus:border-indigo-300 transition-all dark:bg-slate-700/50 dark:border-slate-600 dark:text-white" placeholder="Name (e.g. John Doe)">
+                            <select id="network-role-input" class="w-full bg-white border border-gray-100 rounded-lg py-1.5 px-2 text-xs font-medium outline-none focus:border-indigo-300 dark:bg-slate-700/50 dark:border-slate-600 dark:text-slate-200">
+                                <option value="Recruiter">Recruiter</option>
+                                <option value="Engineer">Engineer</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-1 gap-2 mb-2">
+                            <input type="text" id="network-company-input" class="w-full bg-white border border-gray-100 rounded-lg py-1.5 px-3 text-xs outline-none focus:border-indigo-300 transition-all dark:bg-slate-700/50 dark:border-slate-600 dark:text-white" placeholder="Company (Optional)">
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="email" id="network-email-input" class="flex-1 bg-white border border-gray-100 rounded-lg py-1.5 px-3 text-xs outline-none focus:border-indigo-300 transition-all dark:bg-slate-700/50 dark:border-slate-600 dark:text-white" placeholder="Email (Optional)">
+                            <input type="tel" id="network-mobile-input" class="flex-1 bg-white border border-gray-100 rounded-lg py-1.5 px-3 text-xs outline-none focus:border-indigo-300 transition-all dark:bg-slate-700/50 dark:border-slate-600 dark:text-white" placeholder="Phone (Optional)">
+                            <button onclick="app.addNetworkContact()" class="w-16 flex items-center justify-center bg-indigo-600 text-white rounded-lg shadow-sm hover:bg-indigo-700 active:scale-95 transition text-xs font-bold">
+                                Add
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic List Container -->
+                    <div id="plan-networking-list" class="space-y-4">
+                        <!-- Contacts or Groupings injected here -->
                     </div>
                 </div>
             </div>
@@ -3230,10 +3253,11 @@
                     if (!plan.networking || plan.networking.length === 0) {
                         netList.innerHTML = `<div class="w-full text-center text-xs text-gray-300 italic py-2 px-5 dark:text-slate-600">No active contacts. Add someone to start networking!</div>`;
                     } else {
-                        // Spacer for scroll padding
-                        netList.appendChild(document.createElement('div')); 
+                        const groupBySelect = document.getElementById('network-group-by');
+                        const groupBy = groupBySelect ? groupBySelect.value : 'none';
                         
-                        plan.networking.forEach((contact, idx) => {
+                        // Render a single card
+                        const renderContactCard = (contact, idx) => {
                             const statusColors = {
                                 'todo': 'bg-gray-100 text-gray-500 border-gray-200 dark:bg-slate-700 dark:text-slate-400 dark:border-slate-600',
                                 'contacted': 'bg-gray-50 text-blue-600 border-gray-100 dark:bg-gray-800 dark:text-blue-300 dark:border-blue-800',
@@ -3244,6 +3268,13 @@
                             const s = contact.status || 'todo';
                             const initials = contact.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
                             
+                            let linksHtml = '';
+                            if(contact.email) linksHtml += `<a href="mailto:${contact.email}" class="text-indigo-400 hover:text-indigo-600"><i class="fas fa-envelope"></i></a>`;
+                            if(contact.mobile) linksHtml += `<a href="tel:${contact.mobile}" class="text-indigo-400 hover:text-indigo-600"><i class="fas fa-phone"></i></a>`;
+                            if(linksHtml) linksHtml = `<div class="flex gap-2 text-[10px] mt-1 justify-center">${linksHtml}</div>`;
+
+                            const companyLabel = contact.company ? `<div class="text-[9px] font-medium text-indigo-500 truncate dark:text-indigo-400">${contact.company}</div>` : '';
+
                             const card = document.createElement('div');
                             card.className = "flex-shrink-0 w-32 bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col items-center gap-2 relative group snap-start dark:bg-[#0a0a0a] dark:border-gray-800";
                             card.innerHTML = `
@@ -3252,13 +3283,50 @@
                                 <div class="text-center w-full">
                                     <div class="font-bold text-xs text-gray-800 truncate dark:text-slate-200">${contact.name}</div>
                                     <div class="text-[9px] text-gray-400 truncate dark:text-slate-500">${contact.role || 'Contact'}</div>
+                                    ${companyLabel}
+                                    ${linksHtml}
                                 </div>
-                                <button onclick="app.toggleNetworkStatus(${idx})" class="text-[9px] font-bold px-2 py-0.5 rounded-full border ${statusColors[s]} transition w-full truncate">${statusLabels[s]}</button>
+                                <button onclick="app.toggleNetworkStatus(${idx})" class="text-[9px] font-bold px-2 py-0.5 rounded-full border ${statusColors[s]} transition w-full truncate mt-auto">${statusLabels[s]}</button>
                             `;
-                            netList.appendChild(card);
-                        });
-                        // Spacer for scroll padding
-                        const spacer = document.createElement('div'); spacer.className = "w-1 shrink-0"; netList.appendChild(spacer);
+                            return card;
+                        };
+
+                        if (groupBy === 'none') {
+                            const container = document.createElement('div');
+                            container.className = "flex gap-4 overflow-x-auto no-scrollbar py-2 -mx-2 px-2";
+                            container.appendChild(document.createElement('div')); // Spacer
+                            plan.networking.forEach((contact, idx) => {
+                                container.appendChild(renderContactCard(contact, idx));
+                            });
+                            const spacer = document.createElement('div'); spacer.className = "w-1 shrink-0"; container.appendChild(spacer);
+                            netList.appendChild(container);
+                        } else {
+                            // Grouping logic
+                            const groups = {};
+                            plan.networking.forEach((contact, idx) => {
+                                let key = groupBy === 'company' ? (contact.company || 'Unknown') : (contact.role || 'Unknown');
+                                if (!groups[key]) groups[key] = [];
+                                groups[key].push({contact, idx});
+                            });
+
+                            Object.keys(groups).sort().forEach(groupKey => {
+                                const section = document.createElement('div');
+                                section.className = "mb-4 last:mb-0";
+                                section.innerHTML = `<h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2 pl-1 dark:text-slate-500">${groupKey} <span class="opacity-50">(${groups[groupKey].length})</span></h4>`;
+
+                                const container = document.createElement('div');
+                                container.className = "flex gap-4 overflow-x-auto no-scrollbar py-1 -mx-2 px-2";
+                                container.appendChild(document.createElement('div')); // Spacer
+
+                                groups[groupKey].forEach(item => {
+                                    container.appendChild(renderContactCard(item.contact, item.idx));
+                                });
+
+                                const spacer = document.createElement('div'); spacer.className = "w-1 shrink-0"; container.appendChild(spacer);
+                                section.appendChild(container);
+                                netList.appendChild(section);
+                            });
+                        }
                     }
                 }
 
@@ -3472,13 +3540,25 @@
             addNetworkContact: () => {
                 const nameInp = document.getElementById('network-name-input');
                 const roleInp = document.getElementById('network-role-input');
+                const companyInp = document.getElementById('network-company-input');
+                const emailInp = document.getElementById('network-email-input');
+                const mobileInp = document.getElementById('network-mobile-input');
+
                 const name = nameInp.value.trim();
                 const role = roleInp.value;
+                const company = companyInp ? companyInp.value.trim() : '';
+                const email = emailInp ? emailInp.value.trim() : '';
+                const mobile = mobileInp ? mobileInp.value.trim() : '';
 
                 if (name) {
                     if (!STATE.data.plan.networking) STATE.data.plan.networking = [];
-                    STATE.data.plan.networking.push({ name, role, status: 'todo' });
+                    STATE.data.plan.networking.push({ name, role, company, email, mobile, status: 'todo' });
+
                     nameInp.value = '';
+                    if(companyInp) companyInp.value = '';
+                    if(emailInp) emailInp.value = '';
+                    if(mobileInp) mobileInp.value = '';
+
                     app.saveToCloud();
                     app.renderPlan();
                     app.toast("Contact added");

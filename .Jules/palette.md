@@ -15,3 +15,7 @@
 **Learning:** When users manage a long-term process like job searching, simply tracking individual tasks is insufficient. They need high-level analytics to understand where they are stuck in the "funnel" (e.g., getting interviews but failing to get offers). Pairing task tracking with a CRM enables better visibility and long-term momentum.
 
 **Action:** Built a Conversion Funnel module into the Weekly Insights modal, which dynamically calculates and displays the user's progress through different stages of the job hunt. Also introduced a "Networking Radar" mini-CRM into the Plan view, allowing users to track and iterate on specific contacts easily.
+
+## 2026-08-06 - Data Grouping in CRM UI
+**Learning:** When generating grouped lists in UI that map back to a flat data array, storing the original array index on the derived items is essential for maintaining O(1) mutations (like delete/toggle) and preventing data corruption.
+**Action:** Implemented grouping map with `idx` property in the Networking Radar to ensure safe mutations regardless of view sorting.
