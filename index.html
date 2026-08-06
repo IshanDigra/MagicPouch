@@ -15,7 +15,7 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', "Segoe UI", 'Roboto', "Helvetica Neue", 'Arial', 'sans-serif'],
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', "Segoe UI", 'Roboto', "Helvetica Neue", 'Arial', 'sans-serif'],
 
                     },
                     colors: {
@@ -45,6 +45,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
         body {
@@ -400,20 +401,28 @@
 
     <!-- === BOTTOM NAV === -->
     <nav class="bg-white border-t border-gray-200 flex justify-around items-center h-16 safe-pb shrink-0 z-30 dark:bg-black dark:border-gray-800">
-        <button onclick="app.switchView('jobs')" class="nav-btn active text-zinc-900 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-zinc-100 scale-105 transition-all">
-            <i class="fas fa-check-double text-xl group-active:scale-90 transition"></i>
+        <button onclick="app.switchView('jobs')" class="nav-btn active text-zinc-900 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-zinc-100 transition-all">
+            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200 bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                <i class="fas fa-check-double text-lg group-active:scale-90 transition"></i>
+            </div>
             <span class="text-[10px] font-bold">Apply</span>
         </button>
-        <button onclick="app.switchView('interviews')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-105 transition-all">
-            <i class="fas fa-user-tie text-xl group-active:scale-90 transition"></i>
+        <button onclick="app.switchView('interviews')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
+            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200">
+                <i class="fas fa-user-tie text-lg group-active:scale-90 transition"></i>
+            </div>
             <span class="text-[10px] font-bold">Interview</span>
         </button>
-        <button onclick="app.switchView('plan')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-105 transition-all">
-            <i class="fas fa-bullseye text-xl group-active:scale-90 transition"></i>
+        <button onclick="app.switchView('plan')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
+            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200">
+                <i class="fas fa-bullseye text-lg group-active:scale-90 transition"></i>
+            </div>
             <span class="text-[10px] font-bold">Plan</span>
         </button>
-        <button onclick="app.switchView('templates')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-105 transition-all">
-            <i class="fas fa-folder text-xl group-active:scale-90 transition"></i>
+        <button onclick="app.switchView('templates')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
+            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200">
+                <i class="fas fa-folder text-lg group-active:scale-90 transition"></i>
+            </div>
             <span class="text-[10px] font-bold">Library</span>
         </button>
     </nav>
@@ -548,7 +557,7 @@
             </div>
 
             <!-- Simplified Streak Section -->
-            <div class="bg-gradient-to-br bg-gray-50  rounded-xl p-5 border border-gray-200 mb-5 relative overflow-hidden dark:bg-gray-800  dark:border-orange-500/20">
+            <div class="bg-zinc-50 rounded-xl p-5 border border-gray-200 mb-5 relative overflow-hidden dark:bg-zinc-900 dark:border-orange-500/20">
                 <div class="absolute top-0 right-0 -mr-4 -mt-4 text-orange-200/50 text-9xl dark:text-orange-500/10">
                     <i class="fas fa-fire"></i>
                 </div>
@@ -720,7 +729,7 @@
             </div>
             
             <div class="mt-6">
-                <button onclick="app.saveNorthStar()" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg shadow-sm hover:scale-[1.02] transition-transform">
+                <button onclick="app.saveNorthStar()" class="w-full py-3 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:scale-[1.02] transition-transform">
                     Set Coordinates 🚀
                 </button>
             </div>
@@ -828,7 +837,7 @@
             </div>
 
             <!-- 🆕 NEW: PROGRESS SECTION (The Bridge) -->
-            <div class="mb-5 bg-gradient-to-r bg-gray-50 to-purple-50 p-4 rounded-xl border border-gray-100 dark:bg-gray-800  dark:border-indigo-800/50">
+            <div class="mb-5 bg-zinc-50 p-4 rounded-xl border border-gray-100 dark:bg-zinc-900 dark:border-indigo-800/50">
                 <h4 class="text-xs font-bold text-indigo-900 uppercase mb-2 dark:text-indigo-300 flex items-center gap-1.5">
                     <i class="fas fa-rocket text-indigo-500"></i> Got a Response?
                 </h4>
@@ -2615,7 +2624,7 @@
                     "Referrals Received", 
                     referralReceivedJobs, 
                     "fas fa-handshake text-teal-600", 
-                    "bg-gradient-to-r bg-gray-50  text-teal-900 border-gray-200 dark:bg-gray-800  dark:text-teal-100 dark:border-teal-800",
+                    "bg-zinc-50 text-teal-900 border-gray-200 dark:bg-zinc-900 dark:text-teal-100 dark:border-teal-800",
                     "border-gray-200",
                     "group-ref",
                     true
@@ -2627,7 +2636,7 @@
                     "Direct Apply", 
                     directApplyJobs, 
                     "fas fa-location-arrow text-purple-600", 
-                    "bg-gradient-to-r bg-gray-50  text-purple-900 border-gray-200 dark:bg-gray-800  dark:text-purple-100 dark:border-purple-800",
+                    "bg-zinc-50 text-purple-900 border-gray-200 dark:bg-zinc-900 dark:text-purple-100 dark:border-purple-800",
                     "border-gray-200",
                     "group-direct",
                     true
@@ -2681,22 +2690,22 @@
                     let textColor = "";
                     let iconColor = "";
                     if (day === 0) {
-                        bgClasses = "bg-gradient-to-r bg-gray-50  dark:bg-gray-800 ";
+                        bgClasses = "bg-zinc-50 dark:bg-zinc-900 ";
                         borderColor = "border-gray-100 dark:border-blue-800";
                         textColor = "text-blue-900 dark:text-blue-100";
                         iconColor = "text-blue-500 dark:text-blue-400";
                     } else if (day === 1) {
-                        bgClasses = "bg-gradient-to-r bg-gray-50  dark:bg-gray-800 ";
+                        bgClasses = "bg-zinc-50 dark:bg-zinc-900 ";
                         borderColor = "border-gray-200 dark:border-orange-800";
                         textColor = "text-orange-900 dark:text-orange-100";
                         iconColor = "text-orange-600 dark:text-orange-400";
                     } else if (day <= 3) {
-                        bgClasses = "bg-gradient-to-r bg-gray-50  dark:bg-gray-800 ";
+                        bgClasses = "bg-zinc-50 dark:bg-zinc-900 ";
                         borderColor = "border-gray-200 dark:border-red-800";
                         textColor = "text-red-900 dark:text-red-100";
                         iconColor = "text-red-500 dark:text-red-400";
                     } else {
-                        bgClasses = "bg-gradient-to-r from-red-100 to-red-200 dark:from-red-950/50 ";
+                        bgClasses = "bg-red-50 dark:bg-red-900/30 ";
                         borderColor = "border-red-300 dark:border-red-900";
                         textColor = "text-red-950 dark:text-red-200";
                         iconColor = "text-red-700 dark:text-red-500";
@@ -3121,7 +3130,7 @@
                             card.className = "flex-shrink-0 w-32 bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col items-center gap-2 relative group snap-start dark:bg-[#0a0a0a] dark:border-gray-800";
                             card.innerHTML = `
                                 <button onclick="app.deleteNetworkContact(${idx})" class="absolute top-1 right-1 text-gray-300 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-times text-[10px]"></i></button>
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-100  flex items-center justify-center text-indigo-600 font-bold text-xs border border-white shadow-sm dark:from-indigo-900 dark:to-blue-900 dark:border-slate-600 dark:text-indigo-300">${initials}</div>
+                                <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-xs border border-white shadow-sm dark:bg-indigo-900/50 dark:border-slate-600 dark:text-indigo-300">${initials}</div>
                                 <div class="text-center w-full">
                                     <div class="font-bold text-xs text-gray-800 truncate dark:text-slate-200">${contact.name}</div>
                                     <div class="text-[9px] text-gray-400 truncate dark:text-slate-500">${contact.role || 'Contact'}</div>
@@ -3416,6 +3425,10 @@
                 document.querySelectorAll('.nav-btn').forEach(btn => { 
                     btn.classList.remove('text-zinc-900', 'active', 'dark:text-zinc-100');
                     btn.classList.add('text-gray-400', 'dark:text-slate-500'); 
+                    const indicator = btn.querySelector('.nav-indicator');
+                    if (indicator) {
+                        indicator.classList.remove('bg-blue-100', 'text-blue-700', 'dark:bg-blue-900/40', 'dark:text-blue-300');
+                    }
                 }); 
                 
                 const navIndex = viewName === 'jobs' ? 0 : viewName === 'interviews' ? 1 : viewName === 'plan' ? 2 : 3; 
@@ -3424,6 +3437,10 @@
                 if (activeBtn) {
                     activeBtn.classList.add('text-zinc-900', 'active', 'dark:text-zinc-100');
                     activeBtn.classList.remove('text-gray-400', 'dark:text-slate-500'); 
+                    const indicator = activeBtn.querySelector('.nav-indicator');
+                    if (indicator) {
+                        indicator.classList.add('bg-blue-100', 'text-blue-700', 'dark:bg-blue-900/40', 'dark:text-blue-300');
+                    }
                 }
                 
                 if (viewName === 'plan') app.renderPlan(); 
