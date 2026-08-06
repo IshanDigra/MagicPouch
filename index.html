@@ -394,6 +394,28 @@
                         <textarea id="plan-monthly-text" oninput="app.savePlanText('monthly')" class="w-full h-32 p-4 text-sm text-gray-700 leading-relaxed outline-none resize-none bg-transparent dark:text-slate-300 placeholder-gray-300 dark:placeholder-slate-600" placeholder="The Big Picture..."></textarea>
                     </div>
                 </div>
+
+                <!-- NEW: Networking Radar UI -->
+                <div class="fade-in bg-white rounded-xl p-5 shadow-sm border border-gray-100 dark:bg-[#0a0a0a] dark:border-gray-800">
+                    <h3 class="font-bold text-gray-800 text-sm dark:text-slate-100 mb-3 flex items-center gap-2">
+                        <i class="fas fa-users text-indigo-500"></i> Networking Radar
+                    </h3>
+                    <div class="flex gap-2 mb-3">
+                        <input type="text" id="network-name-input" class="flex-1 bg-gray-50 border border-gray-100 rounded-xl py-2 pl-3 text-sm outline-none focus:border-indigo-300 focus:bg-white transition-all dark:bg-slate-700/50 dark:border-slate-600 dark:text-white" placeholder="Name (e.g. John)">
+                        <select id="network-role-input" class="w-1/3 bg-gray-50 border border-gray-100 rounded-xl py-2 pl-2 text-xs font-medium outline-none focus:border-indigo-300 dark:bg-slate-700/50 dark:border-slate-600 dark:text-slate-200">
+                            <option value="Recruiter">Recruiter</option>
+                            <option value="Engineer">Engineer</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <button onclick="app.addNetworkContact()" class="w-10 h-[38px] flex items-center justify-center bg-indigo-600 text-white rounded-xl shadow-sm hover:bg-indigo-700 active:scale-95 transition">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div id="plan-networking-list" class="flex gap-4 overflow-x-auto no-scrollbar py-2 -mx-2 px-2">
+                        <!-- Contacts injected here -->
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -634,6 +656,21 @@
                             <div class="text-xl font-bold text-purple-600 dark:text-purple-400" id="weekly-referrals">0</div>
                             <div class="text-[9px] text-gray-300 dark:text-slate-600">Rec'd this week</div>
                         </div>
+                </div>
+
+                <!-- NEW: Conversion Funnel -->
+                <div class="mt-4 pt-4 border-t border-gray-50 dark:border-gray-800">
+                    <h4 class="font-bold text-gray-700 text-[10px] uppercase tracking-wide mb-3 dark:text-slate-400">Funnel Conversion</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="bg-indigo-50 p-2 rounded-lg border border-indigo-100 dark:bg-indigo-900/30 dark:border-indigo-800/50">
+                            <div class="text-[9px] text-indigo-500 font-bold uppercase tracking-wider dark:text-indigo-400">App → Interview</div>
+                            <div class="text-lg font-black text-indigo-700 dark:text-indigo-300 leading-none mt-1" id="conv-app-int">0%</div>
+                        </div>
+                        <div class="bg-emerald-50 p-2 rounded-lg border border-emerald-100 dark:bg-emerald-900/30 dark:border-emerald-800/50">
+                            <div class="text-[9px] text-emerald-500 font-bold uppercase tracking-wider dark:text-emerald-400">Interview → Offer</div>
+                            <div class="text-lg font-black text-emerald-700 dark:text-emerald-300 leading-none mt-1" id="conv-int-off">0%</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1257,6 +1294,7 @@
                 if (!Array.isArray(safeData.profile)) safeData.profile = [];
                 if (!Array.isArray(safeData.quickNotes)) safeData.quickNotes = []; 
                 if (!safeData.plan || typeof safeData.plan !== 'object') safeData.plan = {};
+                if (!Array.isArray(safeData.plan.networking)) safeData.plan.networking = [];
                 
                 if (!Array.isArray(safeData.plan.daily)) {
                     safeData.plan.daily = [
@@ -1289,9 +1327,39 @@
             openWeeklyModal: () => { 
                 document.getElementById('modal-weekly').classList.remove('hidden'); 
                 setTimeout(() => { 
+                    app.calculateConversionRates();
                     app.renderWeeklyStats(); 
                     app.renderHeatmap(new Date(), STATE.data.stats.dailyTarget || 5);
                 }, 100); 
+            },
+
+            calculateConversionRates: () => {
+                const notes = STATE.data.notes || [];
+                let totalApplied = 0;
+                let totalInterviews = 0;
+                let totalOffers = 0;
+
+                notes.forEach(note => {
+                    // Count any job that was applied to or any interview record (which implies it was applied to)
+                    if ((note.category === 'job' && (note.status === 'applied' || note.status === 'completed' || note.status === 'direct-apply')) || note.category === 'interview') {
+                        totalApplied++;
+                    }
+                    if (note.category === 'interview') {
+                        totalInterviews++;
+                        if (note.status === 'Offer') {
+                            totalOffers++;
+                        }
+                    }
+                });
+
+                const appToIntRate = totalApplied > 0 ? Math.round((totalInterviews / totalApplied) * 100) : 0;
+                const intToOffRate = totalInterviews > 0 ? Math.round((totalOffers / totalInterviews) * 100) : 0;
+
+                const appIntEl = document.getElementById('conv-app-int');
+                const intOffEl = document.getElementById('conv-int-off');
+
+                if (appIntEl) appIntEl.textContent = `${appToIntRate}%`;
+                if (intOffEl) intOffEl.textContent = `${intToOffRate}%`;
             },
 
             getWeeklyStats: (weekOffset = 0) => {
@@ -3398,6 +3466,24 @@
                     app.saveToCloud();
                     app.renderPlan();
                     app.toast("Added");
+                }
+            },
+
+            addNetworkContact: () => {
+                const nameInp = document.getElementById('network-name-input');
+                const roleInp = document.getElementById('network-role-input');
+                const name = nameInp.value.trim();
+                const role = roleInp.value;
+
+                if (name) {
+                    if (!STATE.data.plan.networking) STATE.data.plan.networking = [];
+                    STATE.data.plan.networking.push({ name, role, status: 'todo' });
+                    nameInp.value = '';
+                    app.saveToCloud();
+                    app.renderPlan();
+                    app.toast("Contact added");
+                } else {
+                    app.toast("Please enter a name", true);
                 }
             },
 
