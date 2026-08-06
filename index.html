@@ -1539,15 +1539,60 @@
                 if (!titleInput.value) {
                     try {
                         const urlObj = new URL(url.match(/^http/) ? url : `https://${url}`);
-                        const pathSegments = urlObj.pathname.split('/').filter(p => p.length > 2 && !p.match(/^\d+$/));
+                        const hostname = urlObj.hostname.toLowerCase();
+                        const pathParts = urlObj.pathname.split('/').filter(Boolean);
                         
-                        if (pathSegments.length > 0) {
-                            const last = pathSegments[pathSegments.length - 1];
-                            const readable = last.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                            
-                            if (!url.includes('linkedin')) {
-                                titleInput.value = readable;
+                        let company = '';
+                        let role = '';
+
+                        if (hostname.includes('greenhouse.io') || hostname.includes('lever.co') || hostname.includes('ashbyhq.com')) {
+                            if (pathParts.length >= 1) company = pathParts[0];
+                        } else if (hostname.includes('workdayjobs.com')) {
+                            company = hostname.split('.')[0];
+                            const jobIndex = pathParts.indexOf('job');
+                            if (jobIndex !== -1 && jobIndex + 2 < pathParts.length) {
+                                role = pathParts[jobIndex + 2].split('_')[0];
                             }
+                        } else if (hostname.includes('wellfound.com') || hostname.includes('ycombinator.com')) {
+                            const compIndex = pathParts.findIndex(p => p === 'company' || p === 'companies');
+                            if (compIndex !== -1 && compIndex + 1 < pathParts.length) {
+                                company = pathParts[compIndex + 1];
+                            }
+                        } else if (hostname.includes('workable.com')) {
+                            if (pathParts.length >= 1) company = pathParts[0];
+                        } else if (hostname.includes('linkedin.com')) {
+                            // Let the fallback logic handle linkedin if it can find a non-generic path
+                        } else if (!hostname.includes('indeed.com') && !hostname.includes('glassdoor.com') && !hostname.includes('naukri.com')) {
+                            const hostParts = hostname.split('.');
+                            if (hostParts.length >= 2) {
+                                let offset = 2;
+                                if (hostParts.length >= 3 && (hostParts[hostParts.length - 2] === 'co' || hostParts[hostParts.length - 2] === 'com' || hostParts[hostParts.length - 2] === 'org' || hostParts[hostParts.length - 2] === 'net')) {
+                                    offset = 3;
+                                }
+                                company = hostParts[hostParts.length - offset];
+                            }
+                        }
+
+                        if (!company && !role) {
+                            const pathSegments = pathParts.filter(p => p.length > 2 && !p.match(/^\d+$/) && !p.match(/^[a-zA-Z0-9_-]{10,}$/));
+                            if (pathSegments.length > 0) {
+                                const last = pathSegments[pathSegments.length - 1];
+                                if (last.toLowerCase() !== 'view') {
+                                    role = last;
+                                }
+                            }
+                        }
+
+                        if (company) company = company.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        if (role) role = role.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+                        let titleValue = '';
+                        if (company && role) titleValue = `${role} @ ${company}`;
+                        else if (company) titleValue = company;
+                        else if (role) titleValue = role;
+
+                        if (titleValue) {
+                            titleInput.value = titleValue;
                         }
                     } catch(e) {
                         // Invalid URL
