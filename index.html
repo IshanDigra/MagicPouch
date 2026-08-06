@@ -563,14 +563,15 @@
                 </div>
                 
                 <div class="relative z-10 flex flex-col items-center text-center">
-                    <div class="text-xs font-bold text-orange-600 uppercase tracking-widest mb-1 dark:text-orange-400">Current Streak</div>
+                    <div class="text-xs font-bold uppercase tracking-widest mb-1"><span id="tier-label" class="px-2 py-0.5 rounded-full text-white bg-orange-500 shadow-sm">Bronze Tier</span></div>
                     <div class="text-6xl font-black text-orange-500 drop-shadow-sm flex items-center gap-2 dark:text-orange-400">
                         <span id="streak-count">0</span>
-                        <i class="fas fa-fire text-4xl animate-pulse"></i>
+                        <i id="tier-icon" class="fas fa-fire text-4xl animate-pulse"></i>
                     </div>
-                    <div class="mt-4 w-full bg-white/50 rounded-full h-3 p-0.5 dark:bg-black/30">
+                    <div class="mt-4 w-full bg-white/50 rounded-full h-3 p-0.5 dark:bg-black/30 relative">
                         <div id="streak-progress-bar" class="h-full rounded-full bg-orange-500 transition-all duration-1000 w-0 shadow-sm"></div>
                     </div>
+                    <div id="next-milestone-text" class="text-[9px] font-bold text-gray-500 mt-1 uppercase tracking-wider dark:text-gray-400">3 days to Silver Tier</div>
                     
                     <!-- Progress Text & Target Button -->
                     <div class="flex justify-between items-end w-full mt-3 px-1">
@@ -1388,12 +1389,61 @@
                 const progressText = document.getElementById('today-progress-text');
                 const progressBar = document.getElementById('streak-progress-bar');
                 const streakCountEl = document.getElementById('streak-count');
+                const tierLabel = document.getElementById('tier-label');
+                const tierIcon = document.getElementById('tier-icon');
+                const nextMilestoneText = document.getElementById('next-milestone-text');
                 
                 if(progressText) progressText.textContent = `${count} / ${target}`;
-                if(streakCountEl) streakCountEl.textContent = STATE.data.plan.streak;
+
+                const currentStreak = STATE.data.plan.streak;
+                if(streakCountEl) streakCountEl.textContent = currentStreak;
+
+                // Gamification Tiers Logic
+                const tiers = [
+                    { name: 'Bronze Tier', min: 0, next: 3, icon: 'fa-fire', color: 'bg-orange-500', iconColor: 'text-orange-500' },
+                    { name: 'Silver Tier', min: 3, next: 7, icon: 'fa-bolt', color: 'bg-gray-400', iconColor: 'text-gray-400' },
+                    { name: 'Gold Tier', min: 7, next: 14, icon: 'fa-star', color: 'bg-yellow-400', iconColor: 'text-yellow-400' },
+                    { name: 'Diamond Tier', min: 14, next: null, icon: 'fa-gem', color: 'bg-cyan-400', iconColor: 'text-cyan-400' }
+                ];
+
+                let activeTier = tiers[0];
+                for(let i = tiers.length - 1; i >= 0; i--) {
+                    if (currentStreak >= tiers[i].min) {
+                        activeTier = tiers[i];
+                        break;
+                    }
+                }
+
+                if (tierLabel) {
+                    tierLabel.textContent = activeTier.name;
+                    tierLabel.className = `px-2 py-0.5 rounded-full text-white ${activeTier.color} shadow-sm`;
+                }
+
+                if (tierIcon) {
+                    tierIcon.className = `fas ${activeTier.icon} text-4xl animate-pulse ${activeTier.iconColor}`;
+                }
+
                 if(progressBar) {
-                    const pct = Math.min(100, (count / target) * 100);
-                    progressBar.style.width = `${pct}%`;
+                    if (activeTier.next !== null) {
+                        const progressInTier = currentStreak - activeTier.min;
+                        const tierSize = activeTier.next - activeTier.min;
+                        const pct = Math.min(100, (progressInTier / tierSize) * 100);
+                        progressBar.style.width = `${pct}%`;
+                        progressBar.className = `h-full rounded-full transition-all duration-1000 shadow-sm ${activeTier.color}`;
+                    } else {
+                        progressBar.style.width = `100%`;
+                        progressBar.className = `h-full rounded-full transition-all duration-1000 shadow-sm ${activeTier.color}`;
+                    }
+                }
+
+                if (nextMilestoneText) {
+                    if (activeTier.next !== null) {
+                        const daysLeft = activeTier.next - currentStreak;
+                        const nextTierName = tiers.find(t => t.min === activeTier.next).name;
+                        nextMilestoneText.textContent = `${daysLeft} days to ${nextTierName}`;
+                    } else {
+                        nextMilestoneText.textContent = `Max Tier Reached!`;
+                    }
                 }
 
                 const streakBtnBg = document.getElementById('streak-progress-bg');
