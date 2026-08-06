@@ -15,7 +15,7 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', "Segoe UI", 'Roboto', "Helvetica Neue", 'Arial', 'sans-serif'],
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', "Segoe UI", 'Roboto', "Helvetica Neue", 'Arial', 'sans-serif'],
 
                     },
                     colors: {
@@ -45,6 +45,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
         body {
@@ -393,6 +394,28 @@
                         <textarea id="plan-monthly-text" oninput="app.savePlanText('monthly')" class="w-full h-32 p-4 text-sm text-gray-700 leading-relaxed outline-none resize-none bg-transparent dark:text-slate-300 placeholder-gray-300 dark:placeholder-slate-600" placeholder="The Big Picture..."></textarea>
                     </div>
                 </div>
+
+                <!-- NEW: Networking Radar UI -->
+                <div class="fade-in bg-white rounded-xl p-5 shadow-sm border border-gray-100 dark:bg-[#0a0a0a] dark:border-gray-800">
+                    <h3 class="font-bold text-gray-800 text-sm dark:text-slate-100 mb-3 flex items-center gap-2">
+                        <i class="fas fa-users text-indigo-500"></i> Networking Radar
+                    </h3>
+                    <div class="flex gap-2 mb-3">
+                        <input type="text" id="network-name-input" class="flex-1 bg-gray-50 border border-gray-100 rounded-xl py-2 pl-3 text-sm outline-none focus:border-indigo-300 focus:bg-white transition-all dark:bg-slate-700/50 dark:border-slate-600 dark:text-white" placeholder="Name (e.g. John)">
+                        <select id="network-role-input" class="w-1/3 bg-gray-50 border border-gray-100 rounded-xl py-2 pl-2 text-xs font-medium outline-none focus:border-indigo-300 dark:bg-slate-700/50 dark:border-slate-600 dark:text-slate-200">
+                            <option value="Recruiter">Recruiter</option>
+                            <option value="Engineer">Engineer</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <button onclick="app.addNetworkContact()" class="w-10 h-[38px] flex items-center justify-center bg-indigo-600 text-white rounded-xl shadow-sm hover:bg-indigo-700 active:scale-95 transition">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div id="plan-networking-list" class="flex gap-4 overflow-x-auto no-scrollbar py-2 -mx-2 px-2">
+                        <!-- Contacts injected here -->
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -400,20 +423,28 @@
 
     <!-- === BOTTOM NAV === -->
     <nav class="bg-white border-t border-gray-200 flex justify-around items-center h-16 safe-pb shrink-0 z-30 dark:bg-black dark:border-gray-800">
-        <button onclick="app.switchView('jobs')" class="nav-btn active text-zinc-900 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-zinc-100 scale-105 transition-all">
-            <i class="fas fa-check-double text-xl group-active:scale-90 transition"></i>
+        <button onclick="app.switchView('jobs')" class="nav-btn active text-zinc-900 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-zinc-100 transition-all">
+            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200 bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                <i class="fas fa-check-double text-lg group-active:scale-90 transition"></i>
+            </div>
             <span class="text-[10px] font-bold">Apply</span>
         </button>
-        <button onclick="app.switchView('interviews')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-105 transition-all">
-            <i class="fas fa-user-tie text-xl group-active:scale-90 transition"></i>
+        <button onclick="app.switchView('interviews')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
+            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200">
+                <i class="fas fa-user-tie text-lg group-active:scale-90 transition"></i>
+            </div>
             <span class="text-[10px] font-bold">Interview</span>
         </button>
-        <button onclick="app.switchView('plan')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-105 transition-all">
-            <i class="fas fa-bullseye text-xl group-active:scale-90 transition"></i>
+        <button onclick="app.switchView('plan')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
+            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200">
+                <i class="fas fa-bullseye text-lg group-active:scale-90 transition"></i>
+            </div>
             <span class="text-[10px] font-bold">Plan</span>
         </button>
-        <button onclick="app.switchView('templates')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:scale-105 transition-all">
-            <i class="fas fa-folder text-xl group-active:scale-90 transition"></i>
+        <button onclick="app.switchView('templates')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
+            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200">
+                <i class="fas fa-folder text-lg group-active:scale-90 transition"></i>
+            </div>
             <span class="text-[10px] font-bold">Library</span>
         </button>
     </nav>
@@ -548,20 +579,21 @@
             </div>
 
             <!-- Simplified Streak Section -->
-            <div class="bg-gradient-to-br bg-gray-50  rounded-xl p-5 border border-gray-200 mb-5 relative overflow-hidden dark:bg-gray-800  dark:border-orange-500/20">
+            <div class="bg-zinc-50 rounded-xl p-5 border border-gray-200 mb-5 relative overflow-hidden dark:bg-zinc-900 dark:border-orange-500/20">
                 <div class="absolute top-0 right-0 -mr-4 -mt-4 text-orange-200/50 text-9xl dark:text-orange-500/10">
                     <i class="fas fa-fire"></i>
                 </div>
                 
                 <div class="relative z-10 flex flex-col items-center text-center">
-                    <div class="text-xs font-bold text-orange-600 uppercase tracking-widest mb-1 dark:text-orange-400">Current Streak</div>
+                    <div class="text-xs font-bold uppercase tracking-widest mb-1"><span id="tier-label" class="px-2 py-0.5 rounded-full text-white bg-orange-500 shadow-sm">Bronze Tier</span></div>
                     <div class="text-6xl font-black text-orange-500 drop-shadow-sm flex items-center gap-2 dark:text-orange-400">
                         <span id="streak-count">0</span>
-                        <i class="fas fa-fire text-4xl animate-pulse"></i>
+                        <i id="tier-icon" class="fas fa-fire text-4xl animate-pulse"></i>
                     </div>
-                    <div class="mt-4 w-full bg-white/50 rounded-full h-3 p-0.5 dark:bg-black/30">
+                    <div class="mt-4 w-full bg-white/50 rounded-full h-3 p-0.5 dark:bg-black/30 relative">
                         <div id="streak-progress-bar" class="h-full rounded-full bg-orange-500 transition-all duration-1000 w-0 shadow-sm"></div>
                     </div>
+                    <div id="next-milestone-text" class="text-[9px] font-bold text-gray-500 mt-1 uppercase tracking-wider dark:text-gray-400">3 days to Silver Tier</div>
                     
                     <!-- Progress Text & Target Button -->
                     <div class="flex justify-between items-end w-full mt-3 px-1">
@@ -624,6 +656,21 @@
                             <div class="text-xl font-bold text-purple-600 dark:text-purple-400" id="weekly-referrals">0</div>
                             <div class="text-[9px] text-gray-300 dark:text-slate-600">Rec'd this week</div>
                         </div>
+                </div>
+
+                <!-- NEW: Conversion Funnel -->
+                <div class="mt-4 pt-4 border-t border-gray-50 dark:border-gray-800">
+                    <h4 class="font-bold text-gray-700 text-[10px] uppercase tracking-wide mb-3 dark:text-slate-400">Funnel Conversion</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="bg-indigo-50 p-2 rounded-lg border border-indigo-100 dark:bg-indigo-900/30 dark:border-indigo-800/50">
+                            <div class="text-[9px] text-indigo-500 font-bold uppercase tracking-wider dark:text-indigo-400">App → Interview</div>
+                            <div class="text-lg font-black text-indigo-700 dark:text-indigo-300 leading-none mt-1" id="conv-app-int">0%</div>
+                        </div>
+                        <div class="bg-emerald-50 p-2 rounded-lg border border-emerald-100 dark:bg-emerald-900/30 dark:border-emerald-800/50">
+                            <div class="text-[9px] text-emerald-500 font-bold uppercase tracking-wider dark:text-emerald-400">Interview → Offer</div>
+                            <div class="text-lg font-black text-emerald-700 dark:text-emerald-300 leading-none mt-1" id="conv-int-off">0%</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -720,7 +767,7 @@
             </div>
             
             <div class="mt-6">
-                <button onclick="app.saveNorthStar()" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-xl shadow-lg shadow-sm hover:scale-[1.02] transition-transform">
+                <button onclick="app.saveNorthStar()" class="w-full py-3 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:scale-[1.02] transition-transform">
                     Set Coordinates 🚀
                 </button>
             </div>
@@ -828,7 +875,7 @@
             </div>
 
             <!-- 🆕 NEW: PROGRESS SECTION (The Bridge) -->
-            <div class="mb-5 bg-gradient-to-r bg-gray-50 to-purple-50 p-4 rounded-xl border border-gray-100 dark:bg-gray-800  dark:border-indigo-800/50">
+            <div class="mb-5 bg-zinc-50 p-4 rounded-xl border border-gray-100 dark:bg-zinc-900 dark:border-indigo-800/50">
                 <h4 class="text-xs font-bold text-indigo-900 uppercase mb-2 dark:text-indigo-300 flex items-center gap-1.5">
                     <i class="fas fa-rocket text-indigo-500"></i> Got a Response?
                 </h4>
@@ -1247,6 +1294,7 @@
                 if (!Array.isArray(safeData.profile)) safeData.profile = [];
                 if (!Array.isArray(safeData.quickNotes)) safeData.quickNotes = []; 
                 if (!safeData.plan || typeof safeData.plan !== 'object') safeData.plan = {};
+                if (!Array.isArray(safeData.plan.networking)) safeData.plan.networking = [];
                 
                 if (!Array.isArray(safeData.plan.daily)) {
                     safeData.plan.daily = [
@@ -1279,9 +1327,39 @@
             openWeeklyModal: () => { 
                 document.getElementById('modal-weekly').classList.remove('hidden'); 
                 setTimeout(() => { 
+                    app.calculateConversionRates();
                     app.renderWeeklyStats(); 
                     app.renderHeatmap(new Date(), STATE.data.stats.dailyTarget || 5);
                 }, 100); 
+            },
+
+            calculateConversionRates: () => {
+                const notes = STATE.data.notes || [];
+                let totalApplied = 0;
+                let totalInterviews = 0;
+                let totalOffers = 0;
+
+                notes.forEach(note => {
+                    // Count any job that was applied to or any interview record (which implies it was applied to)
+                    if ((note.category === 'job' && (note.status === 'applied' || note.status === 'completed' || note.status === 'direct-apply')) || note.category === 'interview') {
+                        totalApplied++;
+                    }
+                    if (note.category === 'interview') {
+                        totalInterviews++;
+                        if (note.status === 'Offer') {
+                            totalOffers++;
+                        }
+                    }
+                });
+
+                const appToIntRate = totalApplied > 0 ? Math.round((totalInterviews / totalApplied) * 100) : 0;
+                const intToOffRate = totalInterviews > 0 ? Math.round((totalOffers / totalInterviews) * 100) : 0;
+
+                const appIntEl = document.getElementById('conv-app-int');
+                const intOffEl = document.getElementById('conv-int-off');
+
+                if (appIntEl) appIntEl.textContent = `${appToIntRate}%`;
+                if (intOffEl) intOffEl.textContent = `${intToOffRate}%`;
             },
 
             getWeeklyStats: (weekOffset = 0) => {
@@ -1379,12 +1457,61 @@
                 const progressText = document.getElementById('today-progress-text');
                 const progressBar = document.getElementById('streak-progress-bar');
                 const streakCountEl = document.getElementById('streak-count');
+                const tierLabel = document.getElementById('tier-label');
+                const tierIcon = document.getElementById('tier-icon');
+                const nextMilestoneText = document.getElementById('next-milestone-text');
                 
                 if(progressText) progressText.textContent = `${count} / ${target}`;
-                if(streakCountEl) streakCountEl.textContent = STATE.data.plan.streak;
+
+                const currentStreak = STATE.data.plan.streak;
+                if(streakCountEl) streakCountEl.textContent = currentStreak;
+
+                // Gamification Tiers Logic
+                const tiers = [
+                    { name: 'Bronze Tier', min: 0, next: 3, icon: 'fa-fire', color: 'bg-orange-500', iconColor: 'text-orange-500' },
+                    { name: 'Silver Tier', min: 3, next: 7, icon: 'fa-bolt', color: 'bg-gray-400', iconColor: 'text-gray-400' },
+                    { name: 'Gold Tier', min: 7, next: 14, icon: 'fa-star', color: 'bg-yellow-400', iconColor: 'text-yellow-400' },
+                    { name: 'Diamond Tier', min: 14, next: null, icon: 'fa-gem', color: 'bg-cyan-400', iconColor: 'text-cyan-400' }
+                ];
+
+                let activeTier = tiers[0];
+                for(let i = tiers.length - 1; i >= 0; i--) {
+                    if (currentStreak >= tiers[i].min) {
+                        activeTier = tiers[i];
+                        break;
+                    }
+                }
+
+                if (tierLabel) {
+                    tierLabel.textContent = activeTier.name;
+                    tierLabel.className = `px-2 py-0.5 rounded-full text-white ${activeTier.color} shadow-sm`;
+                }
+
+                if (tierIcon) {
+                    tierIcon.className = `fas ${activeTier.icon} text-4xl animate-pulse ${activeTier.iconColor}`;
+                }
+
                 if(progressBar) {
-                    const pct = Math.min(100, (count / target) * 100);
-                    progressBar.style.width = `${pct}%`;
+                    if (activeTier.next !== null) {
+                        const progressInTier = currentStreak - activeTier.min;
+                        const tierSize = activeTier.next - activeTier.min;
+                        const pct = Math.min(100, (progressInTier / tierSize) * 100);
+                        progressBar.style.width = `${pct}%`;
+                        progressBar.className = `h-full rounded-full transition-all duration-1000 shadow-sm ${activeTier.color}`;
+                    } else {
+                        progressBar.style.width = `100%`;
+                        progressBar.className = `h-full rounded-full transition-all duration-1000 shadow-sm ${activeTier.color}`;
+                    }
+                }
+
+                if (nextMilestoneText) {
+                    if (activeTier.next !== null) {
+                        const daysLeft = activeTier.next - currentStreak;
+                        const nextTierName = tiers.find(t => t.min === activeTier.next).name;
+                        nextMilestoneText.textContent = `${daysLeft} days to ${nextTierName}`;
+                    } else {
+                        nextMilestoneText.textContent = `Max Tier Reached!`;
+                    }
                 }
 
                 const streakBtnBg = document.getElementById('streak-progress-bg');
@@ -2615,7 +2742,7 @@
                     "Referrals Received", 
                     referralReceivedJobs, 
                     "fas fa-handshake text-teal-600", 
-                    "bg-gradient-to-r bg-gray-50  text-teal-900 border-gray-200 dark:bg-gray-800  dark:text-teal-100 dark:border-teal-800",
+                    "bg-zinc-50 text-teal-900 border-gray-200 dark:bg-zinc-900 dark:text-teal-100 dark:border-teal-800",
                     "border-gray-200",
                     "group-ref",
                     true
@@ -2627,7 +2754,7 @@
                     "Direct Apply", 
                     directApplyJobs, 
                     "fas fa-location-arrow text-purple-600", 
-                    "bg-gradient-to-r bg-gray-50  text-purple-900 border-gray-200 dark:bg-gray-800  dark:text-purple-100 dark:border-purple-800",
+                    "bg-zinc-50 text-purple-900 border-gray-200 dark:bg-zinc-900 dark:text-purple-100 dark:border-purple-800",
                     "border-gray-200",
                     "group-direct",
                     true
@@ -2681,22 +2808,22 @@
                     let textColor = "";
                     let iconColor = "";
                     if (day === 0) {
-                        bgClasses = "bg-gradient-to-r bg-gray-50  dark:bg-gray-800 ";
+                        bgClasses = "bg-zinc-50 dark:bg-zinc-900 ";
                         borderColor = "border-gray-100 dark:border-blue-800";
                         textColor = "text-blue-900 dark:text-blue-100";
                         iconColor = "text-blue-500 dark:text-blue-400";
                     } else if (day === 1) {
-                        bgClasses = "bg-gradient-to-r bg-gray-50  dark:bg-gray-800 ";
+                        bgClasses = "bg-zinc-50 dark:bg-zinc-900 ";
                         borderColor = "border-gray-200 dark:border-orange-800";
                         textColor = "text-orange-900 dark:text-orange-100";
                         iconColor = "text-orange-600 dark:text-orange-400";
                     } else if (day <= 3) {
-                        bgClasses = "bg-gradient-to-r bg-gray-50  dark:bg-gray-800 ";
+                        bgClasses = "bg-zinc-50 dark:bg-zinc-900 ";
                         borderColor = "border-gray-200 dark:border-red-800";
                         textColor = "text-red-900 dark:text-red-100";
                         iconColor = "text-red-500 dark:text-red-400";
                     } else {
-                        bgClasses = "bg-gradient-to-r from-red-100 to-red-200 dark:from-red-950/50 ";
+                        bgClasses = "bg-red-50 dark:bg-red-900/30 ";
                         borderColor = "border-red-300 dark:border-red-900";
                         textColor = "text-red-950 dark:text-red-200";
                         iconColor = "text-red-700 dark:text-red-500";
@@ -3121,7 +3248,7 @@
                             card.className = "flex-shrink-0 w-32 bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col items-center gap-2 relative group snap-start dark:bg-[#0a0a0a] dark:border-gray-800";
                             card.innerHTML = `
                                 <button onclick="app.deleteNetworkContact(${idx})" class="absolute top-1 right-1 text-gray-300 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-times text-[10px]"></i></button>
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-100  flex items-center justify-center text-indigo-600 font-bold text-xs border border-white shadow-sm dark:from-indigo-900 dark:to-blue-900 dark:border-slate-600 dark:text-indigo-300">${initials}</div>
+                                <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-xs border border-white shadow-sm dark:bg-indigo-900/50 dark:border-slate-600 dark:text-indigo-300">${initials}</div>
                                 <div class="text-center w-full">
                                     <div class="font-bold text-xs text-gray-800 truncate dark:text-slate-200">${contact.name}</div>
                                     <div class="text-[9px] text-gray-400 truncate dark:text-slate-500">${contact.role || 'Contact'}</div>
@@ -3342,6 +3469,24 @@
                 }
             },
 
+            addNetworkContact: () => {
+                const nameInp = document.getElementById('network-name-input');
+                const roleInp = document.getElementById('network-role-input');
+                const name = nameInp.value.trim();
+                const role = roleInp.value;
+
+                if (name) {
+                    if (!STATE.data.plan.networking) STATE.data.plan.networking = [];
+                    STATE.data.plan.networking.push({ name, role, status: 'todo' });
+                    nameInp.value = '';
+                    app.saveToCloud();
+                    app.renderPlan();
+                    app.toast("Contact added");
+                } else {
+                    app.toast("Please enter a name", true);
+                }
+            },
+
             addSuggestion: (text) => {
                 STATE.data.plan.daily.push({ id: Date.now().toString(), text, done: false });
                 app.saveToCloud();
@@ -3416,6 +3561,10 @@
                 document.querySelectorAll('.nav-btn').forEach(btn => { 
                     btn.classList.remove('text-zinc-900', 'active', 'dark:text-zinc-100');
                     btn.classList.add('text-gray-400', 'dark:text-slate-500'); 
+                    const indicator = btn.querySelector('.nav-indicator');
+                    if (indicator) {
+                        indicator.classList.remove('bg-blue-100', 'text-blue-700', 'dark:bg-blue-900/40', 'dark:text-blue-300');
+                    }
                 }); 
                 
                 const navIndex = viewName === 'jobs' ? 0 : viewName === 'interviews' ? 1 : viewName === 'plan' ? 2 : 3; 
@@ -3424,6 +3573,10 @@
                 if (activeBtn) {
                     activeBtn.classList.add('text-zinc-900', 'active', 'dark:text-zinc-100');
                     activeBtn.classList.remove('text-gray-400', 'dark:text-slate-500'); 
+                    const indicator = activeBtn.querySelector('.nav-indicator');
+                    if (indicator) {
+                        indicator.classList.add('bg-blue-100', 'text-blue-700', 'dark:bg-blue-900/40', 'dark:text-blue-300');
+                    }
                 }
                 
                 if (viewName === 'plan') app.renderPlan(); 
