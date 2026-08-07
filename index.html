@@ -3324,8 +3324,8 @@
                                 card.className = "flex-shrink-0 w-36 bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col gap-2 relative group snap-start dark:bg-[#0a0a0a] dark:border-gray-800";
 
                                 let contactIcons = '';
-                                if(contact.email) contactIcons += `<a href="mailto:${contact.email}" onclick="event.stopPropagation()" class="text-gray-400 hover:text-blue-500 transition"><i class="fas fa-envelope text-xs"></i></a>`;
-                                if(contact.mobile) contactIcons += `<a href="tel:${contact.mobile}" onclick="event.stopPropagation()" class="text-gray-400 hover:text-green-500 transition"><i class="fas fa-phone text-xs"></i></a>`;
+                                if(contact.email) contactIcons += `<i class="fas fa-envelope text-xs text-gray-400" title="${contact.email}"></i>`;
+                                if(contact.mobile) contactIcons += `<i class="fas fa-phone text-xs text-gray-400" title="${contact.mobile}"></i>`;
 
                                 card.innerHTML = `
                                     <div class="flex justify-between items-start w-full">
