@@ -2007,7 +2007,17 @@
                     if(note) {
                         // Switch type
                         note.category = 'interview';
-                        note.company = note.title; // Map title to company
+
+                        // Extract Role and Company
+                        if (note.title && note.title.includes(' @ ')) {
+                            const parts = note.title.split(' @ ');
+                            note.role = parts[0].trim();
+                            note.company = parts.slice(1).join(' @ ').trim();
+                        } else {
+                            note.company = note.title; // Map title to company if no separator
+                            note.role = '';
+                        }
+
                         note.status = 'Test Received';
                         note.updated = Date.now();
                         
@@ -2464,8 +2474,8 @@
             promoteStage: (id) => {
                 const note = STATE.data.notes.find(n => n.id === id);
                 if(note) {
-                     // Open modal to set new details
-                     app.openInterviewModal(id);
+                     // Open modal to set new details, passing true to indicate promotion
+                     app.openInterviewModal(id, true);
                      app.toast("Select the next stage & deadline");
                 }
             },
@@ -2516,8 +2526,9 @@
                 app.renderInterviews(type, document.getElementById('global-search').value);
             },
 
-            openInterviewModal: (id = null) => {
+            openInterviewModal: (id = null, isPromoting = false) => {
                 STATE.editingId = id;
+                STATE.isPromoting = isPromoting;
                 const modal = document.getElementById('modal-interview');
                 const company = document.getElementById('int-company');
                 const role = document.getElementById('int-role');
@@ -2575,7 +2586,7 @@
                         if (h.completed) {
                             icon = '<i class="fas fa-check-circle text-green-500 mt-0.5"></i>';
                             titleClass = "text-green-700 dark:text-green-400";
-                        } else if (h.notes && (h.notes.includes("Moved to") || h.notes.includes("Started"))) {
+                        } else if (h.notes && (h.notes.includes("Moved to") || h.notes.includes("Started") || h.notes.includes("New Round:"))) {
                             icon = '<i class="fas fa-arrow-circle-right text-indigo-500 mt-0.5"></i>';
                             titleClass = "text-indigo-700 dark:text-indigo-400";
                         }
@@ -2614,9 +2625,8 @@
                      const oldItem = STATE.data.notes.find(n => n.id === STATE.editingId);
                      if(oldItem) {
                          oldStatus = oldItem.status;
-                         // If status changed OR user is editing a completed stage to "move" it
-                         if (oldItem.status !== status || (oldItem.stageCompleted && oldItem.status === status)) {
-                             // Status changed or re-saving completed stage (likely promoting)
+                         // If status changed OR it's an explicit promotion
+                         if (oldItem.status !== status || STATE.isPromoting) {
                              isStageReset = true;
                          }
                      }
@@ -2640,18 +2650,25 @@
                 if (STATE.editingId) {
                     const idx = STATE.data.notes.findIndex(n => n.id === STATE.editingId);
                     if (idx > -1) {
-                        // If status changed, log the transition
-                        if (STATE.data.notes[idx].status !== status) {
-                             if (!STATE.data.notes[idx].history) STATE.data.notes[idx].history = [];
-                             STATE.data.notes[idx].history.push({
+                        const oldItem = STATE.data.notes[idx];
+                        // If status changed OR it's an explicit promotion, log the transition
+                        if (oldItem.status !== status || STATE.isPromoting) {
+                             if (!oldItem.history) oldItem.history = [];
+
+                             let notesMsg = `Moved to ${status}`;
+                             if (STATE.isPromoting && oldItem.status === status) {
+                                 notesMsg = `New Round: ${status}`;
+                             }
+
+                             oldItem.history.push({
                                  status: status,
                                  date: Date.now(),
                                  completed: false, 
-                                 notes: `Moved to ${status}`
+                                 notes: notesMsg
                              });
                         }
                         
-                        STATE.data.notes[idx] = { ...STATE.data.notes[idx], ...itemData };
+                        STATE.data.notes[idx] = { ...oldItem, ...itemData };
                     }
                 } else {
                     STATE.data.notes.unshift({ 
