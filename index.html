@@ -369,6 +369,20 @@
                     </div>
                 </div>
 
+                <!-- Important Daily Post-it Note -->
+                <div class="fade-in relative mt-2 mb-6" style="animation-delay: 0.1s">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-3 bg-red-400/80 rounded-sm shadow-sm z-10 transform -rotate-2 backdrop-blur-sm dark:bg-red-500/80"></div>
+                    <div class="bg-yellow-100 rounded-xl p-4 shadow-md border border-yellow-200 transform rotate-1 transition-transform hover:rotate-0 dark:bg-yellow-900/30 dark:border-yellow-700/50">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-sm text-yellow-800 dark:text-yellow-400 flex items-center gap-2">
+                                <i class="fas fa-thumbtack"></i> Urgent Reminders
+                            </h3>
+                            <button onclick="app.copyPlanText('postIt')" class="text-yellow-600 hover:text-yellow-800 dark:text-yellow-500 dark:hover:text-yellow-300"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <textarea id="plan-postIt-text" oninput="app.savePlanText('postIt')" class="w-full h-24 text-sm text-yellow-900 leading-relaxed outline-none resize-none bg-transparent placeholder-yellow-700/50 dark:text-yellow-100 dark:placeholder-yellow-500/50" placeholder="HR follow-ups, calls, etc."></textarea>
+                    </div>
+                </div>
+
                 <!-- Strategic Goals (Weekly/Monthly) -->
                 <div class="fade-in grid grid-cols-1 gap-4" style="animation-delay: 0.2s">
                     
@@ -1352,6 +1366,7 @@
                 }
                 if (typeof safeData.plan.weekly !== 'string') safeData.plan.weekly = '';
                 if (typeof safeData.plan.monthly !== 'string') safeData.plan.monthly = '';
+                if (typeof safeData.plan.postIt !== 'string') safeData.plan.postIt = '';
                 if (typeof safeData.plan.lastLogin !== 'string') safeData.plan.lastLogin = '';
                 if (typeof safeData.plan.streak !== 'number') safeData.plan.streak = 0;
                 if (typeof safeData.plan.hideDone !== 'boolean') safeData.plan.hideDone = false; 
@@ -3386,11 +3401,13 @@
                     }
                 }
 
-                // Restore Weekly & Monthly Text
+                // Restore Text Areas
                 const weeklyEl = document.getElementById('plan-weekly-text');
                 const monthlyEl = document.getElementById('plan-monthly-text');
+                const postItEl = document.getElementById('plan-postIt-text');
                 if (weeklyEl) weeklyEl.value = plan.weekly || '';
                 if (monthlyEl) monthlyEl.value = plan.monthly || '';
+                if (postItEl) postItEl.value = plan.postIt || '';
                 
                 // Render Top Dashboard Features
                 app.renderVelocity();
