@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Magic Pouch Job Assistant",
+  "version": "1.0.0",
+  "description": "Floating job assistant that seamlessly captures job applications and tracks your progress.",
+  "action": {
+    "default_panel": "src/index.html"
+  },
+  "side_panel": {
+    "default_path": "src/index.html"
+  },
+  "permissions": [
+    "sidePanel",
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.linkedin.com/*",
+    "*://*.greenhouse.io/*",
+    "*://*.lever.co/*",
+    "*://*.workdayjobs.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content.js"]
+    }
+  ]
+}
