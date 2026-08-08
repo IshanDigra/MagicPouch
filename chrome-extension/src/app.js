@@ -86,7 +86,7 @@ import Chart from 'chart.js/auto';
              return doc(db, 'sync', STATE.syncKey);
         };
 
-        window.app = {
+        const app = {
 
             saveJobFromExtension: (data) => {
                 let role = data.title || '';
@@ -2625,6 +2625,8 @@ import Chart from 'chart.js/auto';
                 }
             }
         };
+        window.app = app;
+
 
         window.addEventListener('DOMContentLoaded', () => {
             app.init();
