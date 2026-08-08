@@ -1,6 +1,6 @@
-// Content Script for Magic Pouch Job Capture
+// Content Script for ApplicationPal Job Capture
 
-console.log('Magic Pouch content script loaded');
+console.log('ApplicationPal content script loaded');
 
 // Helper to scrape basic job details from common platforms
 function scrapeJobDetails() {
@@ -38,7 +38,7 @@ function scrapeJobDetails() {
       company = window.location.hostname;
     }
   } catch (e) {
-    console.error('Magic Pouch scraping error:', e);
+    console.error('ApplicationPal scraping error:', e);
   }
 
   return { title, company, url };
@@ -48,7 +48,7 @@ function scrapeJobDetails() {
 function setupAutoCapture() {
   // Let's create a subtle floating button to capture the job
   const btn = document.createElement('button');
-  btn.innerHTML = '✨ Save to Pouch';
+  btn.innerHTML = '✨ Save to ApplicationPal';
   Object.assign(btn.style, {
     position: 'fixed',
     bottom: '20px',
@@ -70,7 +70,10 @@ function setupAutoCapture() {
   btn.onmouseover = () => btn.style.transform = 'scale(1.05)';
   btn.onmouseout = () => btn.style.transform = 'scale(1)';
 
-  btn.onclick = () => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     const details = scrapeJobDetails();
 
     // Animate button
@@ -89,10 +92,10 @@ function setupAutoCapture() {
     });
 
     setTimeout(() => {
-      btn.innerHTML = '✨ Save to Pouch';
+      btn.innerHTML = '✨ Save to ApplicationPal';
       btn.style.backgroundColor = '#000000';
     }, 2000);
-  };
+  });
 
   document.body.appendChild(btn);
 }

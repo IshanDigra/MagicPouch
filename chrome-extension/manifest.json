@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Magic Pouch Job Assistant",
+  "name": "ApplicationPal Job Assistant",
   "version": "1.0.0",
   "description": "Floating job assistant that seamlessly captures job applications and tracks your progress.",
   "action": {
@@ -8,6 +8,11 @@
   },
   "side_panel": {
     "default_path": "src/index.html"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
   "permissions": [
     "sidePanel",

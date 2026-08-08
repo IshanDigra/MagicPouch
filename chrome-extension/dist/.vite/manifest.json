@@ -1,6 +1,6 @@
 {
   "../../@crx/manifest": {
-    "file": "assets/crx-manifest.js-CsHFyxgM.js",
+    "file": "assets/crx-manifest.js--lrNS3TT.js",
     "name": "crx-manifest.js",
     "src": "../../@crx/manifest",
     "isEntry": true
@@ -21,20 +21,24 @@
     "file": "assets/fa-v4compatibility-CErXDOsT.woff2",
     "src": "node_modules/.pnpm/@fortawesome+fontawesome-free@7.3.1/node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
   },
+  "public/icon128.png": {
+    "file": "assets/icon128-DIaqIHwT.png",
+    "src": "public/icon128.png"
+  },
   "src/background.js": {
-    "file": "assets/background.js-DfSM8zHq.js",
+    "file": "assets/background.js-DI2lqTJ_.js",
     "name": "background.js",
     "src": "src/background.js",
     "isEntry": true
   },
   "src/content.js": {
-    "file": "assets/content.js-ynW5ZTQO.js",
+    "file": "assets/content.js-cJsCHkqF.js",
     "name": "content.js",
     "src": "src/content.js",
     "isEntry": true
   },
   "src/index.html": {
-    "file": "assets/index.html-CiClecu9.js",
+    "file": "assets/index.html-u8mXsKBy.js",
     "name": "index.html",
     "src": "src/index.html",
     "isEntry": true,
@@ -45,7 +49,8 @@
       "assets/fa-brands-400-Bs6tcqqs.woff2",
       "assets/fa-regular-400-DRN8N0d1.woff2",
       "assets/fa-solid-900-IAB4Droh.woff2",
-      "assets/fa-v4compatibility-CErXDOsT.woff2"
+      "assets/fa-v4compatibility-CErXDOsT.woff2",
+      "assets/icon128-DIaqIHwT.png"
     ]
   }
 }

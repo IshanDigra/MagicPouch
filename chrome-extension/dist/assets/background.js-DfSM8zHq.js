@@ -1,1 +1,0 @@
-chrome.runtime.onInstalled.addListener(()=>{chrome.sidePanel.setPanelBehavior({openPanelOnActionClick:!0})}),chrome.runtime.onMessage.addListener((e,t,n)=>(e.type===`JOB_CAPTURED`&&(chrome.runtime.sendMessage({type:`SYNC_JOB_TO_POUCH`,payload:e.payload}),n({success:!0})),!0));
