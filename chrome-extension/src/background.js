@@ -9,7 +9,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'JOB_CAPTURED') {
     // We broadcast this to any open side panels
     chrome.runtime.sendMessage({
-      type: 'SYNC_JOB_TO_POUCH',
+      type: 'SYNC_JOB_TO_PAL',
       payload: message.payload
     });
     sendResponse({ success: true });

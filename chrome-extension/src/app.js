@@ -21,11 +21,11 @@ import Chart from 'chart.js/auto';
         const db = getFirestore(firebaseApp);
 
         // Load saved folder state from local storage
-        const savedFolders = localStorage.getItem('magic_pouch_folders');
+        const savedFolders = localStorage.getItem('application_pal_folders');
 
         const STATE = {
             user: null,
-            syncKey: localStorage.getItem('magic_pouch_key') || Math.random().toString(36).substr(2, 6).toUpperCase(),
+            syncKey: localStorage.getItem('application_pal_key') || Math.random().toString(36).substr(2, 6).toUpperCase(),
             data: {
                 notes: [],
                 profile: [],
@@ -98,7 +98,7 @@ import Chart from 'chart.js/auto';
                     title: finalTitle,
                     content: data.url || '',
                     linkType: data.url && data.url.includes('linkedin') ? 'linkedin' : 'job',
-                    remarks: 'Auto-captured via Magic Pouch Extension',
+                    remarks: 'Auto-captured via ApplicationPal Extension',
                     category: 'job',
                     updated: Date.now(),
                     status: 'applied'
@@ -130,7 +130,7 @@ import Chart from 'chart.js/auto';
                     }
                 });
 
-                localStorage.setItem('magic_pouch_key', STATE.syncKey);
+                localStorage.setItem('application_pal_key', STATE.syncKey);
                 if(document.getElementById('sync-status-text')) document.getElementById('sync-status-text').textContent = STATE.syncKey;
                 if(document.getElementById('sync-key-input')) document.getElementById('sync-key-input').value = STATE.syncKey;
             },
@@ -1001,7 +1001,7 @@ import Chart from 'chart.js/auto';
                         STATE.openFolders.delete(id);
                     }
                     // Save new configuration to local storage
-                    localStorage.setItem('magic_pouch_folders', JSON.stringify([...STATE.openFolders]));
+                    localStorage.setItem('application_pal_folders', JSON.stringify([...STATE.openFolders]));
                 }
             },
 
@@ -2037,7 +2037,7 @@ import Chart from 'chart.js/auto';
             openConfirm: (msg, actionFn) => { document.getElementById('confirm-msg').textContent = msg; STATE.currentConfirmAction = actionFn; document.getElementById('modal-confirm').classList.remove('hidden'); },
             confirmYes: () => { if (STATE.currentConfirmAction) { STATE.currentConfirmAction(); STATE.currentConfirmAction = null; } document.getElementById('modal-confirm').classList.add('hidden'); },
             cleanupOldJobs: () => { const now = Date.now(); const initialLen = STATE.data.notes.length; STATE.data.notes = STATE.data.notes.filter(n => { if(n.category !== 'job') return true; const daysOld = Math.floor((now - n.created) / MILLIS_PER_DAY); return daysOld <= 7; }); if(STATE.data.notes.length !== initialLen) app.saveToCloud(); },
-            exportData: () => { const dataStr = JSON.stringify(STATE.data, null, 2); const blob = new Blob([dataStr], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `magic_pouch_backup_${new Date().toISOString().slice(0,10)}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); },
+            exportData: () => { const dataStr = JSON.stringify(STATE.data, null, 2); const blob = new Blob([dataStr], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `application_pal_backup_${new Date().toISOString().slice(0,10)}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); },
             importData: (input) => { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (ev) => { try { const imported = JSON.parse(ev.target.result); app.openConfirm("Replace current data with backup?", () => { STATE.data = app.sanitizeData(imported); app.saveToCloud(); app.refreshUI(); app.toast('Restored!'); document.getElementById('modal-settings').classList.add('hidden'); }); } catch(err) { app.toast('Invalid file', true); } input.value = ''; }; reader.readAsText(file); },
             handleGlobalSearch: (query) => {
                 if (STATE.currentView === 'jobs') app.renderJobs(query);
@@ -2577,7 +2577,7 @@ import Chart from 'chart.js/auto';
                 }
             },
             saveToCloud: async () => { if(!STATE.user) return; try { const docRef = doc(db, 'sync', STATE.syncKey); await setDoc(docRef, { data: STATE.data, userId: STATE.user.uid, lastUpdated: new Date().toISOString() }); } catch (e) { console.error('Save error:', e); } },
-            saveSyncKey: () => { const newKey = document.getElementById('sync-key-input').value.trim().toUpperCase(); if(newKey && newKey !== STATE.syncKey) { STATE.syncKey = newKey; localStorage.setItem('magic_pouch_key', newKey); if(document.getElementById('sync-status-text')) document.getElementById('sync-status-text').textContent = newKey; app.setupSync(); document.getElementById('modal-sync').classList.add('hidden'); app.toast("Switched Sync Channel"); } else if(newKey === STATE.syncKey) { app.toast("Same key - already connected"); } },
+            saveSyncKey: () => { const newKey = document.getElementById('sync-key-input').value.trim().toUpperCase(); if(newKey && newKey !== STATE.syncKey) { STATE.syncKey = newKey; localStorage.setItem('application_pal_key', newKey); if(document.getElementById('sync-status-text')) document.getElementById('sync-status-text').textContent = newKey; app.setupSync(); document.getElementById('modal-sync').classList.add('hidden'); app.toast("Switched Sync Channel"); } else if(newKey === STATE.syncKey) { app.toast("Same key - already connected"); } },
             switchView: (viewName) => {
                 STATE.currentView = viewName;
                 const vJobs = document.getElementById('view-jobs');
@@ -2725,7 +2725,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- Chrome Extension Integration ---
 if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-        if (message.type === 'SYNC_JOB_TO_POUCH') {
+        if (message.type === 'SYNC_JOB_TO_PAL') {
             const data = message.payload;
             const title = data.title && data.company ? data.role + ' @ ' + data.company : (data.title || data.company || 'Captured Job');
 
