@@ -369,6 +369,20 @@
                     </div>
                 </div>
 
+                <!-- Important Daily Post-it Note -->
+                <div class="fade-in relative mt-2 mb-6" style="animation-delay: 0.1s">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-3 bg-red-400/80 rounded-sm shadow-sm z-10 transform -rotate-2 backdrop-blur-sm dark:bg-red-500/80"></div>
+                    <div class="bg-yellow-100 rounded-xl p-4 shadow-md border border-yellow-200 transform rotate-1 transition-transform hover:rotate-0 dark:bg-yellow-900/30 dark:border-yellow-700/50">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-bold text-sm text-yellow-800 dark:text-yellow-400 flex items-center gap-2">
+                                <i class="fas fa-thumbtack"></i> Urgent Reminders
+                            </h3>
+                            <button onclick="app.copyPlanText('postIt')" class="text-yellow-600 hover:text-yellow-800 dark:text-yellow-500 dark:hover:text-yellow-300"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <textarea id="plan-postIt-text" oninput="app.savePlanText('postIt')" class="w-full h-24 text-sm text-yellow-900 leading-relaxed outline-none resize-none bg-transparent placeholder-yellow-700/50 dark:text-yellow-100 dark:placeholder-yellow-500/50" placeholder="HR follow-ups, calls, etc."></textarea>
+                    </div>
+                </div>
+
                 <!-- Strategic Goals (Weekly/Monthly) -->
                 <div class="fade-in grid grid-cols-1 gap-4" style="animation-delay: 0.2s">
                     
@@ -400,20 +414,23 @@
                     <h3 class="font-bold text-gray-800 text-sm dark:text-slate-100 mb-3 flex items-center gap-2">
                         <i class="fas fa-users text-indigo-500"></i> Networking Radar
                     </h3>
-                    <div class="flex gap-2 mb-3">
-                        <input type="text" id="network-name-input" class="flex-1 bg-gray-50 border border-gray-100 rounded-xl py-2 pl-3 text-sm outline-none focus:border-indigo-300 focus:bg-white transition-all dark:bg-slate-700/50 dark:border-slate-600 dark:text-white" placeholder="Name (e.g. John)">
-                        <select id="network-role-input" class="w-1/3 bg-gray-50 border border-gray-100 rounded-xl py-2 pl-2 text-xs font-medium outline-none focus:border-indigo-300 dark:bg-slate-700/50 dark:border-slate-600 dark:text-slate-200">
-                            <option value="Recruiter">Recruiter</option>
-                            <option value="Engineer">Engineer</option>
-                            <option value="Manager">Manager</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        <button onclick="app.addNetworkContact()" class="w-10 h-[38px] flex items-center justify-center bg-indigo-600 text-white rounded-xl shadow-sm hover:bg-indigo-700 active:scale-95 transition">
-                            <i class="fas fa-plus"></i>
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center gap-2">
+                            <label class="text-xs text-gray-500 dark:text-slate-400">Group by:</label>
+                            <select id="network-group-by" onchange="app.renderPlan()" class="bg-gray-50 border border-gray-100 rounded-lg py-1 px-2 text-xs font-medium outline-none focus:border-indigo-300 dark:bg-slate-700/50 dark:border-slate-600 dark:text-slate-200">
+                                <option value="none">None</option>
+                                <option value="company">Company</option>
+                                <option value="role">Role</option>
+                            </select>
+                        </div>
+                        <button onclick="app.addNetworkContact()" class="px-3 py-1.5 flex items-center justify-center gap-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-sm hover:bg-indigo-700 active:scale-95 transition">
+                            <i class="fas fa-plus text-[10px]"></i> Add Contact
                         </button>
                     </div>
-                    <div id="plan-networking-list" class="flex gap-4 overflow-x-auto no-scrollbar py-2 -mx-2 px-2">
-                        <!-- Contacts injected here -->
+                    <div id="plan-networking-list-container">
+                        <div id="plan-networking-list" class="flex gap-4 overflow-x-auto no-scrollbar py-2 -mx-2 px-2">
+                            <!-- Contacts injected here -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -852,6 +869,51 @@
         </div>
     </div>
     
+    <!-- Network Contact Modal -->
+    <div id="modal-network" class="fixed inset-0 bg-black/50 z-[90] hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg dark:text-white">Network Contact</h3>
+                <button onclick="document.getElementById('modal-network').classList.add('hidden')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="space-y-4">
+                <input type="hidden" id="network-input-id">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Name</label>
+                    <input type="text" id="network-input-name" class="w-full bg-gray-50 rounded-xl py-2 px-3 outline-none text-sm border-2 border-transparent focus:border-indigo-500 transition-colors dark:bg-slate-700 dark:text-white" placeholder="e.g. John Doe">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Company</label>
+                    <input type="text" id="network-input-company" class="w-full bg-gray-50 rounded-xl py-2 px-3 outline-none text-sm border-2 border-transparent focus:border-indigo-500 transition-colors dark:bg-slate-700 dark:text-white" placeholder="e.g. Google">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Role</label>
+                    <select id="network-input-role" class="w-full bg-gray-50 rounded-xl py-2 px-3 outline-none text-sm border-2 border-transparent focus:border-indigo-500 transition-colors dark:bg-slate-700 dark:text-white">
+                        <option value="Recruiter">Recruiter</option>
+                        <option value="Engineer">Engineer</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Email</label>
+                    <input type="email" id="network-input-email" class="w-full bg-gray-50 rounded-xl py-2 px-3 outline-none text-sm border-2 border-transparent focus:border-indigo-500 transition-colors dark:bg-slate-700 dark:text-white" placeholder="e.g. john@google.com">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Mobile Number</label>
+                    <input type="tel" id="network-input-mobile" class="w-full bg-gray-50 rounded-xl py-2 px-3 outline-none text-sm border-2 border-transparent focus:border-indigo-500 transition-colors dark:bg-slate-700 dark:text-white" placeholder="e.g. +1 234 567 890">
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <button onclick="app.saveNetworkContact()" class="w-full py-3 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:scale-[1.02] transition-transform">
+                    Save Contact
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Confirm Modal -->
     <div id="modal-confirm" class="fixed inset-0 bg-black/50 z-[60] hidden flex items-center justify-center p-6 backdrop-blur-sm">
         <div class="bg-white w-full max-w-xs rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 text-center dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
@@ -1304,6 +1366,7 @@
                 }
                 if (typeof safeData.plan.weekly !== 'string') safeData.plan.weekly = '';
                 if (typeof safeData.plan.monthly !== 'string') safeData.plan.monthly = '';
+                if (typeof safeData.plan.postIt !== 'string') safeData.plan.postIt = '';
                 if (typeof safeData.plan.lastLogin !== 'string') safeData.plan.lastLogin = '';
                 if (typeof safeData.plan.streak !== 'number') safeData.plan.streak = 0;
                 if (typeof safeData.plan.hideDone !== 'boolean') safeData.plan.hideDone = false; 
@@ -3241,43 +3304,88 @@
                 if(progressText) progressText.textContent = `${completedCount}/${total}`;
 
                 // --- NEW: NETWORKING RADAR RENDER ---
-                const netList = document.getElementById('plan-networking-list');
-                if (netList) {
-                    netList.innerHTML = '';
+                const netListContainer = document.getElementById('plan-networking-list-container');
+                if (netListContainer) {
+                    netListContainer.innerHTML = '';
                     if (!plan.networking || plan.networking.length === 0) {
-                        netList.innerHTML = `<div class="w-full text-center text-xs text-gray-300 italic py-2 px-5 dark:text-slate-600">No active contacts. Add someone to start networking!</div>`;
+                        netListContainer.innerHTML = `<div class="w-full text-center text-xs text-gray-300 italic py-2 px-5 dark:text-slate-600">No active contacts. Add someone to start networking!</div>`;
                     } else {
-                        // Spacer for scroll padding
-                        netList.appendChild(document.createElement('div')); 
-                        
-                        plan.networking.forEach((contact, idx) => {
-                            const statusColors = {
-                                'todo': 'bg-gray-100 text-gray-500 border-gray-200 dark:bg-slate-700 dark:text-slate-400 dark:border-slate-600',
-                                'contacted': 'bg-gray-50 text-blue-600 border-gray-100 dark:bg-gray-800 dark:text-blue-300 dark:border-blue-800',
-                                'meeting': 'bg-gray-50 text-purple-600 border-gray-100 dark:bg-gray-800 dark:text-purple-300 dark:border-purple-800',
-                                'done': 'bg-gray-50 text-green-600 border-gray-100 dark:bg-gray-800 dark:text-green-300 dark:border-green-800'
-                            };
-                            const statusLabels = { 'todo': 'To Contact', 'contacted': 'Sent', 'meeting': 'Talking', 'done': 'Done' };
-                            const s = contact.status || 'todo';
-                            const initials = contact.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+                        const groupBy = document.getElementById('network-group-by') ? document.getElementById('network-group-by').value : 'none';
+                        let groups = {};
+
+                        if (groupBy === 'none') {
+                            groups['All Contacts'] = plan.networking;
+                        } else {
+                            plan.networking.forEach(contact => {
+                                const key = contact[groupBy] || 'Unspecified';
+                                if (!groups[key]) groups[key] = [];
+                                groups[key].push(contact);
+                            });
+                        }
+
+                        // Render Groups
+                        Object.keys(groups).sort().forEach(groupName => {
+                            if (groupBy !== 'none') {
+                                const groupHeader = document.createElement('h4');
+                                groupHeader.className = "text-xs font-bold text-gray-500 mt-4 mb-2 uppercase tracking-wider dark:text-slate-400";
+                                groupHeader.textContent = groupName;
+                                netListContainer.appendChild(groupHeader);
+                            }
+
+                            const scrollContainer = document.createElement('div');
+                            scrollContainer.className = "flex gap-4 overflow-x-auto no-scrollbar py-2 -mx-2 px-2";
                             
-                            const card = document.createElement('div');
-                            card.className = "flex-shrink-0 w-32 bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col items-center gap-2 relative group snap-start dark:bg-[#0a0a0a] dark:border-gray-800";
-                            card.innerHTML = `
-                                <button onclick="app.deleteNetworkContact(${idx})" class="absolute top-1 right-1 text-gray-300 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-times text-[10px]"></i></button>
-                                <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-xs border border-white shadow-sm dark:bg-indigo-900/50 dark:border-slate-600 dark:text-indigo-300">${initials}</div>
-                                <div class="text-center w-full">
-                                    <div class="font-bold text-xs text-gray-800 truncate dark:text-slate-200">${contact.name}</div>
-                                    <div class="text-[9px] text-gray-400 truncate dark:text-slate-500">${contact.role || 'Contact'}</div>
-                                </div>
-                                <button onclick="app.toggleNetworkStatus(${idx})" class="text-[9px] font-bold px-2 py-0.5 rounded-full border ${statusColors[s]} transition w-full truncate">${statusLabels[s]}</button>
-                            `;
-                            netList.appendChild(card);
+                            // Spacer for scroll padding
+                            scrollContainer.appendChild(document.createElement('div'));
+
+                            groups[groupName].forEach(contact => {
+                                // Find original index
+                                const originalIdx = plan.networking.indexOf(contact);
+
+                                const statusColors = {
+                                    'todo': 'bg-gray-100 text-gray-500 border-gray-200 dark:bg-slate-700 dark:text-slate-400 dark:border-slate-600',
+                                    'contacted': 'bg-gray-50 text-blue-600 border-gray-100 dark:bg-gray-800 dark:text-blue-300 dark:border-blue-800',
+                                    'meeting': 'bg-gray-50 text-purple-600 border-gray-100 dark:bg-gray-800 dark:text-purple-300 dark:border-purple-800',
+                                    'done': 'bg-gray-50 text-green-600 border-gray-100 dark:bg-gray-800 dark:text-green-300 dark:border-green-800'
+                                };
+                                const statusLabels = { 'todo': 'To Contact', 'contacted': 'Sent', 'meeting': 'Talking', 'done': 'Done' };
+                                const s = contact.status || 'todo';
+                                const initials = contact.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+
+                                const card = document.createElement('div');
+                                card.className = "flex-shrink-0 w-36 bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col gap-2 relative group snap-start dark:bg-[#0a0a0a] dark:border-gray-800";
+
+                                let contactIcons = '';
+                                if(contact.email) contactIcons += `<i class="fas fa-envelope text-xs text-gray-400" title="${contact.email}"></i>`;
+                                if(contact.mobile) contactIcons += `<i class="fas fa-phone text-xs text-gray-400" title="${contact.mobile}"></i>`;
+
+                                card.innerHTML = `
+                                    <div class="flex justify-between items-start w-full">
+                                        <div class="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-[10px] border border-white shadow-sm dark:bg-indigo-900/50 dark:border-slate-600 dark:text-indigo-300 shrink-0">${initials}</div>
+                                        <div class="flex gap-1">
+                                            <button onclick="app.openNetworkModal(${originalIdx})" class="text-gray-300 hover:text-indigo-500 p-1 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-pen text-[10px]"></i></button>
+                                            <button onclick="app.deleteNetworkContact(${originalIdx})" class="text-gray-300 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-times text-[10px]"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="w-full">
+                                        <div class="font-bold text-xs text-gray-800 truncate dark:text-slate-200">${contact.name}</div>
+                                        ${contact.company ? `<div class="text-[9px] font-bold text-indigo-500 truncate dark:text-indigo-400">${contact.company}</div>` : ''}
+                                        <div class="text-[9px] text-gray-400 truncate dark:text-slate-500">${contact.role || 'Contact'}</div>
+                                    </div>
+                                    <div class="flex justify-between items-center w-full mt-auto">
+                                        <div class="flex gap-1.5">${contactIcons}</div>
+                                        <button onclick="app.toggleNetworkStatus(${originalIdx})" class="text-[9px] font-bold px-2 py-0.5 rounded-full border ${statusColors[s]} transition truncate">${statusLabels[s]}</button>
+                                    </div>
+                                `;
+                                scrollContainer.appendChild(card);
+                            });
+                            // Spacer for scroll padding
+                            const spacer = document.createElement('div'); spacer.className = "w-1 shrink-0"; scrollContainer.appendChild(spacer);
+                            netListContainer.appendChild(scrollContainer);
                         });
-                        // Spacer for scroll padding
-                        const spacer = document.createElement('div'); spacer.className = "w-1 shrink-0"; netList.appendChild(spacer);
                     }
                 }
+
 
                 // --- NEW: PREP DOJO RENDER ---
                 const prepList = document.getElementById('plan-prep-list');
@@ -3310,11 +3418,13 @@
                     }
                 }
 
-                // Restore Weekly & Monthly Text
+                // Restore Text Areas
                 const weeklyEl = document.getElementById('plan-weekly-text');
                 const monthlyEl = document.getElementById('plan-monthly-text');
+                const postItEl = document.getElementById('plan-postIt-text');
                 if (weeklyEl) weeklyEl.value = plan.weekly || '';
                 if (monthlyEl) monthlyEl.value = plan.monthly || '';
+                if (postItEl) postItEl.value = plan.postIt || '';
                 
                 // Render Top Dashboard Features
                 app.renderVelocity();
@@ -3486,21 +3596,88 @@
                 }
             },
 
-            addNetworkContact: () => {
-                const nameInp = document.getElementById('network-name-input');
-                const roleInp = document.getElementById('network-role-input');
-                const name = nameInp.value.trim();
-                const role = roleInp.value;
+            addNetworkContact: () => { app.openNetworkModal(); },
+
+            openNetworkModal: (idx = null) => {
+                const idInp = document.getElementById('network-input-id');
+                const nameInp = document.getElementById('network-input-name');
+                const companyInp = document.getElementById('network-input-company');
+                const roleInp = document.getElementById('network-input-role');
+                const emailInp = document.getElementById('network-input-email');
+                const mobileInp = document.getElementById('network-input-mobile');
+
+                if (idx !== null && STATE.data.plan.networking && STATE.data.plan.networking[idx]) {
+                    const contact = STATE.data.plan.networking[idx];
+                    idInp.value = idx;
+                    nameInp.value = contact.name || '';
+                    companyInp.value = contact.company || '';
+                    roleInp.value = contact.role || 'Other';
+                    emailInp.value = contact.email || '';
+                    mobileInp.value = contact.mobile || '';
+                } else {
+                    idInp.value = '';
+                    nameInp.value = '';
+                    companyInp.value = '';
+                    roleInp.value = 'Recruiter';
+                    emailInp.value = '';
+                    mobileInp.value = '';
+                }
+
+                document.getElementById('modal-network').classList.remove('hidden');
+            },
+
+            saveNetworkContact: () => {
+                const idxStr = document.getElementById('network-input-id').value;
+                const name = document.getElementById('network-input-name').value.trim();
+                const company = document.getElementById('network-input-company').value.trim();
+                const role = document.getElementById('network-input-role').value;
+                const email = document.getElementById('network-input-email').value.trim();
+                const mobile = document.getElementById('network-input-mobile').value.trim();
 
                 if (name) {
                     if (!STATE.data.plan.networking) STATE.data.plan.networking = [];
-                    STATE.data.plan.networking.push({ name, role, status: 'todo' });
-                    nameInp.value = '';
+
+                    const contactData = { name, company, role, email, mobile };
+
+                    if (idxStr !== '') {
+                        const idx = parseInt(idxStr);
+                        contactData.status = STATE.data.plan.networking[idx].status || 'todo';
+                        STATE.data.plan.networking[idx] = contactData;
+                        app.toast("Contact updated");
+                    } else {
+                        contactData.status = 'todo';
+                        STATE.data.plan.networking.push(contactData);
+                        app.toast("Contact added");
+                    }
+
                     app.saveToCloud();
                     app.renderPlan();
-                    app.toast("Contact added");
+                    document.getElementById('modal-network').classList.add('hidden');
                 } else {
                     app.toast("Please enter a name", true);
+                }
+            },
+
+            deleteNetworkContact: (idx) => {
+                app.openConfirm("Remove this contact?", () => {
+                    if (STATE.data.plan.networking && STATE.data.plan.networking.length > idx) {
+                        STATE.data.plan.networking.splice(idx, 1);
+                        app.saveToCloud();
+                        app.renderPlan();
+                        app.toast("Contact removed");
+                    }
+                });
+            },
+
+            toggleNetworkStatus: (idx) => {
+                if (STATE.data.plan.networking && STATE.data.plan.networking[idx]) {
+                    const statuses = ['todo', 'contacted', 'meeting', 'done'];
+                    const current = STATE.data.plan.networking[idx].status || 'todo';
+                    let nextIdx = statuses.indexOf(current) + 1;
+                    if (nextIdx >= statuses.length) nextIdx = 0;
+                    STATE.data.plan.networking[idx].status = statuses[nextIdx];
+                    app.saveToCloud();
+                    app.renderPlan();
                 }
             },
 
