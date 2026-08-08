@@ -15,3 +15,7 @@
 **Learning:** When users manage a long-term process like job searching, simply tracking individual tasks is insufficient. They need high-level analytics to understand where they are stuck in the "funnel" (e.g., getting interviews but failing to get offers). Pairing task tracking with a CRM enables better visibility and long-term momentum.
 
 **Action:** Built a Conversion Funnel module into the Weekly Insights modal, which dynamically calculates and displays the user's progress through different stages of the job hunt. Also introduced a "Networking Radar" mini-CRM into the Plan view, allowing users to track and iterate on specific contacts easily.
+
+## 2026-08-07 - Ensure clear feedback when progressing through pipeline stages
+**Learning:** Users need to have a clear understanding of the progression through interview stages, especially when moving between the same stage multiple times (e.g., Technical Round 1 to Technical Round 2). The system must log these transitions distinctly.
+**Action:** Implemented a new `isPromoting` flag to explicitly track when a user is actively promoting an interview to a new stage, enabling the system to log "New Round: [Stage]" in the history and render appropriate visual cues (e.g., the indigo arrow icon) to reflect the progression clearly, rather than confusing it with simple edits.
