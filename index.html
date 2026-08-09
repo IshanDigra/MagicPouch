@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Magic Pouch - Job Assistant</title>
     <!-- Favicon -->
-    <link rel="icon" href='data:image/svg+xml,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" fill="%230096E8"/><circle cx="50" cy="55" r="35" fill="white"/><path d="M22 55 A 28 28 0 0 0 78 55 Z" stroke="%230096E8" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M5 25 Q 50 45 95 25" stroke="%23E73345" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="50" cy="40" r="8" fill="%23F1C40F" stroke="%23333" stroke-width="1.5"/><line x1="43" y1="37" x2="57" y2="37" stroke="%23333" stroke-width="1.5"/><circle cx="50" cy="42" r="1.5" fill="%23333"/><line x1="50" y1="42" x2="50" y2="48" stroke="%23333" stroke-width="1.5"/></svg>' type="image/svg+xml">
+    <link rel="icon" href="assets/mascot.png" type="image/png">
     
     <!-- Tailwind CSS  -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -88,20 +88,7 @@
             <div class="relative cursor-pointer active:scale-95 transition select-none shrink-0" onclick="app.openSettings()">
                 <!-- Icon with Text Inside -->
                 <div class="w-10 h-10 flex items-center justify-center">
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-sm filter">
-                        <defs><path id="textCircle" d="M 12,50 A 38,38 0 1 1 88,50" /></defs>
-                        <circle cx="50" cy="50" r="50" fill="#0096E8" />
-                        <circle cx="50" cy="55" r="35" fill="white" />
-                        <path d="M22 55 A 28 28 0 0 0 78 55 Z" stroke="#0096E8" stroke-width="2.5" fill="none" stroke-linejoin="round" />
-                        <path d="M5 25 Q 50 45 95 25" stroke="#E73345" stroke-width="8" fill="none" stroke-linecap="round" />
-                        <circle cx="50" cy="40" r="8" fill="#F1C40F" stroke="#333" stroke-width="1.5" />
-                        <line x1="43" y1="37" x2="57" y2="37" stroke="#333" stroke-width="1.5" />
-                        <circle cx="50" cy="42" r="1.5" fill="#333" />
-                        <line x1="50" y1="42" x2="50" y2="48" stroke="#333" stroke-width="1.5" />
-                        <text font-size="11.5" font-weight="800" fill="#FFD700" letter-spacing="0.5" text-anchor="middle" style="font-family: system-ui, sans-serif; text-shadow: 1px 1px 0px #005c8f;">
-                            <textPath href="#textCircle" startOffset="50%">MAGIC POUCH</textPath>
-                        </text>
-                    </svg>
+                    <img src="assets/mascot.png" alt="Magic Pouch Mascot" class="w-full h-full drop-shadow-sm filter rounded-full object-cover">
                 </div>
                 <!-- HEADER STATUS ICON / SYNC INDICATOR -->
                 <div id="header-sync-indicator" class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-red-400 border-2 border-white shadow-sm z-10" title="Sync Status"></div>
@@ -569,7 +556,7 @@
                 </div>
             </div>
             <div class="p-6 pt-2 bg-white border-t border-gray-50 z-10 dark:bg-black dark:border-gray-800">
-                <button onclick="app.saveInterview()" class="w-full py-3.5 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-[0.98] transition text-sm">Save</button>
+                <button onclick="app.saveInterview()" id="save-interview-btn" class="w-full py-3.5 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-[0.98] transition text-sm">Save</button>
             </div>
         </div>
     </div>
@@ -1203,7 +1190,7 @@
         // Load saved folder state from local storage
         const savedFolders = localStorage.getItem('magic_pouch_folders');
 
-        const STATE = {
+        window.STATE = {
             user: null,
             syncKey: localStorage.getItem('magic_pouch_key') || Math.random().toString(36).substr(2, 6).toUpperCase(),
             data: { 
@@ -1263,7 +1250,7 @@
         // Helper to get Canvas Compliant Path
         const getDocRef = () => {
              // Standard path for direct deployment
-             return doc(db, 'sync', STATE.syncKey);
+             return doc(db, 'sync', window.STATE.syncKey);
         };
 
         window.app = {

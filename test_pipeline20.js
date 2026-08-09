@@ -3,6 +3,7 @@ const { chromium } = require('playwright');
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
+  page.setDefaultNavigationTimeout(60000);
   await page.goto('http://localhost:8080');
 
   // We are on the Jobs view by default

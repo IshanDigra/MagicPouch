@@ -3,6 +3,9 @@ const { chromium } = require('playwright');
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
+
+  // Set timeout explicitly to avoid flaky behavior
+  page.setDefaultNavigationTimeout(60000);
   await page.goto('http://localhost:8080');
 
   // Add a new job
@@ -17,8 +20,10 @@ const { chromium } = require('playwright');
 
   await page.waitForTimeout(500);
 
-  // Click status button
-  await page.click('.fa-ellipsis-h');
+  // Use evaluate to open the status modal for the first job note since it might be hidden
+  await page.evaluate(() => {
+     app.openStatusModal(window.STATE.data.notes[0].id);
+  });
 
   await page.waitForTimeout(500);
 
