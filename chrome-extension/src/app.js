@@ -2673,13 +2673,13 @@ document.addEventListener('DOMContentLoaded', () => {
     "action_20": { code: "app.addNetworkContact()" },
     "action_21": { code: "app.switchView('jobs')" },
     "action_22": { code: "app.switchView('interviews')" },
-    "action_23": { code: "app.switchView('interviews')" },
-    "action_24": { code: "app.switchView('interviews')" },
+    "action_23": { code: "app.switchView('plan')" },
+    "action_24": { code: "app.switchView('templates')" },
     "action_25": { code: "app.closeDaySummary()" },
     "action_26": { code: "app.closeDaySummary()" },
     "action_27": { code: "app.closeDaySummary()" },
     "action_28": { code: "if(event.target === this) this.classList.add('hidden')" },
-    "action_29": { code: "app.closeDaySummary()" },
+    "action_29": { code: "document.getElementById('modal-history').classList.add('hidden')" },
     "action_30": { code: "document.getElementById('modal-interview').classList.add('hidden')" },
     "action_31": { code: "app.saveInterview()" },
     "action_32": { code: "document.getElementById('modal-quote').classList.add('hidden')" },
@@ -2688,7 +2688,7 @@ document.addEventListener('DOMContentLoaded', () => {
     "action_35": { code: "document.getElementById('modal-streak').classList.add('hidden')" },
     "action_36": { code: "app.editDailyTarget()" },
     "action_37": { code: "if(event.target === this) this.classList.add('hidden')" },
-    "action_38": { code: "if(event.target === this) this.classList.add('hidden')" },
+    "action_38": { code: "document.getElementById('modal-weekly').classList.add('hidden')" },
     "action_39": { code: "document.getElementById('target-input').stepDown()" },
     "action_40": { code: "document.getElementById('target-input').stepUp()" },
     "action_41": { code: "document.getElementById('modal-target').classList.add('hidden')" },
@@ -2706,11 +2706,11 @@ document.addEventListener('DOMContentLoaded', () => {
     "action_52": { code: "app.exportData()" },
     "action_53": { code: "document.getElementById('import-file').click()" },
     "action_54": { code: "document.getElementById('modal-settings').classList.add('hidden')" },
-    "action_55": { code: "document.getElementById('modal-northstar').classList.add('hidden')" },
+    "action_55": { code: "document.getElementById('modal-network').classList.add('hidden')" },
     "action_56": { code: "document.getElementById('modal-sync').classList.remove('hidden'); this.classList.add('hidden')" },
     "action_57": { code: "document.getElementById('modal-confirm').classList.add('hidden')" },
     "action_58": { code: "app.confirmYes()" },
-    "action_59": { code: "document.getElementById('modal-network').classList.add('hidden')" },
+    "action_59": { code: "document.getElementById('modal-status').classList.add('hidden')" },
     "action_60": { code: "app.promoteToInterview()" },
     "action_61": { code: "app.updateStatus('applied', 'direct')" },
     "action_62": { code: "app.updateStatus('applied', 'cold-email')" },
@@ -2721,7 +2721,7 @@ document.addEventListener('DOMContentLoaded', () => {
     "action_67": { code: "app.updateStatus('referral-asked')" },
     "action_68": { code: "app.updateStatus('referral-received')" },
     "action_69": { code: "app.updateStatus('pending')" },
-    "action_70": { code: "app.updateStatus('applied', 'cold-email')" },
+    "action_70": { code: "document.getElementById('modal-job').classList.add('hidden')" },
     "action_94": { code: "app.handleUrlInput(this.value)" },
     "action_71": { code: "app.openQuickNotesModal()" },
     "action_72": { code: "app.addQuickNote('Ask for Referral')" },
@@ -2833,9 +2833,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- Chrome Extension Integration ---
 if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-        if (message.type === 'SYNC_JOB_TO_POUCH') {
+        if (message.type === 'SYNC_JOB_TO_PAL' || message.type === 'SYNC_JOB_TO_POUCH') {
             const data = message.payload;
-            const title = data.title && data.company ? data.role + ' @ ' + data.company : (data.title || data.company || 'Captured Job');
+            const roleStr = data.title || data.role || '';
+            const companyStr = data.company || '';
+            const title = (roleStr && companyStr) ? (roleStr + ' @ ' + companyStr) : (roleStr || companyStr || 'Captured Job');
 
             // Assuming STATE and app.saveToCloud are available in scope.
             // In app.js, STATE is globally accessible because it's defined at the top level.
