@@ -2578,6 +2578,11 @@ import Chart from 'chart.js/auto';
             },
             saveToCloud: async () => { if(!STATE.user) return; try { const docRef = doc(db, 'sync', STATE.syncKey); await setDoc(docRef, { data: STATE.data, userId: STATE.user.uid, lastUpdated: new Date().toISOString() }); } catch (e) { console.error('Save error:', e); } },
             saveSyncKey: () => { const newKey = document.getElementById('sync-key-input').value.trim().toUpperCase(); if(newKey && newKey !== STATE.syncKey) { STATE.syncKey = newKey; localStorage.setItem('magic_pouch_key', newKey); if(document.getElementById('sync-status-text')) document.getElementById('sync-status-text').textContent = newKey; app.setupSync(); document.getElementById('modal-sync').classList.add('hidden'); app.toast("Switched Sync Channel"); } else if(newKey === STATE.syncKey) { app.toast("Same key - already connected"); } },
+            generateSyncKey: () => {
+                const newKey = Math.random().toString(36).substr(2, 6).toUpperCase();
+                document.getElementById('sync-key-input').value = newKey;
+            },
+
             switchView: (viewName) => {
                 STATE.currentView = viewName;
                 const vJobs = document.getElementById('view-jobs');
@@ -2696,10 +2701,10 @@ document.addEventListener('DOMContentLoaded', () => {
     "action_48": { code: "document.getElementById('modal-quick-notes').classList.add('hidden')" },
     "action_49": { code: "if(event.target === this) this.classList.add('hidden')" },
     "action_89": { code: "app.toggleTheme()" },
-    "action_50": { code: "app.saveNorthStar()" },
+    "action_50": { code: "app.saveSyncKey()" },
     "action_51": { code: "document.getElementById('modal-sync').classList.remove('hidden'); this.classList.add('hidden')" },
     "action_52": { code: "app.exportData()" },
-    "action_53": { code: "app.exportData()" },
+    "action_53": { code: "document.getElementById('import-file').click()" },
     "action_54": { code: "document.getElementById('modal-settings').classList.add('hidden')" },
     "action_55": { code: "document.getElementById('modal-northstar').classList.add('hidden')" },
     "action_56": { code: "document.getElementById('modal-sync').classList.remove('hidden'); this.classList.add('hidden')" },
@@ -2734,6 +2739,7 @@ document.addEventListener('DOMContentLoaded', () => {
     "action_84": { code: "app.saveProfileItem()" },
     "action_85": { code: "document.getElementById('modal-rename').classList.add('hidden')" },
     "action_86": { code: "app.executeTemplateCopy()" },
+    "action_96": { code: "app.generateSyncKey()" },
 };
 
     ['click', 'change', 'input', 'keydown'].forEach(eventName => {
@@ -2743,74 +2749,80 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const actionId = el.getAttribute('data-' + eventName);
             if (actionMap[actionId]) {
-                const code = actionMap[actionId].code;
+                const codes = actionMap[actionId].code.split(';').map(c => c.trim()).filter(Boolean);
 
-                if (eventName === 'keydown' && code.includes("event.key === 'Enter'") && event.key !== 'Enter') {
-                    return;
-                }
+                for (let code of codes) {
+                    if (code.startsWith("if")) {
+                        const conditionMatch = code.match(/if\s*\((.*?)\)\s*(.*)/);
+                        if (conditionMatch) {
+                            const condition = conditionMatch[1].trim();
+                            code = conditionMatch[2].trim();
 
-                const methodMatch = code.match(/app\.(\w+)\((.*)\)/);
-
-                if (methodMatch) {
-                    const method = methodMatch[1];
-                    const argsStr = methodMatch[2];
-                    let args = [];
-
-                    if (argsStr) {
-                        if (argsStr === 'this') {
-                            args = [el];
-                        } else if (argsStr === 'this.value') {
-                            args = [el.value];
-                        } else {
-                            args = argsStr.split(',').map(a => {
-                                a = a.trim();
-                                if (a === 'true') return true;
-                                if (a === 'false') return false;
-                                if (!isNaN(a) && a !== '') return Number(a);
-                                if (a.startsWith("'") && a.endsWith("'")) return a.slice(1, -1);
-                                if (a.startsWith('"') && a.endsWith('"')) return a.slice(1, -1);
-                                return a;
-                            });
-                        }
-                    }
-
-                    if (typeof app[method] === 'function') {
-                        app[method](...args);
-                    } else {
-                        console.error('Method not found:', method);
-                    }
-                } else if (code.includes('classList.add') || code.includes('classList.remove')) {
-                    const elMatch = code.match(/document.getElementById(['"]([^'"]+)['"]).classList.(add|remove)(['"]([^'"]+)['"])/);
-                    if (elMatch) {
-                        const targetEl = document.getElementById(elMatch[1]);
-                        if (targetEl) {
-                            targetEl.classList[elMatch[2]](elMatch[3]);
-                        }
-                    } else if (code.includes('this.classList.add')) {
-                        const classMatch = code.match(/this.classList.add(['"]([^'"]+)['"])/);
-                        if (classMatch) {
-                            el.classList.add(classMatch[1]);
-                        }
-                    } else if (code.includes('event.target === this')) {
-                        if (event.target === el) {
-                            const classMatch = code.match(/this.classList.add(['"]([^'"]+)['"])/);
-                            if (classMatch) {
-                                el.classList.add(classMatch[1]);
+                            if (condition === "event.key === 'Enter'" && event.key !== 'Enter') {
+                                continue;
+                            }
+                            if (condition === "event.target === this" && event.target !== el) {
+                                continue;
                             }
                         }
                     }
-                } else if (code.includes('stepDown()')) {
-                    document.getElementById('target-input').stepDown();
-                } else if (code.includes('stepUp()')) {
-                    document.getElementById('target-input').stepUp();
-                } else if (code.includes('click()')) {
-                     const elMatch = code.match(/document.getElementById(['"]([^'"]+)['"]).click()/);
-                     if (elMatch) {
-                         const targetEl = document.getElementById(elMatch[1]);
-                         if (targetEl) targetEl.click();
-                     }
-                } else {
-                    console.error('Could not interpret:', code);
+
+                    const methodMatch = code.match(/app\.(\w+)\((.*)\)/);
+
+                    if (methodMatch) {
+                        const method = methodMatch[1];
+                        const argsStr = methodMatch[2];
+                        let args = [];
+
+                        if (argsStr) {
+                            if (argsStr === 'this') {
+                                args = [el];
+                            } else if (argsStr === 'this.value') {
+                                args = [el.value];
+                            } else {
+                                // Don't split by comma inside quotes (simple approach)
+                                args = argsStr.split(/,\s*(?=(?:[^'"]*['"][^'"]*['"])*[^'"]*$)/).map(a => {
+                                    a = a.trim();
+                                    if (a === 'true') return true;
+                                    if (a === 'false') return false;
+                                    if (!isNaN(a) && a !== '') return Number(a);
+                                    if (a.startsWith("'") && a.endsWith("'")) return a.slice(1, -1);
+                                    if (a.startsWith('"') && a.endsWith('"')) return a.slice(1, -1);
+                                    return a;
+                                });
+                            }
+                        }
+
+                        if (typeof app[method] === 'function') {
+                            app[method](...args);
+                        } else {
+                            console.error('Method not found:', method);
+                        }
+                    } else if (code.includes('classList.add') || code.includes('classList.remove')) {
+                        const elMatch = code.match(/document\.getElementById\(['"]([^'"]+)['"]\)\.classList\.(add|remove)\(['"]([^'"]+)['"]\)/);
+                        if (elMatch) {
+                            const targetEl = document.getElementById(elMatch[1]);
+                            if (targetEl) {
+                                targetEl.classList[elMatch[2]](elMatch[3]);
+                            }
+                        }
+                        const classMatch = code.match(/this\.classList\.(add|remove)\(['"]([^'"]+)['"]\)/);
+                        if (classMatch) {
+                            el.classList[classMatch[1]](classMatch[2]);
+                        }
+                    } else if (code.includes('stepDown()')) {
+                        document.getElementById('target-input').stepDown();
+                    } else if (code.includes('stepUp()')) {
+                        document.getElementById('target-input').stepUp();
+                    } else if (code.includes('click()')) {
+                         const elMatch = code.match(/document\.getElementById\(['"]([^'"]+)['"]\)\.click\(\)/);
+                         if (elMatch) {
+                             const targetEl = document.getElementById(elMatch[1]);
+                             if (targetEl) targetEl.click();
+                         }
+                    } else {
+                        console.error('Could not interpret:', code);
+                    }
                 }
             }
         });
