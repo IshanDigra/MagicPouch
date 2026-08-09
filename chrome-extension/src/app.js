@@ -2749,7 +2749,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                const methodMatch = code.match(/app.(w+)((.*))/);
+                const methodMatch = code.match(/app\.(\w+)\((.*)\)/);
 
                 if (methodMatch) {
                     const method = methodMatch[1];
