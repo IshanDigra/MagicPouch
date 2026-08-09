@@ -49,10 +49,15 @@ function setupAutoCapture() {
   // Let's create a subtle floating button to capture the job
   const btn = document.createElement('button');
   btn.innerHTML = '✨ Save to ApplicationPal';
+
+  // Set initial position or load from storage
+  let currentX = window.innerWidth - 250; // default near right edge
+  let currentY = window.innerHeight - 80;  // default near bottom edge
+
   Object.assign(btn.style, {
     position: 'fixed',
-    bottom: '20px',
-    right: '20px',
+    left: `${currentX}px`,
+    top: `${currentY}px`,
     zIndex: '999999',
     padding: '10px 16px',
     backgroundColor: '#000000',
@@ -62,17 +67,75 @@ function setupAutoCapture() {
     fontFamily: 'system-ui, sans-serif',
     fontSize: '14px',
     fontWeight: 'bold',
-    cursor: 'pointer',
+    cursor: 'grab', // indicate it can be moved
     boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-    transition: 'all 0.2s ease'
+    transition: 'background-color 0.2s ease, transform 0.2s ease' // Don't transition position or it will lag when dragging
+  });
+
+  // Restore position if saved
+  chrome.storage.local.get(['palBtnPos'], (result) => {
+    if (result.palBtnPos) {
+      currentX = result.palBtnPos.x;
+      currentY = result.palBtnPos.y;
+      btn.style.left = `${currentX}px`;
+      btn.style.top = `${currentY}px`;
+    }
   });
 
   btn.onmouseover = () => btn.style.transform = 'scale(1.05)';
   btn.onmouseout = () => btn.style.transform = 'scale(1)';
 
+  // Dragging logic
+  let isDragging = false;
+  let startX, startY;
+  let hasDragged = false;
+
+  btn.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    hasDragged = false;
+    startX = e.clientX - currentX;
+    startY = e.clientY - currentY;
+    btn.style.cursor = 'grabbing';
+    e.preventDefault(); // Prevent text selection
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    hasDragged = true;
+
+    currentX = e.clientX - startX;
+    currentY = e.clientY - startY;
+
+    // Keep within bounds
+    const rect = btn.getBoundingClientRect();
+    if (currentX < 0) currentX = 0;
+    if (currentY < 0) currentY = 0;
+    if (currentX + rect.width > window.innerWidth) currentX = window.innerWidth - rect.width;
+    if (currentY + rect.height > window.innerHeight) currentY = window.innerHeight - rect.height;
+
+    btn.style.left = `${currentX}px`;
+    btn.style.top = `${currentY}px`;
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      btn.style.cursor = 'grab';
+      if (hasDragged) {
+         chrome.storage.local.set({ palBtnPos: { x: currentX, y: currentY } });
+      }
+    }
+  });
+
   btn.addEventListener('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (hasDragged) {
+        // Prevent click if we just finished dragging
+        hasDragged = false;
+        return;
+    }
 
     const details = scrapeJobDetails();
 

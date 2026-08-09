@@ -33,7 +33,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/content.js-cJsCHkqF.js"
+        "assets/content.js-DiRbUL6U.js"
       ],
       "matches": [
         "<all_urls>"
@@ -46,7 +46,7 @@
         "<all_urls>"
       ],
       "resources": [
-        "assets/content.js-cJsCHkqF.js"
+        "assets/content.js-DiRbUL6U.js"
       ],
       "use_dynamic_url": false
     }
