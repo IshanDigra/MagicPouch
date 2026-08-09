@@ -3,63 +3,45 @@ const { chromium } = require('playwright');
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
+  page.setDefaultNavigationTimeout(60000);
   await page.goto('http://localhost:8080');
 
-  // Go to Interviews view
-  await page.click('button[onclick="app.switchView(\'interviews\')"]');
+  // Add a new job
+  await page.click('button[aria-label="Add New Job"]');
+  await page.waitForSelector('#modal-job:not(.hidden)');
 
-  // Wait a bit
-  await page.waitForTimeout(500);
+  await page.fill('#job-title', 'Job for Pipeline');
+  await page.fill('#job-content', 'http://example.com');
 
-  // Add a new interview
-  await page.click('button[aria-label="Add New Interview"]');
-  await page.waitForSelector('#modal-interview:not(.hidden)');
-
-  await page.fill('#int-company', 'Test Pipeline Bug');
-  await page.fill('#int-role', 'Test Pipeline Bug Role');
-  await page.selectOption('#int-status', 'Test Received');
-  await page.click('#modal-interview button:has-text("Save")');
+  await page.click('#modal-job button:has-text("Save")');
 
   await page.waitForTimeout(500);
 
-  const interviewHtml = await page.innerHTML('#interviews-list');
-  console.log('Interviews List Initial:', interviewHtml);
+  await page.evaluate(() => {
+     app.openStatusModal(window.STATE.data.notes[0].id);
+  });
 
-  // Get the ID of the newly added interview
-  // It has button onclick="app.markStageComplete('ID')"
-  const markDoneMatch = interviewHtml.match(/markStageComplete\('([^']+)'\)/);
-  if (markDoneMatch) {
-    const interviewId = markDoneMatch[1];
-    console.log('Found interview ID:', interviewId);
+  await page.waitForTimeout(500);
 
-    // Mark Done
-    await page.evaluate((id) => {
-        app.markStageComplete(id);
-    }, interviewId);
+  // Click Move to Interview / Test
+  await page.click('button:has-text("Move to Interview / Test")');
 
-    await page.waitForTimeout(500);
+  await page.waitForTimeout(500);
 
-    const interviewHtml2 = await page.innerHTML('#interviews-list');
-    console.log('Interviews List after Mark Done:', interviewHtml2);
+  await page.evaluate(() => {
+     app.markStageComplete(window.STATE.data.notes[0].id);
+  });
 
-    // Promote Stage
-    await page.evaluate((id) => {
-        app.promoteStage(id);
-    }, interviewId);
+  await page.waitForTimeout(500);
 
-    await page.waitForTimeout(500);
+  const intHtml = await page.innerHTML('#interviews-list');
+  console.log('Interviews List Initial:', intHtml);
 
-    // See if the modal is open with the right stage?
-    await page.selectOption('#int-status', 'Offer');
-    await page.click('#modal-interview button:has-text("Save")');
-
-    await page.waitForTimeout(500);
-
-    const interviewHtml3 = await page.innerHTML('#interviews-list');
-    console.log('Interviews List after Promote Stage to Offer:', interviewHtml3);
-  } else {
-    console.log('Could not find interview ID.');
-  }
+  // Let's see what values are populated in the interview modal
+  const companyVal = await page.inputValue('#int-company');
+  const roleVal = await page.inputValue('#int-role');
+  console.log('Interview Modal Company:', companyVal);
+  console.log('Interview Modal Role:', roleVal);
 
   await browser.close();
 })();

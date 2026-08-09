@@ -3,6 +3,7 @@ const { chromium } = require('playwright');
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
+  page.setDefaultNavigationTimeout(60000);
   await page.goto('http://localhost:8080');
 
   // Add a new job
@@ -11,14 +12,15 @@ const { chromium } = require('playwright');
 
   await page.fill('#job-title', 'Job for Pipeline');
   await page.fill('#job-content', 'http://example.com');
-  // Need to use class/text match since button just has text "Applied" or "Direct Apply"
-  // Let's use app.saveJob('pending') which is the Save button
-  await page.click('button:has-text("Save")');
 
-  await page.waitForTimeout(500);
+  await page.click('#modal-job button:has-text("Save")');
 
-  // Click status button
-  await page.click('.fa-ellipsis-h');
+  await page.waitForTimeout(1000);
+
+  // Click status button - the selector might be different so let's evaluate
+  await page.evaluate(() => {
+     app.openStatusModal(window.STATE.data.notes[0].id);
+  });
 
   await page.waitForTimeout(500);
 
