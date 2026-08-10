@@ -18,7 +18,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 
-  <script type="module" crossorigin src="/assets/index.html-CdDsNNPO.js"></script>
+  <script type="module" crossorigin src="/assets/index.html-DKZHDS6U.js"></script>
   <link rel="stylesheet" crossorigin href="/assets/index-BS-q0sLx.css">
 </head>
 <body class="bg-gray-50 h-[100dvh] flex flex-col text-gray-800 font-sans tracking-tight overflow-hidden dark:bg-black dark:text-slate-100 transition-colors duration-200">
@@ -27,7 +27,7 @@
     <header class="bg-white shrink-0 safe-pt z-20 shadow-sm border-b border-gray-100 dark:bg-black dark:border-gray-800 transition-colors duration-200">
         <div class="h-16 flex items-center px-4 gap-3">
             <!-- LOGO: Clickable Area for Menu -->
-            <div class="relative cursor-pointer active:scale-95 transition select-none shrink-0" data-click="action_1">
+            <div class="relative cursor-pointer active:scale-95 transition select-none shrink-0" data-click="app.openSettings()">
                 <!-- Icon with Text Inside -->
                 <div class="w-10 h-10 flex items-center justify-center">
                     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-sm filter">
@@ -52,12 +52,12 @@
             <!-- SEARCH BAR: Flexible width -->
             <div class="flex-1 relative min-w-[100px]">
                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs dark:text-slate-400"></i>
-                <input type="text" id="global-search" placeholder="Search..." class="w-full bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-gray-800 rounded-full py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm dark:text-slate-200 dark:placeholder-slate-500" data-input="action_90">
+                <input type="text" id="global-search" placeholder="Search..." class="w-full bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-gray-800 rounded-full py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm dark:text-slate-200 dark:placeholder-slate-500" data-input="app.handleGlobalSearch(this.value)">
             </div>
 
             <!-- HEADER STATS BUTTONS -->
             <div class="flex items-center gap-2 shrink-0">
-                <button id="streak-btn" data-click="action_2" class="relative p-[2px] rounded-lg active:scale-95 hover:scale-[1.02] transition-all shadow-sm h-9 group overflow-hidden bg-gray-200 dark:bg-slate-700">
+                <button id="streak-btn" data-click="app.openStreakModal()" class="relative p-[2px] rounded-lg active:scale-95 hover:scale-[1.02] transition-all shadow-sm h-9 group overflow-hidden bg-gray-200 dark:bg-slate-700">
                     <!-- Progress Border Layer -->
                     <div id="streak-progress-bg" class="absolute inset-0 transition-all duration-500 ease-out" style="background: conic-gradient(from 0deg, transparent 0%, transparent 100%);"></div>
                     <!-- Inner Content -->
@@ -66,14 +66,14 @@
                         <span class="text-xs font-bold text-orange-700 dark:text-orange-300" id="mini-streak">0</span>
                     </div>
                 </button>
-                <button data-click="action_3" class="flex items-center gap-1.5 bg-white border border-gray-100 px-2 py-1.5 rounded-lg active:scale-95 hover:scale-[1.02] transition-all shadow-sm h-9 dark:bg-[#0a0a0a] dark:border-gray-800">
+                <button data-click="app.openWeeklyModal()" class="flex items-center gap-1.5 bg-white border border-gray-100 px-2 py-1.5 rounded-lg active:scale-95 hover:scale-[1.02] transition-all shadow-sm h-9 dark:bg-[#0a0a0a] dark:border-gray-800">
                     <i class="fas fa-chart-bar text-blue-500 text-xs dark:text-blue-400"></i>
                     <span class="text-xs font-bold text-blue-700 dark:text-blue-300" id="mini-weekly">0</span>
                 </button>
             </div>
 
             <!-- Hidden Import Input -->
-            <input type="file" id="import-file" class="hidden" data-change="action_87">
+            <input type="file" id="import-file" class="hidden" data-change="app.importData(this)">
         </div>
     </header>
 
@@ -86,7 +86,7 @@
             <!-- Quick Gadgets Section -->
             <div class="bg-white pt-4 pb-2 px-4 shrink-0 flex flex-col items-center border-b border-gray-100 dark:bg-black dark:border-gray-800">
                 <!-- Quote Display (Clickable) -->
-                <div data-click="action_4" class="cursor-pointer group flex items-center justify-center gap-2 mb-3 px-2 w-full active:scale-95 transition-transform" title="Tap to edit quote">
+                <div data-click="app.openSettings()" class="cursor-pointer group flex items-center justify-center gap-2 mb-3 px-2 w-full active:scale-95 transition-transform" title="Tap to edit quote">
                     <p id="quote-display" class="text-[10px] text-gray-400 font-bold uppercase tracking-widest dark:text-slate-500 text-center select-none group-hover:text-zinc-900 dark:group-hover:text-blue-400 transition-colors">
                         Quick Content
                     </p>
@@ -107,7 +107,7 @@
             </div>
 
             <!-- FAB (Add Job) -->
-            <button data-click="action_5" aria-label="Add New Job" class="absolute bottom-6 right-6 w-14 h-14 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-full shadow-lg shadow-sm flex items-center justify-center text-xl hover:scale-105 active:scale-95 transition-all z-10 hover:bg-zinc-800 dark:hover:bg-zinc-200">
+            <button data-click="app.openJobModal()" aria-label="Add New Job" class="absolute bottom-6 right-6 w-14 h-14 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-full shadow-lg shadow-sm flex items-center justify-center text-xl hover:scale-105 active:scale-95 transition-all z-10 hover:bg-zinc-800 dark:hover:bg-zinc-200">
                 <i class="fas fa-plus" aria-hidden="true"></i>
             </button>
         </div>
@@ -140,10 +140,10 @@
 
                 <!-- Filter Tabs -->
                 <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-                    <button data-click="action_6" class="int-filter-btn active px-3 py-1.5 rounded-lg bg-gray-800 text-white text-[10px] font-bold dark:bg-white dark:text-slate-900 transition-all shadow-sm" data-filter="all">All</button>
-                    <button data-click="action_7" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-[#0a0a0a] dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="active">Active</button>
-                    <button data-click="action_8" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-[#0a0a0a] dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="offers">Offers</button>
-                    <button data-click="action_9" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-[#0a0a0a] dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="archived">Archived</button>
+                    <button data-click="app.filterInterviews('all')" class="int-filter-btn active px-3 py-1.5 rounded-lg bg-gray-800 text-white text-[10px] font-bold dark:bg-white dark:text-slate-900 transition-all shadow-sm" data-filter="all">All</button>
+                    <button data-click="app.filterInterviews('active')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-[#0a0a0a] dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="active">Active</button>
+                    <button data-click="app.filterInterviews('offers')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-[#0a0a0a] dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="offers">Offers</button>
+                    <button data-click="app.filterInterviews('archived')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-[#0a0a0a] dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="archived">Archived</button>
                 </div>
             </div>
 
@@ -153,7 +153,7 @@
             </div>
 
             <!-- FAB -->
-            <button data-click="action_10" aria-label="Add New Interview" class="absolute bottom-6 right-6 w-14 h-14 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-full shadow-lg shadow-sm flex items-center justify-center text-2xl active:scale-90 transition z-10 hover:bg-zinc-800 dark:hover:bg-zinc-200">
+            <button data-click="app.openInterviewModal()" aria-label="Add New Interview" class="absolute bottom-6 right-6 w-14 h-14 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-full shadow-lg shadow-sm flex items-center justify-center text-2xl active:scale-90 transition z-10 hover:bg-zinc-800 dark:hover:bg-zinc-200">
                 <i class="fas fa-plus" aria-hidden="true"></i>
             </button>
         </div>
@@ -164,7 +164,7 @@
             <div class="px-4 py-3 bg-white border-b border-gray-100 shrink-0 flex flex-col gap-3 dark:bg-black dark:border-gray-800">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <button id="btn-template-back" data-click="action_11" class="hidden text-gray-500 hover:text-blue-600 mr-1 p-1 dark:text-slate-400 dark:hover:text-zinc-100">
+                        <button id="btn-template-back" data-click="app.closeFolder()" class="hidden text-gray-500 hover:text-blue-600 mr-1 p-1 dark:text-slate-400 dark:hover:text-zinc-100">
                             <i class="fas fa-arrow-left"></i>
                         </button>
                         <div>
@@ -173,7 +173,7 @@
                         </div>
                     </div>
                     <!-- Add Profile Link Button -->
-                    <button data-click="action_12" class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg font-bold border border-gray-200 dark:bg-[#0a0a0a] dark:text-slate-300 dark:border-gray-800 dark:hover:bg-slate-700 transition">
+                    <button data-click="app.openProfileModal()" class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg font-bold border border-gray-200 dark:bg-[#0a0a0a] dark:text-slate-300 dark:border-gray-800 dark:hover:bg-slate-700 transition">
                         <i class="fas fa-link mr-1"></i> Profile Links
                     </button>
                 </div>
@@ -184,7 +184,7 @@
             </div>
 
              <!-- FAB (Add Template) -->
-             <button data-click="action_13" aria-label="Add New Template" class="absolute bottom-6 right-6 w-14 h-14 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-full shadow-lg shadow-sm flex items-center justify-center text-2xl active:scale-90 transition z-10 hover:bg-zinc-800 dark:hover:bg-zinc-200">
+             <button data-click="app.openTemplateModal()" aria-label="Add New Template" class="absolute bottom-6 right-6 w-14 h-14 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-full shadow-lg shadow-sm flex items-center justify-center text-2xl active:scale-90 transition z-10 hover:bg-zinc-800 dark:hover:bg-zinc-200">
                 <i class="fas fa-plus" aria-hidden="true"></i>
             </button>
         </div>
@@ -234,7 +234,7 @@
                     </div>
 
                     <!-- 2. THE NORTH STAR (Milky Way Space Theme) -->
-                    <div class="relative rounded-xl p-4 shadow-lg overflow-hidden group cursor-pointer text-white border border-white/10 h-40 flex flex-col justify-between" data-click="action_14">
+                    <div class="relative rounded-xl p-4 shadow-lg overflow-hidden group cursor-pointer text-white border border-white/10 h-40 flex flex-col justify-between" data-click="app.openNorthStarModal()">
                         <!-- Milky Way Background -->
                         <div class="absolute inset-0 bg-slate-950">
                             <!-- Deep Space Gradient -->
@@ -289,8 +289,8 @@
 
                     <!-- Quick Add Input (Inline) -->
                     <div class="relative mb-2">
-                        <input type="text" id="quick-task-input" class="w-full bg-gray-50 border border-gray-100 rounded-xl py-2.5 pl-4 pr-10 text-sm outline-none focus:border-blue-300 focus:bg-white transition-all dark:bg-slate-700/50 dark:border-slate-600 dark:text-white dark:focus:bg-slate-700" placeholder="Add a new win..." data-keydown="action_95">
-                        <button data-click="action_15" class="absolute right-2 top-1.5 w-7 h-7 flex items-center justify-center bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-lg shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition active:scale-95">
+                        <input type="text" id="quick-task-input" class="w-full bg-gray-50 border border-gray-100 rounded-xl py-2.5 pl-4 pr-10 text-sm outline-none focus:border-blue-300 focus:bg-white transition-all dark:bg-slate-700/50 dark:border-slate-600 dark:text-white dark:focus:bg-slate-700" placeholder="Add a new win..." data-keydown="if(event.key === 'Enter') app.addQuickTask()">
+                        <button data-click="app.addQuickTask()" class="absolute right-2 top-1.5 w-7 h-7 flex items-center justify-center bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-lg shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition active:scale-95">
                             <i class="fas fa-plus text-xs"></i>
                         </button>
                     </div>
@@ -305,7 +305,7 @@
                         <span class="text-[9px] text-gray-300 font-medium dark:text-slate-600 uppercase tracking-wider">Tap to edit</span>
 
                         <!-- Toggle Hide/Show Done -->
-                        <button id="btn-toggle-done" data-click="action_16" class="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 hover:text-gray-600 bg-gray-50 px-2 py-1 rounded-lg transition-colors dark:bg-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
+                        <button id="btn-toggle-done" data-click="app.toggleHideDone()" class="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 hover:text-gray-600 bg-gray-50 px-2 py-1 rounded-lg transition-colors dark:bg-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
                             <i class="fas fa-eye-slash"></i> <span>Hide Done</span>
                         </button>
                     </div>
@@ -319,9 +319,9 @@
                             <h3 class="font-bold text-sm text-yellow-800 dark:text-yellow-400 flex items-center gap-2">
                                 <i class="fas fa-thumbtack"></i> Urgent Reminders
                             </h3>
-                            <button data-click="action_17" class="text-yellow-600 hover:text-yellow-800 dark:text-yellow-500 dark:hover:text-yellow-300"><i class="fas fa-copy"></i></button>
+                            <button data-click="app.copyPlanText('postIt')" class="text-yellow-600 hover:text-yellow-800 dark:text-yellow-500 dark:hover:text-yellow-300"><i class="fas fa-copy"></i></button>
                         </div>
-                        <textarea id="plan-postIt-text" data-input="action_91" class="w-full h-24 text-sm text-yellow-900 leading-relaxed outline-none resize-none bg-transparent placeholder-yellow-700/50 dark:text-yellow-100 dark:placeholder-yellow-500/50" placeholder="HR follow-ups, calls, etc."></textarea>
+                        <textarea id="plan-postIt-text" data-input="app.savePlanText('postIt')" class="w-full h-24 text-sm text-yellow-900 leading-relaxed outline-none resize-none bg-transparent placeholder-yellow-700/50 dark:text-yellow-100 dark:placeholder-yellow-500/50" placeholder="HR follow-ups, calls, etc."></textarea>
                     </div>
                 </div>
 
@@ -334,9 +334,9 @@
                             <h3 class="font-bold text-sm text-purple-800 dark:text-purple-300 flex items-center gap-2">
                                 <i class="fas fa-calendar-week"></i> Weekly Focus
                             </h3>
-                            <button data-click="action_18" class="text-purple-400 hover:text-purple-600 dark:hover:text-purple-200"><i class="fas fa-copy"></i></button>
+                            <button data-click="app.copyPlanText('weekly')" class="text-purple-400 hover:text-purple-600 dark:hover:text-purple-200"><i class="fas fa-copy"></i></button>
                         </div>
-                        <textarea id="plan-weekly-text" data-input="action_92" class="w-full h-32 p-4 text-sm text-gray-700 leading-relaxed outline-none resize-none bg-transparent dark:text-slate-300 placeholder-gray-300 dark:placeholder-slate-600" placeholder="- Top priority 1&#10;- Top priority 2"></textarea>
+                        <textarea id="plan-weekly-text" data-input="app.savePlanText('weekly')" class="w-full h-32 p-4 text-sm text-gray-700 leading-relaxed outline-none resize-none bg-transparent dark:text-slate-300 placeholder-gray-300 dark:placeholder-slate-600" placeholder="- Top priority 1&#10;- Top priority 2"></textarea>
                     </div>
 
                     <!-- Monthly Card -->
@@ -345,9 +345,9 @@
                             <h3 class="font-bold text-sm text-pink-800 dark:text-pink-300 flex items-center gap-2">
                                 <i class="fas fa-bullseye"></i> Monthly Vision
                             </h3>
-                            <button data-click="action_19" class="text-pink-400 hover:text-pink-600 dark:hover:text-pink-200"><i class="fas fa-copy"></i></button>
+                            <button data-click="app.copyPlanText('monthly')" class="text-pink-400 hover:text-pink-600 dark:hover:text-pink-200"><i class="fas fa-copy"></i></button>
                         </div>
-                        <textarea id="plan-monthly-text" data-input="action_93" class="w-full h-32 p-4 text-sm text-gray-700 leading-relaxed outline-none resize-none bg-transparent dark:text-slate-300 placeholder-gray-300 dark:placeholder-slate-600" placeholder="The Big Picture..."></textarea>
+                        <textarea id="plan-monthly-text" data-input="app.savePlanText('monthly')" class="w-full h-32 p-4 text-sm text-gray-700 leading-relaxed outline-none resize-none bg-transparent dark:text-slate-300 placeholder-gray-300 dark:placeholder-slate-600" placeholder="The Big Picture..."></textarea>
                     </div>
                 </div>
 
@@ -359,13 +359,13 @@
                     <div class="flex justify-between items-center mb-3">
                         <div class="flex items-center gap-2">
                             <label class="text-xs text-gray-500 dark:text-slate-400">Group by:</label>
-                            <select id="network-group-by" data-change="action_88" class="bg-gray-50 border border-gray-100 rounded-lg py-1 px-2 text-xs font-medium outline-none focus:border-indigo-300 dark:bg-slate-700/50 dark:border-slate-600 dark:text-slate-200">
+                            <select id="network-group-by" data-change="app.renderPlan()" class="bg-gray-50 border border-gray-100 rounded-lg py-1 px-2 text-xs font-medium outline-none focus:border-indigo-300 dark:bg-slate-700/50 dark:border-slate-600 dark:text-slate-200">
                                 <option value="none">None</option>
                                 <option value="company">Company</option>
                                 <option value="role">Role</option>
                             </select>
                         </div>
-                        <button data-click="action_20" class="px-3 py-1.5 flex items-center justify-center gap-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-sm hover:bg-indigo-700 active:scale-95 transition">
+                        <button data-click="app.addNetworkContact()" class="px-3 py-1.5 flex items-center justify-center gap-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-sm hover:bg-indigo-700 active:scale-95 transition">
                             <i class="fas fa-plus text-[10px]"></i> Add Contact
                         </button>
                     </div>
@@ -382,25 +382,25 @@
 
     <!-- === BOTTOM NAV === -->
     <nav class="bg-white border-t border-gray-200 flex justify-around items-center h-16 safe-pb shrink-0 z-30 dark:bg-black dark:border-gray-800">
-        <button data-click="action_21" class="nav-btn active text-zinc-900 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-zinc-100 transition-all">
+        <button data-click="app.switchView('jobs')" class="nav-btn active text-zinc-900 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-zinc-100 transition-all">
             <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200 bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
                 <i class="fas fa-check-double text-lg group-active:scale-90 transition"></i>
             </div>
             <span class="text-[10px] font-bold">Apply</span>
         </button>
-        <button data-click="action_22" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
+        <button data-click="app.switchView('interviews')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
             <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200">
                 <i class="fas fa-user-tie text-lg group-active:scale-90 transition"></i>
             </div>
             <span class="text-[10px] font-bold">Interview</span>
         </button>
-        <button data-click="action_23" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
+        <button data-click="app.switchView('plan')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
             <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200">
                 <i class="fas fa-bullseye text-lg group-active:scale-90 transition"></i>
             </div>
             <span class="text-[10px] font-bold">Plan</span>
         </button>
-        <button data-click="action_24" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
+        <button data-click="app.switchView('templates')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
             <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200">
                 <i class="fas fa-folder text-lg group-active:scale-90 transition"></i>
             </div>
@@ -412,15 +412,15 @@
 
     <!-- NEW: DAY SUMMARY BOTTOM SHEET (Mobile Friendly) -->
     <div id="modal-day-summary" class="fixed inset-0 z-[100] hidden flex items-end justify-center pointer-events-none">
-        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity opacity-0" id="modal-day-summary-bg" data-click="action_25"></div>
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity opacity-0" id="modal-day-summary-bg" data-click="app.closeDaySummary()"></div>
         <div class="bg-white w-full max-w-md rounded-t-xl shadow-lg border border-gray-100 dark:border-gray-800 transform translate-y-full transition-transform duration-300 pointer-events-auto flex flex-col max-h-[80vh] dark:bg-black dark:border-t dark:border-gray-800" id="modal-day-summary-content">
-            <div class="p-2 flex justify-center shrink-0" data-click="action_26">
+            <div class="p-2 flex justify-center shrink-0" data-click="app.closeDaySummary()">
                 <div class="w-12 h-1.5 bg-gray-300 rounded-full dark:bg-slate-700"></div>
             </div>
             <div class="px-6 pb-6 pt-2 overflow-y-auto flex-1">
                  <div class="flex justify-between items-center mb-4">
                     <h3 class="font-bold text-2xl text-gray-800 dark:text-white" id="day-summary-date">Today</h3>
-                    <button data-click="action_27" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400"><i class="fas fa-times"></i></button>
+                    <button data-click="app.closeDaySummary()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400"><i class="fas fa-times"></i></button>
                 </div>
                 <div id="day-summary-list" class="space-y-3">
                     <!-- Content -->
@@ -430,11 +430,11 @@
     </div>
 
     <!-- NEW: HISTORY LOG MODAL -->
-    <div id="modal-history" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-sm" data-click="action_28">
+    <div id="modal-history" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-sm" data-click="if(event.target === this) this.classList.add('hidden')">
         <div class="bg-white w-full max-w-sm rounded-xl p-5 shadow-lg border border-gray-100 dark:border-gray-800 flex flex-col max-h-[80vh] dark:bg-black dark:border dark:border-gray-800">
              <div class="flex justify-between items-center mb-4 shrink-0">
                 <h3 class="font-bold text-lg text-gray-800 dark:text-white">Activity Log</h3>
-                <button data-click="action_29" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400"><i class="fas fa-times"></i></button>
+                <button data-click="document.getElementById('modal-history').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400"><i class="fas fa-times"></i></button>
             </div>
             <div id="history-list-content" class="overflow-y-auto custom-scrollbar space-y-3">
                 <!-- Injected via JS -->
@@ -448,7 +448,7 @@
             <!-- Header -->
             <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 dark:bg-black dark:border-gray-800">
                 <span class="font-bold text-lg dark:text-white">Add to Pipeline</span>
-                <button data-click="action_30" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
+                <button data-click="document.getElementById('modal-interview').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
             </div>
 
             <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-5">
@@ -511,7 +511,7 @@
                 </div>
             </div>
             <div class="p-6 pt-2 bg-white border-t border-gray-50 z-10 dark:bg-black dark:border-gray-800">
-                <button data-click="action_31" class="w-full py-3.5 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-[0.98] transition text-sm">Save</button>
+                <button data-click="app.saveInterview()" class="w-full py-3.5 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-[0.98] transition text-sm">Save</button>
             </div>
         </div>
     </div>
@@ -523,18 +523,18 @@
             <p class="text-xs text-gray-400 mb-4 dark:text-slate-400">What drives you today?</p>
             <input type="text" id="quote-input" class="w-full bg-gray-50 rounded-xl py-3 px-4 mb-4 outline-none text-sm border border-gray-100 focus:border-blue-500 focus:bg-white transition-all dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:focus:border-blue-500" placeholder="Enter your quote...">
             <div class="flex gap-3">
-                <button data-click="action_32" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
-                <button data-click="action_33" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Save Quote</button>
+                <button data-click="document.getElementById('modal-quote').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
+                <button data-click="app.saveQuote()" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Save Quote</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL 1: MOMENTUM (STREAK) -->
-    <div id="modal-streak" class="fixed inset-0 bg-black/50 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm" data-click="action_34">
+    <div id="modal-streak" class="fixed inset-0 bg-black/50 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm" data-click="if(event.target === this) this.classList.add('hidden')">
         <div class="bg-white w-full max-w-sm rounded-xl p-5 shadow-lg border border-gray-100 dark:border-gray-800 flex flex-col max-h-[85dvh] overflow-y-auto dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <div class="flex justify-between items-center mb-4 shrink-0">
                 <h3 class="font-bold text-lg text-gray-800 dark:text-white">Momentum</h3>
-                <button data-click="action_35" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600"><i class="fas fa-times"></i></button>
+                <button data-click="document.getElementById('modal-streak').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600"><i class="fas fa-times"></i></button>
             </div>
 
             <!-- Simplified Streak Section -->
@@ -560,7 +560,7 @@
                             <span class="text-[9px] font-bold text-orange-400 block tracking-wider dark:text-orange-300/70">TODAY'S PROGRESS</span>
                             <span class="text-sm font-black text-orange-600 dark:text-orange-400" id="today-progress-text">0 / 5</span>
                         </div>
-                        <button data-click="action_36" class="flex items-center gap-1.5 bg-white/60 hover:bg-white text-orange-600 px-2.5 py-1.5 rounded-lg border border-gray-100 shadow-sm transition active:scale-95 group dark:bg-[#0a0a0a] dark:border-slate-600 dark:text-orange-400 dark:hover:bg-slate-700">
+                        <button data-click="app.editDailyTarget()" class="flex items-center gap-1.5 bg-white/60 hover:bg-white text-orange-600 px-2.5 py-1.5 rounded-lg border border-gray-100 shadow-sm transition active:scale-95 group dark:bg-[#0a0a0a] dark:border-slate-600 dark:text-orange-400 dark:hover:bg-slate-700">
                             <span class="text-[9px] font-bold">SET GOAL</span>
                             <i class="fas fa-pencil-alt text-[9px] group-hover:rotate-12 transition-transform"></i>
                         </button>
@@ -585,11 +585,11 @@
     </div>
 
     <!-- MODAL 2: WEEKLY INSIGHTS & HEATMAP -->
-    <div id="modal-weekly" class="fixed inset-0 bg-black/50 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm" data-click="action_37">
+    <div id="modal-weekly" class="fixed inset-0 bg-black/50 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm" data-click="if(event.target === this) this.classList.add('hidden')">
         <div class="bg-white w-full max-w-md rounded-xl p-5 shadow-lg border border-gray-100 dark:border-gray-800 flex flex-col max-h-[85dvh] overflow-y-auto dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <div class="flex justify-between items-center mb-4 shrink-0">
                 <h3 class="font-bold text-lg text-gray-800 dark:text-white">Weekly Insights</h3>
-                <button data-click="action_38" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600"><i class="fas fa-times"></i></button>
+                <button data-click="document.getElementById('modal-weekly').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600"><i class="fas fa-times"></i></button>
             </div>
 
             <!-- Chart Section (4 Weeks) -->
@@ -672,13 +672,13 @@
             <h3 class="font-bold text-lg mb-2 dark:text-white">Set Daily Target</h3>
             <p class="text-xs text-gray-400 mb-4 dark:text-slate-400">How many jobs will you apply to daily?</p>
             <div class="flex items-center justify-center gap-4 mb-6">
-                <button data-click="action_39" class="w-10 h-10 rounded-full bg-gray-100 text-gray-600 font-bold hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600">-</button>
+                <button data-click="document.getElementById('target-input').stepDown()" class="w-10 h-10 rounded-full bg-gray-100 text-gray-600 font-bold hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600">-</button>
                 <input type="number" id="target-input" class="w-16 text-center text-3xl font-bold outline-none dark:bg-transparent dark:text-white" value="5" min="1">
-                <button data-click="action_40" class="w-10 h-10 rounded-full bg-gray-100 text-gray-600 font-bold hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600">+</button>
+                <button data-click="document.getElementById('target-input').stepUp()" class="w-10 h-10 rounded-full bg-gray-100 text-gray-600 font-bold hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600">+</button>
             </div>
             <div class="flex gap-3">
-                <button data-click="action_41" class="flex-1 py-2 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
-                <button data-click="action_42" class="flex-1 py-2 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Save</button>
+                <button data-click="document.getElementById('modal-target').classList.add('hidden')" class="flex-1 py-2 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
+                <button data-click="app.saveTarget()" class="flex-1 py-2 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Save</button>
             </div>
         </div>
     </div>
@@ -689,8 +689,8 @@
             <h3 class="font-bold text-lg mb-4 dark:text-white" id="daily-task-modal-title">Add Daily Win</h3>
             <input type="text" id="new-task-input" class="w-full bg-gray-100 rounded-xl py-3 px-4 mb-4 outline-none text-sm focus:ring-2 focus:ring-blue-500 dark:bg-slate-700 dark:text-white dark:placeholder-slate-400" placeholder="e.g. Apply to 5 jobs">
             <div class="flex gap-3">
-                <button data-click="action_43" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
-                <button data-click="action_44" id="daily-task-save-btn" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Add</button>
+                <button data-click="document.getElementById('modal-add-task').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
+                <button data-click="app.saveDailyTask()" id="daily-task-save-btn" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Add</button>
             </div>
         </div>
     </div>
@@ -700,7 +700,7 @@
         <div class="bg-white w-full max-w-sm rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-bold text-lg dark:text-white">Define Your North Star</h3>
-                <button data-click="action_45" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+                <button data-click="document.getElementById('modal-northstar').classList.add('hidden')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
             </div>
 
             <div class="space-y-4">
@@ -726,7 +726,7 @@
             </div>
 
             <div class="mt-6">
-                <button data-click="action_46" class="w-full py-3 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:scale-[1.02] transition-transform">
+                <button data-click="app.saveNorthStar()" class="w-full py-3 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:scale-[1.02] transition-transform">
                     Set Coordinates 🚀
                 </button>
             </div>
@@ -746,16 +746,16 @@
                 <h4 class="text-xs font-bold text-gray-400 uppercase mb-2 dark:text-slate-500">Add New Note</h4>
                 <div class="flex gap-2">
                     <input type="text" id="quick-note-input" class="flex-1 bg-gray-100 rounded-xl py-2 px-4 outline-none text-sm border-2 border-transparent focus:border-blue-500 focus:bg-white transition-all dark:bg-slate-700 dark:text-white dark:focus:bg-slate-800" placeholder="e.g. Remote Only">
-                    <button data-click="action_47" class="bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-xl px-4 py-2 font-bold hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-95 transition">Add</button>
+                    <button data-click="app.saveQuickNote()" class="bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-xl px-4 py-2 font-bold hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-95 transition">Add</button>
                 </div>
             </div>
 
-            <button data-click="action_48" class="w-full mt-4 py-3 text-gray-500 font-bold bg-gray-50 rounded-xl hover:bg-gray-100 dark:bg-slate-700/50 dark:text-slate-400 dark:hover:bg-slate-700 transition">Done</button>
+            <button data-click="document.getElementById('modal-quick-notes').classList.add('hidden')" class="w-full mt-4 py-3 text-gray-500 font-bold bg-gray-50 rounded-xl hover:bg-gray-100 dark:bg-slate-700/50 dark:text-slate-400 dark:hover:bg-slate-700 transition">Done</button>
         </div>
     </div>
 
     <!-- Settings/Menu Modal -->
-    <div id="modal-settings" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-6 backdrop-blur-sm" data-click="action_49">
+    <div id="modal-settings" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-6 backdrop-blur-sm" data-click="if(event.target === this) this.classList.add('hidden')">
         <div class="bg-white w-full max-w-sm rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <h3 class="font-bold text-lg mb-4 text-[#B8860B] dark:text-yellow-500">ApplicationPal Menu</h3>
 
@@ -768,7 +768,7 @@
                     <span class="text-sm font-bold text-gray-700 dark:text-slate-200">Dark Mode</span>
                 </div>
                 <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="theme-toggle" class="sr-only peer" data-change="action_89">
+                    <input type="checkbox" id="theme-toggle" class="sr-only peer" data-change="app.toggleTheme()">
                     <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-slate-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                 </label>
             </div>
@@ -785,29 +785,29 @@
                 <div id="modal-sync" class="hidden mt-2">
                     <input type="text" id="sync-key-input" class="w-full p-2 border rounded mb-2 text-center font-mono uppercase dark:bg-slate-700 dark:text-white dark:border-slate-600" placeholder="ENTER KEY">
                     <div class="flex gap-2">
-                        <button data-click="action_50" class="flex-1 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 p-2 rounded font-bold text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200">JOIN</button>
-                        <button id="generate-key-btn" data-click="action_96" class="bg-gray-200 text-gray-600 p-2 rounded font-bold text-xs hover:bg-gray-300 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600">GEN NEW</button>
+                        <button data-click="app.saveSyncKey()" class="flex-1 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 p-2 rounded font-bold text-xs hover:bg-zinc-800 dark:hover:bg-zinc-200">JOIN</button>
+                        <button id="generate-key-btn" data-click="app.generateSyncKey()" class="bg-gray-200 text-gray-600 p-2 rounded font-bold text-xs hover:bg-gray-300 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600">GEN NEW</button>
                     </div>
                      <p class="text-[10px] text-gray-400 mt-2 text-center dark:text-slate-500">Use same key on other devices to sync.</p>
                 </div>
-                <button data-click="action_51" class="w-full bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold py-2 rounded-lg shadow-sm text-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition">
+                <button data-click="document.getElementById('modal-sync').classList.remove('hidden'); this.classList.add('hidden')" class="w-full bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold py-2 rounded-lg shadow-sm text-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition">
                     <i class="fas fa-sync-alt mr-2"></i> Connect Cloud
                 </button>
             </div>
 
             <!-- Data Actions -->
             <div class="grid grid-cols-2 gap-3 mb-4">
-                <button data-click="action_52" class="flex flex-col items-center justify-center gap-2 p-4 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-slate-700 dark:border-slate-600 dark:hover:bg-slate-600">
+                <button data-click="app.exportData()" class="flex flex-col items-center justify-center gap-2 p-4 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-slate-700 dark:border-slate-600 dark:hover:bg-slate-600">
                     <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 dark:bg-slate-600 dark:text-slate-300"><i class="fas fa-download"></i></div>
                     <span class="text-xs font-bold text-gray-600 dark:text-slate-300">Backup</span>
                 </button>
-                <button data-click="action_53" class="flex flex-col items-center justify-center gap-2 p-4 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-slate-700 dark:border-slate-600 dark:hover:bg-slate-600">
+                <button data-click="document.getElementById('import-file').click()" class="flex flex-col items-center justify-center gap-2 p-4 bg-gray-50 rounded-xl border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-slate-700 dark:border-slate-600 dark:hover:bg-slate-600">
                     <div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600 dark:bg-slate-600 dark:text-slate-300"><i class="fas fa-upload"></i></div>
                     <span class="text-xs font-bold text-gray-600 dark:text-slate-300">Restore</span>
                 </button>
             </div>
 
-            <button data-click="action_54" class="w-full py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600">Close</button>
+            <button data-click="document.getElementById('modal-settings').classList.add('hidden')" class="w-full py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600">Close</button>
         </div>
     </div>
 
@@ -816,7 +816,7 @@
         <div class="bg-white w-full max-w-sm rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="font-bold text-lg dark:text-white">Network Contact</h3>
-                <button data-click="action_55" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+                <button data-click="document.getElementById('modal-network').classList.add('hidden')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
             </div>
 
             <div class="space-y-4">
@@ -849,7 +849,7 @@
             </div>
 
             <div class="mt-6">
-                <button data-click="action_56" class="w-full py-3 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:scale-[1.02] transition-transform">
+                <button data-click="document.getElementById('modal-sync').classList.remove('hidden'); this.classList.add('hidden')" class="w-full py-3 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:scale-[1.02] transition-transform">
                     Save Contact
                 </button>
             </div>
@@ -863,8 +863,8 @@
             <h3 class="font-bold text-lg mb-2 dark:text-white">Are you sure?</h3>
             <p id="confirm-msg" class="text-sm text-gray-500 mb-6 dark:text-slate-400">Action cannot be undone.</p>
             <div class="flex gap-3">
-                <button data-click="action_57" class="flex-1 py-2 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">No</button>
-                <button data-click="action_58" class="flex-1 py-2 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Yes</button>
+                <button data-click="document.getElementById('modal-confirm').classList.add('hidden')" class="flex-1 py-2 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">No</button>
+                <button data-click="app.confirmYes()" class="flex-1 py-2 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Yes</button>
             </div>
         </div>
     </div>
@@ -875,7 +875,7 @@
 
             <div class="flex justify-between items-center mb-4">
                 <h3 id="status-modal-title" class="font-bold text-lg dark:text-white">Update Status</h3>
-                <button data-click="action_59" class="text-gray-400 hover:text-gray-600 dark:hover:text-slate-200"><i class="fas fa-times"></i></button>
+                <button data-click="document.getElementById('modal-status').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 dark:hover:text-slate-200"><i class="fas fa-times"></i></button>
             </div>
 
             <!-- 🆕 NEW: PROGRESS SECTION (The Bridge) -->
@@ -883,7 +883,7 @@
                 <h4 class="text-xs font-bold text-indigo-900 uppercase mb-2 dark:text-indigo-300 flex items-center gap-1.5">
                     <i class="fas fa-rocket text-indigo-500"></i> Got a Response?
                 </h4>
-                <button data-click="action_60" class="w-full flex items-center justify-center gap-2 p-3 rounded-lg bg-indigo-600 text-white shadow-lg shadow-sm hover:scale-[1.02] active:scale-[0.98] transition font-bold text-sm">
+                <button data-click="app.promoteToInterview()" class="w-full flex items-center justify-center gap-2 p-3 rounded-lg bg-indigo-600 text-white shadow-lg shadow-sm hover:scale-[1.02] active:scale-[0.98] transition font-bold text-sm">
                     <span>Move to Interview / Test</span>
                     <i class="fas fa-arrow-right text-xs opacity-70"></i>
                 </button>
@@ -893,24 +893,24 @@
             <div class="mb-5">
                 <h4 class="text-xs font-bold text-gray-400 uppercase mb-3 dark:text-slate-500">Applied via...</h4>
                 <div class="grid grid-cols-2 gap-3">
-                    <button data-click="action_61" class="flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 text-blue-700 border border-gray-200 active:scale-[0.98] transition hover:bg-gray-100 dark:bg-gray-800 dark:text-blue-300 dark:border-blue-500/20 dark:hover:bg-blue-500/20">
+                    <button data-click="app.updateStatus('applied', 'direct')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 text-blue-700 border border-gray-200 active:scale-[0.98] transition hover:bg-gray-100 dark:bg-gray-800 dark:text-blue-300 dark:border-blue-500/20 dark:hover:bg-blue-500/20">
                          <div class="w-8 h-8 rounded-full bg-blue-200 flex items-center justify-center mb-2 dark:bg-gray-800"><i class="fas fa-globe"></i></div>
                          <div class="font-bold text-sm">Direct / Portal</div>
                     </button>
 
-                    <button data-click="action_62" class="flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 text-orange-700 border border-gray-200 active:scale-[0.98] transition hover:bg-gray-100 dark:bg-gray-800 dark:text-orange-300 dark:border-orange-500/20 dark:hover:bg-orange-500/20">
+                    <button data-click="app.updateStatus('applied', 'cold-email')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 text-orange-700 border border-gray-200 active:scale-[0.98] transition hover:bg-gray-100 dark:bg-gray-800 dark:text-orange-300 dark:border-orange-500/20 dark:hover:bg-orange-500/20">
                          <div class="w-8 h-8 rounded-full bg-orange-200 flex items-center justify-center mb-2 dark:bg-gray-800"><i class="fas fa-envelope"></i></div>
                          <div class="font-bold text-sm">Cold Email</div>
                     </button>
 
                     <!-- Updated to TEAL to match Referral Received -->
-                    <button data-click="action_63" class="flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 text-teal-700 border border-gray-200 active:scale-[0.98] transition hover:bg-gray-100 dark:bg-gray-800 dark:text-teal-300 dark:border-teal-500/20 dark:hover:bg-teal-500/20">
+                    <button data-click="app.updateStatus('applied', 'referral')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 text-teal-700 border border-gray-200 active:scale-[0.98] transition hover:bg-gray-100 dark:bg-gray-800 dark:text-teal-300 dark:border-teal-500/20 dark:hover:bg-teal-500/20">
                          <div class="w-8 h-8 rounded-full bg-teal-200 flex items-center justify-center mb-2 dark:bg-gray-800"><i class="fas fa-user-friends"></i></div>
                          <div class="font-bold text-sm">Referral</div>
                     </button>
 
                     <!-- Updated to CYAN to differentiate from Referral -->
-                    <button data-click="action_64" class="flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 text-cyan-700 border border-gray-200 active:scale-[0.98] transition hover:bg-gray-100 dark:bg-gray-800 dark:text-cyan-300 dark:border-cyan-500/20 dark:hover:bg-cyan-500/20">
+                    <button data-click="app.updateStatus('applied', 'recruiter')" class="flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 text-cyan-700 border border-gray-200 active:scale-[0.98] transition hover:bg-gray-100 dark:bg-gray-800 dark:text-cyan-300 dark:border-cyan-500/20 dark:hover:bg-cyan-500/20">
                          <div class="w-8 h-8 rounded-full bg-cyan-200 flex items-center justify-center mb-2 dark:bg-gray-800"><i class="fas fa-headset"></i></div>
                          <div class="font-bold text-sm">Recruiter</div>
                     </button>
@@ -922,24 +922,24 @@
                 <h4 class="text-xs font-bold text-gray-400 uppercase mb-3 dark:text-slate-500">Other Actions</h4>
                 <div class="space-y-2">
                     <!-- NEW BUTTON: DIRECT APPLY (Renamed) -->
-                    <button data-click="action_65" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-purple-600 border border-gray-100 active:scale-[0.98] transition dark:bg-gray-800 dark:text-purple-300 dark:border-purple-500/20 dark:hover:bg-purple-500/20">
+                    <button data-click="document.getElementById('modal-confirm').classList.add('hidden')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-purple-600 border border-gray-100 active:scale-[0.98] transition dark:bg-gray-800 dark:text-purple-300 dark:border-purple-500/20 dark:hover:bg-purple-500/20">
                         <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center mr-3 text-purple-500 dark:bg-gray-800"><i class="fas fa-location-arrow text-xs"></i></div>
                         <div class="font-bold text-sm">Direct Apply</div>
                     </button>
 
-                    <button data-click="action_66" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-gray-800 dark:hover:bg-slate-700">
+                    <button data-click="app.updateStatus('referral-asked')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-gray-800 dark:hover:bg-slate-700">
                         <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center mr-3 text-orange-500 dark:bg-gray-800"><i class="fas fa-paper-plane text-xs"></i></div>
                         <div class="font-bold text-sm">Referral Asked</div>
                     </button>
-                    <button data-click="action_67" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-gray-800 dark:hover:bg-slate-700">
+                    <button data-click="app.updateStatus('referral-asked')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-600 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/50 dark:text-slate-300 dark:border-gray-800 dark:hover:bg-slate-700">
                         <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center mr-3 text-red-500 dark:bg-gray-800"><i class="fas fa-bell text-xs"></i></div>
                         <div class="font-bold text-sm">Set Follow-up</div>
                     </button>
-                    <button data-click="action_68" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-teal-600 border border-gray-100 active:scale-[0.98] transition dark:bg-gray-800 dark:text-teal-300 dark:border-teal-500/20 dark:hover:bg-teal-500/20">
+                    <button data-click="app.updateStatus('referral-received')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-teal-600 border border-gray-100 active:scale-[0.98] transition dark:bg-gray-800 dark:text-teal-300 dark:border-teal-500/20 dark:hover:bg-teal-500/20">
                         <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center mr-3 text-teal-500 dark:bg-gray-800"><i class="fas fa-handshake text-xs"></i></div>
                         <div class="font-bold text-sm">Referral Received</div>
                     </button>
-                     <button data-click="action_69" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-400 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/30 dark:text-slate-500 dark:border-gray-800 dark:hover:bg-slate-800">
+                     <button data-click="app.updateStatus('pending')" class="w-full flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-400 border border-gray-100 active:scale-[0.98] transition dark:bg-slate-700/30 dark:text-slate-500 dark:border-gray-800 dark:hover:bg-slate-800">
                         <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center mr-3 dark:bg-slate-600"><i class="fas fa-undo text-xs"></i></div>
                         <div class="font-bold text-sm">Reset to Pending</div>
                     </button>
@@ -957,7 +957,7 @@
             <!-- Header -->
             <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 dark:bg-black dark:border-gray-800">
                 <span class="font-bold text-lg dark:text-white">Add Job</span>
-                <button data-click="action_70" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
+                <button data-click="document.getElementById('modal-job').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
             </div>
 
             <!-- Scrollable Content -->
@@ -970,7 +970,7 @@
                         <div class="absolute left-4 top-3.5 text-gray-400 dark:text-slate-500">
                             <i class="fas fa-link"></i>
                         </div>
-                        <input type="text" id="job-content" data-input="action_94" class="w-full pl-10 pr-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-500 focus:bg-white transition-all outline-none font-medium text-sm text-gray-700 placeholder-gray-400 dark:bg-[#0a0a0a] dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800" placeholder="Paste URL here (LinkedIn, etc.)">
+                        <input type="text" id="job-content" data-input="app.handleUrlInput(this.value)" class="w-full pl-10 pr-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-500 focus:bg-white transition-all outline-none font-medium text-sm text-gray-700 placeholder-gray-400 dark:bg-[#0a0a0a] dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800" placeholder="Paste URL here (LinkedIn, etc.)">
                     </div>
                 </div>
 
@@ -1001,14 +1001,14 @@
                     <div class="flex justify-between items-center mb-2">
                          <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider dark:text-slate-500">Quick Notes</label>
                          <!-- Updated button to open management modal -->
-                         <button data-click="action_71" class="text-[10px] font-bold text-blue-500 hover:text-blue-600 dark:text-blue-400 bg-gray-50 px-2 py-0.5 rounded dark:bg-gray-800">+ / -</button>
+                         <button data-click="app.openQuickNotesModal()" class="text-[10px] font-bold text-blue-500 hover:text-blue-600 dark:text-blue-400 bg-gray-50 px-2 py-0.5 rounded dark:bg-gray-800">+ / -</button>
                     </div>
                     <div class="flex flex-wrap gap-2" id="quick-notes-container">
                         <!-- Chips injected by JS -->
-                        <button data-click="action_72" class="px-3 py-1.5 rounded-lg bg-gray-50 text-purple-600 text-xs font-bold border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-gray-800 dark:text-purple-300 dark:border-purple-800">Ask Referral</button>
-                        <button data-click="action_73" class="px-3 py-1.5 rounded-lg bg-gray-50 text-blue-600 text-xs font-bold border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-gray-800 dark:text-blue-300 dark:border-blue-800">Direct Apply</button>
-                        <button data-click="action_74" class="px-3 py-1.5 rounded-lg bg-gray-50 text-indigo-600 text-xs font-bold border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-gray-800 dark:text-indigo-300 dark:border-indigo-800">DM Recruiter</button>
-                        <button data-click="action_75" class="px-3 py-1.5 rounded-lg bg-gray-50 text-green-600 text-xs font-bold border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-gray-800 dark:text-green-300 dark:border-green-800">Salary</button>
+                        <button data-click="app.addQuickNote('Ask for Referral')" class="px-3 py-1.5 rounded-lg bg-gray-50 text-purple-600 text-xs font-bold border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-gray-800 dark:text-purple-300 dark:border-purple-800">Ask Referral</button>
+                        <button data-click="app.addQuickNote('Direct Apply')" class="px-3 py-1.5 rounded-lg bg-gray-50 text-blue-600 text-xs font-bold border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-gray-800 dark:text-blue-300 dark:border-blue-800">Direct Apply</button>
+                        <button data-click="app.addQuickNote('DM Recruiter')" class="px-3 py-1.5 rounded-lg bg-gray-50 text-indigo-600 text-xs font-bold border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-gray-800 dark:text-indigo-300 dark:border-indigo-800">DM Recruiter</button>
+                        <button data-click="app.addQuickNote('Check Salary')" class="px-3 py-1.5 rounded-lg bg-gray-50 text-green-600 text-xs font-bold border border-gray-100 hover:bg-gray-100 transition active:scale-95 dark:bg-gray-800 dark:text-green-300 dark:border-green-800">Salary</button>
                     </div>
                 </div>
 
@@ -1023,15 +1023,15 @@
             <div class="p-6 pt-2 bg-white border-t border-gray-50 z-10 dark:bg-black dark:border-gray-800">
                 <div class="flex gap-2">
                      <!-- New Button: Direct Apply -->
-                     <button data-click="action_76" class="flex-1 py-3.5 bg-gray-100 text-purple-600 font-bold rounded-xl hover:bg-purple-200 active:scale-[0.98] transition dark:bg-gray-800 dark:text-purple-300 dark:hover:bg-purple-900/50 text-xs">
+                     <button data-click="app.saveJob('direct-apply')" class="flex-1 py-3.5 bg-gray-100 text-purple-600 font-bold rounded-xl hover:bg-purple-200 active:scale-[0.98] transition dark:bg-gray-800 dark:text-purple-300 dark:hover:bg-purple-900/50 text-xs">
                         Direct Apply
                      </button>
                      <!-- Primary Button: Applied -->
-                     <button data-click="action_77" class="flex-1 py-3.5 bg-gray-100 text-green-700 font-bold rounded-xl hover:bg-green-200 active:scale-[0.98] transition dark:bg-gray-800 dark:text-green-300 dark:hover:bg-green-900/50 text-xs">
+                     <button data-click="app.saveJob(true)" class="flex-1 py-3.5 bg-gray-100 text-green-700 font-bold rounded-xl hover:bg-green-200 active:scale-[0.98] transition dark:bg-gray-800 dark:text-green-300 dark:hover:bg-green-900/50 text-xs">
                         Applied
                      </button>
                      <!-- Secondary Button: Save (was Later) -->
-                     <button data-click="action_78" class="flex-1 py-3.5 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-[0.98] transition text-xs">
+                     <button data-click="app.saveJob('pending')" class="flex-1 py-3.5 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-[0.98] transition text-xs">
                         Save
                      </button>
                 </div>
@@ -1043,9 +1043,9 @@
     <!-- Template Editor -->
     <div id="modal-template" class="fixed inset-0 bg-white z-50 hidden flex flex-col safe-pb dark:bg-black">
         <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-white safe-pt dark:bg-[#0a0a0a] dark:border-gray-800">
-            <button data-click="action_79" class="text-gray-500 font-bold px-2 dark:text-slate-400">Cancel</button>
+            <button data-click="document.getElementById('modal-template').classList.add('hidden')" class="text-gray-500 font-bold px-2 dark:text-slate-400">Cancel</button>
             <span class="font-bold dark:text-white">Template</span>
-            <button data-click="action_80" class="text-purple-600 font-bold px-2 dark:text-purple-400">Save</button>
+            <button data-click="app.saveTemplate()" class="text-purple-600 font-bold px-2 dark:text-purple-400">Save</button>
         </div>
         <div class="p-5 flex flex-col gap-4 flex-1 overflow-y-auto">
             <input type="text" id="tpl-title" class="text-xl font-bold placeholder-gray-300 outline-none dark:bg-transparent dark:text-white" placeholder="Title (e.g. Cold Email)">
@@ -1079,8 +1079,8 @@
             <h3 class="font-bold text-lg mb-4 dark:text-white">Rename Folder</h3>
             <input type="text" id="rename-input" class="w-full bg-gray-100 rounded-xl py-3 px-4 mb-4 outline-none text-sm dark:bg-slate-700 dark:text-white" placeholder="New Name">
             <div class="flex gap-3">
-                <button data-click="action_81" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
-                <button data-click="action_82" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Rename</button>
+                <button data-click="document.getElementById('modal-rename').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
+                <button data-click="app.confirmRename()" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Rename</button>
             </div>
         </div>
     </div>
@@ -1095,8 +1095,8 @@
                 <input type="text" id="profile-label" class="w-full bg-gray-100 rounded-xl py-2 px-4 mb-2 outline-none text-sm dark:bg-slate-700 dark:text-white" placeholder="Label (e.g. Portfolio)">
                 <input type="text" id="profile-value" class="w-full bg-gray-100 rounded-xl py-2 px-4 mb-4 outline-none font-mono text-sm dark:bg-slate-700 dark:text-white" placeholder="URL">
                 <div class="flex gap-3">
-                    <button data-click="action_83" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Close</button>
-                    <button data-click="action_84" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Add</button>
+                    <button data-click="document.getElementById('modal-profile').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Close</button>
+                    <button data-click="app.saveProfileItem()" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Add</button>
                 </div>
             </div>
         </div>
@@ -1111,8 +1111,8 @@
                 <!-- Dynamic inputs will be injected here -->
             </div>
             <div class="flex gap-3">
-                <button data-click="action_85" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
-                <button data-click="action_86" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200 shadow-lg shadow-sm">Copy Text</button>
+                <button data-click="document.getElementById('modal-rename').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
+                <button data-click="app.executeTemplateCopy()" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200 shadow-lg shadow-sm">Copy Text</button>
             </div>
         </div>
     </div>
