@@ -19,3 +19,7 @@
 ## 2026-08-07 - Ensure clear feedback when progressing through pipeline stages
 **Learning:** Users need to have a clear understanding of the progression through interview stages, especially when moving between the same stage multiple times (e.g., Technical Round 1 to Technical Round 2). The system must log these transitions distinctly.
 **Action:** Implemented a new `isPromoting` flag to explicitly track when a user is actively promoting an interview to a new stage, enabling the system to log "New Round: [Stage]" in the history and render appropriate visual cues (e.g., the indigo arrow icon) to reflect the progression clearly, rather than confusing it with simple edits.
+
+## 2026-08-10 - Fix Manifest V3 CSP Blocking Inline Events
+**Learning:** Chrome Extension Manifest V3 strictly enforces a Content Security Policy that disallows inline event handlers like `onclick=...` in HTML strings. Although the string interpolation works natively, it will fail silently or throw CSP errors when clicked.
+**Action:** Replaced inline `onclick` strings in template literals with global event delegator attributes (e.g., `data-click`) mapped to action IDs, parsing context arguments via `data-*` attributes like `data-list-id` to trigger functions safely.
