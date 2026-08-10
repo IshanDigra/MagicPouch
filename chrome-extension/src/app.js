@@ -1638,7 +1638,7 @@ import Chart from 'chart.js/auto';
                     const groupWrapper = document.createElement('div');
                     groupWrapper.className = "fade-in mb-4";
                     groupWrapper.innerHTML = `
-                        <div onclick="app.toggleFolder('${listId}')" class="flex items-center justify-between p-3 rounded-xl border ${borderClass} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none ${colorClass} dark:opacity-100">
+                        <div data-click="action_97" data-list-id="${listId}" class="flex items-center justify-between p-3 rounded-xl border ${borderClass} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none ${colorClass} dark:opacity-100">
                             <div class="flex items-center gap-3">
                                 <i id="${iconId}" class="${arrowClass} text-gray-400"></i>
                                 <div class="flex items-center gap-2">
@@ -1760,7 +1760,7 @@ import Chart from 'chart.js/auto';
                     const groupWrapper = document.createElement('div');
                     groupWrapper.className = "fade-in";
                     groupWrapper.innerHTML = `
-                        <div onclick="app.toggleFolder('${listId}')" class="flex items-center justify-between p-3 rounded-xl border ${borderColor} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none ${bgClasses} dark:opacity-100">
+                        <div data-click="action_97" data-list-id="${listId}" class="flex items-center justify-between p-3 rounded-xl border ${borderColor} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none ${bgClasses} dark:opacity-100">
                             <div class="flex items-center gap-3">
                                 <i id="${iconId}" class="${iconClass}"></i>
                                 <span class="font-bold text-sm ${textColor}">${label}</span>
@@ -2740,6 +2740,7 @@ document.addEventListener('DOMContentLoaded', () => {
     "action_85": { code: "document.getElementById('modal-rename').classList.add('hidden')" },
     "action_86": { code: "app.executeTemplateCopy()" },
     "action_96": { code: "app.generateSyncKey()" },
+    "action_97": { code: "app.toggleFolder(this.getAttribute('data-list-id'))" },
 };
 
     ['click', 'change', 'input', 'keydown'].forEach(eventName => {
@@ -2779,6 +2780,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                 args = [el];
                             } else if (argsStr === 'this.value') {
                                 args = [el.value];
+                            } else if (argsStr.startsWith("this.getAttribute('") && argsStr.endsWith("')")) {
+                                const attrName = argsStr.slice(19, -2);
+                                args = [el.getAttribute(attrName)];
                             } else {
                                 // Don't split by comma inside quotes (simple approach)
                                 args = argsStr.split(/,\s*(?=(?:[^'"]*['"][^'"]*['"])*[^'"]*$)/).map(a => {
