@@ -32,18 +32,18 @@
     "isEntry": true
   },
   "src/content.js": {
-    "file": "assets/content.js-DiRbUL6U.js",
+    "file": "assets/content.js-CkyYGX8I.js",
     "name": "content.js",
     "src": "src/content.js",
     "isEntry": true
   },
   "src/index.html": {
-    "file": "assets/index.html-DKZHDS6U.js",
+    "file": "assets/index.html-C2v7pRYE.js",
     "name": "index.html",
     "src": "src/index.html",
     "isEntry": true,
     "css": [
-      "assets/index-BS-q0sLx.css"
+      "assets/index-CFHl7RAs.css"
     ],
     "assets": [
       "assets/fa-brands-400-Bs6tcqqs.woff2",
