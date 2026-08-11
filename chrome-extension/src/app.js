@@ -1638,7 +1638,7 @@ import Chart from 'chart.js/auto';
                     const groupWrapper = document.createElement('div');
                     groupWrapper.className = "fade-in mb-4";
                     groupWrapper.innerHTML = `
-                        <div data-click="action_97" data-list-id="${listId}" class="flex items-center justify-between p-3 rounded-xl border ${borderClass} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none ${colorClass} dark:opacity-100">
+                        <div data-click="app.toggleFolder(this.getAttribute('data-list-id'))" data-list-id="${listId}" class="flex items-center justify-between p-3 rounded-xl border ${borderClass} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none ${colorClass} dark:opacity-100">
                             <div class="flex items-center gap-3">
                                 <i id="${iconId}" class="${arrowClass} text-gray-400"></i>
                                 <div class="flex items-center gap-2">
@@ -1760,7 +1760,7 @@ import Chart from 'chart.js/auto';
                     const groupWrapper = document.createElement('div');
                     groupWrapper.className = "fade-in";
                     groupWrapper.innerHTML = `
-                        <div data-click="action_97" data-list-id="${listId}" class="flex items-center justify-between p-3 rounded-xl border ${borderColor} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none ${bgClasses} dark:opacity-100">
+                        <div data-click="app.toggleFolder(this.getAttribute('data-list-id'))" data-list-id="${listId}" class="flex items-center justify-between p-3 rounded-xl border ${borderColor} shadow-sm cursor-pointer mb-2 active:scale-[0.99] transition select-none ${bgClasses} dark:opacity-100">
                             <div class="flex items-center gap-3">
                                 <i id="${iconId}" class="${iconClass}"></i>
                                 <span class="font-bold text-sm ${textColor}">${label}</span>
@@ -2641,116 +2641,17 @@ import Chart from 'chart.js/auto';
 
 
 
-// Safe Event Delegator for MV3
+// Safe Event Delegator for MV3 (Dynamic code execution)
 document.addEventListener('DOMContentLoaded', () => {
-    const actionMap = {
-    "action_1": { code: "app.openSettings()" },
-    "action_90": { code: "app.handleGlobalSearch(this.value)" },
-    "action_2": { code: "app.openStreakModal()" },
-    "action_3": { code: "app.openWeeklyModal()" },
-    "action_87": { code: "app.importData(this)" },
-    "action_4": { code: "app.openSettings()" },
-    "action_5": { code: "app.openJobModal()" },
-    "action_6": { code: "app.filterInterviews('all')" },
-    "action_7": { code: "app.filterInterviews('active')" },
-    "action_8": { code: "app.filterInterviews('offers')" },
-    "action_9": { code: "app.filterInterviews('archived')" },
-    "action_10": { code: "app.openInterviewModal()" },
-    "action_11": { code: "app.closeFolder()" },
-    "action_12": { code: "app.openProfileModal()" },
-    "action_13": { code: "app.openTemplateModal()" },
-    "action_14": { code: "app.openNorthStarModal()" },
-    "action_95": { code: "if(event.key === 'Enter') app.addQuickTask()" },
-    "action_15": { code: "app.addQuickTask()" },
-    "action_16": { code: "app.toggleHideDone()" },
-    "action_17": { code: "app.copyPlanText('postIt')" },
-    "action_91": { code: "app.savePlanText('postIt')" },
-    "action_18": { code: "app.copyPlanText('weekly')" },
-    "action_92": { code: "app.savePlanText('weekly')" },
-    "action_19": { code: "app.copyPlanText('monthly')" },
-    "action_93": { code: "app.savePlanText('monthly')" },
-    "action_88": { code: "app.renderPlan()" },
-    "action_20": { code: "app.addNetworkContact()" },
-    "action_21": { code: "app.switchView('jobs')" },
-    "action_22": { code: "app.switchView('interviews')" },
-    "action_23": { code: "app.switchView('plan')" },
-    "action_24": { code: "app.switchView('templates')" },
-    "action_25": { code: "app.closeDaySummary()" },
-    "action_26": { code: "app.closeDaySummary()" },
-    "action_27": { code: "app.closeDaySummary()" },
-    "action_28": { code: "if(event.target === this) this.classList.add('hidden')" },
-    "action_29": { code: "document.getElementById('modal-history').classList.add('hidden')" },
-    "action_30": { code: "document.getElementById('modal-interview').classList.add('hidden')" },
-    "action_31": { code: "app.saveInterview()" },
-    "action_32": { code: "document.getElementById('modal-quote').classList.add('hidden')" },
-    "action_33": { code: "app.saveQuote()" },
-    "action_34": { code: "if(event.target === this) this.classList.add('hidden')" },
-    "action_35": { code: "document.getElementById('modal-streak').classList.add('hidden')" },
-    "action_36": { code: "app.editDailyTarget()" },
-    "action_37": { code: "if(event.target === this) this.classList.add('hidden')" },
-    "action_38": { code: "document.getElementById('modal-weekly').classList.add('hidden')" },
-    "action_39": { code: "document.getElementById('target-input').stepDown()" },
-    "action_40": { code: "document.getElementById('target-input').stepUp()" },
-    "action_41": { code: "document.getElementById('modal-target').classList.add('hidden')" },
-    "action_42": { code: "app.saveTarget()" },
-    "action_43": { code: "document.getElementById('modal-add-task').classList.add('hidden')" },
-    "action_44": { code: "app.saveDailyTask()" },
-    "action_45": { code: "document.getElementById('modal-northstar').classList.add('hidden')" },
-    "action_46": { code: "app.saveNorthStar()" },
-    "action_47": { code: "app.saveQuickNote()" },
-    "action_48": { code: "document.getElementById('modal-quick-notes').classList.add('hidden')" },
-    "action_49": { code: "if(event.target === this) this.classList.add('hidden')" },
-    "action_89": { code: "app.toggleTheme()" },
-    "action_50": { code: "app.saveSyncKey()" },
-    "action_51": { code: "document.getElementById('modal-sync').classList.remove('hidden'); this.classList.add('hidden')" },
-    "action_52": { code: "app.exportData()" },
-    "action_53": { code: "document.getElementById('import-file').click()" },
-    "action_54": { code: "document.getElementById('modal-settings').classList.add('hidden')" },
-    "action_55": { code: "document.getElementById('modal-network').classList.add('hidden')" },
-    "action_56": { code: "document.getElementById('modal-sync').classList.remove('hidden'); this.classList.add('hidden')" },
-    "action_57": { code: "document.getElementById('modal-confirm').classList.add('hidden')" },
-    "action_58": { code: "app.confirmYes()" },
-    "action_59": { code: "document.getElementById('modal-status').classList.add('hidden')" },
-    "action_60": { code: "app.promoteToInterview()" },
-    "action_61": { code: "app.updateStatus('applied', 'direct')" },
-    "action_62": { code: "app.updateStatus('applied', 'cold-email')" },
-    "action_63": { code: "app.updateStatus('applied', 'referral')" },
-    "action_64": { code: "app.updateStatus('applied', 'recruiter')" },
-    "action_65": { code: "document.getElementById('modal-confirm').classList.add('hidden')" },
-    "action_66": { code: "app.updateStatus('referral-asked')" },
-    "action_67": { code: "app.updateStatus('referral-asked')" },
-    "action_68": { code: "app.updateStatus('referral-received')" },
-    "action_69": { code: "app.updateStatus('pending')" },
-    "action_70": { code: "document.getElementById('modal-job').classList.add('hidden')" },
-    "action_94": { code: "app.handleUrlInput(this.value)" },
-    "action_71": { code: "app.openQuickNotesModal()" },
-    "action_72": { code: "app.addQuickNote('Ask for Referral')" },
-    "action_73": { code: "app.addQuickNote('Direct Apply')" },
-    "action_74": { code: "app.addQuickNote('DM Recruiter')" },
-    "action_75": { code: "app.addQuickNote('Check Salary')" },
-    "action_76": { code: "app.saveJob('direct-apply')" },
-    "action_77": { code: "app.saveJob(true)" },
-    "action_78": { code: "app.saveJob('pending')" },
-    "action_79": { code: "document.getElementById('modal-template').classList.add('hidden')" },
-    "action_80": { code: "app.saveTemplate()" },
-    "action_81": { code: "document.getElementById('modal-rename').classList.add('hidden')" },
-    "action_82": { code: "app.confirmRename()" },
-    "action_83": { code: "document.getElementById('modal-profile').classList.add('hidden')" },
-    "action_84": { code: "app.saveProfileItem()" },
-    "action_85": { code: "document.getElementById('modal-rename').classList.add('hidden')" },
-    "action_86": { code: "app.executeTemplateCopy()" },
-    "action_96": { code: "app.generateSyncKey()" },
-    "action_97": { code: "app.toggleFolder(this.getAttribute('data-list-id'))" },
-};
-
     ['click', 'change', 'input', 'keydown'].forEach(eventName => {
         document.body.addEventListener(eventName, (event) => {
             let el = event.target.closest('[data-' + eventName + ']');
             if (!el) return;
 
-            const actionId = el.getAttribute('data-' + eventName);
-            if (actionMap[actionId]) {
-                const codes = actionMap[actionId].code.split(';').map(c => c.trim()).filter(Boolean);
+            const codeStr = el.getAttribute('data-' + eventName);
+            if (codeStr) {
+                // Decode HTML entities if necessary, but getAttribute usually does this
+                const codes = codeStr.split(';').map(c => c.trim()).filter(Boolean);
 
                 for (let code of codes) {
                     if (code.startsWith("if")) {
@@ -2783,9 +2684,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             } else if (argsStr.startsWith("this.getAttribute('") && argsStr.endsWith("')")) {
                                 const attrName = argsStr.slice(19, -2);
                                 args = [el.getAttribute(attrName)];
+                            } else if (argsStr.startsWith('this.getAttribute("') && argsStr.endsWith('")')) {
+                                const attrName = argsStr.slice(19, -2);
+                                args = [el.getAttribute(attrName)];
                             } else {
-                                // Don't split by comma inside quotes (simple approach)
-                                args = argsStr.split(/,\s*(?=(?:[^'"]*['"][^'"]*['"])*[^'"]*$)/).map(a => {
+                                // Simple parser for arguments
+                                args = argsStr.split(/,\s*(?=(?:[^\'"]*['"][^\'"]*['"])*[^\'"]*$)/).map(a => {
                                     a = a.trim();
                                     if (a === 'true') return true;
                                     if (a === 'false') return false;
