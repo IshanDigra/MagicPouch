@@ -120,6 +120,18 @@ import Chart from 'chart.js/auto';
             init: async () => {
                 app.initTheme();
 
+                if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+                    chrome.storage.local.get(['magic_pouch_pending_jobs'], (result) => {
+                        const jobs = result.magic_pouch_pending_jobs || [];
+                        if (jobs.length > 0) {
+                            jobs.forEach(job => {
+                                app.saveJobFromExtension(job);
+                            });
+                            chrome.storage.local.set({ magic_pouch_pending_jobs: [] });
+                        }
+                    });
+                }
+
                 // Initialize Auth
                 try {
                     await signInAnonymously(auth);

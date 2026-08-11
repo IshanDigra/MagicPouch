@@ -222,6 +222,8 @@ function setupAutoCapture() {
     iconBtn.style.backgroundColor = '#10b981';
     panel.style.display = 'none';
 
+
+    // Try to send to runtime first. If no listeners, we fallback to storage.
     chrome.runtime.sendMessage({
       type: 'JOB_CAPTURED',
       payload: {
@@ -231,7 +233,23 @@ function setupAutoCapture() {
         status: status,
         timestamp: Date.now()
       }
+    }, (response) => {
+        if (chrome.runtime.lastError || !response || !response.success) {
+             // App is closed, so save directly to storage
+             chrome.storage.local.get(['magic_pouch_pending_jobs'], (result) => {
+                 const jobs = result.magic_pouch_pending_jobs || [];
+                 jobs.push({
+                    title: details.title,
+                    company: details.company,
+                    url: finalUrl,
+                    status: status,
+                    timestamp: Date.now()
+                 });
+                 chrome.storage.local.set({ magic_pouch_pending_jobs: jobs });
+             });
+        }
     });
+
 
     setTimeout(() => {
       iconBtn.innerHTML = `
