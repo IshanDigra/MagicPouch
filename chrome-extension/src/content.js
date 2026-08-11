@@ -64,16 +64,27 @@ function setupAutoCapture() {
     alignItems: 'flex-end',
     gap: '8px'
   });
-
   // Restore position if saved
   chrome.storage.local.get(['palBtnPos'], (result) => {
     if (result.palBtnPos) {
+      const rect = container.getBoundingClientRect();
+      const widgetWidth = rect.width || 40;
+      const widgetHeight = rect.height || 40;
+
       currentX = result.palBtnPos.x;
       currentY = result.palBtnPos.y;
+
+      // Ensure the widget is within bounds on load
+      if (currentX < 0) currentX = 0;
+      if (currentY < 0) currentY = 0;
+      if (currentX + widgetWidth > window.innerWidth) currentX = window.innerWidth - widgetWidth;
+      if (currentY + widgetHeight > window.innerHeight) currentY = window.innerHeight - widgetHeight;
+
       container.style.left = `${currentX}px`;
       container.style.top = `${currentY}px`;
     }
   });
+
 
   const iconBtn = document.createElement('div');
   // minimalist icon for application pal
@@ -158,6 +169,26 @@ function setupAutoCapture() {
     container.style.left = `${currentX}px`;
     container.style.top = `${currentY}px`;
   });
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    const rect = container.getBoundingClientRect();
+    let updated = false;
+
+    if (currentX + rect.width > window.innerWidth) {
+      currentX = Math.max(0, window.innerWidth - rect.width);
+      updated = true;
+    }
+    if (currentY + rect.height > window.innerHeight) {
+      currentY = Math.max(0, window.innerHeight - rect.height);
+      updated = true;
+    }
+
+    if (updated) {
+      container.style.left = `${currentX}px`;
+      container.style.top = `${currentY}px`;
+    }
+  });
+
 
   document.addEventListener('mouseup', () => {
     if (isDragging) {
