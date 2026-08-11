@@ -94,6 +94,7 @@ import Chart from 'chart.js/auto';
                 let finalTitle = role && company ? role + ' @ ' + company : (role || company || 'Captured Job');
 
                 const newId = Date.now().toString();
+                const status = data.status || 'applied';
                 const itemData = {
                     title: finalTitle,
                     content: data.url || '',
@@ -101,14 +102,19 @@ import Chart from 'chart.js/auto';
                     remarks: 'Auto-captured via Magic Pouch Extension',
                     category: 'job',
                     updated: Date.now(),
-                    status: 'applied'
+                    status: status
                 };
 
                 STATE.data.notes.unshift({ id: newId, created: Date.now(), ...itemData });
                 app.recalculateStreak();
                 app.saveToCloud();
                 app.refreshUI();
-                app.toast('Captured Job Applied! 🔥');
+
+                if (status === 'applied') {
+                    app.toast('Captured Job Applied! 🔥');
+                } else {
+                    app.toast('Captured Job Saved! 💼');
+                }
             },
 
             init: async () => {
