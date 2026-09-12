@@ -16,58 +16,57 @@
     <!-- Chart.js -->
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
 
 </head>
-<body class="bg-gray-50 h-[100dvh] flex flex-col text-gray-800 font-sans tracking-tight overflow-hidden dark:bg-black dark:text-slate-100 transition-colors duration-200">
+<body class="bg-sand-100 dark:bg-espresso-900 h-[100dvh] flex flex-col text-espresso-900 dark:text-sand-100 font-sans tracking-tight overflow-hidden select-none transition-colors duration-200">
 
     <!-- === HEADER === -->
-    <header class="bg-white shrink-0 safe-pt z-20 shadow-sm border-b border-gray-100 dark:bg-black dark:border-gray-800 transition-colors duration-200">
+    <header class="bg-sand-50/90 dark:bg-espresso-800/90 backdrop-blur-xl shrink-0 safe-pt z-20 border-b border-sand-200 dark:border-espresso-700 transition-colors duration-200 shadow-warm-card">
         <div class="h-16 flex items-center px-4 gap-3">
             <!-- LOGO: Clickable Area for Menu -->
-            <div class="relative cursor-pointer active:scale-95 transition select-none shrink-0" data-click="app.openSettings()">
-                <!-- Icon with Text Inside -->
-                <div class="w-10 h-10 flex items-center justify-center">
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-sm filter">
-                        <defs><path id="textCircle" d="M 12,50 A 38,38 0 1 1 88,50" /></defs>
-                        <circle cx="50" cy="50" r="50" fill="#0096E8" />
-                        <circle cx="50" cy="55" r="35" fill="white" />
-                        <path d="M22 55 A 28 28 0 0 0 78 55 Z" stroke="#0096E8" stroke-width="2.5" fill="none" stroke-linejoin="round" />
-                        <path d="M5 25 Q 50 45 95 25" stroke="#E73345" stroke-width="8" fill="none" stroke-linecap="round" />
-                        <circle cx="50" cy="40" r="8" fill="#F1C40F" stroke="#333" stroke-width="1.5" />
-                        <line x1="43" y1="37" x2="57" y2="37" stroke="#333" stroke-width="1.5" />
-                        <circle cx="50" cy="42" r="1.5" fill="#333" />
-                        <line x1="50" y1="42" x2="50" y2="48" stroke="#333" stroke-width="1.5" />
-                        <text font-size="11.5" font-weight="800" fill="#FFD700" letter-spacing="0.5" text-anchor="middle" style="font-family: system-ui, sans-serif; text-shadow: 1px 1px 0px #005c8f;">
-                            <textPath href="#textCircle" startOffset="50%">MAGIC POUCH</textPath>
-                        </text>
-                    </svg>
+            <div class="relative cursor-pointer active:scale-95 transition-transform shrink-0" data-click="app.openSettings()">
+                <div class="w-10 h-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-terracotta-500 via-amberwarm-500 to-sand-400 p-[1px] shadow-md shadow-terracotta-500/20">
+                    <div class="w-full h-full bg-sand-50 dark:bg-espresso-900 rounded-[11px] flex items-center justify-center">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 drop-shadow">
+                            <circle cx="50" cy="50" r="48" fill="#e05638" />
+                            <circle cx="50" cy="55" r="35" fill="#191612" />
+                            <path d="M22 55 A 28 28 0 0 0 78 55 Z" stroke="#d97706" stroke-width="2.5" fill="none" stroke-linejoin="round" />
+                            <path d="M5 25 Q 50 45 95 25" stroke="#efe6d5" stroke-width="8" fill="none" stroke-linecap="round" />
+                            <circle cx="50" cy="40" r="8" fill="#e05638" stroke="#191612" stroke-width="1.5" />
+                        </svg>
+                    </div>
                 </div>
                 <!-- HEADER STATUS ICON / SYNC INDICATOR -->
-                <div id="header-sync-indicator" class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-red-400 border-2 border-white shadow-sm z-10" title="Sync Status"></div>
+                <div id="header-sync-indicator" class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-sage-500 border-2 border-sand-50 dark:border-espresso-900 shadow-sm z-10" title="Sync Status"></div>
             </div>
 
             <!-- SEARCH BAR: Flexible width -->
             <div class="flex-1 relative min-w-[100px]">
-                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs dark:text-slate-400"></i>
-                <input type="text" id="global-search" placeholder="Search..." class="w-full bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-gray-800 rounded-full py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-sm dark:text-slate-200 dark:placeholder-slate-500" data-input="app.handleGlobalSearch(this.value)">
+                <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-sand-500 dark:text-espresso-400 text-xs"></i>
+                <input type="text" id="global-search" placeholder="Search pouch..." class="w-full bg-sand-200/60 dark:bg-espresso-950/60 border border-sand-200 dark:border-espresso-700 rounded-full py-2 pl-9 pr-3 text-xs text-espresso-900 dark:text-sand-100 placeholder-sand-500 dark:placeholder-espresso-400 focus:outline-none focus:ring-1 focus:ring-terracotta-500 focus:border-terracotta-500 transition-all shadow-inner" data-input="app.handleGlobalSearch(this.value)">
             </div>
 
-            <!-- HEADER STATS BUTTONS -->
-            <div class="flex items-center gap-2 shrink-0">
-                <button id="streak-btn" data-click="app.openStreakModal()" class="relative p-[2px] rounded-lg active:scale-95 hover:scale-[1.02] transition-all shadow-sm h-9 group overflow-hidden bg-gray-200 dark:bg-slate-700">
+            <!-- HEADER STATS & THEME TOGGLE BUTTONS -->
+            <div class="flex items-center gap-1.5 shrink-0">
+                <button id="header-theme-toggle" data-click="app.toggleTheme()" class="w-9 h-9 flex items-center justify-center rounded-xl bg-sand-200/60 dark:bg-espresso-700/60 text-espresso-800 dark:text-sand-200 border border-sand-300/60 dark:border-espresso-600/60 hover:border-terracotta-500/50 active:scale-95 transition-all shadow-sm shrink-0" title="Toggle Theme">
+                    <i id="header-theme-icon" class="fas fa-sun text-amberwarm-500 dark:text-amberwarm-400 text-xs"></i>
+                </button>
+                <button id="streak-btn" data-click="app.openStreakModal()" class="relative p-[1px] rounded-xl active:scale-95 hover:scale-[1.02] transition-all h-9 group overflow-hidden bg-sand-200 dark:bg-espresso-700 shadow-sm">
                     <!-- Progress Border Layer -->
-                    <div id="streak-progress-bg" class="absolute inset-0 transition-all duration-500 ease-out" style="background: conic-gradient(from 0deg, transparent 0%, transparent 100%);"></div>
+                    <div id="streak-progress-bg" class="absolute inset-0 transition-all duration-500 ease-out" style="background: conic-gradient(from 0deg, #e05638 0%, transparent 100%);"></div>
                     <!-- Inner Content -->
-                    <div class="relative flex items-center gap-1.5 bg-gray-50 px-2 py-1.5 rounded-[6px] h-full w-full dark:bg-black z-10 border border-transparent">
-                        <i class="fas fa-fire text-orange-500 text-xs dark:text-orange-400"></i>
-                        <span class="text-xs font-bold text-orange-700 dark:text-orange-300" id="mini-streak">0</span>
+                    <div class="relative flex items-center gap-1.5 bg-sand-50 dark:bg-espresso-800 px-2.5 py-1.5 rounded-[11px] h-full w-full z-10">
+                        <i class="fas fa-fire text-terracotta-500 text-xs animate-pulse"></i>
+                        <span class="text-xs font-bold text-terracotta-600 dark:text-terracotta-400 font-mono" id="mini-streak">0</span>
                     </div>
                 </button>
-                <button data-click="app.openWeeklyModal()" class="flex items-center gap-1.5 bg-white border border-gray-100 px-2 py-1.5 rounded-lg active:scale-95 hover:scale-[1.02] transition-all shadow-sm h-9 dark:bg-[#0a0a0a] dark:border-gray-800">
-                    <i class="fas fa-chart-bar text-blue-500 text-xs dark:text-blue-400"></i>
-                    <span class="text-xs font-bold text-blue-700 dark:text-blue-300" id="mini-weekly">0</span>
+                <button data-click="app.openWeeklyModal()" class="flex items-center gap-1.5 bg-sand-50 dark:bg-espresso-800 border border-sand-200 dark:border-espresso-700 px-2.5 py-1.5 rounded-xl active:scale-95 hover:scale-[1.02] transition-all shadow-sm h-9 hover:border-terracotta-500/50">
+                    <i class="fas fa-chart-bar text-terracotta-500 dark:text-terracotta-400 text-xs"></i>
+                    <span class="text-xs font-bold text-terracotta-600 dark:text-terracotta-400 font-mono" id="mini-weekly">0</span>
                 </button>
             </div>
 
@@ -80,16 +79,16 @@
     <main class="flex-1 min-h-0 overflow-hidden relative" id="main-container">
 
         <!-- VIEW: JOBS (Application Dashboard) -->
-        <div id="view-jobs" class="h-full flex flex-col absolute inset-0 transition-transform duration-300 transform translate-x-0 bg-white dark:bg-black">
+        <div id="view-jobs" class="h-full flex flex-col absolute inset-0 transition-transform duration-300 transform translate-x-0 bg-sand-100 dark:bg-espresso-900">
 
             <!-- Quick Gadgets Section -->
-            <div class="bg-white pt-4 pb-2 px-4 shrink-0 flex flex-col items-center border-b border-gray-100 dark:bg-black dark:border-gray-800">
+            <div class="bg-sand-50/90 dark:bg-espresso-800/90 backdrop-blur-md pt-3 pb-2 px-4 shrink-0 flex flex-col items-center border-b border-sand-200 dark:border-espresso-700 shadow-warm-card">
                 <!-- Quote Display (Clickable) -->
-                <div data-click="app.openSettings()" class="cursor-pointer group flex items-center justify-center gap-2 mb-3 px-2 w-full active:scale-95 transition-transform" title="Tap to edit quote">
-                    <p id="quote-display" class="text-[10px] text-gray-400 font-bold uppercase tracking-widest dark:text-slate-500 text-center select-none group-hover:text-zinc-900 dark:group-hover:text-blue-400 transition-colors">
+                <div data-click="app.openSettings()" class="cursor-pointer group flex items-center justify-center gap-2 mb-2 px-2 w-full active:scale-95 transition-transform" title="Tap to edit quote">
+                    <p id="quote-display" class="text-[10px] text-sand-500 dark:text-espresso-400 font-bold uppercase tracking-widest text-center select-none group-hover:text-terracotta-600 dark:group-hover:text-terracotta-400 transition-colors font-mono">
                         Quick Content
                     </p>
-                    <i class="fas fa-pen text-[8px] text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity dark:text-slate-600"></i>
+                    <i class="fas fa-pen text-[8px] text-sand-400 dark:text-espresso-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>
                 </div>
 
                 <div class="flex flex-wrap justify-center gap-2 w-full max-w-lg" id="job-quick-actions">
@@ -98,23 +97,23 @@
             </div>
 
             <!-- Jobs List (Grouped by Age) -->
-            <div id="jobs-list" class="flex-1 overflow-y-auto p-4 space-y-4 safe-pb pb-24 bg-gray-50 dark:bg-black">
-                <div class="text-center mt-10 text-gray-400 text-sm">
-                    <i class="fas fa-cloud-download-alt text-3xl mb-2 opacity-50"></i>
-                    <p>Loading your pouch...</p>
+            <div id="jobs-list" class="flex-1 overflow-y-auto p-4 space-y-4 safe-pb pb-24 bg-sand-100 dark:bg-espresso-900">
+                <div class="text-center mt-12 text-sand-400 dark:text-espresso-400 text-sm flex flex-col items-center gap-2">
+                    <i class="fas fa-cloud-download-alt text-3xl opacity-40 text-terracotta-500 animate-pulse"></i>
+                    <p class="font-medium">Loading your pouch...</p>
                 </div>
             </div>
 
             <!-- FAB (Add Job) -->
-            <button data-click="app.openJobModal()" aria-label="Add New Job" class="absolute bottom-6 right-6 w-14 h-14 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-full shadow-lg shadow-sm flex items-center justify-center text-xl hover:scale-105 active:scale-95 transition-all z-10 hover:bg-zinc-800 dark:hover:bg-zinc-200">
+            <button data-click="app.openJobModal()" aria-label="Add New Job" class="absolute bottom-6 right-6 w-14 h-14 bg-terracotta-500 hover:bg-terracotta-600 text-white rounded-full shadow-lg glow-terracotta flex items-center justify-center text-xl hover:scale-105 active:scale-95 transition-all z-10 border border-sand-50/20">
                 <i class="fas fa-plus" aria-hidden="true"></i>
             </button>
         </div>
 
         <!-- VIEW: INTERVIEWS (Pipeline & Prep) -->
-        <div id="view-interviews" class="h-full flex flex-col absolute inset-0 bg-gray-50 transition-transform duration-300 transform translate-x-full dark:bg-black">
+        <div id="view-interviews" class="h-full flex flex-col absolute inset-0 transition-transform duration-300 transform translate-x-full bg-sand-100 dark:bg-espresso-900">
             <!-- Pipeline Health Dashboard -->
-            <div class="bg-white px-4 py-3 border-b border-gray-100 shrink-0 dark:bg-black dark:border-gray-800 shadow-sm z-10">
+            <div class="bg-sand-50/90 dark:bg-espresso-800/90 backdrop-blur-md px-4 py-3 border-b border-sand-200 dark:border-espresso-700 shrink-0 shadow-warm-card z-10">
 
                 <!-- Visual Timeline (Horizontal Scroll) -->
                 <div id="interview-timeline" class="flex gap-2 overflow-x-auto no-scrollbar snap-x pb-3">
@@ -122,57 +121,57 @@
                 </div>
 
                 <!-- Stats Row - Streamlined -->
-                <div class="grid grid-cols-3 gap-2 mb-3">
-                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-100 dark:bg-gray-800 dark:border-blue-800 flex flex-col items-center">
-                        <div class="text-[9px] uppercase font-bold text-blue-400">Active</div>
-                        <div class="text-lg font-black text-blue-700 dark:text-blue-300 leading-none mt-0.5" id="stats-int-active">0</div>
+                <div class="grid grid-cols-3 gap-2.5 mb-3">
+                    <div class="bg-sand-200/50 dark:bg-espresso-900/50 p-2.5 rounded-xl border border-sand-300 dark:border-espresso-700 flex flex-col items-center shadow-sm">
+                        <div class="text-[9px] uppercase font-bold text-sand-600 dark:text-sand-300 font-mono tracking-wider">Active</div>
+                        <div class="text-xl font-display font-bold text-espresso-900 dark:text-sand-100 leading-none mt-1" id="stats-int-active">0</div>
                     </div>
-                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-100 dark:bg-gray-800 dark:border-emerald-800 flex flex-col items-center">
-                        <div class="text-[9px] uppercase font-bold text-emerald-400">Offers</div>
-                        <div class="text-lg font-black text-emerald-700 dark:text-emerald-300 leading-none mt-0.5" id="stats-int-offers">0</div>
+                    <div class="bg-sage-50/50 dark:bg-sage-950/20 p-2.5 rounded-xl border border-sage-500/20 dark:border-sage-500/30 flex flex-col items-center shadow-sm">
+                        <div class="text-[9px] uppercase font-bold text-sage-600 dark:text-sage-400 font-mono tracking-wider">Offers</div>
+                        <div class="text-xl font-display font-bold text-sage-700 dark:text-sage-300 leading-none mt-1" id="stats-int-offers">0</div>
                     </div>
-                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-100 dark:bg-gray-800 dark:border-red-800 flex flex-col items-center">
-                        <div class="text-[9px] uppercase font-bold text-red-400">Urgent</div>
-                        <div class="text-lg font-black text-red-700 dark:text-red-300 leading-none mt-0.5" id="stats-int-urgent">0</div>
+                    <div class="bg-terracotta-50/50 dark:bg-terracotta-950/20 p-2.5 rounded-xl border border-terracotta-500/20 dark:border-terracotta-500/30 flex flex-col items-center shadow-sm">
+                        <div class="text-[9px] uppercase font-bold text-terracotta-600 dark:text-terracotta-400 font-mono tracking-wider">Urgent</div>
+                        <div class="text-xl font-display font-bold text-terracotta-700 dark:text-terracotta-300 leading-none mt-1" id="stats-int-urgent">0</div>
                     </div>
                 </div>
 
                 <!-- Filter Tabs -->
                 <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-                    <button data-click="app.filterInterviews('all')" class="int-filter-btn active px-3 py-1.5 rounded-lg bg-gray-800 text-white text-[10px] font-bold dark:bg-white dark:text-slate-900 transition-all shadow-sm" data-filter="all">All</button>
-                    <button data-click="app.filterInterviews('active')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-[#0a0a0a] dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="active">Active</button>
-                    <button data-click="app.filterInterviews('offers')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-[#0a0a0a] dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="offers">Offers</button>
-                    <button data-click="app.filterInterviews('archived')" class="int-filter-btn px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-[10px] font-bold dark:bg-[#0a0a0a] dark:text-slate-400 transition-all hover:bg-gray-200 dark:hover:bg-slate-700" data-filter="archived">Archived</button>
+                    <button data-click="app.filterInterviews('all')" class="int-filter-btn active px-3.5 py-1.5 rounded-lg bg-terracotta-500 text-white text-[11px] font-bold transition-all shadow-sm shadow-terracotta-500/30" data-filter="all">All</button>
+                    <button data-click="app.filterInterviews('active')" class="int-filter-btn px-3.5 py-1.5 rounded-lg bg-sand-200 dark:bg-espresso-700 text-espresso-800 dark:text-sand-200 text-[11px] font-bold transition-all hover:bg-sand-300 dark:hover:bg-espresso-600" data-filter="active">Active</button>
+                    <button data-click="app.filterInterviews('offers')" class="int-filter-btn px-3.5 py-1.5 rounded-lg bg-sand-200 dark:bg-espresso-700 text-espresso-800 dark:text-sand-200 text-[11px] font-bold transition-all hover:bg-sand-300 dark:hover:bg-espresso-600" data-filter="offers">Offers</button>
+                    <button data-click="app.filterInterviews('archived')" class="int-filter-btn px-3.5 py-1.5 rounded-lg bg-sand-200 dark:bg-espresso-700 text-espresso-800 dark:text-sand-200 text-[11px] font-bold transition-all hover:bg-sand-300 dark:hover:bg-espresso-600" data-filter="archived">Archived</button>
                 </div>
             </div>
 
             <!-- List Container -->
-            <div id="interviews-list" class="flex-1 overflow-y-auto p-4 space-y-3 safe-pb pb-24">
+            <div id="interviews-list" class="flex-1 overflow-y-auto p-4 space-y-3 safe-pb pb-24 bg-sand-100 dark:bg-espresso-900">
                 <!-- Interview Cards Injected Here -->
             </div>
 
             <!-- FAB -->
-            <button data-click="app.openInterviewModal()" aria-label="Add New Interview" class="absolute bottom-6 right-6 w-14 h-14 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-full shadow-lg shadow-sm flex items-center justify-center text-2xl active:scale-90 transition z-10 hover:bg-zinc-800 dark:hover:bg-zinc-200">
+            <button data-click="app.openInterviewModal()" aria-label="Add New Interview" class="absolute bottom-6 right-6 w-14 h-14 bg-terracotta-500 hover:bg-terracotta-600 text-white rounded-full shadow-lg glow-terracotta flex items-center justify-center text-xl hover:scale-105 active:scale-95 transition-all z-10 border border-sand-50/20">
                 <i class="fas fa-plus" aria-hidden="true"></i>
             </button>
         </div>
 
         <!-- VIEW: TEMPLATES (Management) -->
-        <div id="view-templates" class="h-full flex flex-col absolute inset-0 bg-gray-50 transition-transform duration-300 transform translate-x-full dark:bg-black">
+        <div id="view-templates" class="h-full flex flex-col absolute inset-0 bg-sand-100 transition-transform duration-300 transform translate-x-full dark:bg-espresso-900">
             <!-- Template Header / Navigation -->
-            <div class="px-4 py-3 bg-white border-b border-gray-100 shrink-0 flex flex-col gap-3 dark:bg-black dark:border-gray-800">
+            <div class="px-4 py-3 bg-sand-50/90 dark:bg-espresso-800/90 border-b border-sand-200 dark:border-espresso-700 backdrop-blur-md shrink-0 flex flex-col gap-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <button id="btn-template-back" data-click="app.closeFolder()" class="hidden text-gray-500 hover:text-blue-600 mr-1 p-1 dark:text-slate-400 dark:hover:text-zinc-100">
+                        <button id="btn-template-back" data-click="app.closeFolder()" class="hidden text-sand-500 hover:text-terracotta-600 mr-1 p-1 dark:text-espresso-400 dark:hover:text-sand-100">
                             <i class="fas fa-arrow-left"></i>
                         </button>
                         <div>
-                            <h2 class="font-bold text-lg text-gray-800 leading-none dark:text-slate-100" id="template-view-title">Library</h2>
-                            <p class="text-xs text-gray-400 mt-1 dark:text-slate-500" id="template-view-subtitle">Manage Templates & Links</p>
+                            <h2 class="font-bold text-lg text-espresso-900 leading-none dark:text-sand-100" id="template-view-title">Library</h2>
+                            <p class="text-xs text-sand-600 mt-1 dark:text-espresso-300" id="template-view-subtitle">Manage Templates & Links</p>
                         </div>
                     </div>
                     <!-- Add Profile Link Button -->
-                    <button data-click="app.openProfileModal()" class="text-xs bg-gray-100 text-gray-600 px-3 py-1.5 rounded-lg font-bold border border-gray-200 dark:bg-[#0a0a0a] dark:text-slate-300 dark:border-gray-800 dark:hover:bg-slate-700 transition">
+                    <button data-click="app.openProfileModal()" class="text-xs bg-sand-200/80 text-espresso-800 px-3 py-1.5 rounded-lg font-bold border border-sand-300 dark:bg-espresso-700 dark:text-sand-200 dark:border-espresso-600 hover:border-terracotta-500 transition">
                         <i class="fas fa-link mr-1"></i> Profile Links
                     </button>
                 </div>
@@ -183,93 +182,78 @@
             </div>
 
              <!-- FAB (Add Template) -->
-             <button data-click="app.openTemplateModal()" aria-label="Add New Template" class="absolute bottom-6 right-6 w-14 h-14 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 rounded-full shadow-lg shadow-sm flex items-center justify-center text-2xl active:scale-90 transition z-10 hover:bg-zinc-800 dark:hover:bg-zinc-200">
+             <button data-click="app.openTemplateModal()" aria-label="Add New Template" class="absolute bottom-6 right-6 w-14 h-14 bg-espresso-900 text-sand-100 dark:bg-sand-100 dark:text-espresso-900 rounded-full shadow-lg flex items-center justify-center text-2xl active:scale-90 transition z-10 hover:bg-espresso-800 dark:hover:bg-sand-200">
                 <i class="fas fa-plus" aria-hidden="true"></i>
             </button>
         </div>
 
         <!-- VIEW: PLAN (Strategy & Goals) -->
-        <div id="view-plan" class="h-full flex flex-col absolute inset-0 bg-gray-50/50 transition-transform duration-300 transform translate-x-full dark:bg-black">
+        <div id="view-plan" class="h-full flex flex-col absolute inset-0 bg-sand-100 transition-transform duration-300 transform translate-x-full dark:bg-espresso-900">
 
             <!-- Content Area -->
             <div class="flex-1 overflow-y-auto p-5 space-y-6 safe-pb pb-24 scroll-smooth">
 
-                <!-- NEW: TOP DASHBOARD (Velocity & North Star) -->
+                <!-- TOP DASHBOARD (Velocity & North Star) -->
                 <div class="grid grid-cols-2 gap-4 fade-in">
 
-                    <!-- 1. VELOCITY GAUGE (Fixed) -->
-                    <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex flex-col justify-between relative overflow-hidden dark:bg-[#0a0a0a] dark:border-gray-800 h-40">
+                    <!-- 1. VELOCITY GAUGE -->
+                    <div class="bg-sand-50 dark:bg-espresso-800 rounded-2xl p-4 shadow-warm-card border border-sand-200 dark:border-espresso-700 flex flex-col justify-between relative overflow-hidden backdrop-blur-md h-40">
                          <div class="absolute top-0 right-0 p-3 opacity-10">
-                            <i class="fas fa-tachometer-alt text-4xl text-blue-500"></i>
+                            <i class="fas fa-tachometer-alt text-4xl text-terracotta-500"></i>
                         </div>
                         <div>
-                            <h3 class="font-bold text-[10px] text-gray-400 uppercase tracking-wider mb-1 dark:text-slate-500">7-Day Velocity</h3>
+                            <h3 class="font-bold text-[10px] text-sand-500 uppercase tracking-wider mb-1 dark:text-espresso-400">7-Day Velocity</h3>
                             <div class="flex items-baseline gap-1">
-                                <span class="text-3xl font-black text-gray-800 dark:text-white" id="velocity-count">0</span>
-                                <span class="text-xs font-bold text-gray-400 dark:text-slate-500">Apps</span>
+                                <span class="text-3xl font-black text-espresso-900 dark:text-sand-100" id="velocity-count">0</span>
+                                <span class="text-xs font-bold text-sand-500 dark:text-espresso-400">Apps</span>
                             </div>
                         </div>
 
-                        <!-- Gauge SVG (Needle Style) -->
+                        <!-- Gauge SVG -->
                         <div class="relative w-full h-14 mt-auto flex items-end justify-center">
                             <svg viewBox="0 0 100 60" class="w-full h-full drop-shadow-sm overflow-visible" preserveAspectRatio="xMidYMax meet">
-                                <!-- Background Track -->
-                                <path d="M 15 50 A 35 35 0 0 1 85 50" fill="none" stroke="#e2e8f0" stroke-width="8" stroke-linecap="round" class="dark:stroke-slate-700"/>
-
-                                <!-- Active Track (Colored) -->
-                                <path id="gauge-path" d="M 15 50 A 35 35 0 0 1 85 50" fill="none" stroke="#3b82f6" stroke-width="8" stroke-linecap="round" stroke-dasharray="0 110" class="transition-all duration-1000 ease-out" />
-
-                                <!-- Needle -->
+                                <path d="M 15 50 A 35 35 0 0 1 85 50" fill="none" stroke="#efe6d5" stroke-width="8" stroke-linecap="round" class="dark:stroke-espresso-700"/>
+                                <path id="gauge-path" d="M 15 50 A 35 35 0 0 1 85 50" fill="none" stroke="#e05638" stroke-width="8" stroke-linecap="round" stroke-dasharray="0 110" class="transition-all duration-1000 ease-out" />
                                 <g id="gauge-needle" class="transition-transform duration-1000 ease-out" style="transform-origin: 50px 50px; transform: rotate(-90deg);">
-                                    <circle cx="50" cy="50" r="4" class="fill-slate-700 dark:fill-slate-200" />
-                                    <path d="M 48 50 L 50 10 L 52 50 Z" class="fill-slate-700 dark:fill-slate-200" />
+                                    <circle cx="50" cy="50" r="4" class="fill-espresso-800 dark:fill-sand-200" />
+                                    <path d="M 48 50 L 50 10 L 52 50 Z" class="fill-espresso-800 dark:fill-sand-200" />
                                 </g>
                             </svg>
                         </div>
 
                         <div class="mt-1 text-center">
-                            <span id="velocity-label" class="text-[9px] font-bold text-blue-600 bg-gray-50 px-2 py-0.5 rounded-full dark:bg-gray-800 dark:text-blue-300">Warming Up</span>
+                            <span id="velocity-label" class="text-[9px] font-bold text-terracotta-600 bg-terracotta-50 px-2 py-0.5 rounded-full dark:bg-espresso-700 dark:text-terracotta-300">Warming Up</span>
                         </div>
                     </div>
 
-                    <!-- 2. THE NORTH STAR (Milky Way Space Theme) -->
-                    <div class="relative rounded-xl p-4 shadow-lg overflow-hidden group cursor-pointer text-white border border-white/10 h-40 flex flex-col justify-between" data-click="app.openNorthStarModal()">
-                        <!-- Milky Way Background -->
-                        <div class="absolute inset-0 bg-slate-950">
-                            <!-- Deep Space Gradient -->
-                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-indigo-900 via-slate-950 to-black opacity-90"></div>
-                            <!-- Nebulas -->
-                            <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl mix-blend-screen"></div>
-                            <div class="absolute bottom-0 left-0 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl mix-blend-screen"></div>
-
-                            <!-- Animated Stars -->
-                            <div class="absolute top-4 left-4 w-[2px] h-[2px] bg-white rounded-full animate-[pulse_3s_infinite]"></div>
-                            <div class="absolute top-10 right-8 w-[1px] h-[1px] bg-white rounded-full animate-[pulse_4s_infinite]"></div>
-                            <div class="absolute bottom-8 left-12 w-[2px] h-[2px] bg-blue-200 rounded-full animate-[pulse_2s_infinite]"></div>
-                            <div class="absolute top-1/2 left-1/2 w-[1px] h-[1px] bg-white rounded-full animate-[pulse_5s_infinite]"></div>
-                            <div class="absolute bottom-4 right-4 w-[1.5px] h-[1.5px] bg-purple-200 rounded-full animate-[pulse_3s_infinite]"></div>
+                    <!-- 2. THE NORTH STAR -->
+                    <div class="relative rounded-2xl p-4 shadow-lg overflow-hidden group cursor-pointer text-sand-50 border border-sand-300/30 h-40 flex flex-col justify-between glow-terracotta" data-click="app.openNorthStarModal()">
+                        <div class="absolute inset-0 bg-espresso-950">
+                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-espresso-800 via-espresso-900 to-black opacity-90"></div>
+                            <div class="absolute top-0 right-0 w-32 h-32 bg-terracotta-500/20 rounded-full blur-3xl mix-blend-screen"></div>
+                            <div class="absolute bottom-0 left-0 w-40 h-40 bg-amberwarm-500/10 rounded-full blur-3xl mix-blend-screen"></div>
                         </div>
 
                         <!-- Content -->
                         <div class="relative z-10 flex justify-between items-start">
-                            <h3 class="font-bold text-[10px] text-indigo-200 uppercase tracking-widest flex items-center gap-1.5">
-                                <i class="fas fa-star text-yellow-300 text-xs drop-shadow-[0_0_8px_rgba(253,224,71,0.6)]"></i> North Star
+                            <h3 class="font-bold text-[10px] text-amberwarm-300 uppercase tracking-widest flex items-center gap-1.5">
+                                <i class="fas fa-star text-amberwarm-400 text-xs drop-shadow"></i> North Star
                             </h3>
-                            <div class="w-6 h-6 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/10 group-hover:bg-white/20 transition opacity-60 group-hover:opacity-100">
-                                <i class="fas fa-pencil-alt text-[8px] text-white"></i>
+                            <div class="w-6 h-6 rounded-full bg-sand-50/10 backdrop-blur-sm flex items-center justify-center border border-sand-50/10 group-hover:bg-sand-50/20 transition opacity-60 group-hover:opacity-100">
+                                <i class="fas fa-pencil-alt text-[8px] text-sand-100"></i>
                             </div>
                         </div>
 
                         <div class="relative z-10 mt-auto">
                             <div id="ns-company" class="font-black text-lg leading-tight truncate drop-shadow-md tracking-tight mb-0.5">Dream Co.</div>
-                            <div id="ns-role" class="text-[10px] text-indigo-100 opacity-80 truncate mb-2">Target Role</div>
-                            <span id="ns-status" class="inline-block text-[8px] font-bold bg-white/10 border border-white/20 px-2 py-0.5 rounded-full text-indigo-50 backdrop-blur-sm">Dreaming</span>
+                            <div id="ns-role" class="text-[10px] text-sand-200 opacity-80 truncate mb-2">Target Role</div>
+                            <span id="ns-status" class="inline-block text-[8px] font-bold bg-sand-50/10 border border-sand-50/20 px-2 py-0.5 rounded-full text-sand-100 backdrop-blur-sm">Dreaming</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Daily Plan Section -->
-                <div class="fade-in bg-white rounded-xl p-5 shadow-sm border border-gray-100 dark:bg-[#0a0a0a] dark:border-gray-800">
+                <div class="fade-in bg-white/80 dark:bg-slate-900/80 rounded-2xl p-5 shadow-sm border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md">
                     <!-- Header with Progress -->
                     <div class="flex justify-between items-end mb-3">
                         <div class="flex items-center gap-2">
@@ -328,37 +312,37 @@
                 <div class="fade-in grid grid-cols-1 gap-4" style="animation-delay: 0.2s">
 
                     <!-- Weekly Card -->
-                    <div class="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm dark:bg-[#0a0a0a] dark:border-gray-800">
-                        <div class="bg-gray-50 px-4 py-3 flex justify-between items-center border-b border-gray-100 dark:bg-gray-800 dark:border-purple-800">
+                    <div class="bg-white/80 dark:bg-slate-900/80 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 overflow-hidden shadow-sm backdrop-blur-md">
+                        <div class="bg-purple-50/80 dark:bg-purple-950/30 px-4 py-3 flex justify-between items-center border-b border-purple-100/80 dark:border-purple-900/50">
                             <h3 class="font-bold text-sm text-purple-800 dark:text-purple-300 flex items-center gap-2">
                                 <i class="fas fa-calendar-week"></i> Weekly Focus
                             </h3>
                             <button data-click="app.copyPlanText('weekly')" class="text-purple-400 hover:text-purple-600 dark:hover:text-purple-200"><i class="fas fa-copy"></i></button>
                         </div>
-                        <textarea id="plan-weekly-text" data-input="app.savePlanText('weekly')" class="w-full h-32 p-4 text-sm text-gray-700 leading-relaxed outline-none resize-none bg-transparent dark:text-slate-300 placeholder-gray-300 dark:placeholder-slate-600" placeholder="- Top priority 1&#10;- Top priority 2"></textarea>
+                        <textarea id="plan-weekly-text" data-input="app.savePlanText('weekly')" class="w-full h-32 p-4 text-sm text-slate-700 leading-relaxed outline-none resize-none bg-transparent dark:text-slate-300 placeholder-slate-400 dark:placeholder-slate-600" placeholder="- Top priority 1&#10;- Top priority 2"></textarea>
                     </div>
 
                     <!-- Monthly Card -->
-                    <div class="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm dark:bg-[#0a0a0a] dark:border-gray-800">
-                        <div class="bg-gray-50 px-4 py-3 flex justify-between items-center border-b border-gray-100 dark:bg-gray-800 dark:border-pink-800">
+                    <div class="bg-white/80 dark:bg-slate-900/80 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 overflow-hidden shadow-sm backdrop-blur-md">
+                        <div class="bg-pink-50/80 dark:bg-pink-950/30 px-4 py-3 flex justify-between items-center border-b border-pink-100/80 dark:border-pink-900/50">
                             <h3 class="font-bold text-sm text-pink-800 dark:text-pink-300 flex items-center gap-2">
                                 <i class="fas fa-bullseye"></i> Monthly Vision
                             </h3>
                             <button data-click="app.copyPlanText('monthly')" class="text-pink-400 hover:text-pink-600 dark:hover:text-pink-200"><i class="fas fa-copy"></i></button>
                         </div>
-                        <textarea id="plan-monthly-text" data-input="app.savePlanText('monthly')" class="w-full h-32 p-4 text-sm text-gray-700 leading-relaxed outline-none resize-none bg-transparent dark:text-slate-300 placeholder-gray-300 dark:placeholder-slate-600" placeholder="The Big Picture..."></textarea>
+                        <textarea id="plan-monthly-text" data-input="app.savePlanText('monthly')" class="w-full h-32 p-4 text-sm text-slate-700 leading-relaxed outline-none resize-none bg-transparent dark:text-slate-300 placeholder-slate-400 dark:placeholder-slate-600" placeholder="The Big Picture..."></textarea>
                     </div>
                 </div>
 
                 <!-- NEW: Networking Radar UI -->
-                <div class="fade-in bg-white rounded-xl p-5 shadow-sm border border-gray-100 dark:bg-[#0a0a0a] dark:border-gray-800">
-                    <h3 class="font-bold text-gray-800 text-sm dark:text-slate-100 mb-3 flex items-center gap-2">
+                <div class="fade-in bg-white/80 dark:bg-slate-900/80 rounded-2xl p-5 shadow-sm border border-slate-200/80 dark:border-slate-800/80 backdrop-blur-md">
+                    <h3 class="font-bold text-slate-800 text-sm dark:text-slate-100 mb-3 flex items-center gap-2">
                         <i class="fas fa-users text-indigo-500"></i> Networking Radar
                     </h3>
                     <div class="flex justify-between items-center mb-3">
                         <div class="flex items-center gap-2">
-                            <label class="text-xs text-gray-500 dark:text-slate-400">Group by:</label>
-                            <select id="network-group-by" data-change="app.renderPlan()" class="bg-gray-50 border border-gray-100 rounded-lg py-1 px-2 text-xs font-medium outline-none focus:border-indigo-300 dark:bg-slate-700/50 dark:border-slate-600 dark:text-slate-200">
+                            <label class="text-xs text-slate-500 dark:text-slate-400">Group by:</label>
+                            <select id="network-group-by" data-change="app.renderPlan()" class="bg-slate-100/80 border border-slate-200/80 rounded-lg py-1 px-2 text-xs font-medium outline-none focus:border-indigo-300 dark:bg-slate-800/60 dark:border-slate-700 dark:text-slate-200">
                                 <option value="none">None</option>
                                 <option value="company">Company</option>
                                 <option value="role">Role</option>
@@ -380,30 +364,30 @@
     </main>
 
     <!-- === BOTTOM NAV === -->
-    <nav class="bg-white border-t border-gray-200 flex justify-around items-center h-16 safe-pb shrink-0 z-30 dark:bg-black dark:border-gray-800">
-        <button data-click="app.switchView('jobs')" class="nav-btn active text-zinc-900 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-zinc-100 transition-all">
-            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200 bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+    <nav class="bg-sand-50/90 dark:bg-espresso-800/90 backdrop-blur-xl border-t border-sand-200 dark:border-espresso-700 flex justify-around items-center h-16 safe-pb shrink-0 z-30 shadow-lg">
+        <button data-click="app.switchView('jobs')" class="nav-btn active text-terracotta-600 dark:text-terracotta-400 flex flex-col items-center gap-1 w-full h-full justify-center group transition-all">
+            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-all duration-200 bg-terracotta-500/10 dark:bg-terracotta-500/20">
                 <i class="fas fa-check-double text-lg group-active:scale-90 transition"></i>
             </div>
-            <span class="text-[10px] font-bold">Apply</span>
+            <span class="text-[10px] font-bold tracking-wider uppercase font-mono">Apply</span>
         </button>
-        <button data-click="app.switchView('interviews')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
-            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200">
+        <button data-click="app.switchView('interviews')" class="nav-btn text-sand-500 dark:text-espresso-400 flex flex-col items-center gap-1 w-full h-full justify-center group hover:text-espresso-800 dark:hover:text-sand-200 transition-all">
+            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-all duration-200">
                 <i class="fas fa-user-tie text-lg group-active:scale-90 transition"></i>
             </div>
-            <span class="text-[10px] font-bold">Interview</span>
+            <span class="text-[10px] font-bold tracking-wider uppercase font-mono">Interview</span>
         </button>
-        <button data-click="app.switchView('plan')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
-            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200">
+        <button data-click="app.switchView('plan')" class="nav-btn text-sand-500 dark:text-espresso-400 flex flex-col items-center gap-1 w-full h-full justify-center group hover:text-espresso-800 dark:hover:text-sand-200 transition-all">
+            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-all duration-200">
                 <i class="fas fa-bullseye text-lg group-active:scale-90 transition"></i>
             </div>
-            <span class="text-[10px] font-bold">Plan</span>
+            <span class="text-[10px] font-bold tracking-wider uppercase font-mono">Plan</span>
         </button>
-        <button data-click="app.switchView('templates')" class="nav-btn text-gray-400 flex flex-col items-center gap-1 w-full h-full justify-center group dark:text-slate-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all">
-            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-colors duration-200">
+        <button data-click="app.switchView('templates')" class="nav-btn text-sand-500 dark:text-espresso-400 flex flex-col items-center gap-1 w-full h-full justify-center group hover:text-espresso-800 dark:hover:text-sand-200 transition-all">
+            <div class="nav-indicator w-12 h-8 flex items-center justify-center rounded-full transition-all duration-200">
                 <i class="fas fa-folder text-lg group-active:scale-90 transition"></i>
             </div>
-            <span class="text-[10px] font-bold">Library</span>
+            <span class="text-[10px] font-bold tracking-wider uppercase font-mono">Library</span>
         </button>
     </nav>
 
@@ -411,15 +395,15 @@
 
     <!-- NEW: DAY SUMMARY BOTTOM SHEET (Mobile Friendly) -->
     <div id="modal-day-summary" class="fixed inset-0 z-[100] hidden flex items-end justify-center pointer-events-none">
-        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm transition-opacity opacity-0" id="modal-day-summary-bg" data-click="app.closeDaySummary()"></div>
-        <div class="bg-white w-full max-w-md rounded-t-xl shadow-lg border border-gray-100 dark:border-gray-800 transform translate-y-full transition-transform duration-300 pointer-events-auto flex flex-col max-h-[80vh] dark:bg-black dark:border-t dark:border-gray-800" id="modal-day-summary-content">
+        <div class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm transition-opacity opacity-0" id="modal-day-summary-bg" data-click="app.closeDaySummary()"></div>
+        <div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl w-full max-w-md rounded-t-2xl shadow-2xl border-t border-slate-200/80 dark:border-slate-800/80 transform translate-y-full transition-transform duration-300 pointer-events-auto flex flex-col max-h-[80vh]" id="modal-day-summary-content">
             <div class="p-2 flex justify-center shrink-0" data-click="app.closeDaySummary()">
-                <div class="w-12 h-1.5 bg-gray-300 rounded-full dark:bg-slate-700"></div>
+                <div class="w-12 h-1.5 bg-slate-300 rounded-full dark:bg-slate-700"></div>
             </div>
             <div class="px-6 pb-6 pt-2 overflow-y-auto flex-1">
                  <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-2xl text-gray-800 dark:text-white" id="day-summary-date">Today</h3>
-                    <button data-click="app.closeDaySummary()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400"><i class="fas fa-times"></i></button>
+                    <h3 class="font-bold text-2xl text-slate-800 dark:text-white" id="day-summary-date">Today</h3>
+                    <button data-click="app.closeDaySummary()" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400"><i class="fas fa-times"></i></button>
                 </div>
                 <div id="day-summary-list" class="space-y-3">
                     <!-- Content -->
@@ -429,11 +413,11 @@
     </div>
 
     <!-- NEW: HISTORY LOG MODAL -->
-    <div id="modal-history" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-sm" data-click="if(event.target === this) this.classList.add('hidden')">
-        <div class="bg-white w-full max-w-sm rounded-xl p-5 shadow-lg border border-gray-100 dark:border-gray-800 flex flex-col max-h-[80vh] dark:bg-black dark:border dark:border-gray-800">
+    <div id="modal-history" class="fixed inset-0 bg-slate-950/50 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-sm" data-click="if(event.target === this) this.classList.add('hidden')">
+        <div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl w-full max-w-sm rounded-2xl p-5 shadow-2xl border border-slate-200/80 dark:border-slate-800/80 flex flex-col max-h-[80vh]">
              <div class="flex justify-between items-center mb-4 shrink-0">
-                <h3 class="font-bold text-lg text-gray-800 dark:text-white">Activity Log</h3>
-                <button data-click="document.getElementById('modal-history').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400"><i class="fas fa-times"></i></button>
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Activity Log</h3>
+                <button data-click="document.getElementById('modal-history').classList.add('hidden')" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400"><i class="fas fa-times"></i></button>
             </div>
             <div id="history-list-content" class="overflow-y-auto custom-scrollbar space-y-3">
                 <!-- Injected via JS -->
@@ -442,50 +426,50 @@
     </div>
 
     <!-- UPDATED: Interview Editor Modal -->
-    <div id="modal-interview" class="fixed inset-0 bg-gray-900/40 z-[90] hidden flex items-end sm:items-center justify-center backdrop-blur-sm sm:p-4">
-        <div class="bg-white w-full sm:max-w-md rounded-t-xl sm:rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 overflow-hidden flex flex-col max-h-[90vh] transition-all dark:bg-black dark:border dark:border-gray-800">
+    <div id="modal-interview" class="fixed inset-0 bg-slate-950/50 z-[90] hidden flex items-end sm:items-center justify-center backdrop-blur-sm sm:p-4">
+        <div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl w-full sm:max-w-md rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200/80 dark:border-slate-800/80 overflow-hidden flex flex-col max-h-[90vh] transition-all">
             <!-- Header -->
-            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 dark:bg-black dark:border-gray-800">
-                <span class="font-bold text-lg dark:text-white">Add to Pipeline</span>
-                <button data-click="document.getElementById('modal-interview').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 dark:bg-[#0a0a0a] dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
+            <div class="px-6 py-4 border-b border-slate-200/80 dark:border-slate-800/80 flex justify-between items-center bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-10">
+                <span class="font-bold text-lg text-slate-800 dark:text-white">Add to Pipeline</span>
+                <button data-click="document.getElementById('modal-interview').classList.add('hidden')" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
             </div>
 
             <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-5">
 
                 <!-- Priority Toggle -->
-                <div class="flex items-center justify-between bg-gray-50 p-3 rounded-xl border border-gray-200 dark:bg-gray-800 dark:border-yellow-700/50">
+                <div class="flex items-center justify-between bg-amber-50/80 dark:bg-amber-950/30 p-3 rounded-xl border border-amber-200/80 dark:border-amber-700/50">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-yellow-600 dark:bg-gray-800 dark:text-yellow-400">
+                        <div class="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 dark:bg-amber-900/50 dark:text-amber-400">
                             <i class="fas fa-star text-xs"></i>
                         </div>
                         <div>
-                            <div class="font-bold text-sm text-yellow-800 dark:text-yellow-200">High Priority</div>
-                            <div class="text-[10px] text-yellow-600/80 dark:text-yellow-400/70">Pin to top of list</div>
+                            <div class="font-bold text-sm text-amber-800 dark:text-amber-200">High Priority</div>
+                            <div class="text-[10px] text-amber-600/80 dark:text-amber-400/70">Pin to top of list</div>
                         </div>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="int-priority" class="sr-only peer">
-                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-slate-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-yellow-500"></div>
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-amber-500"></div>
                     </label>
                 </div>
 
                 <!-- Core Details -->
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Company</label>
-                        <input type="text" id="int-company" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none font-bold text-sm text-gray-800 dark:bg-[#0a0a0a] dark:text-white dark:focus:bg-slate-800" placeholder="e.g. Google">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Company</label>
+                        <input type="text" id="int-company" class="w-full px-4 py-3 bg-slate-100/80 rounded-xl border border-slate-200/80 focus:border-indigo-500 focus:bg-white transition-all outline-none font-bold text-sm text-slate-800 dark:bg-slate-800/60 dark:border-slate-700 dark:text-white dark:focus:bg-slate-800" placeholder="e.g. Google">
                     </div>
                     <div>
-                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Role</label>
-                        <input type="text" id="int-role" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-gray-800 dark:bg-[#0a0a0a] dark:text-white dark:focus:bg-slate-800" placeholder="e.g. SDE II">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Role</label>
+                        <input type="text" id="int-role" class="w-full px-4 py-3 bg-slate-100/80 rounded-xl border border-slate-200/80 focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-slate-800 dark:bg-slate-800/60 dark:border-slate-700 dark:text-white dark:focus:bg-slate-800" placeholder="e.g. SDE II">
                     </div>
                 </div>
 
                 <!-- Stage & Deadline -->
                 <div class="grid grid-cols-1 gap-3">
                     <div>
-                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Current Stage</label>
-                        <select id="int-status" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 outline-none text-sm font-bold text-gray-700 dark:bg-[#0a0a0a] dark:text-white appearance-none">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Current Stage</label>
+                        <select id="int-status" class="w-full px-4 py-3 bg-slate-100/80 rounded-xl border border-slate-200/80 focus:border-indigo-500 outline-none text-sm font-bold text-slate-700 dark:bg-slate-800/60 dark:border-slate-700 dark:text-white appearance-none">
                             <option value="Test Received">Online Test / Assignment</option>
                             <option value="HR Screen">HR Screen</option>
                             <option value="Technical">Technical Round</option>
@@ -498,68 +482,68 @@
                     </div>
 
                     <div>
-                        <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Deadline / Date (Optional)</label>
-                        <input type="datetime-local" id="int-deadline" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-gray-700 dark:bg-[#0a0a0a] dark:text-white dark:focus:bg-slate-800 dark:[color-scheme:dark]">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Deadline / Date (Optional)</label>
+                        <input type="datetime-local" id="int-deadline" class="w-full px-4 py-3 bg-slate-100/80 rounded-xl border border-slate-200/80 focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-slate-700 dark:bg-slate-800/60 dark:border-slate-700 dark:text-white dark:focus:bg-slate-800 dark:[color-scheme:dark]">
                     </div>
                 </div>
 
                 <!-- Prep Notes -->
                 <div>
-                    <label class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Preparation Notes</label>
-                    <textarea id="int-notes" class="w-full h-24 p-4 bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-gray-700 leading-relaxed placeholder-gray-400 resize-none dark:bg-[#0a0a0a] dark:text-slate-200 dark:placeholder-slate-600 dark:focus:bg-slate-800" placeholder="Topics to cover, system design concepts, behavioral stories..."></textarea>
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 block dark:text-slate-500">Preparation Notes</label>
+                    <textarea id="int-notes" class="w-full h-24 p-4 bg-slate-100/80 rounded-xl border border-slate-200/80 focus:border-indigo-500 focus:bg-white transition-all outline-none text-sm text-slate-700 leading-relaxed placeholder-slate-400 resize-none dark:bg-slate-800/60 dark:border-slate-700 dark:text-slate-200 dark:placeholder-slate-500 dark:focus:bg-slate-800" placeholder="Topics to cover, system design concepts, behavioral stories..."></textarea>
                 </div>
             </div>
-            <div class="p-6 pt-2 bg-white border-t border-gray-50 z-10 dark:bg-black dark:border-gray-800">
-                <button data-click="app.saveInterview()" class="w-full py-3.5 bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-bold rounded-xl shadow-lg shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 active:scale-[0.98] transition text-sm">Save</button>
+            <div class="p-6 pt-2 bg-white/80 dark:bg-slate-900/80 border-t border-slate-200/80 dark:border-slate-800/80 z-10">
+                <button data-click="app.saveInterview()" class="w-full py-3.5 bg-indigo-600 text-white dark:bg-indigo-500 dark:text-white font-bold rounded-xl shadow-lg glow-indigo hover:bg-indigo-700 active:scale-[0.98] transition text-sm">Save</button>
             </div>
         </div>
     </div>
 
     <!-- NEW: QUOTE EDITOR MODAL -->
-    <div id="modal-quote" class="fixed inset-0 bg-black/50 z-[90] hidden flex items-center justify-center p-6 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-sm rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-800 dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
-            <h3 class="font-bold text-lg mb-2 dark:text-white">Daily Inspiration</h3>
-            <p class="text-xs text-gray-400 mb-4 dark:text-slate-400">What drives you today?</p>
-            <input type="text" id="quote-input" class="w-full bg-gray-50 rounded-xl py-3 px-4 mb-4 outline-none text-sm border border-gray-100 focus:border-blue-500 focus:bg-white transition-all dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:focus:border-blue-500" placeholder="Enter your quote...">
+    <div id="modal-quote" class="fixed inset-0 bg-slate-950/50 z-[90] hidden flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl w-full max-w-sm rounded-2xl p-6 shadow-2xl border border-slate-200/80 dark:border-slate-800/80">
+            <h3 class="font-bold text-lg mb-2 text-slate-800 dark:text-white">Daily Inspiration</h3>
+            <p class="text-xs text-slate-500 mb-4 dark:text-slate-400">What drives you today?</p>
+            <input type="text" id="quote-input" class="w-full bg-slate-100/80 rounded-xl py-3 px-4 mb-4 outline-none text-sm border border-slate-200/80 focus:border-indigo-500 focus:bg-white transition-all dark:bg-slate-800/60 dark:border-slate-700 dark:text-white dark:focus:border-indigo-500" placeholder="Enter your quote...">
             <div class="flex gap-3">
-                <button data-click="document.getElementById('modal-quote').classList.add('hidden')" class="flex-1 py-3 text-gray-500 font-bold bg-gray-100 rounded-xl dark:bg-slate-700 dark:text-slate-300">Cancel</button>
-                <button data-click="app.saveQuote()" class="flex-1 py-3 text-white font-bold bg-zinc-900 dark:bg-zinc-100 rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200">Save Quote</button>
+                <button data-click="document.getElementById('modal-quote').classList.add('hidden')" class="flex-1 py-3 text-slate-600 dark:text-slate-300 font-bold bg-slate-100 dark:bg-slate-800 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition">Cancel</button>
+                <button data-click="app.saveQuote()" class="flex-1 py-3 text-white font-bold bg-indigo-600 dark:bg-indigo-500 rounded-xl hover:bg-indigo-700 dark:hover:bg-indigo-600 shadow-md glow-indigo transition">Save Quote</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL 1: MOMENTUM (STREAK) -->
-    <div id="modal-streak" class="fixed inset-0 bg-black/50 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm" data-click="if(event.target === this) this.classList.add('hidden')">
-        <div class="bg-white w-full max-w-sm rounded-xl p-5 shadow-lg border border-gray-100 dark:border-gray-800 flex flex-col max-h-[85dvh] overflow-y-auto dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
+    <div id="modal-streak" class="fixed inset-0 bg-slate-950/50 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm" data-click="if(event.target === this) this.classList.add('hidden')">
+        <div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl w-full max-w-sm rounded-2xl p-5 shadow-2xl border border-slate-200/80 dark:border-slate-800/80 flex flex-col max-h-[85dvh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4 shrink-0">
-                <h3 class="font-bold text-lg text-gray-800 dark:text-white">Momentum</h3>
-                <button data-click="document.getElementById('modal-streak').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600"><i class="fas fa-times"></i></button>
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Momentum</h3>
+                <button data-click="document.getElementById('modal-streak').classList.add('hidden')" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
             </div>
 
             <!-- Simplified Streak Section -->
-            <div class="bg-zinc-50 rounded-xl p-5 border border-gray-200 mb-5 relative overflow-hidden dark:bg-zinc-900 dark:border-orange-500/20">
-                <div class="absolute top-0 right-0 -mr-4 -mt-4 text-orange-200/50 text-9xl dark:text-orange-500/10">
+            <div class="bg-amber-50/80 rounded-2xl p-5 border border-amber-200/80 mb-5 relative overflow-hidden dark:bg-slate-950/60 dark:border-amber-500/20 shadow-sm">
+                <div class="absolute top-0 right-0 -mr-4 -mt-4 text-amber-200/50 text-9xl dark:text-amber-500/10">
                     <i class="fas fa-fire"></i>
                 </div>
 
                 <div class="relative z-10 flex flex-col items-center text-center">
-                    <div class="text-xs font-bold uppercase tracking-widest mb-1"><span id="tier-label" class="px-2 py-0.5 rounded-full text-white bg-orange-500 shadow-sm">Bronze Tier</span></div>
-                    <div class="text-6xl font-black text-orange-500 drop-shadow-sm flex items-center gap-2 dark:text-orange-400">
+                    <div class="text-xs font-bold uppercase tracking-widest mb-1"><span id="tier-label" class="px-2.5 py-0.5 rounded-full text-white bg-amber-500 shadow-sm">Bronze Tier</span></div>
+                    <div class="text-6xl font-black text-amber-500 drop-shadow-sm flex items-center gap-2 dark:text-amber-400">
                         <span id="streak-count">0</span>
                         <i id="tier-icon" class="fas fa-fire text-4xl animate-pulse"></i>
                     </div>
-                    <div class="mt-4 w-full bg-white/50 rounded-full h-3 p-0.5 dark:bg-black/30 relative">
-                        <div id="streak-progress-bar" class="h-full rounded-full bg-orange-500 transition-all duration-1000 w-0 shadow-sm"></div>
+                    <div class="mt-4 w-full bg-slate-200/80 rounded-full h-3 p-0.5 dark:bg-slate-800/80 relative">
+                        <div id="streak-progress-bar" class="h-full rounded-full bg-amber-500 transition-all duration-1000 w-0 shadow-sm"></div>
                     </div>
-                    <div id="next-milestone-text" class="text-[9px] font-bold text-gray-500 mt-1 uppercase tracking-wider dark:text-gray-400">3 days to Silver Tier</div>
+                    <div id="next-milestone-text" class="text-[9px] font-bold text-slate-500 mt-1 uppercase tracking-wider dark:text-slate-400">3 days to Silver Tier</div>
 
                     <!-- Progress Text & Target Button -->
                     <div class="flex justify-between items-end w-full mt-3 px-1">
                         <div class="text-left">
-                            <span class="text-[9px] font-bold text-orange-400 block tracking-wider dark:text-orange-300/70">TODAY'S PROGRESS</span>
-                            <span class="text-sm font-black text-orange-600 dark:text-orange-400" id="today-progress-text">0 / 5</span>
+                            <span class="text-[9px] font-bold text-amber-600 block tracking-wider dark:text-amber-300/80">TODAY'S PROGRESS</span>
+                            <span class="text-sm font-black text-amber-700 dark:text-amber-400" id="today-progress-text">0 / 5</span>
                         </div>
-                        <button data-click="app.editDailyTarget()" class="flex items-center gap-1.5 bg-white/60 hover:bg-white text-orange-600 px-2.5 py-1.5 rounded-lg border border-gray-100 shadow-sm transition active:scale-95 group dark:bg-[#0a0a0a] dark:border-slate-600 dark:text-orange-400 dark:hover:bg-slate-700">
+                        <button data-click="app.editDailyTarget()" class="flex items-center gap-1.5 bg-white/80 hover:bg-white text-amber-700 px-2.5 py-1.5 rounded-lg border border-amber-200/80 shadow-sm transition active:scale-95 group dark:bg-slate-900 dark:border-amber-700/50 dark:text-amber-400 dark:hover:bg-slate-800">
                             <span class="text-[9px] font-bold">SET GOAL</span>
                             <i class="fas fa-pencil-alt text-[9px] group-hover:rotate-12 transition-transform"></i>
                         </button>
@@ -568,10 +552,10 @@
             </div>
 
             <!-- Monthly Streak Map (Fire Map) -->
-            <div class="bg-white rounded-xl border border-gray-100 p-4 shadow-sm dark:bg-[#0a0a0a]/50 dark:border-gray-800">
+            <div class="bg-white/80 rounded-2xl border border-slate-200/80 p-4 shadow-sm dark:bg-slate-950/50 dark:border-slate-800">
                 <div class="flex justify-between items-center mb-3">
-                    <h4 class="font-bold text-gray-700 text-xs uppercase tracking-wide dark:text-slate-400">Streak Calendar</h4>
-                    <span id="streak-month-label" class="text-[10px] font-bold text-gray-400 dark:text-slate-500"></span>
+                    <h4 class="font-bold text-slate-700 text-xs uppercase tracking-wide dark:text-slate-400">Streak Calendar</h4>
+                    <span id="streak-month-label" class="text-[10px] font-bold text-slate-400 dark:text-slate-500"></span>
                 </div>
                 <!-- Grid Container -->
                 <div class="grid grid-cols-7 gap-1.5" id="streak-calendar-grid">
@@ -579,53 +563,53 @@
                 </div>
             </div>
 
-            <div class="text-[10px] text-center text-gray-300 mt-4 italic dark:text-slate-600">Consistency is the key to unlocking opportunities.</div>
+            <div class="text-[10px] text-center text-slate-400 mt-4 italic dark:text-slate-600">Consistency is the key to unlocking opportunities.</div>
         </div>
     </div>
 
     <!-- MODAL 2: WEEKLY INSIGHTS & HEATMAP -->
-    <div id="modal-weekly" class="fixed inset-0 bg-black/50 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm" data-click="if(event.target === this) this.classList.add('hidden')">
-        <div class="bg-white w-full max-w-md rounded-xl p-5 shadow-lg border border-gray-100 dark:border-gray-800 flex flex-col max-h-[85dvh] overflow-y-auto dark:bg-[#0a0a0a] dark:border dark:border-gray-800">
+    <div id="modal-weekly" class="fixed inset-0 bg-slate-950/50 z-[80] hidden flex items-center justify-center p-4 backdrop-blur-sm" data-click="if(event.target === this) this.classList.add('hidden')">
+        <div class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl w-full max-w-md rounded-2xl p-5 shadow-2xl border border-slate-200/80 dark:border-slate-800/80 flex flex-col max-h-[85dvh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4 shrink-0">
-                <h3 class="font-bold text-lg text-gray-800 dark:text-white">Weekly Insights</h3>
-                <button data-click="document.getElementById('modal-weekly').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600"><i class="fas fa-times"></i></button>
+                <h3 class="font-bold text-lg text-slate-800 dark:text-white">Weekly Insights</h3>
+                <button data-click="document.getElementById('modal-weekly').classList.add('hidden')" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700"><i class="fas fa-times"></i></button>
             </div>
 
             <!-- Chart Section (4 Weeks) -->
-            <div class="bg-white rounded-xl border border-gray-100 p-4 shadow-sm mb-4 dark:bg-[#0a0a0a]/50 dark:border-gray-800">
+            <div class="bg-white/80 rounded-2xl border border-slate-200/80 p-4 shadow-sm mb-4 dark:bg-slate-950/50 dark:border-slate-800">
                 <div class="flex justify-between items-end mb-4">
-                    <h3 class="font-bold text-gray-700 text-xs flex items-center gap-2 uppercase tracking-wide dark:text-slate-300">
-                        <i class="fas fa-chart-line text-blue-500"></i> Performance
+                    <h3 class="font-bold text-slate-700 text-xs flex items-center gap-2 uppercase tracking-wide dark:text-slate-300">
+                        <i class="fas fa-chart-line text-indigo-500"></i> Performance
                     </h3>
-                    <span id="trend-text" class="text-[10px] font-bold text-green-600 bg-gray-50 px-2 py-0.5 rounded-full dark:bg-gray-800 dark:text-green-400">--</span>
+                    <span id="trend-text" class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full dark:bg-slate-800 dark:text-emerald-400">--</span>
                 </div>
 
                 <div class="h-48 w-full relative">
                     <canvas id="insightsChart"></canvas>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-gray-50 dark:border-gray-800">
+                <div class="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-200/80 dark:border-slate-800">
                         <div>
-                            <div class="text-[10px] text-gray-400 uppercase font-bold dark:text-slate-500">This Week</div>
-                            <div class="text-xl font-bold text-gray-800 dark:text-slate-200" id="weekly-total">0</div>
+                            <div class="text-[10px] text-slate-400 uppercase font-bold dark:text-slate-500">This Week</div>
+                            <div class="text-xl font-bold text-slate-800 dark:text-slate-200" id="weekly-total">0</div>
                         </div>
                         <div>
-                            <div class="text-[10px] text-gray-400 uppercase font-bold dark:text-slate-500">Referrals</div>
+                            <div class="text-[10px] text-slate-400 uppercase font-bold dark:text-slate-500">Referrals</div>
                             <div class="text-xl font-bold text-purple-600 dark:text-purple-400" id="weekly-referrals">0</div>
-                            <div class="text-[9px] text-gray-300 dark:text-slate-600">Rec'd this week</div>
+                            <div class="text-[9px] text-slate-400 dark:text-slate-600">Rec'd this week</div>
                         </div>
                 </div>
 
                 <!-- NEW: Conversion Funnel -->
-                <div class="mt-4 pt-4 border-t border-gray-50 dark:border-gray-800">
-                    <h4 class="font-bold text-gray-700 text-[10px] uppercase tracking-wide mb-3 dark:text-slate-400">Funnel Conversion</h4>
+                <div class="mt-4 pt-4 border-t border-slate-200/80 dark:border-slate-800">
+                    <h4 class="font-bold text-slate-700 text-[10px] uppercase tracking-wide mb-3 dark:text-slate-400">Funnel Conversion</h4>
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="bg-indigo-50 p-2 rounded-lg border border-indigo-100 dark:bg-indigo-900/30 dark:border-indigo-800/50">
-                            <div class="text-[9px] text-indigo-500 font-bold uppercase tracking-wider dark:text-indigo-400">App → Interview</div>
+                        <div class="bg-indigo-50/80 p-2.5 rounded-xl border border-indigo-100 dark:bg-indigo-950/40 dark:border-indigo-800/50">
+                            <div class="text-[9px] text-indigo-600 font-bold uppercase tracking-wider dark:text-indigo-400">App → Interview</div>
                             <div class="text-lg font-black text-indigo-700 dark:text-indigo-300 leading-none mt-1" id="conv-app-int">0%</div>
                         </div>
-                        <div class="bg-emerald-50 p-2 rounded-lg border border-emerald-100 dark:bg-emerald-900/30 dark:border-emerald-800/50">
-                            <div class="text-[9px] text-emerald-500 font-bold uppercase tracking-wider dark:text-emerald-400">Interview → Offer</div>
+                        <div class="bg-emerald-50/80 p-2.5 rounded-xl border border-emerald-100 dark:bg-emerald-950/40 dark:border-emerald-800/50">
+                            <div class="text-[9px] text-emerald-600 font-bold uppercase tracking-wider dark:text-emerald-400">Interview → Offer</div>
                             <div class="text-lg font-black text-emerald-700 dark:text-emerald-300 leading-none mt-1" id="conv-int-off">0%</div>
                         </div>
                     </div>
@@ -633,10 +617,10 @@
             </div>
 
             <!-- Calendar Heatmap Section (Moved Here) -->
-            <div class="bg-white rounded-xl border border-gray-100 p-4 shadow-sm dark:bg-[#0a0a0a]/50 dark:border-gray-800">
+            <div class="bg-white/80 rounded-2xl border border-slate-200/80 p-4 shadow-sm dark:bg-slate-950/50 dark:border-slate-800">
                 <div class="flex justify-between items-center mb-3">
-                    <h4 class="font-bold text-gray-700 text-xs uppercase tracking-wide dark:text-slate-300">Monthly Activity</h4>
-                    <span id="current-month-label" class="text-[10px] font-bold text-gray-400 dark:text-slate-500"></span>
+                    <h4 class="font-bold text-slate-700 text-xs uppercase tracking-wide dark:text-slate-300">Monthly Activity</h4>
+                    <span id="current-month-label" class="text-[10px] font-bold text-slate-400 dark:text-slate-500"></span>
                 </div>
 
                 <!-- Heatmap Grid -->
@@ -647,21 +631,21 @@
                 <!-- Legend -->
                 <div class="flex items-center justify-end gap-2 mt-3">
                     <div class="flex items-center gap-1">
-                        <div class="w-2.5 h-2.5 rounded-sm bg-gray-100 dark:bg-slate-700"></div>
-                        <span class="text-[9px] text-gray-400 dark:text-slate-500">0</span>
+                        <div class="w-2.5 h-2.5 rounded-sm bg-slate-200 dark:bg-slate-700"></div>
+                        <span class="text-[9px] text-slate-400 dark:text-slate-500">0</span>
                     </div>
                     <div class="flex items-center gap-1">
-                        <div class="w-2.5 h-2.5 rounded-sm bg-green-200 dark:bg-gray-800"></div>
-                        <span class="text-[9px] text-gray-400 dark:text-slate-500">Low</span>
+                        <div class="w-2.5 h-2.5 rounded-sm bg-emerald-200 dark:bg-emerald-900/60"></div>
+                        <span class="text-[9px] text-slate-400 dark:text-slate-500">Low</span>
                     </div>
                     <div class="flex items-center gap-1">
-                        <div class="w-2.5 h-2.5 rounded-sm bg-green-500 dark:bg-green-500"></div>
-                        <span class="text-[9px] text-gray-400 dark:text-slate-500">Target</span>
+                        <div class="w-2.5 h-2.5 rounded-sm bg-emerald-500 dark:bg-emerald-500"></div>
+                        <span class="text-[9px] text-slate-400 dark:text-slate-500">Target</span>
                     </div>
                 </div>
             </div>
 
-            <div class="text-[10px] text-center text-gray-400 mt-4 dark:text-slate-600">Data helps you refine your strategy.</div>
+            <div class="text-[10px] text-center text-slate-400 mt-4 dark:text-slate-600">Data helps you refine your strategy.</div>
         </div>
     </div>
 

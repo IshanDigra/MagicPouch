@@ -482,7 +482,7 @@ import Chart from 'chart.js/auto';
                     else if(history[dateStr] && typeof history[dateStr] === 'object') count = history[dateStr].total;
                     const cell = document.createElement('div');
                     const isToday = d === currentDate.getDate();
-                    let bgClass = "bg-gray-50 border-gray-100 text-gray-300 dark:bg-[#0a0a0a] dark:border-gray-800 dark:text-slate-600";
+                    let bgClass = "bg-gray-50 border-gray-100 text-gray-300 dark:bg-[#111827] dark:border-gray-800 dark:text-slate-600";
                     let content = `<span class="text-[9px] font-bold">${d}</span>`;
                     if (count >= target) {
                         bgClass = "bg-gray-100 border-gray-200 text-orange-50 shadow-sm dark:bg-gray-800 dark:border-orange-500/20 dark:text-orange-400";
@@ -706,7 +706,7 @@ import Chart from 'chart.js/auto';
                             <div class="w-2 h-2 rounded-full bg-${color}-400 shrink-0 shadow-sm"></div>
                             <span class="text-sm font-bold text-gray-700 truncate dark:text-slate-200">${note}</span>
                         </div>
-                        <button onclick="app.deleteQuickNote(${idx})" class="text-gray-300 hover:text-red-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-50 transition active:scale-90 dark:hover:bg-red-900/30 dark:text-slate-500 dark:hover:text-red-400">
+                        <button data-click="app.deleteQuickNote(${idx})" class="text-gray-300 hover:text-red-500 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-50 transition active:scale-90 dark:hover:bg-red-900/30 dark:text-slate-500 dark:hover:text-red-400">
                             <i class="fas fa-trash text-xs"></i>
                         </button>
                     `;
@@ -769,7 +769,7 @@ import Chart from 'chart.js/auto';
                         btn.className = `px-3 py-1.5 rounded-lg bg-${color}-100 text-${color}-700 text-xs font-bold border border-${color}-200 transition active:scale-95 dark:bg-${color}-900/40 dark:text-${color}-300 dark:border-${color}-700 shadow-sm`;
                     } else {
                         // Default Grey Style
-                        btn.className = `px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs font-bold border border-gray-200 hover:bg-gray-200 transition active:scale-95 dark:bg-[#0a0a0a] dark:text-slate-400 dark:border-gray-800 dark:hover:bg-slate-700`;
+                        btn.className = `px-3 py-1.5 rounded-lg bg-gray-100 text-gray-500 text-xs font-bold border border-gray-200 hover:bg-gray-200 transition active:scale-95 dark:bg-[#111827] dark:text-slate-400 dark:border-gray-800 dark:hover:bg-slate-700`;
                     }
 
                     btn.textContent = note;
@@ -1087,7 +1087,7 @@ import Chart from 'chart.js/auto';
                     const hasEvent = dailyInts.length > 0;
 
                     // Styling
-                    let bgClass = isToday ? "bg-indigo-600 text-white shadow-md ring-2 ring-indigo-200 dark:ring-indigo-900" : "bg-white text-gray-500 border border-gray-100 hover:border-gray-200 dark:bg-[#0a0a0a] dark:border-gray-800 dark:text-slate-400 dark:hover:border-slate-600";
+                    let bgClass = isToday ? "bg-indigo-600 text-white shadow-md ring-2 ring-indigo-200 dark:ring-indigo-900" : "bg-white text-gray-500 border border-gray-100 hover:border-gray-200 dark:bg-[#111827] dark:border-gray-800 dark:text-slate-400 dark:hover:border-slate-600";
                     let dateClass = isToday ? "text-white" : "text-gray-800 dark:text-white";
 
                     const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
@@ -1160,14 +1160,14 @@ import Chart from 'chart.js/auto';
                     events.forEach(evt => {
                         const timeStr = new Date(evt.deadline).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                         const div = document.createElement('div');
-                        div.className = "bg-gray-50 p-4 rounded-xl border border-gray-100 flex items-center justify-between dark:bg-[#0a0a0a] dark:border-gray-800";
+                        div.className = "bg-gray-50 p-4 rounded-xl border border-gray-100 flex items-center justify-between dark:bg-[#111827] dark:border-gray-800";
                         div.innerHTML = `
                             <div>
                                 <div class="text-xs font-bold text-indigo-500 mb-1">${timeStr}</div>
                                 <div class="font-bold text-gray-800 dark:text-white">${evt.company}</div>
                                 <div class="text-xs text-gray-500 dark:text-slate-400">${evt.status}</div>
                             </div>
-                            <button onclick="app.openInterviewModal('${evt.id}'); app.closeDaySummary()" class="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-indigo-600 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-300">
+                            <button data-click="app.openInterviewModal('${evt.id}'); app.closeDaySummary()" class="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:text-indigo-600 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-300">
                                 <i class="fas fa-chevron-right text-xs"></i>
                             </button>
                         `;
@@ -1255,15 +1255,15 @@ import Chart from 'chart.js/auto';
                 // --- NEW: Dynamic Theme Helper ---
                 const getStageTheme = (status) => {
                     switch (status) {
-                        case 'Test Received': return { border: 'border-indigo-500', bg: 'bg-gray-50', text: 'text-indigo-700', badge: 'bg-gray-100 text-indigo-700', icon: 'fa-laptop-code' };
-                        case 'HR Screen': return { border: 'border-blue-500', bg: 'bg-gray-50', text: 'text-blue-700', badge: 'bg-gray-100 text-blue-700', icon: 'fa-phone-alt' };
-                        case 'Technical': return { border: 'border-purple-500', bg: 'bg-gray-50', text: 'text-purple-700', badge: 'bg-gray-100 text-purple-700', icon: 'fa-code' };
-                        case 'Final Round': return { border: 'border-orange-500', bg: 'bg-gray-50', text: 'text-orange-700', badge: 'bg-gray-100 text-orange-700', icon: 'fa-user-tie' };
-                        case 'Offer': return { border: 'border-emerald-500', bg: 'bg-gray-50', text: 'text-emerald-700', badge: 'bg-gray-100 text-emerald-700', icon: 'fa-gift' };
-                        case 'Rejected': return { border: 'border-red-400', bg: 'bg-gray-50', text: 'text-red-700', badge: 'bg-gray-100 text-red-700', icon: 'fa-times-circle' };
-                        case 'Ghosted': return { border: 'border-gray-400', bg: 'bg-gray-50', text: 'text-gray-700', badge: 'bg-gray-200 text-gray-500', icon: 'fa-ghost' };
-                        case 'Follow Up': return { border: 'border-yellow-500', bg: 'bg-gray-50', text: 'text-yellow-700', badge: 'bg-gray-100 text-yellow-700', icon: 'fa-clock' };
-                        default: return { border: 'border-gray-200', bg: 'bg-gray-50', text: 'text-gray-700', badge: 'bg-gray-100 text-gray-600', icon: 'fa-circle' };
+                        case 'Test Received': return { border: 'border-terracotta-500', bg: 'bg-terracotta-50/50', text: 'text-terracotta-700 dark:text-terracotta-300', badge: 'bg-terracotta-100 dark:bg-terracotta-900/40 text-terracotta-700 dark:text-terracotta-300', icon: 'fa-laptop-code' };
+                        case 'HR Screen': return { border: 'border-amberwarm-500', bg: 'bg-amberwarm-50/50', text: 'text-amberwarm-700 dark:text-amberwarm-300', badge: 'bg-amberwarm-100 dark:bg-amberwarm-900/40 text-amberwarm-700 dark:text-amberwarm-300', icon: 'fa-phone-alt' };
+                        case 'Technical': return { border: 'border-sand-500', bg: 'bg-sand-100/50', text: 'text-sand-800 dark:text-sand-200', badge: 'bg-sand-200 dark:bg-espresso-700 text-sand-800 dark:text-sand-200', icon: 'fa-code' };
+                        case 'Final Round': return { border: 'border-terracotta-600', bg: 'bg-terracotta-50/50', text: 'text-terracotta-800 dark:text-terracotta-200', badge: 'bg-terracotta-100 dark:bg-terracotta-900/40 text-terracotta-800 dark:text-terracotta-200', icon: 'fa-user-tie' };
+                        case 'Offer': return { border: 'border-sage-500', bg: 'bg-sage-50/50', text: 'text-sage-700 dark:text-sage-300', badge: 'bg-sage-100 dark:bg-sage-900/40 text-sage-700 dark:text-sage-300', icon: 'fa-gift' };
+                        case 'Rejected': return { border: 'border-espresso-400', bg: 'bg-espresso-100/50', text: 'text-espresso-700 dark:text-espresso-300', badge: 'bg-espresso-200 dark:bg-espresso-700 text-espresso-700 dark:text-espresso-300', icon: 'fa-times-circle' };
+                        case 'Ghosted': return { border: 'border-sand-300', bg: 'bg-sand-100/50', text: 'text-sand-600 dark:text-sand-400', badge: 'bg-sand-200 dark:bg-espresso-800 text-sand-600 dark:text-sand-400', icon: 'fa-ghost' };
+                        case 'Follow Up': return { border: 'border-amberwarm-500', bg: 'bg-amberwarm-50/50', text: 'text-amberwarm-700 dark:text-amberwarm-300', badge: 'bg-amberwarm-100 dark:bg-amberwarm-900/40 text-amberwarm-700 dark:text-amberwarm-300', icon: 'fa-clock' };
+                        default: return { border: 'border-sand-300', bg: 'bg-sand-50', text: 'text-espresso-800 dark:text-sand-200', badge: 'bg-sand-200 dark:bg-espresso-700 text-espresso-800 dark:text-sand-200', icon: 'fa-circle' };
                     }
                 };
 
@@ -1293,7 +1293,7 @@ import Chart from 'chart.js/auto';
                                 dateColor = "bg-gray-100 text-orange-600 dark:bg-gray-800 dark:text-orange-400";
                             }
                         } else {
-                            dateColor = "bg-gray-200 text-gray-400 dark:bg-[#0a0a0a] dark:text-slate-500";
+                            dateColor = "bg-gray-200 text-gray-400 dark:bg-[#111827] dark:text-slate-500";
                         }
 
                         // Calendar Leaf Visual
@@ -1317,13 +1317,13 @@ import Chart from 'chart.js/auto';
 
                     if (interview.stageCompleted) {
                         actionArea = `
-                            <button onclick="app.promoteStage('${interview.id}')" class="flex-1 bg-indigo-600 text-white text-xs font-bold py-2 rounded-lg hover:bg-indigo-700 active:scale-95 transition shadow-sm">
+                            <button data-click="app.promoteStage('${interview.id}')" class="flex-1 bg-indigo-600 text-white text-xs font-bold py-2 rounded-lg hover:bg-indigo-700 active:scale-95 transition shadow-sm">
                                 Next Stage <i class="fas fa-arrow-right ml-1"></i>
                             </button>
                         `;
                     } else if (!['Offer', 'Rejected', 'Ghosted'].includes(interview.status)) {
                         actionArea = `
-                            <button onclick="app.markStageComplete('${interview.id}')" class="flex-1 bg-white border border-${theme.border.replace('border-', '')} ${theme.text} text-xs font-bold py-2 rounded-lg hover:bg-gray-50 active:scale-95 transition flex items-center justify-center gap-1.5 dark:bg-[#0a0a0a] dark:border-slate-600 dark:${theme.text}">
+                            <button data-click="app.markStageComplete('${interview.id}')" class="flex-1 bg-white border border-${theme.border.replace('border-', '')} ${theme.text} text-xs font-bold py-2 rounded-lg hover:bg-gray-50 active:scale-95 transition flex items-center justify-center gap-1.5 dark:bg-[#111827] dark:border-slate-600 dark:${theme.text}">
                                 <i class="fas fa-check"></i> Mark Done
                             </button>
                         `;
@@ -1333,7 +1333,7 @@ import Chart from 'chart.js/auto';
                     }
 
                     // COMPACT CARD LAYOUT
-                    el.className = `relative bg-white dark:bg-[#0a0a0a] rounded-xl p-3 shadow-sm border-l-4 ${theme.border} mb-3 active:scale-[0.99] transition`;
+                    el.className = `relative bg-sand-50 dark:bg-espresso-800 rounded-xl p-3 shadow-warm-card border border-sand-200 dark:border-espresso-700 border-l-4 ${theme.border} mb-3 active:scale-[0.99] transition`;
                     el.innerHTML = `
                         <div class="flex justify-between items-start mb-2">
                             <div class="min-w-0 pr-2">
@@ -1357,10 +1357,10 @@ import Chart from 'chart.js/auto';
                         <div class="flex items-center gap-2 pt-2 border-t border-gray-50 dark:border-gray-800/50">
                             <!-- Utilities -->
                             <div class="flex gap-1">
-                                <button onclick="app.openInterviewModal('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-zinc-900 transition dark:hover:bg-slate-700"><i class="fas fa-pen text-xs"></i></button>
-                                <button onclick="app.openHistoryModal('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-indigo-500 transition dark:hover:bg-slate-700"><i class="fas fa-history text-xs"></i></button>
-                                ${showCalButton ? `<button onclick="app.downloadICS('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-green-500 transition dark:hover:bg-slate-700"><i class="fas fa-calendar-plus text-xs"></i></button>` : ''}
-                                <button onclick="app.deleteNote('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-red-500 transition dark:hover:bg-slate-700"><i class="fas fa-trash text-xs"></i></button>
+                                <button data-click="app.openInterviewModal('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-zinc-900 transition dark:hover:bg-slate-700"><i class="fas fa-pen text-xs"></i></button>
+                                <button data-click="app.openHistoryModal('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-indigo-500 transition dark:hover:bg-slate-700"><i class="fas fa-history text-xs"></i></button>
+                                ${showCalButton ? `<button data-click="app.downloadICS('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-green-500 transition dark:hover:bg-slate-700"><i class="fas fa-calendar-plus text-xs"></i></button>` : ''}
+                                <button data-click="app.deleteNote('${interview.id}')" class="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-red-500 transition dark:hover:bg-slate-700"><i class="fas fa-trash text-xs"></i></button>
                             </div>
                             <!-- Primary Action -->
                             ${actionArea}
@@ -1441,10 +1441,10 @@ import Chart from 'chart.js/auto';
                 document.querySelectorAll('.int-filter-btn').forEach(btn => {
                     if (btn.dataset.filter === type) {
                         btn.classList.add('bg-gray-800', 'text-white', 'dark:bg-white', 'dark:text-slate-900', 'shadow-sm');
-                        btn.classList.remove('bg-gray-100', 'text-gray-500', 'dark:bg-[#0a0a0a]', 'dark:text-slate-400');
+                        btn.classList.remove('bg-gray-100', 'text-gray-500', 'dark:bg-[#111827]', 'dark:text-slate-400');
                     } else {
                         btn.classList.remove('bg-gray-800', 'text-white', 'dark:bg-white', 'dark:text-slate-900', 'shadow-sm');
-                        btn.classList.add('bg-gray-100', 'text-gray-500', 'dark:bg-[#0a0a0a]', 'dark:text-slate-400');
+                        btn.classList.add('bg-gray-100', 'text-gray-500', 'dark:bg-[#111827]', 'dark:text-slate-400');
                     }
                 });
                 app.renderInterviews(type, document.getElementById('global-search').value);
@@ -1502,7 +1502,7 @@ import Chart from 'chart.js/auto';
                         // Format: 14/02/2026 12:58 PM
                         const dateStr = d.toLocaleDateString('en-GB') + ' ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
                         const div = document.createElement('div');
-                        div.className = "flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 dark:bg-[#0a0a0a] dark:border-gray-800";
+                        div.className = "flex items-start gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 dark:bg-[#111827] dark:border-gray-800";
 
                         let icon = '<i class="fas fa-circle text-[8px] text-gray-400 mt-1.5"></i>';
                         let titleClass = "text-gray-700 dark:text-slate-300";
@@ -1804,49 +1804,47 @@ import Chart from 'chart.js/auto';
                 const isDone = status === 'applied' || status === 'completed';
                 const dateStr = new Date(job.created).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
-                let borderColor = "border-gray-100 dark:border-gray-700";
+                let borderColor = "border-sand-200 dark:border-espresso-700";
                 let badgeHtml = "";
                 let statusIcon = "fa-ellipsis-h";
-                let statusBtnClass = "bg-gray-50 text-gray-400 dark:bg-gray-800 dark:text-gray-500";
+                let statusBtnClass = "bg-sand-200/60 text-sand-600 dark:bg-espresso-700 dark:text-sand-400";
 
                 if (status === 'referral-received') {
-                    // SEA GREEN THEME
-                    borderColor = "border-gray-200 border-l-4 border-l-teal-400 dark:border-teal-900 dark:border-l-teal-500";
-                    badgeHtml = `<span class="text-[9px] font-bold text-teal-600 bg-gray-50 px-1.5 py-0.5 rounded mr-2 dark:bg-gray-800 dark:text-teal-300">REFERRAL RECEIVED</span>`;
+                    borderColor = "border-sand-300 border-l-4 border-l-sage-500 dark:border-espresso-700 dark:border-l-sage-400";
+                    badgeHtml = `<span class="text-[9px] font-bold text-sage-600 bg-sage-50 px-1.5 py-0.5 rounded mr-2 dark:bg-sage-950/40 dark:text-sage-300">REFERRAL RECEIVED</span>`;
                     statusIcon = "fa-handshake";
-                    statusBtnClass = "bg-gray-100 text-teal-500 dark:bg-gray-800 dark:text-teal-400";
+                    statusBtnClass = "bg-sage-100 text-sage-600 dark:bg-sage-900/40 dark:text-sage-300";
                 } else if (status === 'direct-apply') {
-                    // PURPLE THEME
-                    borderColor = "border-gray-200 border-l-4 border-l-purple-400 dark:border-purple-900 dark:border-l-purple-500";
-                    badgeHtml = `<span class="text-[9px] font-bold text-purple-600 bg-gray-50 px-1.5 py-0.5 rounded mr-2 dark:bg-gray-800 dark:text-purple-300">DIRECT APPLY</span>`;
+                    borderColor = "border-sand-300 border-l-4 border-l-terracotta-500 dark:border-espresso-700 dark:border-l-terracotta-400";
+                    badgeHtml = `<span class="text-[9px] font-bold text-terracotta-600 bg-terracotta-50 px-1.5 py-0.5 rounded mr-2 dark:bg-terracotta-950/40 dark:text-terracotta-300">DIRECT APPLY</span>`;
                     statusIcon = "fa-location-arrow";
-                    statusBtnClass = "bg-gray-100 text-purple-500 dark:bg-gray-800 dark:text-purple-400";
+                    statusBtnClass = "bg-terracotta-100 text-terracotta-600 dark:bg-terracotta-900/40 dark:text-terracotta-300";
                 } else if (status === 'referral-asked') {
-                    borderColor = "border-gray-200 border-l-4 border-l-orange-400 dark:border-orange-900 dark:border-l-orange-500";
-                    badgeHtml = `<span class="text-[9px] font-bold text-orange-600 bg-gray-50 px-1.5 py-0.5 rounded mr-2 dark:bg-gray-800 dark:text-orange-300">REFERRAL ASKED</span>`;
+                    borderColor = "border-sand-300 border-l-4 border-l-amberwarm-500 dark:border-espresso-700 dark:border-l-amberwarm-400";
+                    badgeHtml = `<span class="text-[9px] font-bold text-amberwarm-600 bg-amberwarm-50 px-1.5 py-0.5 rounded mr-2 dark:bg-amberwarm-950/40 dark:text-amberwarm-300">REFERRAL ASKED</span>`;
                     statusIcon = "fa-paper-plane";
-                    statusBtnClass = "bg-gray-100 text-orange-500 dark:bg-gray-800 dark:text-orange-400";
+                    statusBtnClass = "bg-amberwarm-100 text-amberwarm-600 dark:bg-amberwarm-900/40 dark:text-amberwarm-300";
                 } else if (status === 'reminder') {
-                    borderColor = "border-gray-200 border-l-4 border-l-red-500 dark:border-red-900 dark:border-l-red-500";
-                    badgeHtml = `<span class="text-[9px] font-bold text-red-600 bg-gray-50 px-1.5 py-0.5 rounded mr-2 animate-pulse dark:bg-gray-800 dark:text-red-300">FOLLOW-UP DUE</span>`;
+                    borderColor = "border-sand-300 border-l-4 border-l-terracotta-600 dark:border-espresso-700 dark:border-l-terracotta-500";
+                    badgeHtml = `<span class="text-[9px] font-bold text-terracotta-600 bg-terracotta-50 px-1.5 py-0.5 rounded mr-2 animate-pulse dark:bg-terracotta-950/40 dark:text-terracotta-300">FOLLOW-UP DUE</span>`;
                     statusIcon = "fa-bell";
-                    statusBtnClass = "bg-gray-100 text-red-500 dark:bg-gray-800 dark:text-red-400";
+                    statusBtnClass = "bg-terracotta-100 text-terracotta-600 dark:bg-terracotta-900/40 dark:text-terracotta-300";
                 } else if (isDone) {
-                    borderColor = "border-gray-100 bg-gray-50 dark:border-green-900 dark:bg-gray-800";
+                    borderColor = "border-sand-200 bg-sand-50 dark:border-espresso-700 dark:bg-espresso-800/80";
                     statusIcon = "fa-check";
-                    statusBtnClass = "bg-gray-100 text-green-600 dark:bg-gray-800 dark:text-green-400";
+                    statusBtnClass = "bg-sage-100 text-sage-600 dark:bg-sage-900/40 dark:text-sage-300";
                     if (job.applicationMedium) {
                         let medLabel = job.applicationMedium;
                         if (medLabel === 'cold-email') medLabel = 'Cold Email';
                         if (medLabel === 'direct') medLabel = 'Direct';
-                        badgeHtml = `<span class="text-[9px] font-bold text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded mr-2 dark:bg-gray-700 dark:text-gray-400 uppercase tracking-wider">${medLabel}</span>`;
+                        badgeHtml = `<span class="text-[9px] font-bold text-sand-600 bg-sand-200 px-1.5 py-0.5 rounded mr-2 dark:bg-espresso-700 dark:text-sand-300 uppercase tracking-wider">${medLabel}</span>`;
                     }
                 } else {
                     statusIcon = "fa-circle";
-                    statusBtnClass = "bg-gray-100 text-gray-300 dark:bg-gray-800 dark:text-gray-600";
+                    statusBtnClass = "bg-sand-200/60 text-sand-500 dark:bg-espresso-700 dark:text-sand-400";
                 }
 
-                el.className = `p-3 rounded-xl shadow-sm border ${borderColor} bg-white relative active:scale-[0.99] transition flex justify-between items-start ${isDone ? 'opacity-60' : ''} dark:bg-dark-card`;
+                el.className = `p-3 rounded-xl shadow-warm-card border ${borderColor} bg-sand-50 dark:bg-espresso-800 relative active:scale-[0.99] transition flex justify-between items-start ${isDone ? 'opacity-60' : ''}`;
                 let iconClass = "fa-briefcase";
                 if(job.linkType === 'linkedin') iconClass = "fa-brands fa-linkedin";
                 if(job.linkType === 'site') iconClass = "fa-globe";
@@ -1880,12 +1878,12 @@ import Chart from 'chart.js/auto';
                         <div class="flex flex-col items-end gap-1">
                             <span class="text-[9px] text-gray-400 font-medium whitespace-nowrap dark:text-gray-600">${dateStr}</span>
                             <div class="flex items-center gap-2">
-                                <button onclick="app.copyText('${job.content.replace(/'/g, "\\'")}')" class="text-gray-300 hover:text-zinc-900 p-2 dark:text-gray-600 dark:hover:text-zinc-100" title="Copy Link"><i class="fas fa-link text-xs"></i></button>
-                                <button onclick="app.openStatusModal('${job.id}')" class="w-8 h-8 rounded-full ${statusBtnClass} flex items-center justify-center shadow-sm hover:brightness-95 transition">
+                                <button data-click="app.copyText('${job.content.replace(/'/g, "\\'")}')" class="text-gray-300 hover:text-zinc-900 p-2 dark:text-gray-600 dark:hover:text-zinc-100" title="Copy Link"><i class="fas fa-link text-xs"></i></button>
+                                <button data-click="app.openStatusModal('${job.id}')" class="w-8 h-8 rounded-full ${statusBtnClass} flex items-center justify-center shadow-sm hover:brightness-95 transition">
                                     <i class="fas ${statusIcon} text-xs"></i>
                                 </button>
-                                <button onclick="app.openJobModal('${job.id}')" class="text-gray-300 hover:text-zinc-900 p-2 dark:text-gray-600 dark:hover:text-zinc-100"><i class="fas fa-pen text-xs"></i></button>
-                                <button onclick="app.deleteNote('${job.id}')" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>
+                                <button data-click="app.openJobModal('${job.id}')" class="text-gray-300 hover:text-zinc-900 p-2 dark:text-gray-600 dark:hover:text-zinc-100"><i class="fas fa-pen text-xs"></i></button>
+                                <button data-click="app.deleteNote('${job.id}')" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>
                             </div>
                         </div>
                     </div>
@@ -1923,7 +1921,7 @@ import Chart from 'chart.js/auto';
                          const div = document.createElement('div');
                          div.className = "bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex justify-between items-center cursor-pointer active:scale-[0.99] transition dark:bg-dark-card dark:border-dark-border";
                          div.onclick = (e) => { app.openFolder(folderName); };
-                         div.innerHTML = `<div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-yellow-500 dark:bg-gray-800 dark:text-yellow-400"><i class="fas fa-folder"></i></div><div><h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${folderName}</h4><p class="text-[10px] text-gray-400 dark:text-gray-500">${count} items</p></div></div><div class="flex gap-2"><button onclick="event.stopPropagation(); app.openRenameFolder('${folderName}')" class="text-gray-300 hover:text-zinc-900 p-2 dark:text-gray-600 dark:hover:text-zinc-100"><i class="fas fa-pen text-xs"></i></button><i class="fas fa-chevron-right text-gray-300 text-xs dark:text-gray-600"></i></div>`;
+                         div.innerHTML = `<div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-yellow-500 dark:bg-gray-800 dark:text-yellow-400"><i class="fas fa-folder"></i></div><div><h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${folderName}</h4><p class="text-[10px] text-gray-400 dark:text-gray-500">${count} items</p></div></div><div class="flex gap-2"><button data-click="event.stopPropagation(); app.openRenameFolder('${folderName}')" class="text-gray-300 hover:text-zinc-900 p-2 dark:text-gray-600 dark:hover:text-zinc-100"><i class="fas fa-pen text-xs"></i></button><i class="fas fa-chevron-right text-gray-300 text-xs dark:text-gray-600"></i></div>`;
                          list.appendChild(div);
                      });
                  }
@@ -1940,7 +1938,7 @@ import Chart from 'chart.js/auto';
                 const tagsStr = (typeof t.tags === 'string') ? t.tags : '';
                 const tagsHtml = tagsStr ? tagsStr.split(',').map(tag => `<span class="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded text-[9px] uppercase font-bold tracking-wider dark:bg-gray-800 dark:text-gray-400">${tag.trim()}</span>`).join('') : '';
                 const isEasy = t.easyAccess ? '<i class="fas fa-bolt text-yellow-400 text-xs" title="Easy Access"></i>' : '';
-                div.innerHTML = `<div class="flex justify-between items-start mb-2"><div><div class="flex items-center gap-2"><h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${t.title}</h4>${isEasy}</div><div class="flex flex-wrap gap-1 mt-1">${tagsHtml}</div></div><div class="flex gap-1"><button onclick="app.openTemplateModal('${t.id}')" class="text-gray-300 hover:text-zinc-900 p-2 dark:text-gray-600 dark:hover:text-zinc-100"><i class="fas fa-pen text-xs"></i></button><button onclick="app.deleteNote('${t.id}')" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button></div></div><div class="bg-gray-50 p-3 rounded-lg text-xs text-gray-600 font-mono leading-relaxed relative group-hover:bg-gray-100 transition cursor-pointer dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700 line-clamp-2" onclick="app.handleTemplateCopy(decodeURIComponent('${encodeURIComponent(t.content)}'))">${t.content}<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-copy text-gray-400 dark:text-gray-500"></i></div></div>`;
+                div.innerHTML = `<div class="flex justify-between items-start mb-2"><div><div class="flex items-center gap-2"><h4 class="font-bold text-gray-800 text-sm dark:text-gray-200">${t.title}</h4>${isEasy}</div><div class="flex flex-wrap gap-1 mt-1">${tagsHtml}</div></div><div class="flex gap-1"><button data-click="app.openTemplateModal('${t.id}')" class="text-gray-300 hover:text-zinc-900 p-2 dark:text-gray-600 dark:hover:text-zinc-100"><i class="fas fa-pen text-xs"></i></button><button data-click="app.deleteNote('${t.id}')" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button></div></div><div class="bg-gray-50 p-3 rounded-lg text-xs text-gray-600 font-mono leading-relaxed relative group-hover:bg-gray-100 transition cursor-pointer dark:bg-gray-800 dark:text-gray-400 dark:group-hover:bg-gray-700 line-clamp-2" data-click="app.handleTemplateCopy(decodeURIComponent('${encodeURIComponent(t.content)}'))">${t.content}<div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-copy text-gray-400 dark:text-gray-500"></i></div></div>`;
                 return div;
             },
 
@@ -1949,7 +1947,7 @@ import Chart from 'chart.js/auto';
             openRenameFolder: (oldName) => { STATE.renameTargetFolder = oldName; document.getElementById('rename-input').value = oldName; document.getElementById('modal-rename').classList.remove('hidden'); },
             confirmRename: () => { const newName = document.getElementById('rename-input').value.trim(); if (newName && newName !== STATE.renameTargetFolder) { STATE.data.notes.forEach(n => { if (n.category === 'template' && (n.folder || 'General') === STATE.renameTargetFolder) { n.folder = newName; } }); app.saveToCloud(); app.renderTemplates(); } document.getElementById('modal-rename').classList.add('hidden'); },
 
-            renderProfileManageList: () => { const list = document.getElementById('profile-manage-list'); if(!list) return; list.innerHTML = ''; const profiles = STATE.data.profile || []; profiles.forEach((p, idx) => { const div = document.createElement('div'); div.className = "flex items-center justify-between bg-gray-50 p-2 rounded-lg border border-gray-100 dark:bg-gray-800 dark:border-gray-700"; div.innerHTML = `<div class="overflow-hidden"><div class="font-bold text-xs text-gray-700 dark:text-gray-300">${p.label}</div><div class="text-[10px] text-gray-400 truncate dark:text-gray-500">${p.value}</div></div><button onclick="app.deleteProfileItem(${idx})" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>`; list.appendChild(div); }); },
+            renderProfileManageList: () => { const list = document.getElementById('profile-manage-list'); if(!list) return; list.innerHTML = ''; const profiles = STATE.data.profile || []; profiles.forEach((p, idx) => { const div = document.createElement('div'); div.className = "flex items-center justify-between bg-gray-50 p-2 rounded-lg border border-gray-100 dark:bg-gray-800 dark:border-gray-700"; div.innerHTML = `<div class="overflow-hidden"><div class="font-bold text-xs text-gray-700 dark:text-gray-300">${p.label}</div><div class="text-[10px] text-gray-400 truncate dark:text-gray-500">${p.value}</div></div><button data-click="app.deleteProfileItem(${idx})" class="text-gray-300 hover:text-red-500 p-2 dark:text-gray-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>`; list.appendChild(div); }); },
             openProfileModal: () => { app.renderProfileManageList(); document.getElementById('modal-profile').classList.remove('hidden'); },
             saveProfileItem: () => { const label = document.getElementById('profile-label').value.trim(); const value = document.getElementById('profile-value').value.trim(); if (label && value) { STATE.data.profile.push({ label, value }); app.saveToCloud(); app.renderProfileManageList(); app.renderQuickActions(); document.getElementById('profile-label').value = ''; document.getElementById('profile-value').value = ''; } },
             deleteProfileItem: (idx) => { STATE.data.profile.splice(idx, 1); app.saveToCloud(); app.renderProfileManageList(); app.renderQuickActions(); },
@@ -2040,8 +2038,8 @@ import Chart from 'chart.js/auto';
                     else if (labelLower.includes('email') || labelLower.includes('mail') || labelLower.includes('gmail')) { iconClass = "fas fa-envelope"; isIconOnly = true; specificClasses = "text-red-500 dark:text-red-400"; }
                     else if (labelLower.includes('resume') || labelLower.includes('cv')) { iconClass = "fas fa-file-alt"; isIconOnly = true; specificClasses = "text-green-600 dark:text-green-400"; }
                     else if (labelLower.includes('contact') || labelLower.includes('phone') || labelLower.includes('call')) { iconClass = "fas fa-phone"; isIconOnly = true; specificClasses = "text-indigo-600 dark:text-indigo-400"; }
-                    if (isIconOnly) { btn.className = `w-9 h-9 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 flex items-center justify-center transition active:scale-90 dark:bg-[#0a0a0a] dark:border-gray-800 dark:hover:bg-slate-700 ${specificClasses}`; btn.innerHTML = `<i class="${iconClass} text-sm"></i>`; btn.title = p.label; }
-                    else { btn.className = "bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200 transition active:scale-95 flex items-center gap-1 dark:bg-[#0a0a0a] dark:border-gray-800 dark:text-slate-300 dark:hover:bg-slate-700"; btn.innerHTML = `<i class="${iconClass} text-[10px] opacity-50"></i> ${p.label}`; }
+                    if (isIconOnly) { btn.className = `w-9 h-9 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-50 flex items-center justify-center transition active:scale-90 dark:bg-[#111827] dark:border-gray-800 dark:hover:bg-slate-700 ${specificClasses}`; btn.innerHTML = `<i class="${iconClass} text-sm"></i>`; btn.title = p.label; }
+                    else { btn.className = "bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-gray-200 transition active:scale-95 flex items-center gap-1 dark:bg-[#111827] dark:border-gray-800 dark:text-slate-300 dark:hover:bg-slate-700"; btn.innerHTML = `<i class="${iconClass} text-[10px] opacity-50"></i> ${p.label}`; }
                     btn.onclick = () => app.copyText(p.value);
                     container.appendChild(btn);
                 });
@@ -2118,7 +2116,7 @@ import Chart from 'chart.js/auto';
                     if (isEditing) {
                         div.innerHTML = `
                             <div class="w-5 h-5 flex items-center justify-center text-gray-300"><i class="fas fa-edit text-xs"></i></div>
-                            <input type="text" id="inline-edit-${idx}" class="flex-1 bg-white border border-blue-300 rounded px-2 py-1 text-sm outline-none dark:bg-slate-700 dark:border-blue-500 dark:text-white" value="${task.text.replace(/"/g, '&quot;')}" onblur="app.saveInlineEdit(${idx})" onkeydown="if(event.key === 'Enter') app.saveInlineEdit(${idx})">
+                            <input type="text" id="inline-edit-${idx}" class="flex-1 bg-white border border-blue-300 rounded px-2 py-1 text-sm outline-none dark:bg-slate-700 dark:border-blue-500 dark:text-white" value="${task.text.replace(/"/g, '&quot;')}" data-blur="app.saveInlineEdit(${idx})" data-keydown="if(event.key === 'Enter') app.saveInlineEdit(${idx})">
                         `;
                     } else {
                         div.innerHTML = `
@@ -2128,17 +2126,17 @@ import Chart from 'chart.js/auto';
                             </div>
 
                             <!-- Checkbox -->
-                            <div onclick="app.togglePlanTask(${idx})" class="shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center cursor-pointer transition-all duration-200 ${task.done ? 'bg-yellow-400 border-yellow-400 text-white' : 'border-gray-200 text-transparent hover:border-yellow-400 bg-white dark:bg-[#0a0a0a] dark:border-slate-600'}">
+                            <div data-click="app.togglePlanTask(${idx})" class="shrink-0 w-5 h-5 rounded border-2 flex items-center justify-center cursor-pointer transition-all duration-200 ${task.done ? 'bg-yellow-400 border-yellow-400 text-white' : 'border-gray-200 text-transparent hover:border-yellow-400 bg-white dark:bg-[#111827] dark:border-slate-600'}">
                                 <i class="fas fa-check text-[10px]"></i>
                             </div>
 
                             <!-- Text -->
-                            <span class="text-sm font-medium text-gray-700 flex-1 truncate select-none ${task.done ? 'text-gray-400 line-through decoration-gray-300 dark:text-slate-600' : 'dark:text-slate-200'}" onclick="app.enableInlineEdit(${idx})" title="Tap to edit">
+                            <span class="text-sm font-medium text-gray-700 flex-1 truncate select-none ${task.done ? 'text-gray-400 line-through decoration-gray-300 dark:text-slate-600' : 'dark:text-slate-200'}" data-click="app.enableInlineEdit(${idx})" title="Tap to edit">
                                 ${task.text}
                             </span>
 
                             <!-- Simple Delete 'x' -->
-                            <button onclick="app.deletePlanTask(${idx})" class="w-6 h-6 flex items-center justify-center text-gray-300 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 dark:text-slate-600 dark:hover:text-red-400">
+                            <button data-click="app.deletePlanTask(${idx})" class="w-6 h-6 flex items-center justify-center text-gray-300 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 dark:text-slate-600 dark:hover:text-red-400">
                                 <i class="fas fa-times text-xs"></i>
                             </button>
                         `;
@@ -2214,7 +2212,7 @@ import Chart from 'chart.js/auto';
                                 const initials = contact.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
 
                                 const card = document.createElement('div');
-                                card.className = "flex-shrink-0 w-36 bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col gap-2 relative group snap-start dark:bg-[#0a0a0a] dark:border-gray-800";
+                                card.className = "flex-shrink-0 w-36 bg-white rounded-xl border border-gray-100 shadow-sm p-3 flex flex-col gap-2 relative group snap-start dark:bg-[#111827] dark:border-gray-800";
 
                                 let contactIcons = '';
                                 if(contact.email) contactIcons += `<i class="fas fa-envelope text-xs text-gray-400" title="${contact.email}"></i>`;
@@ -2224,8 +2222,8 @@ import Chart from 'chart.js/auto';
                                     <div class="flex justify-between items-start w-full">
                                         <div class="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold text-[10px] border border-white shadow-sm dark:bg-indigo-900/50 dark:border-slate-600 dark:text-indigo-300 shrink-0">${initials}</div>
                                         <div class="flex gap-1">
-                                            <button onclick="app.openNetworkModal(${originalIdx})" class="text-gray-300 hover:text-indigo-500 p-1 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-pen text-[10px]"></i></button>
-                                            <button onclick="app.deleteNetworkContact(${originalIdx})" class="text-gray-300 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-times text-[10px]"></i></button>
+                                            <button data-click="app.openNetworkModal(${originalIdx})" class="text-gray-300 hover:text-indigo-500 p-1 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-pen text-[10px]"></i></button>
+                                            <button data-click="app.deleteNetworkContact(${originalIdx})" class="text-gray-300 hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-times text-[10px]"></i></button>
                                         </div>
                                     </div>
                                     <div class="w-full">
@@ -2235,7 +2233,7 @@ import Chart from 'chart.js/auto';
                                     </div>
                                     <div class="flex justify-between items-center w-full mt-auto">
                                         <div class="flex gap-1.5">${contactIcons}</div>
-                                        <button onclick="app.toggleNetworkStatus(${originalIdx})" class="text-[9px] font-bold px-2 py-0.5 rounded-full border ${statusColors[s]} transition truncate">${statusLabels[s]}</button>
+                                        <button data-click="app.toggleNetworkStatus(${originalIdx})" class="text-[9px] font-bold px-2 py-0.5 rounded-full border ${statusColors[s]} transition truncate">${statusLabels[s]}</button>
                                     </div>
                                 `;
                                 scrollContainer.appendChild(card);
@@ -2268,11 +2266,11 @@ import Chart from 'chart.js/auto';
                                         <span class="text-xs font-bold text-gray-700 dark:text-slate-200 truncate">${item.topic}</span>
                                         <span class="text-[9px] font-bold text-gray-400 uppercase dark:text-slate-500">${levelLabels[currentLevel]}</span>
                                     </div>
-                                    <div class="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden cursor-pointer dark:bg-slate-700" onclick="app.togglePrepStatus(${idx})">
+                                    <div class="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden cursor-pointer dark:bg-slate-700" data-click="app.togglePrepStatus(${idx})">
                                         <div class="h-full rounded-full transition-all duration-300 ${levels[currentLevel]}"></div>
                                     </div>
                                 </div>
-                                <button onclick="app.deletePrepItem(${idx})" class="text-gray-300 hover:text-red-400 p-1 dark:text-slate-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>
+                                <button data-click="app.deletePrepItem(${idx})" class="text-gray-300 hover:text-red-400 p-1 dark:text-slate-600 dark:hover:text-red-400"><i class="fas fa-trash text-xs"></i></button>
                             `;
                             prepList.appendChild(row);
                         });
@@ -2619,11 +2617,11 @@ import Chart from 'chart.js/auto';
                 if(viewName === 'interviews') vInts.style.transform = 'translateX(0)';
 
                 document.querySelectorAll('.nav-btn').forEach(btn => {
-                    btn.classList.remove('text-zinc-900', 'active', 'dark:text-zinc-100');
-                    btn.classList.add('text-gray-400', 'dark:text-slate-500');
+                    btn.classList.remove('text-terracotta-500', 'dark:text-terracotta-400', 'active', 'text-espresso-900', 'text-indigo-400');
+                    btn.classList.add('text-sand-500', 'dark:text-espresso-400');
                     const indicator = btn.querySelector('.nav-indicator');
                     if (indicator) {
-                        indicator.classList.remove('bg-blue-100', 'text-blue-700', 'dark:bg-blue-900/40', 'dark:text-blue-300');
+                        indicator.classList.remove('bg-terracotta-500/10', 'dark:bg-terracotta-500/20', 'text-terracotta-500', 'bg-indigo-500/20', 'text-indigo-400', 'shadow-sm', 'shadow-indigo-500/20');
                     }
                 });
 
@@ -2631,11 +2629,11 @@ import Chart from 'chart.js/auto';
                 const activeBtn = document.querySelectorAll('.nav-btn')[navIndex];
 
                 if (activeBtn) {
-                    activeBtn.classList.add('text-zinc-900', 'active', 'dark:text-zinc-100');
-                    activeBtn.classList.remove('text-gray-400', 'dark:text-slate-500');
+                    activeBtn.classList.add('text-terracotta-600', 'dark:text-terracotta-400', 'active');
+                    activeBtn.classList.remove('text-sand-500', 'dark:text-espresso-400');
                     const indicator = activeBtn.querySelector('.nav-indicator');
                     if (indicator) {
-                        indicator.classList.add('bg-blue-100', 'text-blue-700', 'dark:bg-blue-900/40', 'dark:text-blue-300');
+                        indicator.classList.add('bg-terracotta-500/10', 'dark:bg-terracotta-500/20', 'text-terracotta-600', 'dark:text-terracotta-400', 'shadow-sm');
                     }
                 }
 
@@ -2661,17 +2659,23 @@ import Chart from 'chart.js/auto';
 
 // Safe Event Delegator for MV3 (Dynamic code execution)
 document.addEventListener('DOMContentLoaded', () => {
-    ['click', 'change', 'input', 'keydown'].forEach(eventName => {
+    ['click', 'change', 'input', 'keydown', 'blur', 'focusout'].forEach(eventName => {
+        const useCapture = (eventName === 'blur');
         document.body.addEventListener(eventName, (event) => {
-            let el = event.target.closest('[data-' + eventName + ']');
+            let attrName = (eventName === 'focusout') ? 'blur' : eventName;
+            let el = event.target.closest('[data-' + attrName + ']');
             if (!el) return;
 
-            const codeStr = el.getAttribute('data-' + eventName);
+            const codeStr = el.getAttribute('data-' + attrName);
             if (codeStr) {
                 // Decode HTML entities if necessary, but getAttribute usually does this
                 const codes = codeStr.split(';').map(c => c.trim()).filter(Boolean);
 
                 for (let code of codes) {
+                    if (code === 'event.stopPropagation()' || code === 'stopPropagation()') {
+                        event.stopPropagation();
+                        continue;
+                    }
                     if (code.startsWith("if")) {
                         const conditionMatch = code.match(/if\s*\((.*?)\)\s*(.*)/);
                         if (conditionMatch) {

@@ -131,10 +131,10 @@ function setupAutoCapture() {
 
   panel.innerHTML = `
     <div style="margin-bottom: 8px; font-weight: 600; color: #18181b;">Save Job to ApplicationPal</div>
-    <input id="app-pal-custom-url" type="text" placeholder="Paste copied link (optional)" style="width: 100%; padding: 6px 8px; border: 1px solid #d4d4d8; border-radius: 6px; margin-bottom: 10px; font-size: 12px; box-sizing: border-box; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#18181b'" onblur="this.style.borderColor='#d4d4d8'" />
+    <input id="app-pal-custom-url" type="text" placeholder="Paste copied link (optional)" style="width: 100%; padding: 6px 8px; border: 1px solid #d4d4d8; border-radius: 6px; margin-bottom: 10px; font-size: 12px; box-sizing: border-box; outline: none; transition: border-color 0.2s;" />
     <div style="display: flex; gap: 8px; flex-direction: column;">
-      <button id="app-pal-save-submitted" style="background: #18181b; color: white; border: none; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: 500; text-align: center; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Mark as Submitted</button>
-      <button id="app-pal-save-active" style="background: #f4f4f5; color: #18181b; border: 1px solid #e4e4e7; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: 500; text-align: center; transition: background 0.2s;" onmouseover="this.style.background='#e4e4e7'" onmouseout="this.style.background='#f4f4f5'">Mark as Active Job</button>
+      <button id="app-pal-save-submitted" style="background: #18181b; color: white; border: none; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: 500; text-align: center; transition: opacity 0.2s;">Mark as Submitted</button>
+      <button id="app-pal-save-active" style="background: #f4f4f5; color: #18181b; border: 1px solid #e4e4e7; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: 500; text-align: center; transition: background 0.2s;">Mark as Active Job</button>
     </div>
   `;
 
