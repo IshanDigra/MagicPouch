@@ -11,6 +11,9 @@ importers:
       '@fortawesome/fontawesome-free':
         specifier: ^7.3.1
         version: 7.3.1
+      '@rolldown/binding-darwin-arm64':
+        specifier: 1.2.6
+        version: 1.2.6
       chart.js:
         specifier: ^4.5.1
         version: 4.5.1
@@ -354,6 +357,12 @@ packages:
 
   '@rolldown/binding-darwin-arm64@1.2.3':
     resolution: {integrity: sha512-ieIiibVCp0tX7TLu2cafoNPv8wJyYi01ekXpbf8q2j7F4rGAhhXb/eQh7ge9DRBY78GwmRQtvjZDux7EDbA8kA==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@rolldown/binding-darwin-arm64@1.2.6':
+    resolution: {integrity: sha512-dgR56NYnvAszm7Ob1B2/Vn0e8bUQYZH2UjVaMMtMVOCKFSfjhfLmuA/9+O+F+ajUdG6B/bSssrKW6JJYASa8jA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [arm64]
     os: [darwin]
@@ -1555,6 +1564,8 @@ snapshots:
 
   '@rolldown/binding-darwin-arm64@1.2.3':
     optional: true
+
+  '@rolldown/binding-darwin-arm64@1.2.6': {}
 
   '@rolldown/binding-darwin-x64@1.2.3':
     optional: true
